@@ -37,7 +37,7 @@ typedef enum
 {
 	HAT_HELICOPTER,
 	SPRING,
-	TRAMPOLINE,
+	TRAMPLANE,
 	MISSILE,
 	NO
 } BonusType;
