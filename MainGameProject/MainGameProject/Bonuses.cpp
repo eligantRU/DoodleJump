@@ -1,8 +1,6 @@
-// Код ниже ацтой, рисует только "пружинки"
-
 void initialBonuses(Game & game);
 void generBonuses(Game & game);
-bool collisionSpring(Game & game);
+bool collisionSpring(Game & game); // эта поебень ещё не написана, но уже объявлена...и так 2 недели подряд
 
 void initialBonuses(Game & game)
 {
@@ -21,10 +19,12 @@ void initialBonuses(Game & game)
 	for (int i = 0; i < NUMBER_BONUSES; ++i)
 	{
 		N = rand() % NUMBER_PLATES;
-		randomNum = rand() % 2;
-
-		switch(randomNum)
+		if (game.plate[N].type == STATIC)
 		{
+			randomNum = rand() % 2;
+
+			switch (randomNum)
+			{
 			case 0:
 				x = rand() % (50 - 7); // 50 -- ширина плиты, 7 -- ширина пружины
 				game.bonus[i].body = new sf::RectangleShape(sf::Vector2f(7, 15));
@@ -39,6 +39,11 @@ void initialBonuses(Game & game)
 				game.bonus[i].body->setPosition(platePosition[N].x + x, platePosition[N].y - 7);
 				game.bonus[i].body->setFillColor(sf::Color(255, 0, 0));
 				break;
+			}
+		}
+		else
+		{
+			--i;
 		}
 	}
 }
@@ -55,8 +60,6 @@ void generBonuses(Game & game)
 	
 	for (int i = 0; i < NUMBER_BONUSES; ++i)
 	{
-		//x = rand() % (50 - 10); // 50 -- ширина плиты, 7 -- ширина пружины
-
 		bonusPosition[i] = game.bonus[i].body->getPosition();
 		
 		if (bonusPosition[i].y >= doodlePosition.y + 70 + 275 - 15)
@@ -64,7 +67,7 @@ void generBonuses(Game & game)
 			for (int j = 0; j < NUMBER_PLATES; ++j)
 			{
 				platePosition = game.plate[j].body->getPosition();
-				if (platePosition.y <= doodlePosition.y - 275)
+				if ((platePosition.y <= doodlePosition.y - 275) && (game.plate[j].type == STATIC))
 				{
 					randomNum = rand() % 2;
 					switch (randomNum)
