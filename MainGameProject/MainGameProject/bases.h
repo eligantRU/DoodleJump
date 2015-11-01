@@ -1,17 +1,21 @@
 #include <SFML/Graphics.hpp>
 
-const int NUMBER_PLATES = 25;
+const int NUMBER_PLATES = 10;
 const int NUMBER_BONUSES = 3;
-int DELTA_HEIGHT = 0;
 const sf::Time TIME_PER_FRAME = sf::seconds(1.f / 60.f);
-const float STEP = 2.f;
+const float STEP = 3.f;
 
-bool noJumps = true;
-bool endOfGame = false;
-int upping = DELTA_HEIGHT;
+bool G_noJumps = true;
+bool G_endOfGame = false;
 
 typedef enum
 {
+	STATIC,
+	DYNAMIC_X
+} PlateType;
+
+typedef enum
+{	
 	COLLISION_SPRING,
 	COLLISION_HAT_HELICOPTER,
 	COLLISION_TRAMPLANE,
@@ -53,11 +57,14 @@ struct Doodle
 	sf::RectangleShape * body;
 	Direction direction;
 	Collision collision;
+	int deltaHeight;
 };
 
 struct Plate
 {
 	sf::RectangleShape * body;
+	PlateType type;
+	Direction direction;
 };
 
 struct Bonus
