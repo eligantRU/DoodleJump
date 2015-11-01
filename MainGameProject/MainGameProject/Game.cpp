@@ -32,7 +32,7 @@ void startGame(void)
 			--Marker;
 
 			starter(window, game);
-			if (endOfGame == false)
+			if (G_endOfGame == false)
 			{
 				window.setView(view);
 				update(window, game, view);
@@ -85,7 +85,7 @@ bool checkGameEnd(Game & game) // это говно исправить на проверку плит под дудло
 	{
 		platePosition[i] = game.plate[i].body->getPosition();
 
-		if (platePosition[i].y >= doodlePosition.y + 70 - 10)
+		if(platePosition[i].y >= doodlePosition.y + 70 - 10 - game.hero.deltaHeight*STEP)
 		{
 			flag = 0;
 		}
@@ -107,14 +107,14 @@ bool checkGameEnd(Game & game) // это говно исправить на проверку плит под дудло
 
 void starter(sf::RenderWindow & window, Game & game)
 {
-	if (noJumps == true)
+	if (G_noJumps == true)
 	{
-		while (noJumps)
+		while (G_noJumps)
 		{
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
 			{
 				game.hero.direction.y = DOWN;
-				noJumps = false;
+				G_noJumps = false;
 			}
 		}
 	}
@@ -171,15 +171,15 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view)
 	}
 	else if (game.hero.direction.y == UP)
 	{
-		if (upping > 0)
+		if (game.hero.deltaHeight > 0)
 		{
 			position.y -= STEP;
-			--upping;
+			--game.hero.deltaHeight;
 		}
 		else
 		{
 			game.hero.direction.y = DOWN;
-			upping = checkDoodleFall(game);
+			game.hero.deltaHeight = checkDoodleFall(game);
 		}
 	}
 	game.hero.body->move(position * TIME_PER_FRAME.asSeconds());
@@ -192,7 +192,7 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view)
 
 	if (checkGameEnd(game))
 	{
-		endOfGame = true;
+		G_endOfGame = true;
 	}
 }
 

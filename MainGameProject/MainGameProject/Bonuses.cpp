@@ -1,6 +1,5 @@
 void initialBonuses(Game & game);
 void generBonuses(Game & game);
-bool collisionSpring(Game & game); // эта поебень ещЄ не написана, но уже объ€влена...и так 2 недели подр€д
 
 void initialBonuses(Game & game)
 {
