@@ -1,12 +1,12 @@
 #include <SFML/Graphics.hpp>
 
-const int NUMBER_PLATES = 10;
-const int NUMBER_BONUSES = 3;
+const int NUMBER_PLATES = 15;
+const int NUMBER_BONUSES = 2;
 const sf::Time TIME_PER_FRAME = sf::seconds(1.f / 60.f);
 const float STEP = 3.f;
 
-bool G_noJumps = true;
-bool G_endOfGame = false;
+bool G_noJumps; // = true;
+bool G_endOfGame; // = false;
 
 typedef enum
 {
