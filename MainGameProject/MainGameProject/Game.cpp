@@ -16,7 +16,10 @@ void startGame(void)
 	sf::View view;
 	view.reset(sf::FloatRect(0, 0, 550, 700));
 
-	Game game;
+	Game game; 
+M_Start:
+	G_noJumps = true;
+	G_endOfGame = false;
 	initialGame(game);
 
 	sf::Clock clock;
@@ -45,6 +48,16 @@ void startGame(void)
 		Marker = 60;
 		window.setView(view);
 		render(window, game);
+		if (G_endOfGame == true)
+		{
+			while (true)
+			{
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return))
+				{
+					goto M_Start;
+				}
+			}
+		}
 	}
 }
 

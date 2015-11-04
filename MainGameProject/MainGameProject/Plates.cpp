@@ -60,6 +60,7 @@ void initialPlates(Game & game) // эту функцию можно убрать, либо в неё засунуть
 		{
 			case 0:
 				game.plate[i].type = STATIC;
+				game.plate[i].direction.x = NONE;
 				game.plate[i].body->setFillColor(sf::Color(184, 122, 88));
 				break;
 			case 1:
