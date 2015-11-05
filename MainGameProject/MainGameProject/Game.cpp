@@ -87,7 +87,7 @@ void keyPressed(sf::RenderWindow & window, Game & game)
 	}
 }
 
-bool checkGameEnd(Game & game) // это говно исправить на проверку плит под дудлом + высота прыжка
+bool checkGameEnd(Game & game)
 {
 	sf::Vector2f doodlePosition = game.hero.body->getPosition();
 	sf::Vector2f platePosition[NUMBER_PLATES];
@@ -208,6 +208,8 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view)
 		G_endOfGame = true;
 	}
 }
+
+
 
 int checkDoodleFall(Game & game)
 {
