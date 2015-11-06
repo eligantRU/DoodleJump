@@ -209,8 +209,6 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view)
 	}
 }
 
-
-
 int checkDoodleFall(Game & game)
 {
 	sf::Vector2f doodlePosition = game.hero.body->getPosition();
