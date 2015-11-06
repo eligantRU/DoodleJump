@@ -138,6 +138,7 @@ void initialGame(Game & game)
 	initialHero(game);
 	initialPlates(game);
 	initialBonuses(game);
+	game.actualBonus = NO;
 }
 
 void render(sf::RenderWindow & window, Game & game)
@@ -195,7 +196,18 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view)
 			game.hero.deltaHeight = checkDoodleFall(game);
 		}
 	}
-	game.hero.body->move(position * TIME_PER_FRAME.asSeconds());
+	if (game.actualBonus == NO)
+	{
+		game.hero.body->move(position * TIME_PER_FRAME.asSeconds());
+	}
+	if (game.actualBonus == SPRING)
+	{
+		game.hero.body->move(position * (2*TIME_PER_FRAME.asSeconds()));
+	}
+	if (game.actualBonus == TRAMPLANE)
+	{
+		game.hero.body->move(position * (2*TIME_PER_FRAME.asSeconds()));
+	}
 
 	view.setCenter(275, doodlePosition.y);
 	
@@ -244,6 +256,7 @@ int checkDoodleFall(Game & game)
 				{
 					collision = COLLISION_SPRING;
 				}
+				break;
 			case TRAMPLANE:
 				if (((doodlePosition.y + 70 + 7 + 0.5 >= bonusPosition[i].y + 7 - 0.5) && (doodlePosition.y - 0.5 <= bonusPosition[i].y - 70 + 0.5)
 					&& (doodlePosition.x + 55 >= bonusPosition[i].x) && (doodlePosition.x - 15 <= bonusPosition[i].x)))
@@ -256,12 +269,16 @@ int checkDoodleFall(Game & game)
 	switch (collision)
 	{
 		case COLLISION_PLATE:
+			game.actualBonus = NO;
 			return 4500;
 		case COLLISION_SPRING:
-			return 9000;
+			game.actualBonus = SPRING;
+			return 4500;
 		case COLLISION_TRAMPLANE:
-			return 18000;
+			game.actualBonus = TRAMPLANE;
+			return 6000;
 		default:
+			game.actualBonus = NO;
 			return 0;
 	}
 }
