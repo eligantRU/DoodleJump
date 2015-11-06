@@ -76,6 +76,7 @@ struct Bonus
 struct Game
 {
 	Doodle hero;
+	BonusType actualBonus;
 	Plate plate[NUMBER_PLATES];
 	Bonus bonus[NUMBER_BONUSES];
 };
