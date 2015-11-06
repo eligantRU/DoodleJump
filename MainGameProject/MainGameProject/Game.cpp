@@ -174,7 +174,7 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view)
 	}
 	if (game.hero.direction.y == DOWN)
 	{
-		if (checkDoodleFall(game))
+		if (game.hero.deltaHeight = checkDoodleFall(game)) // if (checkDoodleFall(game))
 		{
 			game.hero.direction.y = UP;
 		}
@@ -193,21 +193,24 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view)
 		else
 		{
 			game.hero.direction.y = DOWN;
-			game.hero.deltaHeight = checkDoodleFall(game);
+			//game.hero.deltaHeight = checkDoodleFall(game);
 		}
 	}
-	if (game.actualBonus == NO)
+
+	int k;
+	switch (game.actualBonus)
 	{
-		game.hero.body->move(position * TIME_PER_FRAME.asSeconds());
+		case NO: 
+			k = 1;
+			break;
+		case SPRING:
+			k = 2;
+			break;
+		case TRAMPLANE:
+			k = 2;
+			break;
 	}
-	if (game.actualBonus == SPRING)
-	{
-		game.hero.body->move(position * (2*TIME_PER_FRAME.asSeconds()));
-	}
-	if (game.actualBonus == TRAMPLANE)
-	{
-		game.hero.body->move(position * (2*TIME_PER_FRAME.asSeconds()));
-	}
+	game.hero.body->move(position * (k * TIME_PER_FRAME.asSeconds()));
 
 	view.setCenter(275, doodlePosition.y);
 	
@@ -242,8 +245,15 @@ int checkDoodleFall(Game & game)
 		if (((doodlePosition.y + 70 + 10 + 0.5 >= platePosition[i].y + 10 - 0.5) && (doodlePosition.y - 0.5 <= platePosition[i].y - 70 + 0.5)
 			&& (doodlePosition.x + 40 >= platePosition[i].x) && (doodlePosition.x - 50 <= platePosition[i].x)))
 		{
+			if (game.plate[i].type == CLOUD)
+			{
+				// здесь и должна была бы появиться функция генерации одной новой плиты, которая бала бы частью генерации двух и более плит
+				// костылёк
+				game.plate[i].body->setPosition(platePosition[i].x, platePosition[i].y+550);
+			} 
 			collision = COLLISION_PLATE;
-		}
+			break;
+		}	
 	}
 
 	for (int i = 0; i < NUMBER_BONUSES; ++i) // в отдельную функцию collisionBonus() засунь, выглядит ущербно 
