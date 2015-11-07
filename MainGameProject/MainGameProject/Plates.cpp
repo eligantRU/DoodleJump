@@ -19,7 +19,7 @@ void generPlates(Game & game)
 
 		if (platePosition[i].y >= doodlePosition.y + 70 + 275)
 		{
-			randomNum = rand() % 2;
+			randomNum = rand() % 3;
 			switch (randomNum)
 			{
 				case 0:
@@ -41,6 +41,11 @@ void generPlates(Game & game)
 					}
 					game.plate[i].body->setFillColor(sf::Color(00, 7*16+15, 255));
 					break;
+				case 2:
+					game.plate[i].type = CLOUD;
+					game.plate[i].direction.x = NONE;
+					game.plate[i].body->setFillColor(sf::Color(13*16, 160, 13*16));
+					break;
 			}
 			game.plate[i].body->setPosition(x, doodlePosition.y + y - 380);
 		}
@@ -55,7 +60,7 @@ void initialPlates(Game & game) // эту функцию можно убрать, либо в неё засунуть
 	for (int i = 0; i < NUMBER_PLATES; ++i)
 	{
 		game.plate[i].body = new sf::RectangleShape(sf::Vector2f(50, 10));
-		randomNum = rand() % 2;
+		randomNum = rand() % 3;
 		switch (randomNum)
 		{
 			case 0:
@@ -77,6 +82,11 @@ void initialPlates(Game & game) // эту функцию можно убрать, либо в неё засунуть
 				}
 				game.plate[i].body->setFillColor(sf::Color(00, 7*16+15, 255));
 				break;
+			case 2:
+				game.plate[i].type = CLOUD;
+				game.plate[i].direction.x = NONE;
+				game.plate[i].body->setFillColor(sf::Color(13*16, 160, 13*16));
+				break;
 		}
 		x = rand() % (550 - 50);
 		y = rand() % (700 - 10) - 250;
@@ -92,7 +102,7 @@ void moveDynamicPlates(Game & game)
 	for (int i = 0; i < NUMBER_PLATES; ++i)
 	{
 		platePosition[i] = game.plate[i].body->getPosition();
-		if (game.plate[i].type = DYNAMIC_X) // лишнее условие, но так нагляднее
+		if (game.plate[i].type == DYNAMIC_X) // лишнее условие, но так нагляднее
 		{
 			switch (game.plate[i].direction.x)
 			{

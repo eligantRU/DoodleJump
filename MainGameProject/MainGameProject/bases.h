@@ -11,7 +11,8 @@ bool G_endOfGame; // = false;
 typedef enum
 {
 	STATIC,
-	DYNAMIC_X
+	DYNAMIC_X,
+	CLOUD
 } PlateType;
 
 typedef enum
