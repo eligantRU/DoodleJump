@@ -61,7 +61,7 @@ void generBonuses(Game & game)
 	{
 		bonusPosition[i] = game.bonus[i].body->getPosition();
 		
-		if (bonusPosition[i].y >= doodlePosition.y + 70 + 275 - 15)
+		if (bonusPosition[i].y >= doodlePosition.y + 70 + 275 - 15 - 10)
 		{
 			for (int j = 0; j < NUMBER_PLATES; ++j)
 			{

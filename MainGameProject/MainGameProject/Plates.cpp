@@ -15,7 +15,7 @@ void generPlates(Game & game)
 	{
 		platePosition[i] = game.plate[i].body->getPosition();
 		x = rand() % (550 - 50);
-		y = -1 * rand() % (150);
+		y = -1 * rand() % (150);               // —юда запилить функцию дл€ равномерной генерации плит по высоте
 
 		if (platePosition[i].y >= doodlePosition.y + 70 + 275)
 		{
@@ -88,8 +88,8 @@ void initialPlates(Game & game) // эту функцию можно убрать, либо в неЄ засунуть
 				game.plate[i].body->setFillColor(sf::Color(13*16, 160, 13*16));
 				break;
 		}
-		x = rand() % (550 - 50);
-		y = rand() % (700 - 10) - 250;
+		x = rand() % (550 - 50);	
+		y = rand() % (700 - 10) - 250;                // —юда запилить функцию дл€ равномерной генерации плит по высоте
 		game.plate[i].body->setPosition(x, y);
 	}
 }
