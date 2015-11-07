@@ -56,6 +56,10 @@ M_Start:
 				{
 					goto M_Start;
 				}
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+				{
+					window.close();
+				}
 			}
 		}
 	}

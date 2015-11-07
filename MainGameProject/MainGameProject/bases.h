@@ -81,3 +81,4 @@ struct Game
 	Plate plate[NUMBER_PLATES];
 	Bonus bonus[NUMBER_BONUSES];
 };
+
