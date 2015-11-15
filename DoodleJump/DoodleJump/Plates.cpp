@@ -17,7 +17,7 @@ void generPlates(Game & game)
 		x = rand() % (550 - PLATE_WIDTH);
 		y = -1 * rand() % (150);               // —юда запилить функцию дл€ равномерной генерации плит по высоте
 
-		if (platePosition[i].y >= doodlePosition.y + DOODLE_HEIGHT + 275)
+		if (platePosition[i].y >= doodlePosition.y + DOODLE_HEIGHT + 275 + 2*PLATE_HEIGHT)
 		{
 			randomNum = rand() % 3;
 			switch (randomNum)
@@ -25,7 +25,7 @@ void generPlates(Game & game)
 			case 0:
 				game.plate[i].type = STATIC;
 				game.plate[i].direction.x = NONE;
-				game.plate[i].body->setFillColor(sf::Color(184, 122, 88));
+				game.plate[i].body->setTexture(PLATE_STATIC_TEXTURE);
 				break;
 			case 1:
 				game.plate[i].type = DYNAMIC_X;
@@ -39,12 +39,12 @@ void generPlates(Game & game)
 					game.plate[i].direction.x = RIGHT;
 					break;
 				}
-				game.plate[i].body->setFillColor(sf::Color(00, 7 * 16 + 15, 255));
+				game.plate[i].body->setTexture(PLATE_DYNAMIC_TEXTURE);
 				break;
 			case 2:
 				game.plate[i].type = CLOUD;
 				game.plate[i].direction.x = NONE;
-				game.plate[i].body->setFillColor(sf::Color(13 * 16, 160, 13 * 16));
+				game.plate[i].body->setTexture(PLATE_CLOUD_TEXTURE);
 				break;
 			}
 			game.plate[i].body->setPosition(x, doodlePosition.y + y - 380);
@@ -59,14 +59,14 @@ void initialPlates(Game & game) // эту функцию можно убрать, либо в неЄ засунуть
 	int randomNum;
 	for (int i = 0; i < NUMBER_PLATES; ++i)
 	{
-		game.plate[i].body = new sf::RectangleShape(sf::Vector2f(PLATE_WIDTH, PLATE_HEIGHT));
+		game.plate[i].body = new sf::Sprite;
 		randomNum = rand() % 3;
 		switch (randomNum)
 		{
 		case 0:
 			game.plate[i].type = STATIC;
 			game.plate[i].direction.x = NONE;
-			game.plate[i].body->setFillColor(sf::Color(184, 122, 88));
+			game.plate[i].body->setTexture(PLATE_STATIC_TEXTURE);
 			break;
 		case 1:
 			game.plate[i].type = DYNAMIC_X;
@@ -80,12 +80,12 @@ void initialPlates(Game & game) // эту функцию можно убрать, либо в неЄ засунуть
 				game.plate[i].direction.x = RIGHT;
 				break;
 			}
-			game.plate[i].body->setFillColor(sf::Color(00, 7 * 16 + 15, 255));
+			game.plate[i].body->setTexture(PLATE_DYNAMIC_TEXTURE);
 			break;
 		case 2:
 			game.plate[i].type = CLOUD;
 			game.plate[i].direction.x = NONE;
-			game.plate[i].body->setFillColor(sf::Color(13 * 16, 160, 13 * 16));
+			game.plate[i].body->setTexture(PLATE_CLOUD_TEXTURE);
 			break;
 		}
 		x = rand() % (550 - PLATE_WIDTH);
