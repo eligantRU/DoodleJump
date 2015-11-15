@@ -1,7 +1,7 @@
-/*
-  Created by Yegorov Nikita, Lacyem 'InfoTech', 2015
-  Under the direction of Rinat Shaikhutdinov
-*/
+*********************************************************
+*  Created by Yegorov Nikita, Lacyem 'InfoTech', 2015   *
+*  Under the direction of Rinat Shaikhutdinov           *
+*********************************************************
 
 [IN DEVELOPING]
 
@@ -9,7 +9,6 @@ Plans:
 
 # Refactoring
 # Fix plate regeneration
-# Add sprites
 # Add menu
 # Add enemy
 # Add hole
