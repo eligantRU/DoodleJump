@@ -4,8 +4,14 @@ const int NUMBER_PLATES = 15;
 const int NUMBER_BONUSES = 2;
 const sf::Time TIME_PER_FRAME = sf::seconds(1.f / 60.f);
 const float STEP = 3.f;
+const int DOODLE_WIDTH = 45;
+const int DOODLE_HEIGHT = 45;
+const int PLATE_WIDTH = 50;
+const int PLATE_HEIGHT = 10;
+const int SPRING_WIDTH = 7;
+const int SPRING_HEIGHT = 15;
 
-bool G_noJumps; // = true;
+bool G_noJumps;   // = true;
 bool G_endOfGame; // = false;
 
 typedef enum
@@ -55,7 +61,8 @@ struct Direction
 
 struct Doodle
 {
-	sf::RectangleShape * body;
+	sf::Sprite * body;
+	sf::Texture texture;
 	Direction direction;
 	Collision collision;
 	int deltaHeight;

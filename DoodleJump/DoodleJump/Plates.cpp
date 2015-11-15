@@ -14,10 +14,10 @@ void generPlates(Game & game)
 	for (int i = 0; i < NUMBER_PLATES; ++i)
 	{
 		platePosition[i] = game.plate[i].body->getPosition();
-		x = rand() % (550 - 50);
+		x = rand() % (550 - PLATE_WIDTH);
 		y = -1 * rand() % (150);               // —юда запилить функцию дл€ равномерной генерации плит по высоте
 
-		if (platePosition[i].y >= doodlePosition.y + 70 + 275)
+		if (platePosition[i].y >= doodlePosition.y + DOODLE_HEIGHT + 275)
 		{
 			randomNum = rand() % 3;
 			switch (randomNum)
@@ -59,7 +59,7 @@ void initialPlates(Game & game) // эту функцию можно убрать, либо в неЄ засунуть
 	int randomNum;
 	for (int i = 0; i < NUMBER_PLATES; ++i)
 	{
-		game.plate[i].body = new sf::RectangleShape(sf::Vector2f(50, 10));
+		game.plate[i].body = new sf::RectangleShape(sf::Vector2f(PLATE_WIDTH, PLATE_HEIGHT));
 		randomNum = rand() % 3;
 		switch (randomNum)
 		{
@@ -88,8 +88,8 @@ void initialPlates(Game & game) // эту функцию можно убрать, либо в неЄ засунуть
 			game.plate[i].body->setFillColor(sf::Color(13 * 16, 160, 13 * 16));
 			break;
 		}
-		x = rand() % (550 - 50);
-		y = rand() % (700 - 10) - 250;                // —юда запилить функцию дл€ равномерной генерации плит по высоте
+		x = rand() % (550 - PLATE_WIDTH);
+		y = rand() % (700 - PLATE_HEIGHT) - 250;                // —юда запилить функцию дл€ равномерной генерации плит по высоте
 		game.plate[i].body->setPosition(x, y);
 	}
 }
@@ -117,7 +117,7 @@ void moveDynamicPlates(Game & game)
 				}
 				break;
 			case RIGHT:
-				if (platePosition[i].x >= 550 - 50 - STEP) // ширина экрана - ширина плиты
+				if (platePosition[i].x >= 550 - PLATE_WIDTH - STEP) // ширина экрана - ширина плиты
 				{
 					game.plate[i].direction.x = LEFT;
 				}

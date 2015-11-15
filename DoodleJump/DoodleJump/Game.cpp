@@ -42,7 +42,7 @@ M_Start:
 			}
 			else
 			{
-				game.hero.body->setFillColor(sf::Color(255, 0, 0));
+//				game.hero.body->setFillColor(sf::Color(255, 0, 0));
 			}
 		}
 		Marker = 60;
@@ -102,7 +102,7 @@ bool checkGameEnd(Game & game)
 	{
 		platePosition[i] = game.plate[i].body->getPosition();
 
-		if (platePosition[i].y >= doodlePosition.y + 70 - 10 - game.hero.deltaHeight*STEP)
+		if (platePosition[i].y >= doodlePosition.y + DOODLE_HEIGHT - PLATE_HEIGHT - game.hero.deltaHeight*STEP)
 		{
 			flag = 0;
 		}
@@ -147,7 +147,7 @@ void initialGame(Game & game)
 
 void render(sf::RenderWindow & window, Game & game)
 {
-	window.clear(sf::Color(255, 255, 255));
+	window.clear(sf::Color(230, 230, 230));
 
 	for (int i = 0; i < NUMBER_PLATES; ++i)
 	{
@@ -178,7 +178,7 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view)
 	}
 	if (game.hero.direction.y == DOWN)
 	{
-		if (game.hero.deltaHeight = checkDoodleFall(game)) // if (checkDoodleFall(game))
+		if (game.hero.deltaHeight = checkDoodleFall(game))
 		{
 			game.hero.direction.y = UP;
 		}
@@ -197,7 +197,6 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view)
 		else
 		{
 			game.hero.direction.y = DOWN;
-			//game.hero.deltaHeight = checkDoodleFall(game);
 		}
 	}
 
@@ -246,8 +245,8 @@ int checkDoodleFall(Game & game)
 
 	for (int i = 0; i < NUMBER_PLATES; ++i) // в отдельную функцию collisionPlate() засунь, выглядит ущербно 
 	{
-		if (((doodlePosition.y + 70 + 10 + 0.5 >= platePosition[i].y + 10 - 0.5) && (doodlePosition.y - 0.5 <= platePosition[i].y - 70 + 0.5)
-			&& (doodlePosition.x + 40 >= platePosition[i].x) && (doodlePosition.x - 50 <= platePosition[i].x)))
+		if (((doodlePosition.y + DOODLE_HEIGHT + PLATE_HEIGHT + 0.5 >= platePosition[i].y + PLATE_HEIGHT - 0.5) && (doodlePosition.y - 0.5 <= platePosition[i].y - DOODLE_HEIGHT + 0.5)
+			&& (doodlePosition.x + DOODLE_WIDTH >= platePosition[i].x) && (doodlePosition.x - PLATE_WIDTH <= platePosition[i].x)))
 		{
 			if (game.plate[i].type == CLOUD)
 			{
@@ -265,15 +264,15 @@ int checkDoodleFall(Game & game)
 		switch (game.bonus[i].type)
 		{
 		case SPRING:
-			if (((doodlePosition.y + 70 + 15 + 0.5 >= bonusPosition[i].y + 15 - 0.5) && (doodlePosition.y - 0.5 <= bonusPosition[i].y - 70 + 0.5)
-				&& (doodlePosition.x + 47 >= bonusPosition[i].x) && (doodlePosition.x - 7 <= bonusPosition[i].x)))
+			if (((doodlePosition.y + DOODLE_HEIGHT + 15 + 0.5 >= bonusPosition[i].y + 15 - 0.5) && (doodlePosition.y - 0.5 <= bonusPosition[i].y - DOODLE_HEIGHT + 0.5)
+				&& (doodlePosition.x + DOODLE_WIDTH + 7 >= bonusPosition[i].x) && (doodlePosition.x - 7 <= bonusPosition[i].x)))
 			{
 				collision = COLLISION_SPRING;
 			}
 			break;
 		case TRAMPLANE:
-			if (((doodlePosition.y + 70 + 7 + 0.5 >= bonusPosition[i].y + 7 - 0.5) && (doodlePosition.y - 0.5 <= bonusPosition[i].y - 70 + 0.5)
-				&& (doodlePosition.x + 55 >= bonusPosition[i].x) && (doodlePosition.x - 15 <= bonusPosition[i].x)))
+			if (((doodlePosition.y + DOODLE_HEIGHT + 7 + 0.5 >= bonusPosition[i].y + 7 - 0.5) && (doodlePosition.y - 0.5 <= bonusPosition[i].y - DOODLE_HEIGHT + 0.5)
+				&& (doodlePosition.x + DOODLE_WIDTH + 15 >= bonusPosition[i].x) && (doodlePosition.x - 15 <= bonusPosition[i].x)))
 			{
 				collision = COLLISION_TRAMPLANE;
 			}

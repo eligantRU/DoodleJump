@@ -25,10 +25,10 @@ void initialBonuses(Game & game)
 			switch (randomNum)
 			{
 			case 0:
-				x = rand() % (50 - 7); // 50 -- ширина плиты, 7 -- ширина пружины
-				game.bonus[i].body = new sf::RectangleShape(sf::Vector2f(7, 15));
+				x = rand() % (PLATE_WIDTH - SPRING_WIDTH);
+				game.bonus[i].body = new sf::RectangleShape(sf::Vector2f(SPRING_WIDTH, SPRING_HEIGHT));
 				game.bonus[i].type = SPRING;
-				game.bonus[i].body->setPosition(platePosition[N].x + x, platePosition[N].y - 15); // 15 -- высота пружины
+				game.bonus[i].body->setPosition(platePosition[N].x + x, platePosition[N].y - SPRING_HEIGHT); 
 				game.bonus[i].body->setFillColor(sf::Color(64, 64, 64));
 				break;
 			case 1:
@@ -61,7 +61,7 @@ void generBonuses(Game & game)
 	{
 		bonusPosition[i] = game.bonus[i].body->getPosition();
 
-		if (bonusPosition[i].y >= doodlePosition.y + 70 + 275 - 15 - 10)
+		if (bonusPosition[i].y >= doodlePosition.y + DOODLE_HEIGHT + 275 - 15 - 10)                 // WHAT IS IT?!
 		{
 			for (int j = 0; j < NUMBER_PLATES; ++j)
 			{
@@ -72,14 +72,14 @@ void generBonuses(Game & game)
 					switch (randomNum)
 					{
 					case 0:
-						x = rand() % (50 - 7); // 50 -- ширина плиты, 7 -- ширина пружины
+						x = rand() % (PLATE_WIDTH - SPRING_WIDTH);
 						game.bonus[i].body = new sf::RectangleShape(sf::Vector2f(7, 15));
 						game.bonus[i].type = SPRING;
-						game.bonus[i].body->setPosition(platePosition.x + x, platePosition.y - 15); // 15 -- высота пружины
+						game.bonus[i].body->setPosition(platePosition.x + x, platePosition.y - SPRING_HEIGHT);
 						game.bonus[i].body->setFillColor(sf::Color(64, 64, 64));
 						break;
 					case 1:
-						x = rand() % (50 - 15); // 50 -- ширина плиты, 15 -- ширина батута
+						x = rand() % (PLATE_WIDTH - 15); // 15 -- ширина батута
 						game.bonus[i].body = new sf::RectangleShape(sf::Vector2f(15, 7));
 						game.bonus[i].type = TRAMPLANE;
 						game.bonus[i].body->setPosition(platePosition.x + x, platePosition.y - 7);
