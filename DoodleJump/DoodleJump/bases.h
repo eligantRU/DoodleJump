@@ -14,6 +14,9 @@ const int SPRING_HEIGHT = 12;
 bool G_noJumps;   // = true;
 bool G_endOfGame; // = false;
 
+sf::Texture BACKGROUND_TEXTURE;
+
+sf::Sprite * BACKGROUND;
 sf::Texture PLATE_STATIC_TEXTURE;
 sf::Texture PLATE_DYNAMIC_TEXTURE;
 sf::Texture PLATE_CLOUD_TEXTURE;
