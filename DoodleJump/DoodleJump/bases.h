@@ -1,18 +1,28 @@
 #include <SFML/Graphics.hpp>
 
-const int NUMBER_PLATES = 15;
-const int NUMBER_BONUSES = 2;
+const int NUMBER_PLATES = 25;
+const int NUMBER_BONUSES = 5;
 const sf::Time TIME_PER_FRAME = sf::seconds(1.f / 60.f);
 const float STEP = 3.f;
 const int DOODLE_WIDTH = 45;
 const int DOODLE_HEIGHT = 45;
-const int PLATE_WIDTH = 50;
-const int PLATE_HEIGHT = 10;
-const int SPRING_WIDTH = 7;
-const int SPRING_HEIGHT = 15;
+const int PLATE_WIDTH = 63;
+const int PLATE_HEIGHT = 15;
+const int SPRING_WIDTH = 16;
+const int SPRING_HEIGHT = 12;
 
 bool G_noJumps;   // = true;
 bool G_endOfGame; // = false;
+
+sf::Texture PLATE_STATIC_TEXTURE;
+sf::Texture PLATE_DYNAMIC_TEXTURE;
+sf::Texture PLATE_CLOUD_TEXTURE;
+sf::Texture SPRING_TEXTURE;
+sf::Texture SPRING_2_TEXTURE;
+sf::Texture DOODLE_LEFT_TEXTURE;
+sf::Texture DOODLE_RIGHT_TEXTURE;
+sf::Texture DOODLE_JUMP_LEFT_TEXTURE;
+sf::Texture DOODLE_JUMP_RIGHT_TEXTURE;
 
 typedef enum
 {
@@ -70,7 +80,8 @@ struct Doodle
 
 struct Plate
 {
-	sf::RectangleShape * body;
+	sf::Sprite * body;
+	sf::Texture texture;
 	PlateType type;
 	Direction direction;
 };
@@ -78,7 +89,7 @@ struct Plate
 struct Bonus
 {
 	BonusType type;
-	sf::RectangleShape * body;
+	sf::Sprite * body;
 };
 
 struct Game

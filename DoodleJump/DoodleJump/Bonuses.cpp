@@ -26,17 +26,17 @@ void initialBonuses(Game & game)
 			{
 			case 0:
 				x = rand() % (PLATE_WIDTH - SPRING_WIDTH);
-				game.bonus[i].body = new sf::RectangleShape(sf::Vector2f(SPRING_WIDTH, SPRING_HEIGHT));
+				game.bonus[i].body = new sf::Sprite;
 				game.bonus[i].type = SPRING;
 				game.bonus[i].body->setPosition(platePosition[N].x + x, platePosition[N].y - SPRING_HEIGHT); 
-				game.bonus[i].body->setFillColor(sf::Color(64, 64, 64));
+				game.bonus[i].body->setTexture(SPRING_TEXTURE);
 				break;
 			case 1:
-				x = rand() % (50 - 15); // 50 -- ширина плиты, 15 -- ширина батута
-				game.bonus[i].body = new sf::RectangleShape(sf::Vector2f(15, 7));
+				x = rand() % (PLATE_WIDTH - 15); // 50 -- ширина плиты, 15 -- ширина батута
+				game.bonus[i].body = new sf::Sprite;
 				game.bonus[i].type = TRAMPLANE;
 				game.bonus[i].body->setPosition(platePosition[N].x + x, platePosition[N].y - 7);
-				game.bonus[i].body->setFillColor(sf::Color(255, 0, 0));
+				//game.bonus[i].body->setFillColor(sf::Color(255, 0, 0));
 				break;
 			}
 		}
@@ -61,7 +61,7 @@ void generBonuses(Game & game)
 	{
 		bonusPosition[i] = game.bonus[i].body->getPosition();
 
-		if (bonusPosition[i].y >= doodlePosition.y + DOODLE_HEIGHT + 275 - 15 - 10)                 // WHAT IS IT?!
+		if (bonusPosition[i].y >= doodlePosition.y + DOODLE_HEIGHT + 275 + 10 + 2*PLATE_HEIGHT)                 // WHAT IS IT?! BUG!!!
 		{
 			for (int j = 0; j < NUMBER_PLATES; ++j)
 			{
@@ -73,17 +73,17 @@ void generBonuses(Game & game)
 					{
 					case 0:
 						x = rand() % (PLATE_WIDTH - SPRING_WIDTH);
-						game.bonus[i].body = new sf::RectangleShape(sf::Vector2f(7, 15));
+						game.bonus[i].body = new sf::Sprite;
 						game.bonus[i].type = SPRING;
 						game.bonus[i].body->setPosition(platePosition.x + x, platePosition.y - SPRING_HEIGHT);
-						game.bonus[i].body->setFillColor(sf::Color(64, 64, 64));
+						game.bonus[i].body->setTexture(SPRING_TEXTURE);
 						break;
 					case 1:
 						x = rand() % (PLATE_WIDTH - 15); // 15 -- ширина батута
-						game.bonus[i].body = new sf::RectangleShape(sf::Vector2f(15, 7));
+						game.bonus[i].body = new sf::Sprite;
 						game.bonus[i].type = TRAMPLANE;
 						game.bonus[i].body->setPosition(platePosition.x + x, platePosition.y - 7);
-						game.bonus[i].body->setFillColor(sf::Color(255, 0, 0));
+						//game.bonus[i].body->setFillColor(sf::Color(255, 0, 0));
 						break;
 					}
 					break;

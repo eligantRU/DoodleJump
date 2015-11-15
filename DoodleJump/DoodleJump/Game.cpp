@@ -42,7 +42,7 @@ M_Start:
 			}
 			else
 			{
-//				game.hero.body->setFillColor(sf::Color(255, 0, 0));
+				// конец игры, выкидываем на Menu
 			}
 		}
 		Marker = 60;
@@ -163,7 +163,7 @@ void render(sf::RenderWindow & window, Game & game)
 	window.display();
 }
 
-void update(sf::RenderWindow & window, Game & game, sf::View & view)
+void update(sf::RenderWindow & window, Game & game, sf::View & view) // смену текстур в отдельную функцию...убожество!
 {
 	sf::Vector2f position(0.f, 0.f);
 	sf::Vector2f doodlePosition = game.hero.body->getPosition();
@@ -171,20 +171,53 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view)
 	if (game.hero.direction.x == RIGHT)
 	{
 		position.x += STEP;
+		if (position.y == DOWN)
+		{
+			game.hero.body->setTexture(DOODLE_RIGHT_TEXTURE);
+		}
+		else
+		{
+			game.hero.body->setTexture(DOODLE_JUMP_RIGHT_TEXTURE);
+		}
 	}
 	if (game.hero.direction.x == LEFT)
 	{
 		position.x -= STEP;
+		if (position.y == DOWN)
+		{
+			game.hero.body->setTexture(DOODLE_LEFT_TEXTURE);
+		}
+		else
+		{
+			game.hero.body->setTexture(DOODLE_JUMP_LEFT_TEXTURE);
+		}
 	}
 	if (game.hero.direction.y == DOWN)
 	{
 		if (game.hero.deltaHeight = checkDoodleFall(game))
 		{
 			game.hero.direction.y = UP;
+			if (game.hero.direction.x == RIGHT)
+			{
+				game.hero.body->setTexture(DOODLE_JUMP_RIGHT_TEXTURE);
+			}
+			else
+			{
+				game.hero.body->setTexture(DOODLE_JUMP_LEFT_TEXTURE);
+			}
 		}
 		else
 		{
 			position.y += STEP;
+			if (game.hero.direction.x == RIGHT)
+			{
+				game.hero.body->setTexture(DOODLE_RIGHT_TEXTURE);
+			}
+			else //if(game.hero.direction.x == LEFT)  // Убираем "//if..." и баг с переключением дудла влево исчезает. 
+													  // Надо сохранять то, куда он смотрел, прежде чем начать падать. Сранивать спрайты(?)
+			{
+				game.hero.body->setTexture(DOODLE_LEFT_TEXTURE);
+			}
 		}
 	}
 	else if (game.hero.direction.y == UP)
@@ -268,6 +301,7 @@ int checkDoodleFall(Game & game)
 				&& (doodlePosition.x + DOODLE_WIDTH + 7 >= bonusPosition[i].x) && (doodlePosition.x - 7 <= bonusPosition[i].x)))
 			{
 				collision = COLLISION_SPRING;
+				game.bonus[i].body->setTexture(SPRING_2_TEXTURE);
 			}
 			break;
 		case TRAMPLANE:
