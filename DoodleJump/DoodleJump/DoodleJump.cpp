@@ -8,6 +8,17 @@
 int main(void)
 {   
 	// это убожество в отдельную функцию неплохо бы забить молотом Тора
+	if (!BACKGROUND_TEXTURE.loadFromFile("images/background.png"))
+	{
+		printf("Error loaded file");
+	}
+	BACKGROUND_TEXTURE.setSmooth(true);
+	BACKGROUND_TEXTURE.setRepeated(true);
+	
+	BACKGROUND = new sf::Sprite;
+	BACKGROUND->setTextureRect(sf::IntRect(0, 0, 550, 700));
+	BACKGROUND->setTexture(BACKGROUND_TEXTURE);
+
 	if (!DOODLE_LEFT_TEXTURE.loadFromFile("images/Doodle45_45Left.png"))
 	{
 		printf("Error loaded file");

@@ -148,6 +148,10 @@ void initialGame(Game & game)
 void render(sf::RenderWindow & window, Game & game)
 {
 	window.clear(sf::Color(230, 230, 230));
+	// FIX IT!
+	sf::Vector2f position = game.hero.body->getPosition();                               
+	BACKGROUND->setPosition(0, position.y-350);
+	window.draw(*BACKGROUND);
 
 	for (int i = 0; i < NUMBER_PLATES; ++i)
 	{
@@ -247,6 +251,16 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view) // смену те
 		break;
 	}
 	game.hero.body->move(position * (k * TIME_PER_FRAME.asSeconds()));
+
+	// В отдельную функцию + стоит добавить плавности? // В оригинале дудла так же резко
+	if (doodlePosition.x <= -1*DOODLE_WIDTH)
+	{
+		game.hero.body->setPosition(550-DOODLE_WIDTH, doodlePosition.y);
+	}
+	if (doodlePosition.x >= 550)
+	{
+		game.hero.body->setPosition(0, doodlePosition.y);
+	}
 
 	view.setCenter(275, doodlePosition.y);
 
