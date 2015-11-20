@@ -1,6 +1,6 @@
 bool checkGameEnd(Game & game);
 void starter(sf::RenderWindow & window, Game & game);
-void initialGame(Game & game);
+void initialGame(Game & game, sf::View view);
 void startGame(void);
 void keyPressed(sf::RenderWindow & window, Game & game);
 void update(sf::RenderWindow & window, Game & game, sf::View & view);
@@ -20,8 +20,8 @@ void startGame(void)
 M_Start:
 	G_noJumps = true;
 	G_endOfGame = false;
-	initialGame(game);
-
+	initialGame(game, view);
+	update(window, game, view);
 	sf::Clock clock;
 	float timeSinceLastUpdate = clock.getElapsedTime().asSeconds();
 	int Marker = 60;
@@ -137,9 +137,9 @@ void starter(sf::RenderWindow & window, Game & game)
 	}
 }
 
-void initialGame(Game & game)
+void initialGame(Game & game, sf::View view)
 {
-	initialHero(game);
+	initialHero(game, view);
 	initialPlates(game);
 	initialBonuses(game);
 	game.actualBonus = NO;
@@ -148,9 +148,9 @@ void initialGame(Game & game)
 void render(sf::RenderWindow & window, Game & game)
 {
 	window.clear(sf::Color(230, 230, 230));
-	// FIX IT!
-	sf::Vector2f position = game.hero.body->getPosition();                               
-	BACKGROUND->setPosition(0, position.y-350);
+	// FIX IT! Костыль!
+	sf::Vector2f position = game.hero.body->getPosition();
+	BACKGROUND->setPosition(0, position.y - 350);
 	window.draw(*BACKGROUND);
 
 	for (int i = 0; i < NUMBER_PLATES; ++i)
@@ -169,7 +169,7 @@ void render(sf::RenderWindow & window, Game & game)
 
 void update(sf::RenderWindow & window, Game & game, sf::View & view) // смену текстур в отдельную функцию...убожество!
 {
-	sf::Vector2f position(0.f, 0.f);
+	sf::Vector2f position(0.f, 1.f);
 	sf::Vector2f doodlePosition = game.hero.body->getPosition();
 
 	if (game.hero.direction.x == RIGHT)
@@ -218,7 +218,7 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view) // смену те
 				game.hero.body->setTexture(DOODLE_RIGHT_TEXTURE);
 			}
 			else //if(game.hero.direction.x == LEFT)  // Убираем "//if..." и баг с переключением дудла влево исчезает. 
-													  // Надо сохранять то, куда он смотрел, прежде чем начать падать. Сранивать спрайты(?)
+				 // Надо сохранять то, куда он смотрел, прежде чем начать падать. Сранивать спрайты(?)
 			{
 				game.hero.body->setTexture(DOODLE_LEFT_TEXTURE);
 			}
@@ -237,7 +237,7 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view) // смену те
 		}
 	}
 
-	int k;
+	int k = 1;
 	switch (game.actualBonus)
 	{
 	case NO:
@@ -253,17 +253,21 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view) // смену те
 	game.hero.body->move(position * (k * TIME_PER_FRAME.asSeconds()));
 
 	// В отдельную функцию + стоит добавить плавности? // В оригинале дудла так же резко
-	if (doodlePosition.x <= -1*DOODLE_WIDTH)
+	if (doodlePosition.x <= -1 * DOODLE_WIDTH)
 	{
-		game.hero.body->setPosition(550-DOODLE_WIDTH, doodlePosition.y);
+		game.hero.body->setPosition(550 - DOODLE_WIDTH, doodlePosition.y);
 	}
 	if (doodlePosition.x >= 550)
 	{
 		game.hero.body->setPosition(0, doodlePosition.y);
 	}
 
-	view.setCenter(275, doodlePosition.y);
-
+	//if (game.hero.direction.y == UP) РАССКОММЕНТИТЬ
+	//{ РАССКОММЕНТИТЬ
+		view.setCenter(275, doodlePosition.y);
+		// в этом месте нужно пересчитать координаты дудла(нужно считать сколько STEP он падал) и переопределить координаты всех тел на рабочей области
+		// камера остаётся на месте, рывки прекращаются
+	//} РАССКОММЕНТИТЬ
 	moveDynamicPlates(game);
 	generPlates(game);
 	generBonuses(game);
@@ -331,7 +335,7 @@ int checkDoodleFall(Game & game)
 	{
 	case COLLISION_PLATE:
 		game.actualBonus = NO;
-		return 4500;
+		return 5500;
 	case COLLISION_SPRING:
 		game.actualBonus = SPRING;
 		return 4500;

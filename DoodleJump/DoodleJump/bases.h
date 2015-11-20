@@ -13,6 +13,7 @@ const int SPRING_HEIGHT = 12;
 
 bool G_noJumps;   // = true;
 bool G_endOfGame; // = false;
+sf::Vector2f G_STEPS;
 
 sf::Texture BACKGROUND_TEXTURE;
 
