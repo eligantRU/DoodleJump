@@ -234,6 +234,7 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view) // смену те
 		else
 		{
 			game.hero.direction.y = DOWN;
+			positionBeforeDown = game.hero.body->getPosition();
 		}
 	}
 
@@ -262,12 +263,11 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view) // смену те
 		game.hero.body->setPosition(0, doodlePosition.y);
 	}
 
-	//if (game.hero.direction.y == UP) –ј—— ќћћ≈Ќ“»“№
-	//{ –ј—— ќћћ≈Ќ“»“№
+	if ((game.hero.direction.y == UP) && (doodlePosition.y <= positionBeforeDown.y))
+	{
 		view.setCenter(275, doodlePosition.y);
-		// в этом месте нужно пересчитать координаты дудла(нужно считать сколько STEP он падал) и переопределить координаты всех тел на рабочей области
-		// камера остаЄтс€ на месте, рывки прекращаютс€
-	//} –ј—— ќћћ≈Ќ“»“№
+	}
+
 	moveDynamicPlates(game);
 	generPlates(game);
 	generBonuses(game);
