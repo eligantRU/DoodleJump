@@ -11,8 +11,9 @@ const int PLATE_HEIGHT = 15;
 const int SPRING_WIDTH = 16;
 const int SPRING_HEIGHT = 12;
 
-bool G_noJumps;   // = true;
-bool G_endOfGame; // = false;
+bool G_noJumps;
+bool G_endOfGame;
+sf::Vector2f positionBeforeDown;
 
 sf::Texture BACKGROUND_TEXTURE;
 
