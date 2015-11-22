@@ -68,7 +68,7 @@ void generBonuses(Game & game)
 				platePosition = game.plate[j].body->getPosition();
 				if ((platePosition.y <= doodlePosition.y - 275) && (game.plate[j].type == STATIC))
 				{
-					randomNum = rand() % 2;
+					randomNum = rand() % 3;
 					switch (randomNum)
 					{
 					case 0:
@@ -85,8 +85,23 @@ void generBonuses(Game & game)
 						game.bonus[i].body->setPosition(platePosition.x + x, platePosition.y - 7);
 						//game.bonus[i].body->setFillColor(sf::Color(255, 0, 0));
 						break;
+					case 2:
+						randomNum = rand() % 2;
+						x = rand() % (PLATE_WIDTH - SPRING_WIDTH);
+						game.bonus[i].body = new sf::Sprite;
+						game.bonus[i].type = HAT_HELICOPTER;
+						game.bonus[i].body->setPosition(platePosition.x + x, platePosition.y - HAT_HELICOPTER_HEIGHT);
+						switch (randomNum)
+						{
+							case 0:
+								game.bonus[i].body->setTexture(HAT_HELOCPTER_NONE_LEFT_TEXTURE);
+								break;
+							case 1:
+								game.bonus[i].body->setTexture(HAT_HELOCPTER_NONE_RIGHT_TEXTURE);
+								break;
+						}
+						break;
 					}
-					break;
 				}
 			}
 		}

@@ -19,6 +19,42 @@ int main(void)
 	BACKGROUND->setTextureRect(sf::IntRect(0, 0, 550, 700));
 	BACKGROUND->setTexture(BACKGROUND_TEXTURE);
 
+	if (!HAT_HELOCPTER_NONE_RIGHT_TEXTURE.loadFromFile("images/Hat_Helicopter_None_Right_30_18.png"))
+	{
+		printf("Error loaded file");
+	}
+	HAT_HELOCPTER_NONE_RIGHT_TEXTURE.setSmooth(true);
+
+	if (!HAT_HELOCPTER_NONE_LEFT_TEXTURE.loadFromFile("images/Hat_Helicopter_None_Left_30_18.png"))
+	{
+		printf("Error loaded file");
+	}
+	HAT_HELOCPTER_NONE_LEFT_TEXTURE.setSmooth(true);
+
+	if (!HAT_HELOCPTER_DIAGONAL_LEFT_TEXTURE.loadFromFile("images/Hat_Helicopter_Fly_Diagonal_Left_29_26.png"))
+	{
+		printf("Error loaded file");
+	}
+	HAT_HELOCPTER_DIAGONAL_LEFT_TEXTURE.setSmooth(true);
+
+	if (!HAT_HELOCPTER_DIAGONAL_RIGHT_TEXTURE.loadFromFile("images/Hat_Helicopter_Fly_Diagonal_Right_29_26.png"))
+	{
+		printf("Error loaded file");
+	}
+	HAT_HELOCPTER_DIAGONAL_RIGHT_TEXTURE.setSmooth(true);
+	
+	if (!HAT_HELOCPTER_FLY_LEFT_TEXTURE.loadFromFile("images/Hat_Helicopter_Left_29_23.png"))
+	{
+		printf("Error loaded file");
+	}
+	HAT_HELOCPTER_FLY_LEFT_TEXTURE.setSmooth(true);
+
+	if (!HAT_HELOCPTER_FLY_RIGHT_TEXTURE.loadFromFile("images/Hat_Helicopter_Right_29_23.png"))
+	{
+		printf("Error loaded file");
+	}
+	HAT_HELOCPTER_FLY_RIGHT_TEXTURE.setSmooth(true);
+
 	if (!DOODLE_LEFT_TEXTURE.loadFromFile("images/Doodle45_45Left.png"))
 	{
 		printf("Error loaded file");
