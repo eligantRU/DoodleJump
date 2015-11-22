@@ -151,9 +151,6 @@ void initialGame(Game & game, sf::View view)
 void render(sf::RenderWindow & window, Game & game)
 {
 	window.clear(sf::Color(230, 230, 230));
-	// FIX IT! Костыль!
-	sf::Vector2f position = game.hero.body->getPosition();
-	BACKGROUND->setPosition(0, position.y - 350);
 	window.draw(*BACKGROUND);
 
 	for (int i = 0; i < NUMBER_PLATES; ++i)
@@ -263,7 +260,7 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view) // смену те
 	}
 	game.hero.body->move(position * (k * TIME_PER_FRAME.asSeconds()));
 
-	// В отдельную функцию + стоит добавить плавности? // В оригинале дудла так же резко
+	// В отдельную функцию
 	if (doodlePosition.x <= -1 * DOODLE_WIDTH)
 	{
 		game.hero.body->setPosition(550 - DOODLE_WIDTH, doodlePosition.y);
@@ -274,13 +271,21 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view) // смену те
 	}
 	//
 
-	if (game.actualBonus == HAT_HELICOPTER) 
+	if (game.actualBonus == HAT_HELICOPTER) // и это тоже в отдельную функцию
 	{
+		if (game.hero.deltaHeight <= 1000)
+		{
+			game.qwerty = -1;
+			game.bonus[game.actualBonusId].body->setTexture(HAT_HELOCPTER_FLY_LEFT_TEXTURE);
+			game.bonus[game.actualBonusId].body->rotate(-0.07f);
+			game.bonus[game.actualBonusId].body->move(sf::Vector2f(-2*STEP, 6*STEP) * TIME_PER_FRAME.asSeconds());
+		}
 		if (game.hero.deltaHeight == 0)
 		{
-			game.actualBonus = NO;
 			game.qwerty = 0;
+			game.actualBonus = NO;
 		}
+
 		if ((game.qwerty >= 0) && (game.qwerty <= 100))
 		{
 			game.bonus[game.actualBonusId].body->setTexture(HAT_HELOCPTER_FLY_LEFT_TEXTURE);
@@ -302,19 +307,23 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view) // смену те
 			game.qwerty = 0;
 		}
 
-		if (game.hero.lastDirectionX == RIGHT)
+		if ((game.qwerty >= 0) && (game.qwerty <= 400) && (game.actualBonus != NO))
 		{
-			game.bonus[game.actualBonusId].body->setPosition(game.hero.body->getPosition().x, game.hero.body->getPosition().y - 13);
-		}
-		else if (game.hero.lastDirectionX == LEFT)
-		{
-			game.bonus[game.actualBonusId].body->setPosition(game.hero.body->getPosition().x + 15, game.hero.body->getPosition().y - 13);
+			if (game.hero.lastDirectionX == RIGHT)
+			{
+				game.bonus[game.actualBonusId].body->setPosition(game.hero.body->getPosition().x, game.hero.body->getPosition().y - 13);
+			}
+			else if (game.hero.lastDirectionX == LEFT)
+			{
+				game.bonus[game.actualBonusId].body->setPosition(game.hero.body->getPosition().x + 15, game.hero.body->getPosition().y - 13);
+			}
 		}
 	}
 
 	if ((game.hero.direction.y == UP) && (doodlePosition.y <= positionBeforeDown.y))
 	{
 		view.setCenter(275, doodlePosition.y);
+		BACKGROUND->setPosition(0, doodlePosition.y-350);
 	}
 
 	moveDynamicPlates(game);
