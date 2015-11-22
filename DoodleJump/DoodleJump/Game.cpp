@@ -14,10 +14,11 @@ void startGame(void)
 	window.setFramerateLimit(60);
 
 	sf::View view;
-	view.reset(sf::FloatRect(0, 0, 550, 700));
+	
 
 	Game game;
 M_Start:
+	view.reset(sf::FloatRect(0, 0, 550, 700));
 	G_noJumps = true;
 	G_endOfGame = false;
 	initialGame(game, view);

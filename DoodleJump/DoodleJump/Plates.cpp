@@ -47,7 +47,7 @@ void generPlates(Game & game)
 				game.plate[i].body->setTexture(PLATE_CLOUD_TEXTURE);
 				break;
 			}
-			game.plate[i].body->setPosition(x, doodlePosition.y + y - 380);
+			game.plate[i].body->setPosition(x, doodlePosition.y + y - 380);  // 380?! What is it?
 		}
 	}
 }
@@ -89,7 +89,7 @@ void initialPlates(Game & game) // эту функцию можно убрать, либо в неЄ засунуть
 			break;
 		}
 		x = rand() % (550 - PLATE_WIDTH);
-		y = rand() % (700 - PLATE_HEIGHT) - 250;                // —юда запилить функцию дл€ равномерной генерации плит по высоте
+		y = rand() % (700 - PLATE_HEIGHT-PLATE_HEIGHT); // —юда запилить функцию дл€ равномерной генерации плит по высоте
 		game.plate[i].body->setPosition(x, y);
 	}
 }
