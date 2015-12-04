@@ -1,3 +1,5 @@
+#pragma once
+
 void initialBonuses(Game & game);
 void generBonuses(Game & game);
 
@@ -29,14 +31,14 @@ void initialBonuses(Game & game)
 				game.bonus[i].body = new sf::Sprite;
 				game.bonus[i].type = SPRING;
 				game.bonus[i].body->setPosition(platePosition[N].x + x, platePosition[N].y - SPRING_HEIGHT); 
-				game.bonus[i].body->setTexture(SPRING_TEXTURE);
+				game.bonus[i].body->setTexture(G_ASSETS.SPRING_TEXTURE);
 				break;
 			case 1:
-				x = rand() % (PLATE_WIDTH - 15); // 50 -- ширина плиты, 15 -- ширина батута
+				x = rand() % (PLATE_WIDTH - TRAMPOLINE_WIDTH); 
 				game.bonus[i].body = new sf::Sprite;
 				game.bonus[i].type = TRAMPLANE;
-				game.bonus[i].body->setPosition(platePosition[N].x + x, platePosition[N].y - 7);
-				//game.bonus[i].body->setFillColor(sf::Color(255, 0, 0));
+				game.bonus[i].body->setPosition(platePosition[N].x + x, platePosition[N].y - TRAMPOLINE_HEIGHT);
+				game.bonus[i].body->setTexture(G_ASSETS.TRAMPOLINE_TEXTURE);
 				break;
 			}
 		}
@@ -68,7 +70,7 @@ void generBonuses(Game & game)
 				platePosition = game.plate[j].body->getPosition();
 				if ((platePosition.y <= doodlePosition.y - 275) && (game.plate[j].type == STATIC))
 				{
-					randomNum = rand() % 3;
+					randomNum = rand() % 4;
 					switch (randomNum)
 					{
 					case 0:
@@ -76,14 +78,14 @@ void generBonuses(Game & game)
 						game.bonus[i].body = new sf::Sprite;
 						game.bonus[i].type = SPRING;
 						game.bonus[i].body->setPosition(platePosition.x + x, platePosition.y - SPRING_HEIGHT);
-						game.bonus[i].body->setTexture(SPRING_TEXTURE);
+						game.bonus[i].body->setTexture(G_ASSETS.SPRING_TEXTURE);
 						break;
 					case 1:
-						x = rand() % (PLATE_WIDTH - 15); // 15 -- ширина батута
+						x = rand() % (PLATE_WIDTH - TRAMPOLINE_WIDTH);
 						game.bonus[i].body = new sf::Sprite;
 						game.bonus[i].type = TRAMPLANE;
-						game.bonus[i].body->setPosition(platePosition.x + x, platePosition.y - 7);
-						//game.bonus[i].body->setFillColor(sf::Color(255, 0, 0));
+						game.bonus[i].body->setPosition(platePosition.x + x, platePosition.y - TRAMPOLINE_HEIGHT);
+						game.bonus[i].body->setTexture(G_ASSETS.TRAMPOLINE_TEXTURE);
 						break;
 					case 2:
 						randomNum = rand() % 2;
@@ -94,12 +96,19 @@ void generBonuses(Game & game)
 						switch (randomNum)
 						{
 							case 0:
-								game.bonus[i].body->setTexture(HAT_HELOCPTER_NONE_LEFT_TEXTURE);
+								game.bonus[i].body->setTexture(G_ASSETS.HAT_HELOCPTER_NONE_LEFT_TEXTURE);
 								break;
 							case 1:
-								game.bonus[i].body->setTexture(HAT_HELOCPTER_NONE_RIGHT_TEXTURE);
+								game.bonus[i].body->setTexture(G_ASSETS.HAT_HELOCPTER_NONE_RIGHT_TEXTURE);
 								break;
 						}
+						break;
+					case 3:
+						x = rand() % (PLATE_WIDTH - ROCKET_WIDTH);
+						game.bonus[i].body = new sf::Sprite;
+						game.bonus[i].type = ROCKET;
+						game.bonus[i].body->setPosition(platePosition.x + x, platePosition.y - ROCKET_HEIGHT);
+						game.bonus[i].body->setTexture(G_ASSETS.ROCKET_NONE_TEXTURE);
 						break;
 					}
 				}
