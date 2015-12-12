@@ -17,6 +17,8 @@ In the future:
 - Menu
 - Table of records
 
-**Created by Yegorov Nikita, Lacyem 'InfoTech', 2015**
-**Under the direction of Rinat Shaikhutdinov**
-**Refactoring inder the direction of Sergey Shambir**
+```sh
+Created by Yegorov Nikita, Lacyem 'InfoTech', 2015
+Under the direction of Rinat Shaikhutdinov
+Refactoring inder the direction of Sergey Shambir
+'''
