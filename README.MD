@@ -1,14 +1,22 @@
-*********************************************************
-*  Created by Yegorov Nikita, Lacyem 'InfoTech', 2015   *
-*  Under the direction of Rinat Shaikhutdinov           *
-*********************************************************
+# DoodleJump
 
-[IN DEVELOPING]
+DoodleJump is a popular game in over the world. Status: in developing.
 
-Plans:
+## Control keys
+* Esc -- exit
+* Left-right-up-down -- move Doodle
+* Enter(after die) -- new game
 
-# Refactoring
-# Fix plate regeneration
-# Add menu
-# Add enemy
-# Add hole
+### Development
+In the future: 
+- Refactoring
+- Fix plate (re)generation
+- Bonuses on dynamic plates without bugs
+- Enemy
+- Hole
+- Menu
+- Table of records
+
+**Created by Yegorov Nikita, Lacyem 'InfoTech', 2015**
+**Under the direction of Rinat Shaikhutdinov**
+**Refactoring inder the direction of Sergey Shambir**
