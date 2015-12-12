@@ -5,9 +5,9 @@ void initialHero(Game & game);
 void initialHero(Game & game, sf::View & view)
 {
 	game.hero.body = new sf::Sprite;
-	game.hero.body->setTexture(G_ASSETS.DOODLE_LEFT_TEXTURE);
+	game.hero.body->setTexture(g_Assets.DOODLE_LEFT_TEXTURE);
 	game.hero.body->setScale(sf::Vector2f(1.f, 1.f));
-	game.hero.body->setPosition(260, 350);  // +DOODLE_HEIGHT -- этого здесь не было
+	game.hero.body->setPosition(260, 350);
 	game.hero.direction.x = NONE;
 	game.hero.deltaHeight = 0;
 	game.hero.lastDirectionX = LEFT;

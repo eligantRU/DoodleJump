@@ -19,8 +19,8 @@ static const int ROCKET_HEIGHT = 36;
 static const int TRAMPOLINE_WIDTH = 20;
 static const int TRAMPOLINE_HEIGHT = 7;
 
-bool G_noJumps;
-bool G_endOfGame;
+bool g_noJumps;
+bool g_endOfGame;
 sf::Vector2f g_positionBeforeDown; // extern // объ€вить в одном из файлов // им€ переменной убогое, сменить!
 
 struct Assets
@@ -52,7 +52,7 @@ struct Assets
 	sf::Texture TRAMPOLINE_TEXTURE;
 };
 
-Assets G_ASSETS;
+Assets g_Assets;
 
 enum PlateType
 {
@@ -89,7 +89,7 @@ enum BonusType
 {
 	HAT_HELICOPTER,
 	SPRING,
-	TRAMPLANE,
+	TRAMPOLINE,
 	MISSILE,
 	ROCKET,
 	NO
