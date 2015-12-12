@@ -17,8 +17,6 @@ In the future:
 - Menu
 - Table of records
 
-```sh
-Created by Yegorov Nikita, Lacyem 'InfoTech', 2015
+```Created by Yegorov Nikita, Lacyem 'InfoTech', 2015
 Under the direction of Rinat Shaikhutdinov
 Refactoring inder the direction of Sergey Shambir
-'''
