@@ -1,3 +1,5 @@
+#pragma once
+
 int checkDoodleFall(Game & game);
 void generPlates(Game & game);
 void initialPlates(Game & game);
@@ -25,7 +27,7 @@ void generPlates(Game & game)
 			case 0:
 				game.plate[i].type = STATIC;
 				game.plate[i].direction.x = NONE;
-				game.plate[i].body->setTexture(PLATE_STATIC_TEXTURE);
+				game.plate[i].body->setTexture(g_Assets.PLATE_STATIC_TEXTURE);
 				break;
 			case 1:
 				game.plate[i].type = DYNAMIC_X;
@@ -39,12 +41,12 @@ void generPlates(Game & game)
 					game.plate[i].direction.x = RIGHT;
 					break;
 				}
-				game.plate[i].body->setTexture(PLATE_DYNAMIC_TEXTURE);
+				game.plate[i].body->setTexture(g_Assets.PLATE_DYNAMIC_TEXTURE);
 				break;
 			case 2:
 				game.plate[i].type = CLOUD;
 				game.plate[i].direction.x = NONE;
-				game.plate[i].body->setTexture(PLATE_CLOUD_TEXTURE);
+				game.plate[i].body->setTexture(g_Assets.PLATE_CLOUD_TEXTURE);
 				break;
 			}
 			game.plate[i].body->setPosition(x, doodlePosition.y + y - 380);  // 380?! What is it?
@@ -66,7 +68,7 @@ void initialPlates(Game & game) // эту функцию можно убрать, либо в неё засунуть
 		case 0:
 			game.plate[i].type = STATIC;
 			game.plate[i].direction.x = NONE;
-			game.plate[i].body->setTexture(PLATE_STATIC_TEXTURE);
+			game.plate[i].body->setTexture(g_Assets.PLATE_STATIC_TEXTURE);
 			break;
 		case 1:
 			game.plate[i].type = DYNAMIC_X;
@@ -80,12 +82,12 @@ void initialPlates(Game & game) // эту функцию можно убрать, либо в неё засунуть
 				game.plate[i].direction.x = RIGHT;
 				break;
 			}
-			game.plate[i].body->setTexture(PLATE_DYNAMIC_TEXTURE);
+			game.plate[i].body->setTexture(g_Assets.PLATE_DYNAMIC_TEXTURE);
 			break;
 		case 2:
 			game.plate[i].type = CLOUD;
 			game.plate[i].direction.x = NONE;
-			game.plate[i].body->setTexture(PLATE_CLOUD_TEXTURE);
+			game.plate[i].body->setTexture(g_Assets.PLATE_CLOUD_TEXTURE);
 			break;
 		}
 		x = rand() % (550 - PLATE_WIDTH);

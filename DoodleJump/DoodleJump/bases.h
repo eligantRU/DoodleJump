@@ -1,78 +1,99 @@
+#pragma once
+
 #include <SFML/Graphics.hpp>
 
-const int NUMBER_PLATES = 30;
-const int NUMBER_BONUSES = 9;
-const sf::Time TIME_PER_FRAME = sf::seconds(1.f / 60.f);
-const float STEP = 3.f;
-const int DOODLE_WIDTH = 45;
-const int DOODLE_HEIGHT = 45;
-const int PLATE_WIDTH = 63;
-const int PLATE_HEIGHT = 15;
-const int SPRING_WIDTH = 16;
-const int SPRING_HEIGHT = 12;
-const int HAT_HELICOPTER_WIDTH = 30;
-const int HAT_HELICOPTER_HEIGHT = 18;
+static const int NUMBER_PLATES = 30;
+static const int NUMBER_BONUSES = 5;
+static const sf::Time TIME_PER_FRAME = sf::seconds(1.f / 60.f);
+static const float STEP = 3.f;
+static const int DOODLE_WIDTH = 45;
+static const int DOODLE_HEIGHT = 45;
+static const int PLATE_WIDTH = 63;
+static const int PLATE_HEIGHT = 15;
+static const int SPRING_WIDTH = 16;
+static const int SPRING_HEIGHT = 12;
+static const int HAT_HELICOPTER_WIDTH = 30;
+static const int HAT_HELICOPTER_HEIGHT = 18;
+static const int ROCKET_WIDTH = 23;
+static const int ROCKET_HEIGHT = 36;
+static const int TRAMPOLINE_WIDTH = 20;
+static const int TRAMPOLINE_HEIGHT = 7;
 
-bool G_noJumps;
-bool G_endOfGame;
-sf::Vector2f positionBeforeDown;
+bool g_noJumps;
+bool g_endOfGame;
+sf::Vector2f g_positionBeforeDown; // extern // объ€вить в одном из файлов // им€ переменной убогое, сменить!
 
-sf::Sprite * BACKGROUND;
-sf::Texture BACKGROUND_TEXTURE;
-sf::Texture PLATE_STATIC_TEXTURE;
-sf::Texture PLATE_DYNAMIC_TEXTURE;
-sf::Texture PLATE_CLOUD_TEXTURE;
-sf::Texture SPRING_TEXTURE;
-sf::Texture SPRING_2_TEXTURE;
-sf::Texture DOODLE_LEFT_TEXTURE;
-sf::Texture DOODLE_RIGHT_TEXTURE;
-sf::Texture DOODLE_JUMP_LEFT_TEXTURE;
-sf::Texture DOODLE_JUMP_RIGHT_TEXTURE;
-sf::Texture HAT_HELOCPTER_DIAGONAL_RIGHT_TEXTURE;
-sf::Texture HAT_HELOCPTER_DIAGONAL_LEFT_TEXTURE;
-sf::Texture HAT_HELOCPTER_FLY_RIGHT_TEXTURE;
-sf::Texture HAT_HELOCPTER_FLY_LEFT_TEXTURE;
-sf::Texture HAT_HELOCPTER_NONE_RIGHT_TEXTURE;
-sf::Texture HAT_HELOCPTER_NONE_LEFT_TEXTURE;
+struct Assets
+{
+	sf::Sprite * BACKGROUND;
+	sf::Texture BACKGROUND_TEXTURE;
+	sf::Texture PLATE_STATIC_TEXTURE;
+	sf::Texture PLATE_DYNAMIC_TEXTURE;
+	sf::Texture PLATE_CLOUD_TEXTURE;
+	sf::Texture SPRING_TEXTURE;
+	sf::Texture SPRING_2_TEXTURE;
+	sf::Texture DOODLE_LEFT_TEXTURE;
+	sf::Texture DOODLE_RIGHT_TEXTURE;
+	sf::Texture DOODLE_JUMP_LEFT_TEXTURE;
+	sf::Texture DOODLE_JUMP_RIGHT_TEXTURE;
+	sf::Texture HAT_HELOCPTER_DIAGONAL_RIGHT_TEXTURE;
+	sf::Texture HAT_HELOCPTER_DIAGONAL_LEFT_TEXTURE;
+	sf::Texture HAT_HELOCPTER_FLY_RIGHT_TEXTURE;
+	sf::Texture HAT_HELOCPTER_FLY_LEFT_TEXTURE;
+	sf::Texture HAT_HELOCPTER_NONE_RIGHT_TEXTURE;
+	sf::Texture HAT_HELOCPTER_NONE_LEFT_TEXTURE;
+	sf::Texture ROCKET_NONE_TEXTURE;
+	sf::Texture ROCKET_1_LEFT_TEXTURE;
+	sf::Texture ROCKET_1_RIGHT_TEXTURE;
+	sf::Texture ROCKET_2_LEFT_TEXTURE;
+	sf::Texture ROCKET_2_RIGHT_TEXTURE;
+	sf::Texture ROCKET_3_LEFT_TEXTURE;
+	sf::Texture ROCKET_3_RIGHT_TEXTURE;
+	sf::Texture TRAMPOLINE_TEXTURE;
+};
 
-typedef enum
+Assets g_Assets;
+
+enum PlateType
 {
 	STATIC,
 	DYNAMIC_X,
 	CLOUD
-} PlateType;
+};
 
-typedef enum
+enum Collision
 {
 	COLLISION_SPRING,
 	COLLISION_HAT_HELICOPTER,
 	COLLISION_TRAMPLANE,
 	COLLISION_MISSLE,
 	COLLISION_PLATE,
+	COLLISION_ROCKET,
 	NO_COLLISION
-} Collision;
+};
 
-typedef enum
+enum DirectionY
 {
 	UP,
 	DOWN
-} DirectionY;
+};
 
-typedef enum
+enum DirectionX
 {
 	NONE,
 	LEFT,
 	RIGHT
-} DirectionX;
+};
 
-typedef enum
+enum BonusType
 {
 	HAT_HELICOPTER,
 	SPRING,
-	TRAMPLANE,
+	TRAMPOLINE,
 	MISSILE,
+	ROCKET,
 	NO
-} BonusType;
+};
 
 struct Direction
 {

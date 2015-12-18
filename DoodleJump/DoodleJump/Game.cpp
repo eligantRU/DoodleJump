@@ -1,3 +1,5 @@
+#pragma once
+
 bool checkGameEnd(Game & game);
 void starter(sf::RenderWindow & window, Game & game);
 void initialGame(Game & game, sf::View view);
@@ -5,9 +7,12 @@ void startGame(void);
 void keyPressed(sf::RenderWindow & window, Game & game);
 void update(sf::RenderWindow & window, Game & game, sf::View & view);
 void render(sf::RenderWindow & window, Game & game);
+void initAssets(void);
 
 void startGame(void)
 {
+	srand(time(NULL));
+	initAssets();
 	sf::RenderWindow window(sf::VideoMode(550, 700), "Doodle Jump");
 
 	window.setVerticalSyncEnabled(true);
@@ -19,8 +24,8 @@ void startGame(void)
 	Game game;
 M_Start:
 	view.reset(sf::FloatRect(0, 0, 550, 700));
-	G_noJumps = true;
-	G_endOfGame = false;
+	g_noJumps = true;
+	g_endOfGame = false;
 	initialGame(game, view);
 	update(window, game, view);
 	sf::Clock clock;
@@ -36,7 +41,7 @@ M_Start:
 			--Marker;
 
 			starter(window, game);
-			if (G_endOfGame == false)
+			if (g_endOfGame == false)
 			{
 				window.setView(view);
 				update(window, game, view);
@@ -49,7 +54,7 @@ M_Start:
 		Marker = 60;
 		window.setView(view);
 		render(window, game);
-		if (G_endOfGame == true)
+		if (g_endOfGame == true)
 		{
 			while (true)
 			{
@@ -127,14 +132,14 @@ bool checkGameEnd(Game & game)
 
 void starter(sf::RenderWindow & window, Game & game)
 {
-	if (G_noJumps == true)
+	if (g_noJumps == true)
 	{
-		while (G_noJumps)
+		while (g_noJumps)
 		{
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
 			{
 				game.hero.direction.y = DOWN;
-				G_noJumps = false;
+				g_noJumps = false;
 			}
 		}
 	}
@@ -151,7 +156,7 @@ void initialGame(Game & game, sf::View view)
 void render(sf::RenderWindow & window, Game & game)
 {
 	window.clear(sf::Color(230, 230, 230));
-	window.draw(*BACKGROUND);
+	window.draw(*g_Assets.BACKGROUND);
 
 	for (int i = 0; i < NUMBER_PLATES; ++i)
 	{
@@ -178,11 +183,11 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view) // смену те
 		position.x += STEP;
 		if (position.y == DOWN)
 		{
-			game.hero.body->setTexture(DOODLE_RIGHT_TEXTURE);
+			game.hero.body->setTexture(g_Assets.DOODLE_RIGHT_TEXTURE);
 		}
 		else
 		{
-			game.hero.body->setTexture(DOODLE_JUMP_RIGHT_TEXTURE);
+			game.hero.body->setTexture(g_Assets.DOODLE_JUMP_RIGHT_TEXTURE);
 		}
 	}
 	else if (game.hero.direction.x == LEFT)
@@ -190,11 +195,11 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view) // смену те
 		position.x -= STEP;
 		if (position.y == DOWN)
 		{
-			game.hero.body->setTexture(DOODLE_LEFT_TEXTURE);
+			game.hero.body->setTexture(g_Assets.DOODLE_LEFT_TEXTURE);
 		}
 		else
 		{
-			game.hero.body->setTexture(DOODLE_JUMP_LEFT_TEXTURE);
+			game.hero.body->setTexture(g_Assets.DOODLE_JUMP_LEFT_TEXTURE);
 		}
 	}
 	if (game.hero.direction.y == DOWN)
@@ -208,11 +213,11 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view) // смену те
 			position.y += STEP;
 			if (game.hero.lastDirectionX == RIGHT)
 			{
-				game.hero.body->setTexture(DOODLE_RIGHT_TEXTURE);
+				game.hero.body->setTexture(g_Assets.DOODLE_RIGHT_TEXTURE);
 			}
 			else if (game.hero.lastDirectionX == LEFT)
 			{
-				game.hero.body->setTexture(DOODLE_LEFT_TEXTURE);
+				game.hero.body->setTexture(g_Assets.DOODLE_LEFT_TEXTURE);
 			}
 		}
 	}
@@ -220,11 +225,11 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view) // смену те
 	{
 		if (game.hero.lastDirectionX == LEFT)
 		{
-			game.hero.body->setTexture(DOODLE_JUMP_LEFT_TEXTURE);
+			game.hero.body->setTexture(g_Assets.DOODLE_JUMP_LEFT_TEXTURE);
 		}
 		else if (game.hero.lastDirectionX == RIGHT)
 		{
-			game.hero.body->setTexture(DOODLE_JUMP_RIGHT_TEXTURE);
+			game.hero.body->setTexture(g_Assets.DOODLE_JUMP_RIGHT_TEXTURE);
 		}
 
 		if (game.hero.deltaHeight > 0)
@@ -235,13 +240,14 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view) // смену те
 		else
 		{
 			game.hero.direction.y = DOWN;
-			if (game.hero.body->getPosition().y < positionBeforeDown.y)
+			if (game.hero.body->getPosition().y < g_positionBeforeDown.y)
 			{
-				positionBeforeDown = game.hero.body->getPosition();
+				g_positionBeforeDown = game.hero.body->getPosition();
 			}
 		}
 	}
 
+	// в отдельную функцию
 	int k = 1;
 	switch (game.actualBonus)
 	{
@@ -251,14 +257,18 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view) // смену те
 		case SPRING:
 			k = 2;
 			break;
-		case TRAMPLANE:
+		case TRAMPOLINE:
 			k = 2;
 			break;
 		case HAT_HELICOPTER:
 			k = 2;
 			break;
+		case ROCKET:
+			k = 3;
+			break;
 	}
 	game.hero.body->move(position * (k * TIME_PER_FRAME.asSeconds()));
+	//
 
 	// В отдельную функцию
 	if (doodlePosition.x <= -1 * DOODLE_WIDTH)
@@ -276,7 +286,7 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view) // смену те
 		if (game.hero.deltaHeight <= 1000)
 		{
 			game.qwerty = -1;
-			game.bonus[game.actualBonusId].body->setTexture(HAT_HELOCPTER_FLY_LEFT_TEXTURE);
+			game.bonus[game.actualBonusId].body->setTexture(g_Assets.HAT_HELOCPTER_FLY_LEFT_TEXTURE);
 			game.bonus[game.actualBonusId].body->rotate(-0.07f);
 			game.bonus[game.actualBonusId].body->move(sf::Vector2f(-2*STEP, 6*STEP) * TIME_PER_FRAME.asSeconds());
 		}
@@ -286,28 +296,32 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view) // смену те
 			game.actualBonus = NO;
 		}
 
-		if ((game.qwerty >= 0) && (game.qwerty <= 100))
+		if ((game.qwerty >= 0) && (game.qwerty <= 200))
 		{
-			game.bonus[game.actualBonusId].body->setTexture(HAT_HELOCPTER_FLY_LEFT_TEXTURE);
+			game.bonus[game.actualBonusId].body->setTexture(g_Assets.HAT_HELOCPTER_FLY_LEFT_TEXTURE);
 			++game.qwerty;
 		}
-		else if((game.qwerty >= 101) && (game.qwerty <= 200))
+		else if((game.qwerty >= 201) && (game.qwerty <= 400))
 		{
-			game.bonus[game.actualBonusId].body->setTexture(HAT_HELOCPTER_DIAGONAL_LEFT_TEXTURE);
+			game.bonus[game.actualBonusId].body->setTexture(g_Assets.HAT_HELOCPTER_DIAGONAL_LEFT_TEXTURE);
 			++game.qwerty;
 		}
-		else if ((game.qwerty >= 201) && (game.qwerty <= 300))
+		else if ((game.qwerty >= 401) && (game.qwerty <= 600))
 		{
-			game.bonus[game.actualBonusId].body->setTexture(HAT_HELOCPTER_DIAGONAL_RIGHT_TEXTURE);
+			game.bonus[game.actualBonusId].body->setTexture(g_Assets.HAT_HELOCPTER_DIAGONAL_RIGHT_TEXTURE);
 			++game.qwerty;
 		}
-		else if ((game.qwerty >= 301) && (game.qwerty <= 400))
+		else if ((game.qwerty >= 601) && (game.qwerty <= 800))
 		{
-			game.bonus[game.actualBonusId].body->setTexture(HAT_HELOCPTER_FLY_RIGHT_TEXTURE);
+			game.bonus[game.actualBonusId].body->setTexture(g_Assets.HAT_HELOCPTER_FLY_RIGHT_TEXTURE);
+			++game.qwerty;
+		}
+		else if (game.qwerty == 801)
+		{
 			game.qwerty = 0;
 		}
 
-		if ((game.qwerty >= 0) && (game.qwerty <= 400) && (game.actualBonus != NO))
+		if ((game.qwerty >= 0) && (game.qwerty <= 800) && (game.actualBonus != NO))
 		{
 			if (game.hero.lastDirectionX == RIGHT)
 			{
@@ -319,11 +333,80 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view) // смену те
 			}
 		}
 	}
+	
+	if (game.actualBonus == ROCKET) // в отдельную функцию
+	{
+		if (game.hero.deltaHeight <= 1000)
+		{
+			game.qwerty = -1;
+			game.bonus[game.actualBonusId].body->setTexture(g_Assets.ROCKET_NONE_TEXTURE);
+			game.bonus[game.actualBonusId].body->rotate(-0.07f);
+			game.bonus[game.actualBonusId].body->move(sf::Vector2f(-2 * STEP, 6 * STEP) * TIME_PER_FRAME.asSeconds());
+		}
+		if (game.hero.deltaHeight == 0)
+		{
+			game.qwerty = 0;
+			game.actualBonus = NO;
+		}
 
-	if ((game.hero.direction.y == UP) && (doodlePosition.y <= positionBeforeDown.y))
+		if ((game.qwerty >= 0) && (game.qwerty <= 200))
+		{
+			if (game.hero.lastDirectionX == RIGHT)
+			{
+				game.bonus[game.actualBonusId].body->setTexture(g_Assets.ROCKET_1_LEFT_TEXTURE);
+			} 
+			else if (game.hero.lastDirectionX == LEFT)
+			{
+				game.bonus[game.actualBonusId].body->setTexture(g_Assets.ROCKET_1_RIGHT_TEXTURE);
+			}
+			++game.qwerty;
+		}
+		if ((game.qwerty >= 201) && (game.qwerty <= 400))
+		{
+			if (game.hero.lastDirectionX == RIGHT)
+			{
+				game.bonus[game.actualBonusId].body->setTexture(g_Assets.ROCKET_2_LEFT_TEXTURE);
+			}
+			else if (game.hero.lastDirectionX == LEFT)
+			{
+				game.bonus[game.actualBonusId].body->setTexture(g_Assets.ROCKET_2_RIGHT_TEXTURE);
+			}
+			++game.qwerty;
+		}
+		if ((game.qwerty >= 401) && (game.qwerty <= 600))
+		{
+			if (game.hero.lastDirectionX == RIGHT)
+			{
+				game.bonus[game.actualBonusId].body->setTexture(g_Assets.ROCKET_3_LEFT_TEXTURE);
+			}
+			else if (game.hero.lastDirectionX == LEFT)
+			{
+				game.bonus[game.actualBonusId].body->setTexture(g_Assets.ROCKET_3_RIGHT_TEXTURE);
+			}
+			++game.qwerty;
+		}
+		if (game.qwerty == 601)
+		{
+			game.qwerty = 0;
+		}
+
+		if ((game.qwerty >= 0) && (game.qwerty <= 600) && (game.actualBonus != NO))
+		{
+			if (game.hero.lastDirectionX == RIGHT)
+			{
+				game.bonus[game.actualBonusId].body->setPosition(game.hero.body->getPosition().x - ROCKET_WIDTH, game.hero.body->getPosition().y);
+			}
+			else if (game.hero.lastDirectionX == LEFT)
+			{
+				game.bonus[game.actualBonusId].body->setPosition(game.hero.body->getPosition().x + DOODLE_WIDTH, game.hero.body->getPosition().y);
+			}
+		}
+	} //
+
+	if ((game.hero.direction.y == UP) && (doodlePosition.y <= g_positionBeforeDown.y))
 	{
 		view.setCenter(275, doodlePosition.y);
-		BACKGROUND->setPosition(0, doodlePosition.y-350);
+		g_Assets.BACKGROUND->setPosition(0, doodlePosition.y-350);
 	}
 
 	moveDynamicPlates(game);
@@ -332,7 +415,7 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view) // смену те
 
 	if (checkGameEnd(game))
 	{
-		G_endOfGame = true;
+		g_endOfGame = true;
 	}
 }
 
@@ -377,13 +460,13 @@ int checkDoodleFall(Game & game)
 				&& (doodlePosition.x + DOODLE_WIDTH + SPRING_WIDTH >= bonusPosition[i].x) && (doodlePosition.x - SPRING_WIDTH <= bonusPosition[i].x)))
 			{
 				collision = COLLISION_SPRING;
-				game.bonus[i].body->setTexture(SPRING_2_TEXTURE);
+				game.bonus[i].body->setTexture(g_Assets.SPRING_2_TEXTURE);
 				game.actualBonusId = i;
 			}
 			break;
-		case TRAMPLANE:
-			if (((doodlePosition.y + DOODLE_HEIGHT + 7 + 0.5 >= bonusPosition[i].y + 7 - 0.5) && (doodlePosition.y - 0.5 <= bonusPosition[i].y - DOODLE_HEIGHT + 0.5)
-				&& (doodlePosition.x + DOODLE_WIDTH + 15 >= bonusPosition[i].x) && (doodlePosition.x - 15 <= bonusPosition[i].x)))
+		case TRAMPOLINE:
+			if (((doodlePosition.y + DOODLE_HEIGHT + TRAMPOLINE_HEIGHT + 0.5 >= bonusPosition[i].y + TRAMPOLINE_HEIGHT - 0.5) && (doodlePosition.y - 0.5 <= bonusPosition[i].y - DOODLE_HEIGHT + 0.5)
+				&& (doodlePosition.x + DOODLE_WIDTH + TRAMPOLINE_WIDTH >= bonusPosition[i].x) && (doodlePosition.x - TRAMPOLINE_WIDTH <= bonusPosition[i].x)))
 			{
 				collision = COLLISION_TRAMPLANE;
 				game.actualBonusId = i;
@@ -398,13 +481,31 @@ int checkDoodleFall(Game & game)
 
 				if (game.hero.direction.x == RIGHT)
 				{
-					game.bonus[i].body->setPosition(doodlePosition.x + 15, doodlePosition.y - 15);
+					game.bonus[i].body->setPosition(doodlePosition.x + 15, doodlePosition.y - 15);     // что такое 15?!
 				}
 				else if ((game.hero.direction.x == LEFT) || (game.hero.direction.x == NONE))
 				{
-					game.bonus[i].body->setPosition(doodlePosition.x+15, doodlePosition.y-15);
+					game.bonus[i].body->setPosition(doodlePosition.x + 15, doodlePosition.y - 15);     // ЧТО ЭТО?! ПОЧЕМУ ОНО СОВПАДАЕТ С ТЕМ, ЧТО ВЫШЕ?! АААААААА!!!
 				}
 			}
+			break;
+		case ROCKET:
+			if (((doodlePosition.y + DOODLE_HEIGHT + ROCKET_HEIGHT + 0.5 >= bonusPosition[i].y + ROCKET_HEIGHT - 0.5) && (doodlePosition.y - 0.5 <= bonusPosition[i].y - DOODLE_HEIGHT + 0.5)
+				&& (doodlePosition.x + DOODLE_WIDTH + ROCKET_WIDTH >= bonusPosition[i].x) && (doodlePosition.x - ROCKET_WIDTH <= bonusPosition[i].x)))
+			{
+				collision = COLLISION_ROCKET;
+				game.actualBonusId = i;
+
+				if (game.hero.direction.x == RIGHT)
+				{
+					game.bonus[i].body->setPosition(doodlePosition.x - ROCKET_WIDTH, doodlePosition.y);
+				}
+				else if ((game.hero.direction.x == LEFT) || (game.hero.direction.x == NONE))
+				{
+					game.bonus[i].body->setPosition(doodlePosition.x + DOODLE_WIDTH, doodlePosition.y);
+				}
+			}
+			break;
 		}
 	}
 
@@ -417,13 +518,168 @@ int checkDoodleFall(Game & game)
 		game.actualBonus = SPRING;
 		return 4500;
 	case COLLISION_TRAMPLANE:
-		game.actualBonus = TRAMPLANE;
+		game.actualBonus = TRAMPOLINE;
 		return 6000;
 	case COLLISION_HAT_HELICOPTER:
 		game.actualBonus = HAT_HELICOPTER;
 		return 12000;
+	case COLLISION_ROCKET:
+		game.actualBonus = ROCKET;
+		return 24000;
 	default:
-	//	game.actualBonus = NO;
+	//	game.actualBonus = NO;            // кто-нибудь помнит, зачем я это закомментил? Нет? Кто-нибудь...
 		return 0;
 	}
+}
+
+void initAssets(void) // а внутри ещё функцию, которая принимает переменную и путь к файлу в виде строки
+{
+	if (!g_Assets.BACKGROUND_TEXTURE.loadFromFile("images/background.png"))
+	{
+		printf("Error loaded file");
+	}
+	g_Assets.BACKGROUND_TEXTURE.setSmooth(true);
+	g_Assets.BACKGROUND_TEXTURE.setRepeated(true);
+	
+	g_Assets.BACKGROUND = new sf::Sprite;
+	g_Assets.BACKGROUND->setTextureRect(sf::IntRect(0, 0, 550, 700));
+	g_Assets.BACKGROUND->setTexture(g_Assets.BACKGROUND_TEXTURE);
+
+	if (!g_Assets.TRAMPOLINE_TEXTURE.loadFromFile("images/TRAMPOLINE_20_7.png"))
+	{
+		printf("Error loaded file");
+	}
+	g_Assets.TRAMPOLINE_TEXTURE.setSmooth(true);
+
+	if (!g_Assets.ROCKET_NONE_TEXTURE.loadFromFile("images/Rocket_none_23_36.png"))
+	{
+		printf("Error loaded file");
+	}
+	g_Assets.ROCKET_NONE_TEXTURE.setSmooth(true);
+
+	if (!g_Assets.ROCKET_1_LEFT_TEXTURE.loadFromFile("images/Rocket_left_1_12_40.png"))
+	{
+		printf("Error loaded file");
+	}
+	g_Assets.ROCKET_1_LEFT_TEXTURE.setSmooth(true);
+
+	if (!g_Assets.ROCKET_1_RIGHT_TEXTURE.loadFromFile("images/Rocket_right_1_12_40.png"))
+	{
+		printf("Error loaded file");
+	}
+	g_Assets.ROCKET_1_RIGHT_TEXTURE.setSmooth(true);
+
+	if (!g_Assets.ROCKET_2_LEFT_TEXTURE.loadFromFile("images/Rocket_left_2_15_52.png"))
+	{
+		printf("Error loaded file");
+	}
+	g_Assets.ROCKET_2_LEFT_TEXTURE.setSmooth(true);
+
+	if (!g_Assets.ROCKET_2_RIGHT_TEXTURE.loadFromFile("images/Rocket_right_2_15_52.png"))
+	{
+		printf("Error loaded file");
+	}
+	g_Assets.ROCKET_2_RIGHT_TEXTURE.setSmooth(true);
+
+	if (!g_Assets.ROCKET_3_LEFT_TEXTURE.loadFromFile("images/Rocket_left_3_23_61.png"))
+	{
+		printf("Error loaded file");
+	}
+	g_Assets.ROCKET_3_LEFT_TEXTURE.setSmooth(true);
+
+	if (!g_Assets.ROCKET_3_RIGHT_TEXTURE.loadFromFile("images/Rocket_right_3_23_61.png"))
+	{
+		printf("Error loaded file");
+	}
+	g_Assets.ROCKET_3_RIGHT_TEXTURE.setSmooth(true);
+
+	if (!g_Assets.HAT_HELOCPTER_NONE_RIGHT_TEXTURE.loadFromFile("images/Hat_Helicopter_None_Right_30_18.png"))
+	{
+		printf("Error loaded file");
+	}
+	g_Assets.HAT_HELOCPTER_NONE_RIGHT_TEXTURE.setSmooth(true);
+
+	if (!g_Assets.HAT_HELOCPTER_NONE_LEFT_TEXTURE.loadFromFile("images/Hat_Helicopter_None_Left_30_18.png"))
+	{
+		printf("Error loaded file");
+	}
+	g_Assets.HAT_HELOCPTER_NONE_LEFT_TEXTURE.setSmooth(true);
+
+	if (!g_Assets.HAT_HELOCPTER_DIAGONAL_LEFT_TEXTURE.loadFromFile("images/Hat_Helicopter_Fly_Diagonal_Left_29_26.png"))
+	{
+		printf("Error loaded file");
+	}
+	g_Assets.HAT_HELOCPTER_DIAGONAL_LEFT_TEXTURE.setSmooth(true);
+
+	if (!g_Assets.HAT_HELOCPTER_DIAGONAL_RIGHT_TEXTURE.loadFromFile("images/Hat_Helicopter_Fly_Diagonal_Right_29_26.png"))
+	{
+		printf("Error loaded file");
+	}
+	g_Assets.HAT_HELOCPTER_DIAGONAL_RIGHT_TEXTURE.setSmooth(true);
+	
+	if (!g_Assets.HAT_HELOCPTER_FLY_LEFT_TEXTURE.loadFromFile("images/Hat_Helicopter_Left_29_23.png"))
+	{
+		printf("Error loaded file");
+	}
+	g_Assets.HAT_HELOCPTER_FLY_LEFT_TEXTURE.setSmooth(true);
+
+	if (!g_Assets.HAT_HELOCPTER_FLY_RIGHT_TEXTURE.loadFromFile("images/Hat_Helicopter_Right_29_23.png"))
+	{
+		printf("Error loaded file");
+	}
+	g_Assets.HAT_HELOCPTER_FLY_RIGHT_TEXTURE.setSmooth(true);
+
+	if (!g_Assets.DOODLE_LEFT_TEXTURE.loadFromFile("images/Doodle45_45Left.png"))
+	{
+		printf("Error loaded file");
+	}
+	g_Assets.DOODLE_LEFT_TEXTURE.setSmooth(true);
+
+	if (!g_Assets.DOODLE_RIGHT_TEXTURE.loadFromFile("images/Doodle45_45Right.png"))
+	{
+		printf("Error loaded file");
+	}
+	g_Assets.DOODLE_RIGHT_TEXTURE.setSmooth(true);
+	
+	if (!g_Assets.DOODLE_JUMP_LEFT_TEXTURE.loadFromFile("images/Doodle45_42Left_Jump.png"))
+	{
+		printf("Error loaded file");
+	}
+	g_Assets.DOODLE_JUMP_LEFT_TEXTURE.setSmooth(true);
+
+	if (!g_Assets.DOODLE_JUMP_RIGHT_TEXTURE.loadFromFile("images/Doodle45_42Right_Jump.png"))
+	{
+		printf("Error loaded file");
+	}
+	g_Assets.DOODLE_JUMP_RIGHT_TEXTURE.setSmooth(true);
+	
+	if (!g_Assets.PLATE_STATIC_TEXTURE.loadFromFile("images/Plate_63_15_Green.png"))
+	{
+		printf("Error loaded file");
+	}
+	g_Assets.PLATE_STATIC_TEXTURE.setSmooth(true);
+
+	if (!g_Assets.PLATE_DYNAMIC_TEXTURE.loadFromFile("images/Plate_63_15_Blue.png"))
+	{
+		printf("Error loaded file");
+	}
+	g_Assets.PLATE_DYNAMIC_TEXTURE.setSmooth(true);
+
+	if (!g_Assets.PLATE_CLOUD_TEXTURE.loadFromFile("images/Plate_63_15_Cloud.png"))
+	{
+		printf("Error loaded file");
+	}
+	g_Assets.PLATE_CLOUD_TEXTURE.setSmooth(true);
+
+	if (!g_Assets.SPRING_TEXTURE.loadFromFile("images/Spring16_12.png"))
+	{
+		printf("Error loaded file");
+	}
+	g_Assets.SPRING_TEXTURE.setSmooth(true);
+	
+	if (!g_Assets.SPRING_2_TEXTURE.loadFromFile("images/Spring16_26.png"))
+	{
+		printf("Error loaded file");
+	}
+	g_Assets.SPRING_2_TEXTURE.setSmooth(true);
 }
