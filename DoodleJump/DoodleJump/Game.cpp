@@ -1,13 +1,17 @@
-#pragma once
+#include "stdafx.h"
+#include "bases.h"
 
-bool checkGameEnd(Game & game);
-void starter(sf::RenderWindow & window, Game & game);
-void initialGame(Game & game, sf::View view);
-void startGame(void);
-void keyPressed(sf::RenderWindow & window, Game & game);
-void update(sf::RenderWindow & window, Game & game, sf::View & view);
-void render(sf::RenderWindow & window, Game & game);
-void initAssets(void);
+extern Assets g_Assets;
+extern sf::Vector2f g_positionBeforeDown;
+extern bool g_noJumps;
+extern bool g_endOfGame;
+//dir = 0; speed = 0; playerScore = 0; // [вор]
+/*// [локально-глобальненько] -- фу-фу-фу
+sf::Font font;//шрифт 
+sf::Text text("", font, 20);//создаем объект текст. закидываем в объект текст строку, шрифт, размер шрифта(в пикселях);//сам объект текст (не строка)
+text.setColor(Color::Black);//покрасили текст в красный. если убрать эту строку, то по умолчанию он белый
+text.setStyle(sf::Text::Bold | sf::Text::Underlined);//жирный и подчеркнутый текст. по умолчанию он "худой":)) и не подчеркнутый
+*/// [вор]
 
 void startGame(void)
 {
@@ -79,17 +83,17 @@ void keyPressed(sf::RenderWindow & window, Game & game)
 	{
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 		{
-			game.hero.direction.x = LEFT;
-			game.hero.lastDirectionX = LEFT;
+			game.hero.direction.x = DirectionX::LEFT;
+			game.hero.lastDirectionX = DirectionX::LEFT;
 		}
 		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 		{
-			game.hero.direction.x = RIGHT;
-			game.hero.lastDirectionX = RIGHT;
+			game.hero.direction.x = DirectionX::RIGHT;
+			game.hero.lastDirectionX = DirectionX::RIGHT;
 		}
 		else
 		{
-			game.hero.direction.x = NONE;
+			game.hero.direction.x = DirectionX::NONE;
 		}
 
 		if (event.type == sf::Event::Closed || (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape))
@@ -138,7 +142,7 @@ void starter(sf::RenderWindow & window, Game & game)
 		{
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
 			{
-				game.hero.direction.y = DOWN;
+				game.hero.direction.y = DirectionY::DOWN;
 				g_noJumps = false;
 			}
 		}
@@ -150,7 +154,7 @@ void initialGame(Game & game, sf::View view)
 	initialHero(game, view);
 	initialPlates(game);
 	initialBonuses(game);
-	game.actualBonus = NO;
+	game.actualBonus = BonusType::NO;
 }
 
 void render(sf::RenderWindow & window, Game & game)
@@ -178,10 +182,10 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view) // смену те
 	sf::Vector2f position(0.f, 0.f);
 	sf::Vector2f doodlePosition = game.hero.body->getPosition();
 
-	if (game.hero.direction.x == RIGHT)
+	if (game.hero.direction.x == DirectionX::RIGHT)
 	{
 		position.x += STEP;
-		if (position.y == DOWN)
+		if (false) //(position.y == DOWN) WHAT THE HELL?!
 		{
 			game.hero.body->setTexture(g_Assets.DOODLE_RIGHT_TEXTURE);
 		}
@@ -190,10 +194,10 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view) // смену те
 			game.hero.body->setTexture(g_Assets.DOODLE_JUMP_RIGHT_TEXTURE);
 		}
 	}
-	else if (game.hero.direction.x == LEFT)
+	else if (game.hero.direction.x == DirectionX::LEFT)
 	{
 		position.x -= STEP;
-		if (position.y == DOWN)
+		if (false) //(position.y == DOWN) WHAT THE HELL?!
 		{
 			game.hero.body->setTexture(g_Assets.DOODLE_LEFT_TEXTURE);
 		}
@@ -202,32 +206,32 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view) // смену те
 			game.hero.body->setTexture(g_Assets.DOODLE_JUMP_LEFT_TEXTURE);
 		}
 	}
-	if (game.hero.direction.y == DOWN)
+	if (game.hero.direction.y == DirectionY::DOWN)
 	{
 		if (game.hero.deltaHeight = checkDoodleFall(game))
 		{
-			game.hero.direction.y = UP;
+			game.hero.direction.y = DirectionY::UP;
 		}
 		else
 		{
 			position.y += STEP;
-			if (game.hero.lastDirectionX == RIGHT)
+			if (game.hero.lastDirectionX == DirectionX::RIGHT)
 			{
 				game.hero.body->setTexture(g_Assets.DOODLE_RIGHT_TEXTURE);
 			}
-			else if (game.hero.lastDirectionX == LEFT)
+			else if (game.hero.lastDirectionX == DirectionX::LEFT)
 			{
 				game.hero.body->setTexture(g_Assets.DOODLE_LEFT_TEXTURE);
 			}
 		}
 	}
-	else if (game.hero.direction.y == UP)
+	else if (game.hero.direction.y == DirectionY::UP)
 	{
-		if (game.hero.lastDirectionX == LEFT)
+		if (game.hero.lastDirectionX == DirectionX::LEFT)
 		{
 			game.hero.body->setTexture(g_Assets.DOODLE_JUMP_LEFT_TEXTURE);
 		}
-		else if (game.hero.lastDirectionX == RIGHT)
+		else if (game.hero.lastDirectionX == DirectionX::RIGHT)
 		{
 			game.hero.body->setTexture(g_Assets.DOODLE_JUMP_RIGHT_TEXTURE);
 		}
@@ -239,7 +243,7 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view) // смену те
 		}
 		else
 		{
-			game.hero.direction.y = DOWN;
+			game.hero.direction.y = DirectionY::DOWN;
 			if (game.hero.body->getPosition().y < g_positionBeforeDown.y)
 			{
 				g_positionBeforeDown = game.hero.body->getPosition();
@@ -251,21 +255,21 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view) // смену те
 	int k = 1;
 	switch (game.actualBonus)
 	{
-		case NO:
-			k = 1;
-			break;
-		case SPRING:
-			k = 2;
-			break;
-		case TRAMPOLINE:
-			k = 2;
-			break;
-		case HAT_HELICOPTER:
-			k = 2;
-			break;
-		case ROCKET:
-			k = 3;
-			break;
+	case BonusType::NO:
+		k = 1;
+		break;
+	case  BonusType::SPRING:
+		k = 2;
+		break;
+	case  BonusType::TRAMPOLINE:
+		k = 2;
+		break;
+	case  BonusType::HAT_HELICOPTER:
+		k = 2;
+		break;
+	case  BonusType::ROCKET:
+		k = 3;
+		break;
 	}
 	game.hero.body->move(position * (k * TIME_PER_FRAME.asSeconds()));
 	//
@@ -281,7 +285,7 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view) // смену те
 	}
 	//
 
-	if (game.actualBonus == HAT_HELICOPTER) // и это тоже в отдельную функцию
+	if (game.actualBonus == BonusType::HAT_HELICOPTER) // и это тоже в отдельную функцию
 	{
 		if (game.hero.deltaHeight <= 1000)
 		{
@@ -293,7 +297,7 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view) // смену те
 		if (game.hero.deltaHeight == 0)
 		{
 			game.qwerty = 0;
-			game.actualBonus = NO;
+			game.actualBonus = BonusType::NO;
 		}
 
 		if ((game.qwerty >= 0) && (game.qwerty <= 200))
@@ -321,20 +325,20 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view) // смену те
 			game.qwerty = 0;
 		}
 
-		if ((game.qwerty >= 0) && (game.qwerty <= 800) && (game.actualBonus != NO))
+		if ((game.qwerty >= 0) && (game.qwerty <= 800) && (game.actualBonus != BonusType::NO))
 		{
-			if (game.hero.lastDirectionX == RIGHT)
+			if (game.hero.lastDirectionX == DirectionX::RIGHT)
 			{
 				game.bonus[game.actualBonusId].body->setPosition(game.hero.body->getPosition().x, game.hero.body->getPosition().y - 13);
 			}
-			else if (game.hero.lastDirectionX == LEFT)
+			else if (game.hero.lastDirectionX == DirectionX::LEFT)
 			{
 				game.bonus[game.actualBonusId].body->setPosition(game.hero.body->getPosition().x + 15, game.hero.body->getPosition().y - 13);
 			}
 		}
 	}
 	
-	if (game.actualBonus == ROCKET) // в отдельную функцию
+	if (game.actualBonus == BonusType::ROCKET) // в отдельную функцию
 	{
 		if (game.hero.deltaHeight <= 1000)
 		{
@@ -346,16 +350,16 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view) // смену те
 		if (game.hero.deltaHeight == 0)
 		{
 			game.qwerty = 0;
-			game.actualBonus = NO;
+			game.actualBonus = BonusType::NO;
 		}
 
 		if ((game.qwerty >= 0) && (game.qwerty <= 200))
 		{
-			if (game.hero.lastDirectionX == RIGHT)
+			if (game.hero.lastDirectionX == DirectionX::RIGHT)
 			{
 				game.bonus[game.actualBonusId].body->setTexture(g_Assets.ROCKET_1_LEFT_TEXTURE);
 			} 
-			else if (game.hero.lastDirectionX == LEFT)
+			else if (game.hero.lastDirectionX == DirectionX::LEFT)
 			{
 				game.bonus[game.actualBonusId].body->setTexture(g_Assets.ROCKET_1_RIGHT_TEXTURE);
 			}
@@ -363,11 +367,11 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view) // смену те
 		}
 		if ((game.qwerty >= 201) && (game.qwerty <= 400))
 		{
-			if (game.hero.lastDirectionX == RIGHT)
+			if (game.hero.lastDirectionX == DirectionX::RIGHT)
 			{
 				game.bonus[game.actualBonusId].body->setTexture(g_Assets.ROCKET_2_LEFT_TEXTURE);
 			}
-			else if (game.hero.lastDirectionX == LEFT)
+			else if (game.hero.lastDirectionX == DirectionX::LEFT)
 			{
 				game.bonus[game.actualBonusId].body->setTexture(g_Assets.ROCKET_2_RIGHT_TEXTURE);
 			}
@@ -375,11 +379,11 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view) // смену те
 		}
 		if ((game.qwerty >= 401) && (game.qwerty <= 600))
 		{
-			if (game.hero.lastDirectionX == RIGHT)
+			if (game.hero.lastDirectionX == DirectionX::RIGHT)
 			{
 				game.bonus[game.actualBonusId].body->setTexture(g_Assets.ROCKET_3_LEFT_TEXTURE);
 			}
-			else if (game.hero.lastDirectionX == LEFT)
+			else if (game.hero.lastDirectionX == DirectionX::LEFT)
 			{
 				game.bonus[game.actualBonusId].body->setTexture(g_Assets.ROCKET_3_RIGHT_TEXTURE);
 			}
@@ -390,20 +394,20 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view) // смену те
 			game.qwerty = 0;
 		}
 
-		if ((game.qwerty >= 0) && (game.qwerty <= 600) && (game.actualBonus != NO))
+		if ((game.qwerty >= 0) && (game.qwerty <= 600) && (game.actualBonus != BonusType::NO))
 		{
-			if (game.hero.lastDirectionX == RIGHT)
+			if (game.hero.lastDirectionX == DirectionX::RIGHT)
 			{
 				game.bonus[game.actualBonusId].body->setPosition(game.hero.body->getPosition().x - ROCKET_WIDTH, game.hero.body->getPosition().y);
 			}
-			else if (game.hero.lastDirectionX == LEFT)
+			else if (game.hero.lastDirectionX == DirectionX::LEFT)
 			{
 				game.bonus[game.actualBonusId].body->setPosition(game.hero.body->getPosition().x + DOODLE_WIDTH, game.hero.body->getPosition().y);
 			}
 		}
 	} //
 
-	if ((game.hero.direction.y == UP) && (doodlePosition.y <= g_positionBeforeDown.y))
+	if ((game.hero.direction.y == DirectionY::UP) && (doodlePosition.y <= g_positionBeforeDown.y))
 	{
 		view.setCenter(275, doodlePosition.y);
 		g_Assets.BACKGROUND->setPosition(0, doodlePosition.y-350);
@@ -417,6 +421,12 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view) // смену те
 	{
 		g_endOfGame = true;
 	}
+
+	/*// [вор]
+	text.setString("-");//задает строку тексту
+	text.setPosition(0, 0);//задаем позицию текста, центр камеры
+	window.draw(text);//рисую этот текст
+	*/// [вор]
 }
 
 int checkDoodleFall(Game & game)
@@ -424,7 +434,7 @@ int checkDoodleFall(Game & game)
 	sf::Vector2f doodlePosition = game.hero.body->getPosition();
 	sf::Vector2f platePosition[NUMBER_PLATES];
 	sf::Vector2f bonusPosition[NUMBER_BONUSES];
-	Collision collision = NO_COLLISION;
+	Collision collision = Collision::NO_COLLISION;
 
 	for (int i = 0; i < NUMBER_PLATES; ++i)
 	{
@@ -440,13 +450,13 @@ int checkDoodleFall(Game & game)
 		if (((doodlePosition.y + DOODLE_HEIGHT + PLATE_HEIGHT + 0.5 >= platePosition[i].y + PLATE_HEIGHT - 0.5) && (doodlePosition.y - 0.5 <= platePosition[i].y - DOODLE_HEIGHT + 0.5)
 			&& (doodlePosition.x + DOODLE_WIDTH >= platePosition[i].x) && (doodlePosition.x - PLATE_WIDTH <= platePosition[i].x)))
 		{
-			if (game.plate[i].type == CLOUD)
+			if (game.plate[i].type == PlateType::CLOUD)
 			{
 				// здесь и должна была бы появиться функция генерации одной новой плиты, которая бала бы частью генерации двух и более плит
 				// костылёк
 				game.plate[i].body->setPosition(platePosition[i].x, platePosition[i].y + 550);
 			}
-			collision = COLLISION_PLATE;
+			collision = Collision::COLLISION_PLATE;
 			break;
 		}
 	}
@@ -455,52 +465,52 @@ int checkDoodleFall(Game & game)
 	{
 		switch (game.bonus[i].type)
 		{
-		case SPRING:
+		case BonusType::SPRING:
 			if (((doodlePosition.y + DOODLE_HEIGHT + SPRING_HEIGHT + 0.5 >= bonusPosition[i].y + SPRING_HEIGHT - 0.5) && (doodlePosition.y - 0.5 <= bonusPosition[i].y - DOODLE_HEIGHT + 0.5)
 				&& (doodlePosition.x + DOODLE_WIDTH + SPRING_WIDTH >= bonusPosition[i].x) && (doodlePosition.x - SPRING_WIDTH <= bonusPosition[i].x)))
 			{
-				collision = COLLISION_SPRING;
+				collision = Collision::COLLISION_SPRING;
 				game.bonus[i].body->setTexture(g_Assets.SPRING_2_TEXTURE);
 				game.actualBonusId = i;
 			}
 			break;
-		case TRAMPOLINE:
+		case BonusType::TRAMPOLINE:
 			if (((doodlePosition.y + DOODLE_HEIGHT + TRAMPOLINE_HEIGHT + 0.5 >= bonusPosition[i].y + TRAMPOLINE_HEIGHT - 0.5) && (doodlePosition.y - 0.5 <= bonusPosition[i].y - DOODLE_HEIGHT + 0.5)
 				&& (doodlePosition.x + DOODLE_WIDTH + TRAMPOLINE_WIDTH >= bonusPosition[i].x) && (doodlePosition.x - TRAMPOLINE_WIDTH <= bonusPosition[i].x)))
 			{
-				collision = COLLISION_TRAMPLANE;
+				collision = Collision::COLLISION_TRAMPLANE;
 				game.actualBonusId = i;
 			}
 			break;
-		case HAT_HELICOPTER:
+		case BonusType::HAT_HELICOPTER:
 			if (((doodlePosition.y + DOODLE_HEIGHT + HAT_HELICOPTER_HEIGHT + 0.5 >= bonusPosition[i].y + HAT_HELICOPTER_HEIGHT - 0.5) && (doodlePosition.y - 0.5 <= bonusPosition[i].y - DOODLE_HEIGHT + 0.5)
 				&& (doodlePosition.x + DOODLE_WIDTH + HAT_HELICOPTER_WIDTH >= bonusPosition[i].x) && (doodlePosition.x - HAT_HELICOPTER_WIDTH <= bonusPosition[i].x)))
 			{
-				collision = COLLISION_HAT_HELICOPTER;
+				collision = Collision::COLLISION_HAT_HELICOPTER;
 				game.actualBonusId = i;
 
-				if (game.hero.direction.x == RIGHT)
+				if (game.hero.direction.x == DirectionX::RIGHT)
 				{
 					game.bonus[i].body->setPosition(doodlePosition.x + 15, doodlePosition.y - 15);     // что такое 15?!
 				}
-				else if ((game.hero.direction.x == LEFT) || (game.hero.direction.x == NONE))
+				else if ((game.hero.direction.x == DirectionX::LEFT) || (game.hero.direction.x == DirectionX::NONE))
 				{
 					game.bonus[i].body->setPosition(doodlePosition.x + 15, doodlePosition.y - 15);     // ЧТО ЭТО?! ПОЧЕМУ ОНО СОВПАДАЕТ С ТЕМ, ЧТО ВЫШЕ?! АААААААА!!!
 				}
 			}
 			break;
-		case ROCKET:
+		case BonusType::ROCKET:
 			if (((doodlePosition.y + DOODLE_HEIGHT + ROCKET_HEIGHT + 0.5 >= bonusPosition[i].y + ROCKET_HEIGHT - 0.5) && (doodlePosition.y - 0.5 <= bonusPosition[i].y - DOODLE_HEIGHT + 0.5)
 				&& (doodlePosition.x + DOODLE_WIDTH + ROCKET_WIDTH >= bonusPosition[i].x) && (doodlePosition.x - ROCKET_WIDTH <= bonusPosition[i].x)))
 			{
-				collision = COLLISION_ROCKET;
+				collision = Collision::COLLISION_ROCKET;
 				game.actualBonusId = i;
 
-				if (game.hero.direction.x == RIGHT)
+				if (game.hero.direction.x == DirectionX::RIGHT)
 				{
 					game.bonus[i].body->setPosition(doodlePosition.x - ROCKET_WIDTH, doodlePosition.y);
 				}
-				else if ((game.hero.direction.x == LEFT) || (game.hero.direction.x == NONE))
+				else if ((game.hero.direction.x == DirectionX::LEFT) || (game.hero.direction.x == DirectionX::NONE))
 				{
 					game.bonus[i].body->setPosition(doodlePosition.x + DOODLE_WIDTH, doodlePosition.y);
 				}
@@ -511,20 +521,20 @@ int checkDoodleFall(Game & game)
 
 	switch (collision)
 	{
-	case COLLISION_PLATE:
-		game.actualBonus = NO;
+	case Collision::COLLISION_PLATE:
+		game.actualBonus = BonusType::NO;
 		return 5500;
-	case COLLISION_SPRING:
-		game.actualBonus = SPRING;
+	case Collision::COLLISION_SPRING:
+		game.actualBonus = BonusType::SPRING;
 		return 4500;
-	case COLLISION_TRAMPLANE:
-		game.actualBonus = TRAMPOLINE;
+	case Collision::COLLISION_TRAMPLANE:
+		game.actualBonus = BonusType::TRAMPOLINE;
 		return 6000;
-	case COLLISION_HAT_HELICOPTER:
-		game.actualBonus = HAT_HELICOPTER;
+	case Collision::COLLISION_HAT_HELICOPTER:
+		game.actualBonus = BonusType::HAT_HELICOPTER;
 		return 12000;
-	case COLLISION_ROCKET:
-		game.actualBonus = ROCKET;
+	case Collision::COLLISION_ROCKET:
+		game.actualBonus = BonusType::ROCKET;
 		return 24000;
 	default:
 	//	game.actualBonus = NO;            // кто-нибудь помнит, зачем я это закомментил? Нет? Кто-нибудь...

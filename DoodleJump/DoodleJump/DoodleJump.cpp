@@ -1,5 +1,3 @@
-#pragma once
-
 #include "stdafx.h"
 #include "bases.h"
 #include "Bonuses.cpp"

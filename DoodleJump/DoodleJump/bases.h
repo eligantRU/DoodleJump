@@ -1,5 +1,6 @@
 #pragma once
 
+#include "stdafx.h"
 #include <SFML/Graphics.hpp>
 
 static const int NUMBER_PLATES = 30;
@@ -19,6 +20,7 @@ static const int ROCKET_HEIGHT = 36;
 static const int TRAMPOLINE_WIDTH = 20;
 static const int TRAMPOLINE_HEIGHT = 7;
 
+//int dir, playerScore;//нова€ переменна€, хран€ща€ очки игрока [вор]
 bool g_noJumps;
 bool g_endOfGame;
 sf::Vector2f g_positionBeforeDown; // extern // объ€вить в одном из файлов // им€ переменной убогое, сменить!
@@ -54,14 +56,14 @@ struct Assets
 
 Assets g_Assets;
 
-enum PlateType
+enum class PlateType
 {
 	STATIC,
 	DYNAMIC_X,
 	CLOUD
 };
 
-enum Collision
+enum class Collision
 {
 	COLLISION_SPRING,
 	COLLISION_HAT_HELICOPTER,
@@ -72,20 +74,20 @@ enum Collision
 	NO_COLLISION
 };
 
-enum DirectionY
+enum class DirectionY
 {
 	UP,
 	DOWN
 };
 
-enum DirectionX
+enum class DirectionX
 {
 	NONE,
 	LEFT,
 	RIGHT
 };
 
-enum BonusType
+enum class BonusType
 {
 	HAT_HELICOPTER,
 	SPRING,
@@ -134,3 +136,37 @@ struct Game
 	Plate plate[NUMBER_PLATES];
 	Bonus bonus[NUMBER_BONUSES];
 };
+
+bool checkGameEnd(Game & game);
+
+void starter(sf::RenderWindow & window, Game & game);
+
+void initialGame(Game & game, sf::View view);
+
+void startGame(void);
+
+void keyPressed(sf::RenderWindow & window, Game & game);
+
+void update(sf::RenderWindow & window, Game & game, sf::View & view);
+
+void render(sf::RenderWindow & window, Game & game);
+
+void initAssets(void);
+
+int checkDoodleFall(Game & game);
+
+void generPlates(Game & game);
+
+void initialPlates(Game & game);
+
+void moveDynamicPlates(Game & game);
+
+void initialHero(Game & game);
+
+void initialBonuses(Game & game);
+
+void generBonuses(Game & game);
+
+void buildBonus(Game & game, BonusType bonusType, int i);
+
+void buildBonus(Game & game, BonusType bonusType, int i, sf::Vector2f platePosition);

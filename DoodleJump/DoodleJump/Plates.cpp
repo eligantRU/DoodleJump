@@ -1,9 +1,6 @@
-#pragma once
+#include "stdafx.h"
+#include "bases.h"
 
-int checkDoodleFall(Game & game);
-void generPlates(Game & game);
-void initialPlates(Game & game);
-void moveDynamicPlates(Game & game);
 
 void generPlates(Game & game)
 {
@@ -25,27 +22,27 @@ void generPlates(Game & game)
 			switch (randomNum)
 			{
 			case 0:
-				game.plate[i].type = STATIC;
-				game.plate[i].direction.x = NONE;
+				game.plate[i].type = PlateType::STATIC;
+				game.plate[i].direction.x = DirectionX::NONE;
 				game.plate[i].body->setTexture(g_Assets.PLATE_STATIC_TEXTURE);
 				break;
 			case 1:
-				game.plate[i].type = DYNAMIC_X;
+				game.plate[i].type = PlateType::DYNAMIC_X;
 				randomNum = rand() % 2;
 				switch (randomNum)
 				{
 				case 0:
-					game.plate[i].direction.x = LEFT;
+					game.plate[i].direction.x = DirectionX::LEFT;
 					break;
 				case 1:
-					game.plate[i].direction.x = RIGHT;
+					game.plate[i].direction.x = DirectionX::RIGHT;
 					break;
 				}
 				game.plate[i].body->setTexture(g_Assets.PLATE_DYNAMIC_TEXTURE);
 				break;
 			case 2:
-				game.plate[i].type = CLOUD;
-				game.plate[i].direction.x = NONE;
+				game.plate[i].type = PlateType::CLOUD;
+				game.plate[i].direction.x = DirectionX::NONE;
 				game.plate[i].body->setTexture(g_Assets.PLATE_CLOUD_TEXTURE);
 				break;
 			}
@@ -66,27 +63,27 @@ void initialPlates(Game & game) // эту функцию можно убрать, либо в неё засунуть
 		switch (randomNum)
 		{
 		case 0:
-			game.plate[i].type = STATIC;
-			game.plate[i].direction.x = NONE;
+			game.plate[i].type = PlateType::STATIC;
+			game.plate[i].direction.x = DirectionX::NONE;
 			game.plate[i].body->setTexture(g_Assets.PLATE_STATIC_TEXTURE);
 			break;
 		case 1:
-			game.plate[i].type = DYNAMIC_X;
+			game.plate[i].type = PlateType::DYNAMIC_X;
 			randomNum = rand() % 2;
 			switch (randomNum)
 			{
 			case 0:
-				game.plate[i].direction.x = LEFT;
+				game.plate[i].direction.x = DirectionX::LEFT;
 				break;
 			case 1:
-				game.plate[i].direction.x = RIGHT;
+				game.plate[i].direction.x = DirectionX::RIGHT;
 				break;
 			}
 			game.plate[i].body->setTexture(g_Assets.PLATE_DYNAMIC_TEXTURE);
 			break;
 		case 2:
-			game.plate[i].type = CLOUD;
-			game.plate[i].direction.x = NONE;
+			game.plate[i].type = PlateType::CLOUD;
+			game.plate[i].direction.x = DirectionX::NONE;
 			game.plate[i].body->setTexture(g_Assets.PLATE_CLOUD_TEXTURE);
 			break;
 		}
@@ -104,24 +101,24 @@ void moveDynamicPlates(Game & game)
 	for (int i = 0; i < NUMBER_PLATES; ++i)
 	{
 		platePosition[i] = game.plate[i].body->getPosition();
-		if (game.plate[i].type == DYNAMIC_X) // лишнее условие, но так нагляднее
+		if (game.plate[i].type == PlateType::DYNAMIC_X) // лишнее условие, но так нагляднее
 		{
 			switch (game.plate[i].direction.x)
 			{
-			case LEFT:
+			case DirectionX::LEFT:
 				if (platePosition[i].x <= STEP)
 				{
-					game.plate[i].direction.x = RIGHT;
+					game.plate[i].direction.x = DirectionX::RIGHT;
 				}
 				else
 				{
 					position.x -= 0.5*STEP;
 				}
 				break;
-			case RIGHT:
+			case DirectionX::RIGHT:
 				if (platePosition[i].x >= 550 - PLATE_WIDTH - STEP) // 550 - это ширина экрана
 				{
-					game.plate[i].direction.x = LEFT;
+					game.plate[i].direction.x = DirectionX::LEFT;
 				}
 				else
 				{

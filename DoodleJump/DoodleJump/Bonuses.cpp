@@ -1,9 +1,5 @@
-#pragma once
-
-void initialBonuses(Game & game);
-void generBonuses(Game & game);
-void buildBonus(Game & game, BonusType bonusType, int i);
-void buildBonus(Game & game, BonusType bonusType, int i, sf::Vector2f platePosition);
+#include "stdafx.h"
+#include "bases.h"
 
 void buildBonus(Game & game, BonusType bonusType, int i)
 {
@@ -20,20 +16,20 @@ void buildBonus(Game & game, BonusType bonusType, int i)
 
 	switch (bonusType)
 	{
-		case SPRING:
+		case BonusType::SPRING:
 		{
 			x = rand() % (PLATE_WIDTH - SPRING_WIDTH);
 			game.bonus[i].body = new sf::Sprite;
-			game.bonus[i].type = SPRING;
+			game.bonus[i].type = BonusType::SPRING;
 			game.bonus[i].body->setPosition(platePosition[N].x + x, platePosition[N].y - SPRING_HEIGHT);
 			game.bonus[i].body->setTexture(g_Assets.SPRING_TEXTURE);
 			break;
 		}
-		case TRAMPOLINE:
+		case BonusType::TRAMPOLINE:
 		{
 			x = rand() % (PLATE_WIDTH - TRAMPOLINE_WIDTH);
 			game.bonus[i].body = new sf::Sprite;
-			game.bonus[i].type = TRAMPOLINE;
+			game.bonus[i].type = BonusType::TRAMPOLINE;
 			game.bonus[i].body->setPosition(platePosition[N].x + x, platePosition[N].y - TRAMPOLINE_HEIGHT);
 			game.bonus[i].body->setTexture(g_Assets.TRAMPOLINE_TEXTURE);
 			break;
@@ -47,30 +43,30 @@ void buildBonus(Game & game, BonusType bonusType, int i, sf::Vector2f platePosit
 
 	switch (bonusType)
 	{
-		case SPRING:
+		case BonusType::SPRING:
 		{
 			x = rand() % (PLATE_WIDTH - SPRING_WIDTH);
 			game.bonus[i].body = new sf::Sprite;
-			game.bonus[i].type = SPRING;
+			game.bonus[i].type = BonusType::SPRING;
 			game.bonus[i].body->setPosition(platePosition.x + x, platePosition.y - SPRING_HEIGHT);
 			game.bonus[i].body->setTexture(g_Assets.SPRING_TEXTURE);
 			break;
 		}
-		case TRAMPOLINE:
+		case BonusType::TRAMPOLINE:
 		{
 			x = rand() % (PLATE_WIDTH - TRAMPOLINE_WIDTH);
 			game.bonus[i].body = new sf::Sprite;
-			game.bonus[i].type = TRAMPOLINE;
+			game.bonus[i].type = BonusType::TRAMPOLINE;
 			game.bonus[i].body->setPosition(platePosition.x + x, platePosition.y - TRAMPOLINE_HEIGHT);
 			game.bonus[i].body->setTexture(g_Assets.TRAMPOLINE_TEXTURE);
 			break;
 		}
-		case HAT_HELICOPTER:
+		case BonusType::HAT_HELICOPTER:
 		{
 			randomNum = rand() % 2;
 			x = rand() % (PLATE_WIDTH - SPRING_WIDTH);
 			game.bonus[i].body = new sf::Sprite;
-			game.bonus[i].type = HAT_HELICOPTER;
+			game.bonus[i].type = BonusType::HAT_HELICOPTER;
 			game.bonus[i].body->setPosition(platePosition.x + x, platePosition.y - HAT_HELICOPTER_HEIGHT);
 			switch (randomNum)
 			{
@@ -83,11 +79,11 @@ void buildBonus(Game & game, BonusType bonusType, int i, sf::Vector2f platePosit
 			}
 			break;
 		}
-		case ROCKET:
+		case BonusType::ROCKET:
 		{
 			x = rand() % (PLATE_WIDTH - ROCKET_WIDTH);
 			game.bonus[i].body = new sf::Sprite;
-			game.bonus[i].type = ROCKET;
+			game.bonus[i].type = BonusType::ROCKET;
 			game.bonus[i].body->setPosition(platePosition.x + x, platePosition.y - ROCKET_HEIGHT);
 			game.bonus[i].body->setTexture(g_Assets.ROCKET_NONE_TEXTURE);
 			break;
@@ -111,17 +107,17 @@ void initialBonuses(Game & game)
 	for (int i = 0; i < NUMBER_BONUSES; ++i)
 	{
 		N = rand() % NUMBER_PLATES;
-		if (game.plate[N].type == STATIC)
+		if (game.plate[N].type == PlateType::STATIC)
 		{
 			randomNum = rand() % 2;
 
 			switch (randomNum)
 			{
 			case 0:
-				buildBonus(game, SPRING, i);
+				buildBonus(game, BonusType::SPRING, i);
 				break;
 			case 1:
-				buildBonus(game, TRAMPOLINE, i);
+				buildBonus(game, BonusType::TRAMPOLINE, i);
 				break;
 			}
 		}
@@ -149,22 +145,22 @@ void generBonuses(Game & game)
 			for (int j = 0; j < NUMBER_PLATES; ++j)
 			{
 				platePosition = game.plate[j].body->getPosition();
-				if ((platePosition.y <= doodlePosition.y - 275) && (game.plate[j].type == STATIC))
+				if ((platePosition.y <= doodlePosition.y - 275) && (game.plate[j].type == PlateType::STATIC))
 				{
 					randomNum = rand() % 4;
 					switch (randomNum)
 					{
 					case 0:
-						buildBonus(game, SPRING, i, platePosition);
+						buildBonus(game, BonusType::SPRING, i, platePosition);
 						break;
 					case 1:
-						buildBonus(game, TRAMPOLINE, i, platePosition);
+						buildBonus(game, BonusType::TRAMPOLINE, i, platePosition);
 						break;
 					case 2:
-						buildBonus(game, HAT_HELICOPTER, i, platePosition);
+						buildBonus(game, BonusType::HAT_HELICOPTER, i, platePosition);
 						break;
 					case 3:
-						buildBonus(game, ROCKET, i, platePosition);
+						buildBonus(game, BonusType::ROCKET, i, platePosition);
 						break;
 					}
 				}
