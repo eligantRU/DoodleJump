@@ -20,5 +20,5 @@ In the future:
 ```sh
 Created by Yegorov Nikita, Lacyem 'InfoTech', 2015
 Under the direction of Rinat Shaikhutdinov
-Refactoring inder the direction of Sergey Shambir
+Refactoring under the direction of Sergey Shambir
 ```
