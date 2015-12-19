@@ -99,19 +99,14 @@ void initialBonuses(Game & game)
 	{
 		platePosition[i] = game.plate[i].body->getPosition();
 	}
-
-	double x;
-	int N; // What the...
-	int randomNum;
-
+	
 	for (int i = 0; i < NUMBER_BONUSES; ++i)
 	{
-		N = rand() % NUMBER_PLATES;
+		int N = rand() % NUMBER_PLATES;
 		if (game.plate[N].type == PlateType::STATIC)
 		{
-			randomNum = rand() % 2;
-
-			switch (randomNum)
+			int plateType = rand() % 2;
+			switch (plateType)
 			{
 			case 0:
 				buildBonus(game, BonusType::SPRING, i);
@@ -133,8 +128,6 @@ void generBonuses(Game & game)
 	sf::Vector2f doodlePosition = game.hero.body->getPosition();
 	sf::Vector2f bonusPosition[NUMBER_BONUSES];
 	sf::Vector2f platePosition;
-	float x;
-	int randomNum;
 
 	for (int i = 0; i < NUMBER_BONUSES; ++i)
 	{
@@ -147,7 +140,7 @@ void generBonuses(Game & game)
 				platePosition = game.plate[j].body->getPosition();
 				if ((platePosition.y <= doodlePosition.y - 275) && (game.plate[j].type == PlateType::STATIC))
 				{
-					randomNum = rand() % 4;
+					int randomNum = rand() % 4;
 					switch (randomNum)
 					{
 					case 0:

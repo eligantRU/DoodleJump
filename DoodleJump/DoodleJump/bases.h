@@ -1,6 +1,7 @@
 #pragma once
 
 #include "stdafx.h"
+#include <string>
 #include <SFML/Graphics.hpp>
 
 static const int NUMBER_PLATES = 30;
@@ -19,11 +20,11 @@ static const int ROCKET_WIDTH = 23;
 static const int ROCKET_HEIGHT = 36;
 static const int TRAMPOLINE_WIDTH = 20;
 static const int TRAMPOLINE_HEIGHT = 7;
+static const int MAX_NUMBER_OF_ITEMS = 3;
 
-//int dir, playerScore;//нова€ переменна€, хран€ща€ очки игрока [вор]
 bool g_noJumps;
 bool g_endOfGame;
-sf::Vector2f g_positionBeforeDown; // extern // объ€вить в одном из файлов // им€ переменной убогое, сменить!
+sf::Vector2f g_positionBeforeDown;
 
 struct Assets
 {
@@ -52,6 +53,7 @@ struct Assets
 	sf::Texture ROCKET_3_LEFT_TEXTURE;
 	sf::Texture ROCKET_3_RIGHT_TEXTURE;
 	sf::Texture TRAMPOLINE_TEXTURE;
+	sf::Font font;
 };
 
 Assets g_Assets;
@@ -135,6 +137,8 @@ struct Game
 	int qwerty;
 	Plate plate[NUMBER_PLATES];
 	Bonus bonus[NUMBER_BONUSES];
+	sf::Text text;
+	unsigned long long int points;
 };
 
 bool checkGameEnd(Game & game);

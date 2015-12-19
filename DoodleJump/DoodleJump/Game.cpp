@@ -5,13 +5,6 @@ extern Assets g_Assets;
 extern sf::Vector2f g_positionBeforeDown;
 extern bool g_noJumps;
 extern bool g_endOfGame;
-//dir = 0; speed = 0; playerScore = 0; // [вор]
-/*// [локально-глобальненько] -- фу-фу-фу
-sf::Font font;//шрифт 
-sf::Text text("", font, 20);//создаем объект текст. закидываем в объект текст строку, шрифт, размер шрифта(в пикселях);//сам объект текст (не строка)
-text.setColor(Color::Black);//покрасили текст в красный. если убрать эту строку, то по умолчанию он белый
-text.setStyle(sf::Text::Bold | sf::Text::Underlined);//жирный и подчеркнутый текст. по умолчанию он "худой":)) и не подчеркнутый
-*/// [вор]
 
 void startGame(void)
 {
@@ -24,8 +17,8 @@ void startGame(void)
 
 	sf::View view;
 	
-
 	Game game;
+	game.points = 0;
 M_Start:
 	view.reset(sf::FloatRect(0, 0, 550, 700));
 	g_noJumps = true;
@@ -35,6 +28,7 @@ M_Start:
 	sf::Clock clock;
 	float timeSinceLastUpdate = clock.getElapsedTime().asSeconds();
 	int Marker = 60;
+
 	while (window.isOpen())
 	{
 		keyPressed(window, game);
@@ -52,7 +46,7 @@ M_Start:
 			}
 			else
 			{
-				// конец игры, выкидываем на Menu
+				// Menu();
 			}
 		}
 		Marker = 60;
@@ -174,6 +168,15 @@ void render(sf::RenderWindow & window, Game & game)
 		window.draw(*game.bonus[i].body);
 	}
 
+	game.text.setFont(g_Assets.font);
+	game.text.setCharacterSize(20);
+	std::string str = "Bonuses: " + std::to_string(game.points);
+	game.text.setString(str);
+	game.text.setStyle(sf::Text::Bold);
+	game.text.move(0.f, 0.f);
+	game.text.setColor(sf::Color(0, 0, 0));
+	window.draw(game.text);
+
 	window.display();
 }
 
@@ -181,6 +184,7 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view) // смену те
 {
 	sf::Vector2f position(0.f, 0.f);
 	sf::Vector2f doodlePosition = game.hero.body->getPosition();
+	sf::Vector2f textPosition = game.text.getPosition();
 
 	if (game.hero.direction.x == DirectionX::RIGHT)
 	{
@@ -411,8 +415,10 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view) // смену те
 	{
 		view.setCenter(275, doodlePosition.y);
 		g_Assets.BACKGROUND->setPosition(0, doodlePosition.y-350);
+		game.text.setPosition(0, doodlePosition.y-350);
+		++game.points;
 	}
-
+	
 	moveDynamicPlates(game);
 	generPlates(game);
 	generBonuses(game);
@@ -421,12 +427,6 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view) // смену те
 	{
 		g_endOfGame = true;
 	}
-
-	/*// [вор]
-	text.setString("-");//задает строку тексту
-	text.setPosition(0, 0);//задаем позицию текста, центр камеры
-	window.draw(text);//рисую этот текст
-	*/// [вор]
 }
 
 int checkDoodleFall(Game & game)
@@ -692,4 +692,9 @@ void initAssets(void) // а внутри ещё функцию, которая принимает переменную и пу
 		printf("Error loaded file");
 	}
 	g_Assets.SPRING_2_TEXTURE.setSmooth(true);
+
+	if (!g_Assets.font.loadFromFile("arial.ttf"))
+	{
+		printf("Error loaded arial\n");
+	}
 }
