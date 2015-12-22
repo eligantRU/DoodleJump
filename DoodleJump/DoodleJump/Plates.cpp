@@ -23,7 +23,7 @@ void generPlates(Game & game)
 			case 0:
 				game.plate[i].type = PlateType::STATIC;
 				game.plate[i].direction.x = DirectionX::NONE;
-				game.plate[i].body->setTexture(g_Assets.PLATE_STATIC_TEXTURE);
+				game.plate[i].body->setTexture(game.assets.PLATE_STATIC_TEXTURE);
 				break;
 			case 1:
 				game.plate[i].type = PlateType::DYNAMIC_X;
@@ -37,12 +37,12 @@ void generPlates(Game & game)
 					game.plate[i].direction.x = DirectionX::RIGHT;
 					break;
 				}
-				game.plate[i].body->setTexture(g_Assets.PLATE_DYNAMIC_TEXTURE);
+				game.plate[i].body->setTexture(game.assets.PLATE_DYNAMIC_TEXTURE);
 				break;
 			case 2:
 				game.plate[i].type = PlateType::CLOUD;
 				game.plate[i].direction.x = DirectionX::NONE;
-				game.plate[i].body->setTexture(g_Assets.PLATE_CLOUD_TEXTURE);
+				game.plate[i].body->setTexture(game.assets.PLATE_CLOUD_TEXTURE);
 				break;
 			}
 			game.plate[i].body->setPosition(x, doodlePosition.y + y - 380.f);  // 380?! What is it?
@@ -52,23 +52,19 @@ void generPlates(Game & game)
 
 void initialPlates(Game & game) // эту функцию можно убрать, либо в неЄ засунуть generPlates() + в конце мен€ть начальные координаты + создавать пр€моугольник
 {
-	float x, y;
-	int randomNum;
 	for (int i = 0; i < NUMBER_PLATES; ++i)
 	{
 		game.plate[i].body = new sf::Sprite;
-		randomNum = rand() % 3;
-		switch (randomNum)
+		switch (rand() % 3)
 		{
 		case 0:
 			game.plate[i].type = PlateType::STATIC;
 			game.plate[i].direction.x = DirectionX::NONE;
-			game.plate[i].body->setTexture(g_Assets.PLATE_STATIC_TEXTURE);
+			game.plate[i].body->setTexture(game.assets.PLATE_STATIC_TEXTURE);
 			break;
 		case 1:
 			game.plate[i].type = PlateType::DYNAMIC_X;
-			randomNum = rand() % 2;
-			switch (randomNum)
+			switch (rand() % 2)
 			{
 			case 0:
 				game.plate[i].direction.x = DirectionX::LEFT;
@@ -77,16 +73,16 @@ void initialPlates(Game & game) // эту функцию можно убрать, либо в неЄ засунуть
 				game.plate[i].direction.x = DirectionX::RIGHT;
 				break;
 			}
-			game.plate[i].body->setTexture(g_Assets.PLATE_DYNAMIC_TEXTURE);
+			game.plate[i].body->setTexture(game.assets.PLATE_DYNAMIC_TEXTURE);
 			break;
 		case 2:
 			game.plate[i].type = PlateType::CLOUD;
 			game.plate[i].direction.x = DirectionX::NONE;
-			game.plate[i].body->setTexture(g_Assets.PLATE_CLOUD_TEXTURE);
+			game.plate[i].body->setTexture(game.assets.PLATE_CLOUD_TEXTURE);
 			break;
 		}
-		x = float(rand() % (550 - PLATE_WIDTH));
-		y = float(rand() % (700 - PLATE_HEIGHT)); // —юда запилить функцию дл€ равномерной генерации плит по высоте
+		float x = float(rand() % (550 - PLATE_WIDTH));
+		float y = float(rand() % (700 - PLATE_HEIGHT)); // —юда запилить функцию дл€ равномерной генерации плит по высоте
 		game.plate[i].body->setPosition(x, y);
 	}
 }

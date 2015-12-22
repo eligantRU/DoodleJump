@@ -1,8 +1,6 @@
 #include "stdafx.h"
 #include "sheet.h"
 
-Assets g_Assets;
-
 bool g_noJumps; // костыльменная, уйдёт с вводом Menu, как и функция starter()
 
 void resetGame(Game & game, sf::View & view)
@@ -43,7 +41,6 @@ bool waitRestartChoosen(sf::RenderWindow & window)
 
 void enterGameLoop(void)
 {
-	initAssets();
 	sf::RenderWindow window(sf::VideoMode(550, 700), "Doodle Jump");
 	window.setVerticalSyncEnabled(true);
 	window.setFramerateLimit(60);
@@ -51,6 +48,7 @@ void enterGameLoop(void)
 	sf::View view;
 	sf::Clock clock;
 	Game game;
+	initAssets(game);
 	resetGame(game, view);
 	update(window, game, view);
 
@@ -176,7 +174,7 @@ void initialGame(Game & game, sf::View view)
 void render(sf::RenderWindow & window, Game & game)
 {
 	window.clear(sf::Color(230, 230, 230));
-	window.draw(*g_Assets.BACKGROUND);
+	window.draw(*game.assets.BACKGROUND);
 
 	for (Plate &plate : game.plate)
 	{
@@ -190,7 +188,7 @@ void render(sf::RenderWindow & window, Game & game)
 		window.draw(*game.bonus[i].body);
 	}
 
-	game.text.setFont(g_Assets.font);
+	game.text.setFont(game.assets.font);
 	game.text.setCharacterSize(20);
 	game.text.setString("Bonuses: " + std::to_string(game.points));
 	game.text.setStyle(sf::Text::Bold);
@@ -210,12 +208,12 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view) // смену те
 	if (game.hero.direction.x == DirectionX::RIGHT)
 	{
 		position.x += STEP;
-		game.hero.body->setTexture(g_Assets.DOODLE_JUMP_RIGHT_TEXTURE);
+		game.hero.body->setTexture(game.assets.DOODLE_JUMP_RIGHT_TEXTURE);
 	}
 	else if (game.hero.direction.x == DirectionX::LEFT)
 	{
 		position.x -= STEP;
-		game.hero.body->setTexture(g_Assets.DOODLE_JUMP_LEFT_TEXTURE);
+		game.hero.body->setTexture(game.assets.DOODLE_JUMP_LEFT_TEXTURE);
 	}
 	if (game.hero.direction.y == DirectionY::DOWN)
 	{
@@ -228,11 +226,11 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view) // смену те
 			position.y += STEP;
 			if (game.hero.lastDirectionX == DirectionX::RIGHT)
 			{
-				game.hero.body->setTexture(g_Assets.DOODLE_RIGHT_TEXTURE);
+				game.hero.body->setTexture(game.assets.DOODLE_RIGHT_TEXTURE);
 			}
 			else if (game.hero.lastDirectionX == DirectionX::LEFT)
 			{
-				game.hero.body->setTexture(g_Assets.DOODLE_LEFT_TEXTURE);
+				game.hero.body->setTexture(game.assets.DOODLE_LEFT_TEXTURE);
 			}
 		}
 	}
@@ -240,11 +238,11 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view) // смену те
 	{
 		if (game.hero.lastDirectionX == DirectionX::LEFT)
 		{
-			game.hero.body->setTexture(g_Assets.DOODLE_JUMP_LEFT_TEXTURE);
+			game.hero.body->setTexture(game.assets.DOODLE_JUMP_LEFT_TEXTURE);
 		}
 		else if (game.hero.lastDirectionX == DirectionX::RIGHT)
 		{
-			game.hero.body->setTexture(g_Assets.DOODLE_JUMP_RIGHT_TEXTURE);
+			game.hero.body->setTexture(game.assets.DOODLE_JUMP_RIGHT_TEXTURE);
 		}
 
 		if (game.hero.deltaHeight > 0)
@@ -301,7 +299,7 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view) // смену те
 		if (game.hero.deltaHeight <= 15)
 		{
 			game.qwerty = -1;
-			game.bonus[game.actualBonusId].body->setTexture(g_Assets.HAT_HELOCPTER_FLY_LEFT_TEXTURE);
+			game.bonus[game.actualBonusId].body->setTexture(game.assets.HAT_HELOCPTER_FLY_LEFT_TEXTURE);
 			game.bonus[game.actualBonusId].body->rotate(-0.07f);
 			game.bonus[game.actualBonusId].body->move(sf::Vector2f(-2*STEP, 6*STEP));
 		}
@@ -313,22 +311,22 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view) // смену те
 
 		if ((game.qwerty >= 0) && (game.qwerty <= 200))
 		{
-			game.bonus[game.actualBonusId].body->setTexture(g_Assets.HAT_HELOCPTER_FLY_LEFT_TEXTURE);
+			game.bonus[game.actualBonusId].body->setTexture(game.assets.HAT_HELOCPTER_FLY_LEFT_TEXTURE);
 			++game.qwerty;
 		}
 		else if((game.qwerty >= 201) && (game.qwerty <= 400))
 		{
-			game.bonus[game.actualBonusId].body->setTexture(g_Assets.HAT_HELOCPTER_DIAGONAL_LEFT_TEXTURE);
+			game.bonus[game.actualBonusId].body->setTexture(game.assets.HAT_HELOCPTER_DIAGONAL_LEFT_TEXTURE);
 			++game.qwerty;
 		}
 		else if ((game.qwerty >= 401) && (game.qwerty <= 600))
 		{
-			game.bonus[game.actualBonusId].body->setTexture(g_Assets.HAT_HELOCPTER_DIAGONAL_RIGHT_TEXTURE);
+			game.bonus[game.actualBonusId].body->setTexture(game.assets.HAT_HELOCPTER_DIAGONAL_RIGHT_TEXTURE);
 			++game.qwerty;
 		}
 		else if ((game.qwerty >= 601) && (game.qwerty <= 800))
 		{
-			game.bonus[game.actualBonusId].body->setTexture(g_Assets.HAT_HELOCPTER_FLY_RIGHT_TEXTURE);
+			game.bonus[game.actualBonusId].body->setTexture(game.assets.HAT_HELOCPTER_FLY_RIGHT_TEXTURE);
 			++game.qwerty;
 		}
 		else if (game.qwerty == 801)
@@ -354,7 +352,7 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view) // смену те
 		if (game.hero.deltaHeight <= 15)
 		{
 			game.qwerty = -1;
-			game.bonus[game.actualBonusId].body->setTexture(g_Assets.ROCKET_NONE_TEXTURE);
+			game.bonus[game.actualBonusId].body->setTexture(game.assets.ROCKET_NONE_TEXTURE);
 			game.bonus[game.actualBonusId].body->rotate(-0.07f);
 			game.bonus[game.actualBonusId].body->move(sf::Vector2f(-2 * STEP, 6 * STEP));
 		}
@@ -368,11 +366,11 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view) // смену те
 		{
 			if (game.hero.lastDirectionX == DirectionX::RIGHT)
 			{
-				game.bonus[game.actualBonusId].body->setTexture(g_Assets.ROCKET_1_LEFT_TEXTURE);
+				game.bonus[game.actualBonusId].body->setTexture(game.assets.ROCKET_1_LEFT_TEXTURE);
 			} 
 			else if (game.hero.lastDirectionX == DirectionX::LEFT)
 			{
-				game.bonus[game.actualBonusId].body->setTexture(g_Assets.ROCKET_1_RIGHT_TEXTURE);
+				game.bonus[game.actualBonusId].body->setTexture(game.assets.ROCKET_1_RIGHT_TEXTURE);
 			}
 			++game.qwerty;
 		}
@@ -380,11 +378,11 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view) // смену те
 		{
 			if (game.hero.lastDirectionX == DirectionX::RIGHT)
 			{
-				game.bonus[game.actualBonusId].body->setTexture(g_Assets.ROCKET_2_LEFT_TEXTURE);
+				game.bonus[game.actualBonusId].body->setTexture(game.assets.ROCKET_2_LEFT_TEXTURE);
 			}
 			else if (game.hero.lastDirectionX == DirectionX::LEFT)
 			{
-				game.bonus[game.actualBonusId].body->setTexture(g_Assets.ROCKET_2_RIGHT_TEXTURE);
+				game.bonus[game.actualBonusId].body->setTexture(game.assets.ROCKET_2_RIGHT_TEXTURE);
 			}
 			++game.qwerty;
 		}
@@ -392,11 +390,11 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view) // смену те
 		{
 			if (game.hero.lastDirectionX == DirectionX::RIGHT)
 			{
-				game.bonus[game.actualBonusId].body->setTexture(g_Assets.ROCKET_3_LEFT_TEXTURE);
+				game.bonus[game.actualBonusId].body->setTexture(game.assets.ROCKET_3_LEFT_TEXTURE);
 			}
 			else if (game.hero.lastDirectionX == DirectionX::LEFT)
 			{
-				game.bonus[game.actualBonusId].body->setTexture(g_Assets.ROCKET_3_RIGHT_TEXTURE);
+				game.bonus[game.actualBonusId].body->setTexture(game.assets.ROCKET_3_RIGHT_TEXTURE);
 			}
 			++game.qwerty;
 		}
@@ -421,7 +419,7 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view) // смену те
 	if ((game.hero.direction.y == DirectionY::UP) && (doodlePosition.y <= game.hero.positionBeforeDown.y))
 	{
 		view.setCenter(275, doodlePosition.y);
-		g_Assets.BACKGROUND->setPosition(0, doodlePosition.y-350);
+		game.assets.BACKGROUND->setPosition(0, doodlePosition.y-350);
 		game.text.setPosition(0, doodlePosition.y-350);
 		++game.points;
 	}
@@ -477,7 +475,7 @@ int checkDoodleFall(Game & game)
 				&& (doodlePosition.x + DOODLE_WIDTH + SPRING_WIDTH >= bonusPosition[i].x) && (doodlePosition.x - SPRING_WIDTH <= bonusPosition[i].x)))
 			{
 				collision = Collision::COLLISION_SPRING;
-				game.bonus[i].body->setTexture(g_Assets.SPRING_2_TEXTURE);
+				game.bonus[i].body->setTexture(game.assets.SPRING_2_TEXTURE);
 				game.actualBonusId = i;
 			}
 			break;
@@ -548,158 +546,158 @@ int checkDoodleFall(Game & game)
 	}
 }
 
-void initAssets(void) // а внутри ещё функцию, которая принимает переменную и путь к файлу в виде строки
+void initAssets(Game & game) // а внутри ещё функцию, которая принимает переменную и путь к файлу в виде строки
 {
-	if (!g_Assets.BACKGROUND_TEXTURE.loadFromFile("images/background.png"))
+	if (!game.assets.BACKGROUND_TEXTURE.loadFromFile("images/background.png"))
 	{
 		printf("Error loaded file");
 	}
-	g_Assets.BACKGROUND_TEXTURE.setSmooth(true);
-	g_Assets.BACKGROUND_TEXTURE.setRepeated(true);
+	game.assets.BACKGROUND_TEXTURE.setSmooth(true);
+	game.assets.BACKGROUND_TEXTURE.setRepeated(true);
 	
-	g_Assets.BACKGROUND = new sf::Sprite;
-	g_Assets.BACKGROUND->setTextureRect(sf::IntRect(0, 0, 550, 700));
-	g_Assets.BACKGROUND->setTexture(g_Assets.BACKGROUND_TEXTURE);
+	game.assets.BACKGROUND = new sf::Sprite;
+	game.assets.BACKGROUND->setTextureRect(sf::IntRect(0, 0, 550, 700));
+	game.assets.BACKGROUND->setTexture(game.assets.BACKGROUND_TEXTURE);
 
-	if (!g_Assets.TRAMPOLINE_TEXTURE.loadFromFile("images/TRAMPOLINE_20_7.png"))
+	if (!game.assets.TRAMPOLINE_TEXTURE.loadFromFile("images/TRAMPOLINE_20_7.png"))
 	{
 		printf("Error loaded file");
 	}
-	g_Assets.TRAMPOLINE_TEXTURE.setSmooth(true);
+	game.assets.TRAMPOLINE_TEXTURE.setSmooth(true);
 
-	if (!g_Assets.ROCKET_NONE_TEXTURE.loadFromFile("images/Rocket_none_23_36.png"))
+	if (!game.assets.ROCKET_NONE_TEXTURE.loadFromFile("images/Rocket_none_23_36.png"))
 	{
 		printf("Error loaded file");
 	}
-	g_Assets.ROCKET_NONE_TEXTURE.setSmooth(true);
+	game.assets.ROCKET_NONE_TEXTURE.setSmooth(true);
 
-	if (!g_Assets.ROCKET_1_LEFT_TEXTURE.loadFromFile("images/Rocket_left_1_12_40.png"))
+	if (!game.assets.ROCKET_1_LEFT_TEXTURE.loadFromFile("images/Rocket_left_1_12_40.png"))
 	{
 		printf("Error loaded file");
 	}
-	g_Assets.ROCKET_1_LEFT_TEXTURE.setSmooth(true);
+	game.assets.ROCKET_1_LEFT_TEXTURE.setSmooth(true);
 
-	if (!g_Assets.ROCKET_1_RIGHT_TEXTURE.loadFromFile("images/Rocket_right_1_12_40.png"))
+	if (!game.assets.ROCKET_1_RIGHT_TEXTURE.loadFromFile("images/Rocket_right_1_12_40.png"))
 	{
 		printf("Error loaded file");
 	}
-	g_Assets.ROCKET_1_RIGHT_TEXTURE.setSmooth(true);
+	game.assets.ROCKET_1_RIGHT_TEXTURE.setSmooth(true);
 
-	if (!g_Assets.ROCKET_2_LEFT_TEXTURE.loadFromFile("images/Rocket_left_2_15_52.png"))
+	if (!game.assets.ROCKET_2_LEFT_TEXTURE.loadFromFile("images/Rocket_left_2_15_52.png"))
 	{
 		printf("Error loaded file");
 	}
-	g_Assets.ROCKET_2_LEFT_TEXTURE.setSmooth(true);
+	game.assets.ROCKET_2_LEFT_TEXTURE.setSmooth(true);
 
-	if (!g_Assets.ROCKET_2_RIGHT_TEXTURE.loadFromFile("images/Rocket_right_2_15_52.png"))
+	if (!game.assets.ROCKET_2_RIGHT_TEXTURE.loadFromFile("images/Rocket_right_2_15_52.png"))
 	{
 		printf("Error loaded file");
 	}
-	g_Assets.ROCKET_2_RIGHT_TEXTURE.setSmooth(true);
+	game.assets.ROCKET_2_RIGHT_TEXTURE.setSmooth(true);
 
-	if (!g_Assets.ROCKET_3_LEFT_TEXTURE.loadFromFile("images/Rocket_left_3_23_61.png"))
+	if (!game.assets.ROCKET_3_LEFT_TEXTURE.loadFromFile("images/Rocket_left_3_23_61.png"))
 	{
 		printf("Error loaded file");
 	}
-	g_Assets.ROCKET_3_LEFT_TEXTURE.setSmooth(true);
+	game.assets.ROCKET_3_LEFT_TEXTURE.setSmooth(true);
 
-	if (!g_Assets.ROCKET_3_RIGHT_TEXTURE.loadFromFile("images/Rocket_right_3_23_61.png"))
+	if (!game.assets.ROCKET_3_RIGHT_TEXTURE.loadFromFile("images/Rocket_right_3_23_61.png"))
 	{
 		printf("Error loaded file");
 	}
-	g_Assets.ROCKET_3_RIGHT_TEXTURE.setSmooth(true);
+	game.assets.ROCKET_3_RIGHT_TEXTURE.setSmooth(true);
 
-	if (!g_Assets.HAT_HELOCPTER_NONE_RIGHT_TEXTURE.loadFromFile("images/Hat_Helicopter_None_Right_30_18.png"))
+	if (!game.assets.HAT_HELOCPTER_NONE_RIGHT_TEXTURE.loadFromFile("images/Hat_Helicopter_None_Right_30_18.png"))
 	{
 		printf("Error loaded file");
 	}
-	g_Assets.HAT_HELOCPTER_NONE_RIGHT_TEXTURE.setSmooth(true);
+	game.assets.HAT_HELOCPTER_NONE_RIGHT_TEXTURE.setSmooth(true);
 
-	if (!g_Assets.HAT_HELOCPTER_NONE_LEFT_TEXTURE.loadFromFile("images/Hat_Helicopter_None_Left_30_18.png"))
+	if (!game.assets.HAT_HELOCPTER_NONE_LEFT_TEXTURE.loadFromFile("images/Hat_Helicopter_None_Left_30_18.png"))
 	{
 		printf("Error loaded file");
 	}
-	g_Assets.HAT_HELOCPTER_NONE_LEFT_TEXTURE.setSmooth(true);
+	game.assets.HAT_HELOCPTER_NONE_LEFT_TEXTURE.setSmooth(true);
 
-	if (!g_Assets.HAT_HELOCPTER_DIAGONAL_LEFT_TEXTURE.loadFromFile("images/Hat_Helicopter_Fly_Diagonal_Left_29_26.png"))
+	if (!game.assets.HAT_HELOCPTER_DIAGONAL_LEFT_TEXTURE.loadFromFile("images/Hat_Helicopter_Fly_Diagonal_Left_29_26.png"))
 	{
 		printf("Error loaded file");
 	}
-	g_Assets.HAT_HELOCPTER_DIAGONAL_LEFT_TEXTURE.setSmooth(true);
+	game.assets.HAT_HELOCPTER_DIAGONAL_LEFT_TEXTURE.setSmooth(true);
 
-	if (!g_Assets.HAT_HELOCPTER_DIAGONAL_RIGHT_TEXTURE.loadFromFile("images/Hat_Helicopter_Fly_Diagonal_Right_29_26.png"))
+	if (!game.assets.HAT_HELOCPTER_DIAGONAL_RIGHT_TEXTURE.loadFromFile("images/Hat_Helicopter_Fly_Diagonal_Right_29_26.png"))
 	{
 		printf("Error loaded file");
 	}
-	g_Assets.HAT_HELOCPTER_DIAGONAL_RIGHT_TEXTURE.setSmooth(true);
+	game.assets.HAT_HELOCPTER_DIAGONAL_RIGHT_TEXTURE.setSmooth(true);
 	
-	if (!g_Assets.HAT_HELOCPTER_FLY_LEFT_TEXTURE.loadFromFile("images/Hat_Helicopter_Left_29_23.png"))
+	if (!game.assets.HAT_HELOCPTER_FLY_LEFT_TEXTURE.loadFromFile("images/Hat_Helicopter_Left_29_23.png"))
 	{
 		printf("Error loaded file");
 	}
-	g_Assets.HAT_HELOCPTER_FLY_LEFT_TEXTURE.setSmooth(true);
+	game.assets.HAT_HELOCPTER_FLY_LEFT_TEXTURE.setSmooth(true);
 
-	if (!g_Assets.HAT_HELOCPTER_FLY_RIGHT_TEXTURE.loadFromFile("images/Hat_Helicopter_Right_29_23.png"))
+	if (!game.assets.HAT_HELOCPTER_FLY_RIGHT_TEXTURE.loadFromFile("images/Hat_Helicopter_Right_29_23.png"))
 	{
 		printf("Error loaded file");
 	}
-	g_Assets.HAT_HELOCPTER_FLY_RIGHT_TEXTURE.setSmooth(true);
+	game.assets.HAT_HELOCPTER_FLY_RIGHT_TEXTURE.setSmooth(true);
 
-	if (!g_Assets.DOODLE_LEFT_TEXTURE.loadFromFile("images/Doodle45_45Left.png"))
+	if (!game.assets.DOODLE_LEFT_TEXTURE.loadFromFile("images/Doodle45_45Left.png"))
 	{
 		printf("Error loaded file");
 	}
-	g_Assets.DOODLE_LEFT_TEXTURE.setSmooth(true);
+	game.assets.DOODLE_LEFT_TEXTURE.setSmooth(true);
 
-	if (!g_Assets.DOODLE_RIGHT_TEXTURE.loadFromFile("images/Doodle45_45Right.png"))
+	if (!game.assets.DOODLE_RIGHT_TEXTURE.loadFromFile("images/Doodle45_45Right.png"))
 	{
 		printf("Error loaded file");
 	}
-	g_Assets.DOODLE_RIGHT_TEXTURE.setSmooth(true);
+	game.assets.DOODLE_RIGHT_TEXTURE.setSmooth(true);
 	
-	if (!g_Assets.DOODLE_JUMP_LEFT_TEXTURE.loadFromFile("images/Doodle45_42Left_Jump.png"))
+	if (!game.assets.DOODLE_JUMP_LEFT_TEXTURE.loadFromFile("images/Doodle45_42Left_Jump.png"))
 	{
 		printf("Error loaded file");
 	}
-	g_Assets.DOODLE_JUMP_LEFT_TEXTURE.setSmooth(true);
+	game.assets.DOODLE_JUMP_LEFT_TEXTURE.setSmooth(true);
 
-	if (!g_Assets.DOODLE_JUMP_RIGHT_TEXTURE.loadFromFile("images/Doodle45_42Right_Jump.png"))
+	if (!game.assets.DOODLE_JUMP_RIGHT_TEXTURE.loadFromFile("images/Doodle45_42Right_Jump.png"))
 	{
 		printf("Error loaded file");
 	}
-	g_Assets.DOODLE_JUMP_RIGHT_TEXTURE.setSmooth(true);
+	game.assets.DOODLE_JUMP_RIGHT_TEXTURE.setSmooth(true);
 	
-	if (!g_Assets.PLATE_STATIC_TEXTURE.loadFromFile("images/Plate_63_15_Green.png"))
+	if (!game.assets.PLATE_STATIC_TEXTURE.loadFromFile("images/Plate_63_15_Green.png"))
 	{
 		printf("Error loaded file");
 	}
-	g_Assets.PLATE_STATIC_TEXTURE.setSmooth(true);
+	game.assets.PLATE_STATIC_TEXTURE.setSmooth(true);
 
-	if (!g_Assets.PLATE_DYNAMIC_TEXTURE.loadFromFile("images/Plate_63_15_Blue.png"))
+	if (!game.assets.PLATE_DYNAMIC_TEXTURE.loadFromFile("images/Plate_63_15_Blue.png"))
 	{
 		printf("Error loaded file");
 	}
-	g_Assets.PLATE_DYNAMIC_TEXTURE.setSmooth(true);
+	game.assets.PLATE_DYNAMIC_TEXTURE.setSmooth(true);
 
-	if (!g_Assets.PLATE_CLOUD_TEXTURE.loadFromFile("images/Plate_63_15_Cloud.png"))
+	if (!game.assets.PLATE_CLOUD_TEXTURE.loadFromFile("images/Plate_63_15_Cloud.png"))
 	{
 		printf("Error loaded file");
 	}
-	g_Assets.PLATE_CLOUD_TEXTURE.setSmooth(true);
+	game.assets.PLATE_CLOUD_TEXTURE.setSmooth(true);
 
-	if (!g_Assets.SPRING_TEXTURE.loadFromFile("images/Spring16_12.png"))
+	if (!game.assets.SPRING_TEXTURE.loadFromFile("images/Spring16_12.png"))
 	{
 		printf("Error loaded file");
 	}
-	g_Assets.SPRING_TEXTURE.setSmooth(true);
+	game.assets.SPRING_TEXTURE.setSmooth(true);
 	
-	if (!g_Assets.SPRING_2_TEXTURE.loadFromFile("images/Spring16_26.png"))
+	if (!game.assets.SPRING_2_TEXTURE.loadFromFile("images/Spring16_26.png"))
 	{
 		printf("Error loaded file");
 	}
-	g_Assets.SPRING_2_TEXTURE.setSmooth(true);
+	game.assets.SPRING_2_TEXTURE.setSmooth(true);
 
-	if (!g_Assets.font.loadFromFile("arial.ttf"))
+	if (!game.assets.font.loadFromFile("arial.ttf"))
 	{
 		printf("Error loaded arial\n");
 	}

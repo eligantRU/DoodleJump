@@ -13,7 +13,7 @@ void buildBonus(Game & game, BonusType bonusType, int bonusIndex, sf::Vector2f p
 			bonus.body = new sf::Sprite;
 			bonus.type = BonusType::SPRING;
 			bonus.body->setPosition(platePosition.x + x, platePosition.y - SPRING_HEIGHT);
-			bonus.body->setTexture(g_Assets.SPRING_TEXTURE);
+			bonus.body->setTexture(game.assets.SPRING_TEXTURE);
 			break;
 		}
 		case BonusType::TRAMPOLINE:
@@ -22,7 +22,7 @@ void buildBonus(Game & game, BonusType bonusType, int bonusIndex, sf::Vector2f p
 			bonus.body = new sf::Sprite;
 			bonus.type = BonusType::TRAMPOLINE;
 			bonus.body->setPosition(platePosition.x + x, platePosition.y - TRAMPOLINE_HEIGHT);
-			bonus.body->setTexture(g_Assets.TRAMPOLINE_TEXTURE);
+			bonus.body->setTexture(game.assets.TRAMPOLINE_TEXTURE);
 			break;
 		}
 		case BonusType::HAT_HELICOPTER:
@@ -34,10 +34,10 @@ void buildBonus(Game & game, BonusType bonusType, int bonusIndex, sf::Vector2f p
 			switch (rand() % 2)
 			{
 			case 0:
-				bonus.body->setTexture(g_Assets.HAT_HELOCPTER_NONE_LEFT_TEXTURE);
+				bonus.body->setTexture(game.assets.HAT_HELOCPTER_NONE_LEFT_TEXTURE);
 				break;
 			case 1:
-				bonus.body->setTexture(g_Assets.HAT_HELOCPTER_NONE_RIGHT_TEXTURE);
+				bonus.body->setTexture(game.assets.HAT_HELOCPTER_NONE_RIGHT_TEXTURE);
 				break;
 			}
 			break;
@@ -48,7 +48,7 @@ void buildBonus(Game & game, BonusType bonusType, int bonusIndex, sf::Vector2f p
 			bonus.body = new sf::Sprite;
 			bonus.type = BonusType::ROCKET;
 			bonus.body->setPosition(platePosition.x + x, platePosition.y - ROCKET_HEIGHT);
-			bonus.body->setTexture(g_Assets.ROCKET_NONE_TEXTURE);
+			bonus.body->setTexture(game.assets.ROCKET_NONE_TEXTURE);
 			break;
 		}
 	}
