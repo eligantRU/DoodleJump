@@ -1,125 +1,74 @@
 #include "stdafx.h"
-#include "bases.h"
+#include "sheet.h"
 
-void buildBonus(Game & game, BonusType bonusType, int i)
+void buildBonus(Game & game, BonusType bonusType, int bonusIndex, sf::Vector2f platePosition)
 {
-	// отдельная функция // getPlatesPositions() из getPlatePosition()
-	sf::Vector2f platePosition[NUMBER_PLATES];
-
-	for (int i = 0; i < NUMBER_PLATES; ++i)
-	{
-		platePosition[i] = game.plate[i].body->getPosition();
-	} //
-	int N = rand() % NUMBER_PLATES;
-
-	int x;
+	Bonus & bonus = game.bonus[bonusIndex];
 
 	switch (bonusType)
 	{
 		case BonusType::SPRING:
 		{
-			x = rand() % (PLATE_WIDTH - SPRING_WIDTH);
-			game.bonus[i].body = new sf::Sprite;
-			game.bonus[i].type = BonusType::SPRING;
-			game.bonus[i].body->setPosition(platePosition[N].x + x, platePosition[N].y - SPRING_HEIGHT);
-			game.bonus[i].body->setTexture(g_Assets.SPRING_TEXTURE);
+			int x = rand() % (PLATE_WIDTH - SPRING_WIDTH);
+			bonus.body = new sf::Sprite;
+			bonus.type = BonusType::SPRING;
+			bonus.body->setPosition(platePosition.x + x, platePosition.y - SPRING_HEIGHT);
+			bonus.body->setTexture(g_Assets.SPRING_TEXTURE);
 			break;
 		}
 		case BonusType::TRAMPOLINE:
 		{
-			x = rand() % (PLATE_WIDTH - TRAMPOLINE_WIDTH);
-			game.bonus[i].body = new sf::Sprite;
-			game.bonus[i].type = BonusType::TRAMPOLINE;
-			game.bonus[i].body->setPosition(platePosition[N].x + x, platePosition[N].y - TRAMPOLINE_HEIGHT);
-			game.bonus[i].body->setTexture(g_Assets.TRAMPOLINE_TEXTURE);
-			break;
-		}
-	}
-}
-
-void buildBonus(Game & game, BonusType bonusType, int i, sf::Vector2f platePosition)
-{
-	int x, randomNum;
-
-	switch (bonusType)
-	{
-		case BonusType::SPRING:
-		{
-			x = rand() % (PLATE_WIDTH - SPRING_WIDTH);
-			game.bonus[i].body = new sf::Sprite;
-			game.bonus[i].type = BonusType::SPRING;
-			game.bonus[i].body->setPosition(platePosition.x + x, platePosition.y - SPRING_HEIGHT);
-			game.bonus[i].body->setTexture(g_Assets.SPRING_TEXTURE);
-			break;
-		}
-		case BonusType::TRAMPOLINE:
-		{
-			x = rand() % (PLATE_WIDTH - TRAMPOLINE_WIDTH);
-			game.bonus[i].body = new sf::Sprite;
-			game.bonus[i].type = BonusType::TRAMPOLINE;
-			game.bonus[i].body->setPosition(platePosition.x + x, platePosition.y - TRAMPOLINE_HEIGHT);
-			game.bonus[i].body->setTexture(g_Assets.TRAMPOLINE_TEXTURE);
+			int x = rand() % (PLATE_WIDTH - TRAMPOLINE_WIDTH);
+			bonus.body = new sf::Sprite;
+			bonus.type = BonusType::TRAMPOLINE;
+			bonus.body->setPosition(platePosition.x + x, platePosition.y - TRAMPOLINE_HEIGHT);
+			bonus.body->setTexture(g_Assets.TRAMPOLINE_TEXTURE);
 			break;
 		}
 		case BonusType::HAT_HELICOPTER:
 		{
-			randomNum = rand() % 2;
-			x = rand() % (PLATE_WIDTH - SPRING_WIDTH);
-			game.bonus[i].body = new sf::Sprite;
-			game.bonus[i].type = BonusType::HAT_HELICOPTER;
-			game.bonus[i].body->setPosition(platePosition.x + x, platePosition.y - HAT_HELICOPTER_HEIGHT);
-			switch (randomNum)
+			int x = rand() % (PLATE_WIDTH - SPRING_WIDTH);
+			bonus.body = new sf::Sprite;
+			bonus.type = BonusType::HAT_HELICOPTER;
+			bonus.body->setPosition(platePosition.x + x, platePosition.y - HAT_HELICOPTER_HEIGHT);
+			switch (rand() % 2)
 			{
 			case 0:
-				game.bonus[i].body->setTexture(g_Assets.HAT_HELOCPTER_NONE_LEFT_TEXTURE);
+				bonus.body->setTexture(g_Assets.HAT_HELOCPTER_NONE_LEFT_TEXTURE);
 				break;
 			case 1:
-				game.bonus[i].body->setTexture(g_Assets.HAT_HELOCPTER_NONE_RIGHT_TEXTURE);
+				bonus.body->setTexture(g_Assets.HAT_HELOCPTER_NONE_RIGHT_TEXTURE);
 				break;
 			}
 			break;
 		}
 		case BonusType::ROCKET:
 		{
-			x = rand() % (PLATE_WIDTH - ROCKET_WIDTH);
-			game.bonus[i].body = new sf::Sprite;
-			game.bonus[i].type = BonusType::ROCKET;
-			game.bonus[i].body->setPosition(platePosition.x + x, platePosition.y - ROCKET_HEIGHT);
-			game.bonus[i].body->setTexture(g_Assets.ROCKET_NONE_TEXTURE);
+			int x = rand() % (PLATE_WIDTH - ROCKET_WIDTH);
+			bonus.body = new sf::Sprite;
+			bonus.type = BonusType::ROCKET;
+			bonus.body->setPosition(platePosition.x + x, platePosition.y - ROCKET_HEIGHT);
+			bonus.body->setTexture(g_Assets.ROCKET_NONE_TEXTURE);
 			break;
 		}
 	}
 }
 
-void initialBonuses(Game & game)
+void initBonuses(Game & game)
 {
-	sf::Vector2f platePosition[NUMBER_PLATES];
+	std::vector<sf::Vector2f> platePosition;
 
-	for (int i = 0; i < NUMBER_PLATES; ++i)
+	for (Plate &plate : game.plate)
 	{
-		platePosition[i] = game.plate[i].body->getPosition();
+		if (plate.type == PlateType::STATIC)
+		{
+			platePosition.push_back(plate.body->getPosition());
+		}
 	}
-	
 	for (int i = 0; i < NUMBER_BONUSES; ++i)
 	{
-		int N = rand() % NUMBER_PLATES;
-		if (game.plate[N].type == PlateType::STATIC)
-		{
-			int plateType = rand() % 2;
-			switch (plateType)
-			{
-			case 0:
-				buildBonus(game, BonusType::SPRING, i);
-				break;
-			case 1:
-				buildBonus(game, BonusType::TRAMPOLINE, i);
-				break;
-			}
-		}
-		else
-		{
-			--i;   // What the hell r u doing?! Fix!
-		}
+		BonusType type = (rand() % 2) ? BonusType::SPRING : BonusType::TRAMPOLINE;
+		buildBonus(game, type, i, platePosition[rand() % platePosition.size()]);
 	}
 }
 
@@ -129,31 +78,31 @@ void generBonuses(Game & game)
 	sf::Vector2f bonusPosition[NUMBER_BONUSES];
 	sf::Vector2f platePosition;
 
-	for (int i = 0; i < NUMBER_BONUSES; ++i)
+	for (int bonusIndex = 0; bonusIndex < NUMBER_BONUSES; ++bonusIndex)
 	{
-		bonusPosition[i] = game.bonus[i].body->getPosition();
+		bonusPosition[bonusIndex] = game.bonus[bonusIndex].body->getPosition();
 
-		if (bonusPosition[i].y >= doodlePosition.y + DOODLE_HEIGHT + 275 + 10 + 2*PLATE_HEIGHT)                 // WHAT IS IT?! BUG!!!
+		if (bonusPosition[bonusIndex].y >= doodlePosition.y + DOODLE_HEIGHT + 275 + 2 * PLATE_HEIGHT)                 // WHAT IS IT?! BUG!!!
 		{
-			for (int j = 0; j < NUMBER_PLATES; ++j)
+			for (int plateIndex = 0; plateIndex < NUMBER_PLATES; ++plateIndex)
 			{
-				platePosition = game.plate[j].body->getPosition();
-				if ((platePosition.y <= doodlePosition.y - 275) && (game.plate[j].type == PlateType::STATIC))
+				platePosition = game.plate[plateIndex].body->getPosition();
+				if ((platePosition.y <= doodlePosition.y - 275) && (game.plate[plateIndex].type == PlateType::STATIC))
 				{
 					int randomNum = rand() % 4;
 					switch (randomNum)
 					{
 					case 0:
-						buildBonus(game, BonusType::SPRING, i, platePosition);
+						buildBonus(game, BonusType::SPRING, bonusIndex, platePosition);
 						break;
 					case 1:
-						buildBonus(game, BonusType::TRAMPOLINE, i, platePosition);
+						buildBonus(game, BonusType::TRAMPOLINE, bonusIndex, platePosition);
 						break;
 					case 2:
-						buildBonus(game, BonusType::HAT_HELICOPTER, i, platePosition);
+						buildBonus(game, BonusType::HAT_HELICOPTER, bonusIndex, platePosition);
 						break;
 					case 3:
-						buildBonus(game, BonusType::ROCKET, i, platePosition);
+						buildBonus(game, BonusType::ROCKET, bonusIndex, platePosition);
 						break;
 					}
 				}

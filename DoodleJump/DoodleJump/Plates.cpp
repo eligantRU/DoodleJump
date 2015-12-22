@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "bases.h"
+#include "sheet.h"
 
 
 void generPlates(Game & game)
@@ -8,13 +8,12 @@ void generPlates(Game & game)
 	sf::Vector2f platePosition[NUMBER_PLATES];
 	float x, y;
 	int randomNum;
-	srand(time(NULL));
 
 	for (int i = 0; i < NUMBER_PLATES; ++i)
 	{
 		platePosition[i] = game.plate[i].body->getPosition();
-		x = rand() % (550 - PLATE_WIDTH);
-		y = -1 * rand() % (150);               // —юда запилить функцию дл€ равномерной генерации плит по высоте
+		x = float(rand() % (550 - PLATE_WIDTH));
+		y = float(-1 * rand() % 150);               // —юда запилить функцию дл€ равномерной генерации плит по высоте
 
 		if (platePosition[i].y >= doodlePosition.y + DOODLE_HEIGHT + 275 + 2*PLATE_HEIGHT)
 		{
@@ -46,15 +45,14 @@ void generPlates(Game & game)
 				game.plate[i].body->setTexture(g_Assets.PLATE_CLOUD_TEXTURE);
 				break;
 			}
-			game.plate[i].body->setPosition(x, doodlePosition.y + y - 380);  // 380?! What is it?
+			game.plate[i].body->setPosition(x, doodlePosition.y + y - 380.f);  // 380?! What is it?
 		}
 	}
 }
 
 void initialPlates(Game & game) // эту функцию можно убрать, либо в неЄ засунуть generPlates() + в конце мен€ть начальные координаты + создавать пр€моугольник
 {
-	double x, y;
-	srand(time(NULL));
+	float x, y;
 	int randomNum;
 	for (int i = 0; i < NUMBER_PLATES; ++i)
 	{
@@ -87,8 +85,8 @@ void initialPlates(Game & game) // эту функцию можно убрать, либо в неЄ засунуть
 			game.plate[i].body->setTexture(g_Assets.PLATE_CLOUD_TEXTURE);
 			break;
 		}
-		x = rand() % (550 - PLATE_WIDTH);
-		y = rand() % (700 - PLATE_HEIGHT); // —юда запилить функцию дл€ равномерной генерации плит по высоте
+		x = float(rand() % (550 - PLATE_WIDTH));
+		y = float(rand() % (700 - PLATE_HEIGHT)); // —юда запилить функцию дл€ равномерной генерации плит по высоте
 		game.plate[i].body->setPosition(x, y);
 	}
 }
@@ -112,7 +110,7 @@ void moveDynamicPlates(Game & game)
 				}
 				else
 				{
-					position.x -= 0.5*STEP;
+					position.x -= 0.5f * STEP;
 				}
 				break;
 			case DirectionX::RIGHT:
@@ -122,13 +120,13 @@ void moveDynamicPlates(Game & game)
 				}
 				else
 				{
-					position.x += 0.5*STEP;
+					position.x += 0.5f * STEP;
 				}
 				break;
 			default:
 				break;
 			}
-			game.plate[i].body->move(position * TIME_PER_FRAME.asSeconds());
+			game.plate[i].body->move(position);
 			position.x = 0;
 			position.y = 0;
 		}

@@ -1,70 +1,92 @@
 #include "stdafx.h"
-#include "bases.h"
+#include "sheet.h"
 
-extern Assets g_Assets;
-extern sf::Vector2f g_positionBeforeDown;
-extern bool g_noJumps;
-extern bool g_endOfGame;
+Assets g_Assets;
 
-void startGame(void)
+bool g_noJumps; // костыльменная, уйдёт с вводом Menu, как и функция starter()
+
+void resetGame(Game & game, sf::View & view)
 {
-	srand(time(NULL));
+	view.reset(sf::FloatRect(0, 0, 550, 700));
+	g_noJumps = true;
+	game.endOfGame = false;
+	initialGame(game, view);
+	game.points = 0;
+}
+
+bool waitRestartChoosen(sf::RenderWindow & window)
+{
+	sf::Event event;
+	while (window.waitEvent(event))
+	{
+		if (event.type == sf::Event::Closed)
+		{
+			return false;
+		}
+		if (event.type == sf::Event::KeyPressed)
+		{
+			switch (event.key.code)
+			{
+			case sf::Keyboard::Space:
+				return true;
+			case sf::Keyboard::Return:
+				return true;
+			case sf::Keyboard::Escape:
+				return false;
+			default:
+				break;
+			}
+		}
+	}
+	return false;
+}
+
+void enterGameLoop(void)
+{
 	initAssets();
 	sf::RenderWindow window(sf::VideoMode(550, 700), "Doodle Jump");
-
 	window.setVerticalSyncEnabled(true);
 	window.setFramerateLimit(60);
 
 	sf::View view;
-	
-	Game game;
-	game.points = 0;
-M_Start:
-	view.reset(sf::FloatRect(0, 0, 550, 700));
-	g_noJumps = true;
-	g_endOfGame = false;
-	initialGame(game, view);
-	update(window, game, view);
 	sf::Clock clock;
-	float timeSinceLastUpdate = clock.getElapsedTime().asSeconds();
-	int Marker = 60;
+	Game game;
+	resetGame(game, view);
+	update(window, game, view);
+
+	bool needUpdate = false;
 
 	while (window.isOpen())
 	{
-		keyPressed(window, game);
-		timeSinceLastUpdate += clock.getElapsedTime().asSeconds();
-		while ((timeSinceLastUpdate > TIME_PER_FRAME.asSeconds()) && (Marker != 0))
+		if (game.endOfGame)
 		{
-			timeSinceLastUpdate -= TIME_PER_FRAME.asSeconds();
-			--Marker;
-
-			starter(window, game);
-			if (g_endOfGame == false)
+			if (waitRestartChoosen(window))
 			{
-				window.setView(view);
+				resetGame(game, view);
 				update(window, game, view);
+				needUpdate = false;
+				game.endOfGame = false;
 			}
 			else
 			{
-				// Menu();
+				break;
 			}
 		}
-		Marker = 60;
-		window.setView(view);
-		render(window, game);
-		if (g_endOfGame == true)
+		else
 		{
-			while (true)
+			keyPressed(window, game);
+			if (needUpdate)
 			{
-				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return))
+				starter(window, game);
+				if (game.endOfGame == false)
 				{
-					goto M_Start;
-				}
-				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
-				{
-					window.close();
+					window.setView(view);
+					update(window, game, view);
 				}
 			}
+			needUpdate = true;
+			window.setView(view);
+			render(window, game);
 		}
 	}
 }
@@ -147,7 +169,7 @@ void initialGame(Game & game, sf::View view)
 {
 	initialHero(game, view);
 	initialPlates(game);
-	initialBonuses(game);
+	initBonuses(game);
 	game.actualBonus = BonusType::NO;
 }
 
@@ -156,9 +178,9 @@ void render(sf::RenderWindow & window, Game & game)
 	window.clear(sf::Color(230, 230, 230));
 	window.draw(*g_Assets.BACKGROUND);
 
-	for (int i = 0; i < NUMBER_PLATES; ++i)
+	for (Plate &plate : game.plate)
 	{
-		window.draw(*game.plate[i].body);
+		window.draw(*plate.body);
 	}
 
 	window.draw(*game.hero.body);
@@ -170,8 +192,7 @@ void render(sf::RenderWindow & window, Game & game)
 
 	game.text.setFont(g_Assets.font);
 	game.text.setCharacterSize(20);
-	std::string str = "Bonuses: " + std::to_string(game.points);
-	game.text.setString(str);
+	game.text.setString("Bonuses: " + std::to_string(game.points));
 	game.text.setStyle(sf::Text::Bold);
 	game.text.move(0.f, 0.f);
 	game.text.setColor(sf::Color(0, 0, 0));
@@ -189,26 +210,12 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view) // смену те
 	if (game.hero.direction.x == DirectionX::RIGHT)
 	{
 		position.x += STEP;
-		if (false) //(position.y == DOWN) WHAT THE HELL?!
-		{
-			game.hero.body->setTexture(g_Assets.DOODLE_RIGHT_TEXTURE);
-		}
-		else
-		{
-			game.hero.body->setTexture(g_Assets.DOODLE_JUMP_RIGHT_TEXTURE);
-		}
+		game.hero.body->setTexture(g_Assets.DOODLE_JUMP_RIGHT_TEXTURE);
 	}
 	else if (game.hero.direction.x == DirectionX::LEFT)
 	{
 		position.x -= STEP;
-		if (false) //(position.y == DOWN) WHAT THE HELL?!
-		{
-			game.hero.body->setTexture(g_Assets.DOODLE_LEFT_TEXTURE);
-		}
-		else
-		{
-			game.hero.body->setTexture(g_Assets.DOODLE_JUMP_LEFT_TEXTURE);
-		}
+		game.hero.body->setTexture(g_Assets.DOODLE_JUMP_LEFT_TEXTURE);
 	}
 	if (game.hero.direction.y == DirectionY::DOWN)
 	{
@@ -248,34 +255,34 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view) // смену те
 		else
 		{
 			game.hero.direction.y = DirectionY::DOWN;
-			if (game.hero.body->getPosition().y < g_positionBeforeDown.y)
+			if (game.hero.body->getPosition().y < game.hero.positionBeforeDown.y)
 			{
-				g_positionBeforeDown = game.hero.body->getPosition();
+				game.hero.positionBeforeDown = game.hero.body->getPosition();
 			}
 		}
 	}
 
 	// в отдельную функцию
-	int k = 1;
+	float boostFactor = 1.f;
 	switch (game.actualBonus)
 	{
-	case BonusType::NO:
-		k = 1;
-		break;
 	case  BonusType::SPRING:
-		k = 2;
+		boostFactor = 2.f;
 		break;
 	case  BonusType::TRAMPOLINE:
-		k = 2;
+		boostFactor = 2.f;
 		break;
 	case  BonusType::HAT_HELICOPTER:
-		k = 2;
+		boostFactor = 2.f;
 		break;
 	case  BonusType::ROCKET:
-		k = 3;
+		boostFactor = 3.f;
+		break;
+	case BonusType::NO:
+	default:
 		break;
 	}
-	game.hero.body->move(position * (k * TIME_PER_FRAME.asSeconds()));
+	game.hero.body->move(position * boostFactor);
 	//
 
 	// В отдельную функцию
@@ -291,12 +298,12 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view) // смену те
 
 	if (game.actualBonus == BonusType::HAT_HELICOPTER) // и это тоже в отдельную функцию
 	{
-		if (game.hero.deltaHeight <= 1000)
+		if (game.hero.deltaHeight <= 15)
 		{
 			game.qwerty = -1;
 			game.bonus[game.actualBonusId].body->setTexture(g_Assets.HAT_HELOCPTER_FLY_LEFT_TEXTURE);
 			game.bonus[game.actualBonusId].body->rotate(-0.07f);
-			game.bonus[game.actualBonusId].body->move(sf::Vector2f(-2*STEP, 6*STEP) * TIME_PER_FRAME.asSeconds());
+			game.bonus[game.actualBonusId].body->move(sf::Vector2f(-2*STEP, 6*STEP));
 		}
 		if (game.hero.deltaHeight == 0)
 		{
@@ -344,12 +351,12 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view) // смену те
 	
 	if (game.actualBonus == BonusType::ROCKET) // в отдельную функцию
 	{
-		if (game.hero.deltaHeight <= 1000)
+		if (game.hero.deltaHeight <= 15)
 		{
 			game.qwerty = -1;
 			game.bonus[game.actualBonusId].body->setTexture(g_Assets.ROCKET_NONE_TEXTURE);
 			game.bonus[game.actualBonusId].body->rotate(-0.07f);
-			game.bonus[game.actualBonusId].body->move(sf::Vector2f(-2 * STEP, 6 * STEP) * TIME_PER_FRAME.asSeconds());
+			game.bonus[game.actualBonusId].body->move(sf::Vector2f(-2 * STEP, 6 * STEP));
 		}
 		if (game.hero.deltaHeight == 0)
 		{
@@ -411,7 +418,7 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view) // смену те
 		}
 	} //
 
-	if ((game.hero.direction.y == DirectionY::UP) && (doodlePosition.y <= g_positionBeforeDown.y))
+	if ((game.hero.direction.y == DirectionY::UP) && (doodlePosition.y <= game.hero.positionBeforeDown.y))
 	{
 		view.setCenter(275, doodlePosition.y);
 		g_Assets.BACKGROUND->setPosition(0, doodlePosition.y-350);
@@ -425,7 +432,7 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view) // смену те
 
 	if (checkGameEnd(game))
 	{
-		g_endOfGame = true;
+		game.endOfGame = true;
 	}
 }
 
@@ -523,21 +530,20 @@ int checkDoodleFall(Game & game)
 	{
 	case Collision::COLLISION_PLATE:
 		game.actualBonus = BonusType::NO;
-		return 5500;
+		return 5500 / 60;
 	case Collision::COLLISION_SPRING:
 		game.actualBonus = BonusType::SPRING;
-		return 4500;
+		return 4500 / 60;
 	case Collision::COLLISION_TRAMPLANE:
 		game.actualBonus = BonusType::TRAMPOLINE;
-		return 6000;
+		return 6000 / 60;
 	case Collision::COLLISION_HAT_HELICOPTER:
 		game.actualBonus = BonusType::HAT_HELICOPTER;
-		return 12000;
+		return 12000 / 60;
 	case Collision::COLLISION_ROCKET:
 		game.actualBonus = BonusType::ROCKET;
-		return 24000;
+		return 24000 / 60;
 	default:
-	//	game.actualBonus = NO;            // кто-нибудь помнит, зачем я это закомментил? Нет? Кто-нибудь...
 		return 0;
 	}
 }

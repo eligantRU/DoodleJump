@@ -1,12 +1,9 @@
 #include "stdafx.h"
-#include "bases.h"
-#include "Bonuses.cpp"
-#include "Plates.cpp"
-#include "Doodle.cpp"
-#include "Game.cpp"
+#include "sheet.h"
 
 int main(void)
-{   
-	startGame();
+{
+	srand(unsigned(time(NULL)));
+	enterGameLoop();
 	return 0;
 }

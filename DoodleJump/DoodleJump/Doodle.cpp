@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "bases.h"
+#include "sheet.h"
 
 void initialHero(Game & game, sf::View & view)
 {
@@ -10,8 +10,8 @@ void initialHero(Game & game, sf::View & view)
 	game.hero.direction.x = DirectionX::NONE;
 	game.hero.deltaHeight = 0;
 	game.hero.lastDirectionX = DirectionX::LEFT;
-	game.qwerty = 0;
+	game.qwerty = 0; // TODO: do not optimize using this sheet
 	sf::Vector2f doodlePosition = game.hero.body->getPosition();
-	g_positionBeforeDown.y = doodlePosition.y;
+	game.hero.positionBeforeDown.y = doodlePosition.y;
 	view.setCenter(275, doodlePosition.y);
 }
