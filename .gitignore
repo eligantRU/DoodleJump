@@ -11,7 +11,7 @@
 *.userprefs
 
 # Build results
-DoodleJump/Release/DoodleJump.tlog
+DoodleJump/DoodleJump/Release/DoodleJump.tlog
 [Dd]ebug/
 [Dd]ebugPublic/
 [Rr]eleases/
