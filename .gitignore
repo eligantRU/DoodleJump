@@ -11,7 +11,7 @@
 *.userprefs
 
 # Build results
-DoodleJump/DoodleJump/Release/DoodleJump.tlog
+DoodleJump/Release/DoodleJump.tlog
 [Dd]ebug/
 [Dd]ebugPublic/
 [Rr]eleases/
@@ -210,3 +210,4 @@ FakesAssemblies/
 GeneratedArtifacts/
 _Pvt_Extensions/
 ModelManifest.xml
+/DoodleJump/DoodleJump/Release/DoodleJump.tlog
