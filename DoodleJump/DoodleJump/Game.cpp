@@ -702,3 +702,32 @@ void initAssets(Game & game) // а внутри ещЄ функцию, котора€ принимает переменн
 		printf("Error loaded arial\n");
 	}
 }
+
+void onPauseMenu(sf::RenderWindow &, Game & game)
+{
+
+}
+
+void onStartMenu(sf::RenderWindow &, Game & game)
+{
+
+}
+
+void onGameOverMenu(sf::RenderWindow &, Game & game)
+{
+
+}
+
+void onGameFrame(sf::RenderWindow &, Game & game)
+{
+
+}
+
+void gameLoop() // не объ€влена в sheet.h
+{
+	/*game.frameFunc = OnGameOverMenu;
+	while (window.isOpen())
+	{
+		game.frameFunc(window, game);
+	}*/
+}

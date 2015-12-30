@@ -6,19 +6,16 @@ void generPlates(Game & game)
 {
 	sf::Vector2f doodlePosition = game.hero.body->getPosition();
 	sf::Vector2f platePosition[NUMBER_PLATES];
-	float x, y;
-	int randomNum;
 
 	for (int i = 0; i < NUMBER_PLATES; ++i)
 	{
 		platePosition[i] = game.plate[i].body->getPosition();
-		x = float(rand() % (550 - PLATE_WIDTH));
-		y = float(-1 * rand() % 150);               // —юда запилить функцию дл€ равномерной генерации плит по высоте
+		float x = float(rand() % (550 - PLATE_WIDTH));
+		float y = float(-1 * rand() % 150);               // —юда запилить функцию дл€ равномерной генерации плит по высоте
 
 		if (platePosition[i].y >= doodlePosition.y + DOODLE_HEIGHT + 275 + 2*PLATE_HEIGHT)
 		{
-			randomNum = rand() % 3;
-			switch (randomNum)
+			switch (rand() % 3)
 			{
 			case 0:
 				game.plate[i].type = PlateType::STATIC;
@@ -27,8 +24,7 @@ void generPlates(Game & game)
 				break;
 			case 1:
 				game.plate[i].type = PlateType::DYNAMIC_X;
-				randomNum = rand() % 2;
-				switch (randomNum)
+				switch (rand() % 2)
 				{
 				case 0:
 					game.plate[i].direction.x = DirectionX::LEFT;
