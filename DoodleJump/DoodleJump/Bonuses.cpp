@@ -82,7 +82,7 @@ void generBonuses(Game & game)
 	{
 		bonusPosition[bonusIndex] = game.bonus[bonusIndex].body->getPosition();
 
-		if (bonusPosition[bonusIndex].y >= doodlePosition.y + DOODLE_HEIGHT + 275 + 2 * PLATE_HEIGHT)                 // WHAT IS IT?! BUG!!!
+		if (bonusPosition[bonusIndex].y >= doodlePosition.y + DOODLE_HEIGHT + 275 + DOODLE_HEIGHT) // DOODLE_HEIGHT в конце -- подгонка
 		{
 			for (int plateIndex = 0; plateIndex < NUMBER_PLATES; ++plateIndex)
 			{

@@ -2,10 +2,14 @@
 #include "sheet.h"
 
 bool g_noJumps; // костыльменна€, уйдЄт с вводом Menu, как и функци€ starter()
+Game game;
+sf::View view;
+sf::Vector2f kostil;
 
 void resetGame(Game & game, sf::View & view)
 {
 	view.reset(sf::FloatRect(0, 0, 550, 700));
+	game.text.setPosition(0, 0);
 	g_noJumps = true;
 	game.endOfGame = false;
 	initialGame(game, view);
@@ -39,54 +43,193 @@ bool waitRestartChoosen(sf::RenderWindow & window)
 	return false;
 }
 
+void onPauseMenu(sf::RenderWindow & window)
+{
+	// It's no working!
+	kostil = game.assets.BACKGROUND->getPosition();
+
+	sf::Text backText;
+	backText.setFont(game.assets.font);
+	backText.setCharacterSize(20);
+	backText.setString("Back");
+	backText.setStyle(sf::Text::Bold);
+	backText.setPosition(255.f, kostil.y + 225.f);
+	backText.setColor(sf::Color(0, 0, 0));
+
+	sf::RectangleShape back(sf::Vector2f(120, 50));
+	back.setPosition(215.f, kostil.y + 210.f);
+
+
+	window.clear(sf::Color(255, 255, 255));
+	window.draw(*game.assets.BACKGROUND);
+	window.draw(back);
+	window.draw(backText);
+	window.display();
+
+	sf::Event event;
+
+	if (window.pollEvent(event) && sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left)
+	{
+		sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
+
+		if (((mousePosition.y >= 210) && (mousePosition.y <= 260)
+			&& (mousePosition.x >= 215) && (mousePosition.x <= 335)))
+		{
+			view.setCenter(275, kostil.y-350); // 350 -- половина экрана
+			game.frameFunc = onGameFrame;
+		}
+	}
+}
+
+void onStartMenu(sf::RenderWindow & window)
+{
+	game.assets.BACKGROUND->setPosition(0, 0);
+
+	sf::Text playText;
+	playText.setFont(game.assets.font);
+	playText.setCharacterSize(20);
+	playText.setString("Play");
+	playText.setStyle(sf::Text::Bold);
+	playText.setPosition(255.f, 225.f);
+	playText.setColor(sf::Color(0, 0, 0));
+
+	sf::Text exitText;
+	exitText.setFont(game.assets.font);
+	exitText.setCharacterSize(20);
+	exitText.setString("Exit");
+	exitText.setStyle(sf::Text::Bold);
+	exitText.setPosition(255.f, 405.f);
+	exitText.setColor(sf::Color(0, 0, 0));
+
+	sf::RectangleShape play(sf::Vector2f(120, 50));
+	play.setPosition(215.f, 210.f);
+
+	sf::RectangleShape records(sf::Vector2f(120, 50));
+	records.setPosition(215.f, 300.f);
+
+	sf::RectangleShape exit(sf::Vector2f(120, 50));
+	exit.setPosition(215.f, 390.f);
+
+
+	window.clear(sf::Color(255, 255, 255));
+	window.draw(*game.assets.BACKGROUND);
+	window.draw(play);
+	window.draw(exit);
+	window.draw(playText);
+	window.draw(exitText);
+	window.display();
+
+	sf::Event event;
+
+	if (window.pollEvent(event) && sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left)
+	{
+		sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
+
+		if (((mousePosition.y >= 210) && (mousePosition.y <= 260)
+			&& (mousePosition.x >= 215) && (mousePosition.x <= 335)))
+		{
+			game.frameFunc = onGameFrame;
+		}
+
+		if (((mousePosition.y >= 390) && (mousePosition.y <= 440)
+			&& (mousePosition.x >= 215) && (mousePosition.x <= 335)))
+		{
+			window.close();
+		}		
+	}
+}
+
+void onGameOverMenu(sf::RenderWindow & window)
+{
+	game.assets.BACKGROUND->setPosition(0, 0);
+
+	sf::Text menuText;
+	menuText.setFont(game.assets.font);
+	menuText.setCharacterSize(20);
+	menuText.setString("Menu");
+	menuText.setStyle(sf::Text::Bold);
+	menuText.setPosition(255.f, 225.f);
+	menuText.setColor(sf::Color(0, 0, 0));
+
+	sf::Text recordsText;
+	recordsText.setFont(game.assets.font);
+	recordsText.setCharacterSize(20);
+	recordsText.setString("Records");
+	recordsText.setStyle(sf::Text::Bold);
+	recordsText.setPosition(240.f, 315.f);
+	recordsText.setColor(sf::Color(0, 0, 0));
+
+	sf::RectangleShape menu(sf::Vector2f(120, 50));
+	menu.setPosition(215.f, 210.f);
+
+	sf::RectangleShape records(sf::Vector2f(120, 50));
+	records.setPosition(215.f, 300.f);
+
+
+	window.clear(sf::Color(255, 255, 255));
+	window.draw(*game.assets.BACKGROUND);
+	window.draw(menu);
+	window.draw(records);
+	window.draw(recordsText);
+	window.draw(menuText);
+	window.display();
+
+	sf::Event event;
+
+	if (window.pollEvent(event) && sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left)
+	{
+		sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
+
+		if (((mousePosition.y >= 210) && (mousePosition.y <= 260)
+			&& (mousePosition.x >= 215) && (mousePosition.x <= 335)))
+		{
+			game.frameFunc = onGameFrame;
+		}
+	}
+}
+
+void onGameFrame(sf::RenderWindow & window)
+{
+	if (!game.endOfGame)
+	{
+		render(window, game);
+		keyPressed(window, game);
+		update(window, game, view);
+		window.setView(view);
+	}
+	else
+	{
+		resetGame(game, view);
+		view.setCenter(275, 350);
+		window.setView(view);
+		game.frameFunc = onGameOverMenu;
+	}
+}
+
+void gameLoop(sf::RenderWindow & window, Game & game)
+{
+	while (window.isOpen())
+	{
+		game.frameFunc(window);
+	}
+}
+
 void enterGameLoop(void)
 {
 	sf::RenderWindow window(sf::VideoMode(550, 700), "Doodle Jump");
 	window.setVerticalSyncEnabled(true);
 	window.setFramerateLimit(60);
 
-	sf::View view;
 	sf::Clock clock;
-	Game game;
+	// Game game; 
 	initAssets(game);
 	resetGame(game, view);
 	update(window, game, view);
 
 	bool needUpdate = false;
 
-	while (window.isOpen())
-	{
-		if (game.endOfGame)
-		{
-			if (waitRestartChoosen(window))
-			{
-				resetGame(game, view);
-				update(window, game, view);
-				needUpdate = false;
-				game.endOfGame = false;
-			}
-			else
-			{
-				break;
-			}
-		}
-		else
-		{
-			keyPressed(window, game);
-			if (needUpdate)
-			{
-				starter(window, game);
-				if (game.endOfGame == false)
-				{
-					window.setView(view);
-					update(window, game, view);
-				}
-			}
-			needUpdate = true;
-			window.setView(view);
-			render(window, game);
-		}
-	}
+	game.frameFunc = onStartMenu;
+	gameLoop(window, game);
 }
 
 void keyPressed(sf::RenderWindow & window, Game & game)
@@ -110,9 +253,14 @@ void keyPressed(sf::RenderWindow & window, Game & game)
 			game.hero.direction.x = DirectionX::NONE;
 		}
 
-		if (event.type == sf::Event::Closed || (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape))
+		if (event.type == sf::Event::Closed)
 		{
 			window.close();
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+		{
+			view.setCenter(275, 350);
+			game.frameFunc = onPauseMenu; // It's no working!
 		}
 	}
 }
@@ -171,7 +319,7 @@ void initialGame(Game & game, sf::View view)
 	game.actualBonus = BonusType::NO;
 }
 
-void render(sf::RenderWindow & window, Game & game)
+void render(sf::RenderWindow & window, Game & game) // переписать под работу с вектором
 {
 	window.clear(sf::Color(230, 230, 230));
 	window.draw(*game.assets.BACKGROUND);
@@ -296,7 +444,7 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view) // смену те
 
 	if (game.actualBonus == BonusType::HAT_HELICOPTER) // и это тоже в отдельную функцию
 	{
-		if (game.hero.deltaHeight <= 15)
+		if (game.hero.deltaHeight <= 2)
 		{
 			game.qwerty = -1;
 			game.bonus[game.actualBonusId].body->setTexture(game.assets.HAT_HELOCPTER_FLY_LEFT_TEXTURE);
@@ -309,32 +457,32 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view) // смену те
 			game.actualBonus = BonusType::NO;
 		}
 
-		if ((game.qwerty >= 0) && (game.qwerty <= 200))
+		if ((game.qwerty >= 0) && (game.qwerty <= 2))
 		{
 			game.bonus[game.actualBonusId].body->setTexture(game.assets.HAT_HELOCPTER_FLY_LEFT_TEXTURE);
 			++game.qwerty;
 		}
-		else if((game.qwerty >= 201) && (game.qwerty <= 400))
+		else if((game.qwerty >= 3) && (game.qwerty <= 4))
 		{
 			game.bonus[game.actualBonusId].body->setTexture(game.assets.HAT_HELOCPTER_DIAGONAL_LEFT_TEXTURE);
 			++game.qwerty;
 		}
-		else if ((game.qwerty >= 401) && (game.qwerty <= 600))
+		else if ((game.qwerty >= 5) && (game.qwerty <= 6))
 		{
 			game.bonus[game.actualBonusId].body->setTexture(game.assets.HAT_HELOCPTER_DIAGONAL_RIGHT_TEXTURE);
 			++game.qwerty;
 		}
-		else if ((game.qwerty >= 601) && (game.qwerty <= 800))
+		else if ((game.qwerty >= 7) && (game.qwerty <= 8))
 		{
 			game.bonus[game.actualBonusId].body->setTexture(game.assets.HAT_HELOCPTER_FLY_RIGHT_TEXTURE);
 			++game.qwerty;
 		}
-		else if (game.qwerty == 801)
+		else if (game.qwerty == 8)
 		{
 			game.qwerty = 0;
 		}
 
-		if ((game.qwerty >= 0) && (game.qwerty <= 800) && (game.actualBonus != BonusType::NO))
+		if ((game.qwerty >= 0) && (game.qwerty <= 8) && (game.actualBonus != BonusType::NO))
 		{
 			if (game.hero.lastDirectionX == DirectionX::RIGHT)
 			{
@@ -701,33 +849,4 @@ void initAssets(Game & game) // а внутри ещЄ функцию, котора€ принимает переменн
 	{
 		printf("Error loaded arial\n");
 	}
-}
-
-void onPauseMenu(sf::RenderWindow &, Game & game)
-{
-
-}
-
-void onStartMenu(sf::RenderWindow &, Game & game)
-{
-
-}
-
-void onGameOverMenu(sf::RenderWindow &, Game & game)
-{
-
-}
-
-void onGameFrame(sf::RenderWindow &, Game & game)
-{
-
-}
-
-void gameLoop() // не объ€влена в sheet.h
-{
-	/*game.frameFunc = OnGameOverMenu;
-	while (window.isOpen())
-	{
-		game.frameFunc(window, game);
-	}*/
 }
