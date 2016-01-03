@@ -11,7 +11,6 @@
 *.userprefs
 
 # Build results
-DoodleJump/Release/DoodleJump.tlog
 [Dd]ebug/
 [Dd]ebugPublic/
 [Rr]eleases/
@@ -65,7 +64,7 @@ artifacts/
 .builds
 *.pidb
 *.svclog
-*.scc
+*.scc	
 
 # Chutzpah Test files
 _Chutzpah*
