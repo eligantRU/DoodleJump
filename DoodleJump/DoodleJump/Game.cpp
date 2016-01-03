@@ -183,7 +183,7 @@ void onGameOverMenu(sf::RenderWindow & window)
 		if (((mousePosition.y >= 210) && (mousePosition.y <= 260)
 			&& (mousePosition.x >= 215) && (mousePosition.x <= 335)))
 		{
-			game.frameFunc = onGameFrame;
+			game.frameFunc = onStartMenu;
 		}
 	}
 }
