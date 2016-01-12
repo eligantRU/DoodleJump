@@ -288,7 +288,7 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view) // смену те
 	}
 }
 
-void initAssets(Game & game) // TODO: fix it! For example: void attachFile(string);
+void initAssets(Game & game) // TODO: fix it! For example: void attachFile(string); And create folder /resource/images & /resourse/font
 {
 	if (!game.assets.BACKGROUND_TEXTURE.loadFromFile("images/background.png"))
 	{
