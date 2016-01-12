@@ -288,7 +288,7 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view) // смену те
 	}
 }
 
-void initAssets(Game & game) // а внутри ещё функцию, которая принимает переменную и путь к файлу в виде строки
+void initAssets(Game & game) // TODO: fix it! For example: void attachFile(string);
 {
 	if (!game.assets.BACKGROUND_TEXTURE.loadFromFile("images/background.png"))
 	{

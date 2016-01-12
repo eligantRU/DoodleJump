@@ -4,7 +4,7 @@
 // TODO: No global variable!
 Game game;
 sf::View view;
-sf::Vector2f kostil;
+sf::Vector2f kostil; // TODO: fix it!
 
 void keyPressed(sf::RenderWindow & window, Game & game)
 {
