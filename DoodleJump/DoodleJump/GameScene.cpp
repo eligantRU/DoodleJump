@@ -1,5 +1,4 @@
 #include "stdafx.h"
-#include "sheet.h"
 #include "GameScene.h"
 
 void resetGame(Game & game, sf::View & view)

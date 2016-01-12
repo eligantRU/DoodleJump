@@ -166,6 +166,7 @@ void generBonuses(Game & game);
 
 void buildBonus(Game & game, BonusType bonusType, int bonusIndex, sf::Vector2f platePosition);
 
+// TODO: fix it!
 extern Game game;
 extern sf::View view;
 extern sf::Vector2f kostil;

@@ -1,5 +1,4 @@
 #include "stdafx.h"
-#include "sheet.h"
 #include "StartScene.h"
 
 void onStartMenu(sf::RenderWindow & window)

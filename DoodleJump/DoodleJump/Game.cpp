@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "sheet.h"
 
+// TODO: No global variable!
 Game game;
 sf::View view;
 sf::Vector2f kostil;

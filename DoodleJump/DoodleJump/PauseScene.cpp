@@ -1,5 +1,4 @@
 #include "stdafx.h"
-#include "sheet.h"
 #include "PauseScene.h"
 
 void onPauseMenu(sf::RenderWindow & window)
