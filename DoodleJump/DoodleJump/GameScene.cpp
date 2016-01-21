@@ -42,17 +42,15 @@ void enterGameLoop(void)
 	window.setVerticalSyncEnabled(true);
 	window.setFramerateLimit(60);
 
-	sf::Clock clock;
+	sf::Clock clock; // TODO: not used -- fix it or delete
 	// Game game; 
 	initAssets(game);
 	resetGame(game, view);
-	update(window, game, view);
-
-	bool needUpdate = false;
 
 	game.frameFunc = onStartMenu;
 	gameLoop(window, game);
 }
+
 void update(sf::RenderWindow & window, Game & game, sf::View & view) // смену текстур в отдельную функцию...убожество!
 {
 	sf::Vector2f position(0.f, 0.f);

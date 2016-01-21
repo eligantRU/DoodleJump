@@ -78,7 +78,7 @@ void initialGame(Game & game, sf::View view)
 	game.actualBonus = BonusType::NO;
 }
 
-void render(sf::RenderWindow & window, Game & game) // переписать под работу с вектором
+void render(sf::RenderWindow & window, Game & game) // TODO: try to use std::vector
 {
 	window.clear(sf::Color(230, 230, 230));
 	window.draw(*game.assets.BACKGROUND);
@@ -121,10 +121,10 @@ int checkDoodleFall(Game & game)
 	{
 		bonusPosition[i] = game.bonus[i].body->getPosition();
 	}
-
-	for (int i = 0; i < NUMBER_PLATES; ++i) // в отдельную функцию collisionPlate() засунь, выглядит ущербно 
+	
+	for (int i = 0; i < NUMBER_PLATES; ++i) // TODO: this cycle is the prototype of collisionPlate() 
 	{
-		if (((doodlePosition.y + DOODLE_HEIGHT + PLATE_HEIGHT + 0.5 >= platePosition[i].y + PLATE_HEIGHT - 0.5) && (doodlePosition.y - 0.5 <= platePosition[i].y - DOODLE_HEIGHT + 0.5)
+		if (((doodlePosition.y + DOODLE_HEIGHT >= platePosition[i].y) && (doodlePosition.y + DOODLE_HEIGHT <= platePosition[i].y + PLATE_HEIGHT)
 			&& (doodlePosition.x + DOODLE_WIDTH >= platePosition[i].x) && (doodlePosition.x - PLATE_WIDTH <= platePosition[i].x)))
 		{
 			if (game.plate[i].type == PlateType::CLOUD)
@@ -138,7 +138,7 @@ int checkDoodleFall(Game & game)
 		}
 	}
 
-	for (int i = 0; i < NUMBER_BONUSES; ++i) // в отдельную функцию collisionBonus() засунь, выглядит ущербно 
+	for (int i = 0; i < NUMBER_BONUSES; ++i) // TODO: collisionBonus() based on collisionPlate()
 	{
 		switch (game.bonus[i].type)
 		{
@@ -168,11 +168,11 @@ int checkDoodleFall(Game & game)
 
 				if (game.hero.direction.x == DirectionX::RIGHT)
 				{
-					game.bonus[i].body->setPosition(doodlePosition.x + 15, doodlePosition.y - 15);     // что такое 15?!
+					game.bonus[i].body->setPosition(doodlePosition.x + 15, doodlePosition.y - 15);     // 15 -- подгон, введи точное значение
 				}
 				else if ((game.hero.direction.x == DirectionX::LEFT) || (game.hero.direction.x == DirectionX::NONE))
 				{
-					game.bonus[i].body->setPosition(doodlePosition.x + 15, doodlePosition.y - 15);     // ЧТО ЭТО?! ПОЧЕМУ ОНО СОВПАДАЕТ С ТЕМ, ЧТО ВЫШЕ?! АААААААА!!!
+					game.bonus[i].body->setPosition(doodlePosition.x + 15, doodlePosition.y - 15);     // аналогично, не удалять!
 				}
 			}
 			break;
@@ -200,19 +200,19 @@ int checkDoodleFall(Game & game)
 	{
 	case Collision::COLLISION_PLATE:
 		game.actualBonus = BonusType::NO;
-		return 5500 / 60;
+		return 100;
 	case Collision::COLLISION_SPRING:
 		game.actualBonus = BonusType::SPRING;
-		return 4500 / 60;
+		return 75;
 	case Collision::COLLISION_TRAMPLANE:
 		game.actualBonus = BonusType::TRAMPOLINE;
-		return 6000 / 60;
+		return 100;
 	case Collision::COLLISION_HAT_HELICOPTER:
 		game.actualBonus = BonusType::HAT_HELICOPTER;
-		return 12000 / 60;
+		return 200;
 	case Collision::COLLISION_ROCKET:
 		game.actualBonus = BonusType::ROCKET;
-		return 24000 / 60;
+		return 400;
 	default:
 		return 0;
 	}
