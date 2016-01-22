@@ -5,7 +5,6 @@ DoodleJump is a popular game in over the world. Status: in developing.
 ## Control keys
 * Esc -- exit
 * Left-right-up-down -- move Doodle
-* Enter(after die) -- new game
 
 ### Development
 In the future: 
