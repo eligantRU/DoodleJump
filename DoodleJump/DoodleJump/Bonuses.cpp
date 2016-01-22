@@ -58,7 +58,7 @@ void initBonuses(Game & game)
 {
 	std::vector<sf::Vector2f> platePosition;
 
-	for (Plate &plate : game.plate)
+	for (Plate & plate : game.plate)
 	{
 		if (plate.type == PlateType::STATIC)
 		{

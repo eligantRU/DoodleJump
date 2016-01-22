@@ -5,7 +5,7 @@
 #include <functional>
 #include <SFML/Graphics.hpp>
 
-static const int NUMBER_PLATES = 30;
+static const int NUMBER_PLATES = 30; // TODO: You can get 'integer devision zero'...Fix initBonuses()! 
 static const int NUMBER_BONUSES = 5;
 static const sf::Time TIME_PER_FRAME = sf::seconds(1.f / 60.f);
 static const float STEP = 3.f;
@@ -22,6 +22,11 @@ static const int ROCKET_HEIGHT = 36;
 static const int TRAMPOLINE_WIDTH = 20;
 static const int TRAMPOLINE_HEIGHT = 7;
 static const int MAX_NUMBER_OF_ITEMS = 3;
+static const int PLATE_DELTA_HEIGHT = 100;
+static const int SPRING_DELTA_HEIGHT = 75;
+static const int TRAMPLANE_DELTA_HEIGHT = 100;
+static const int HAT_HELICOPTER_DELTA_HEIGHT = 200;
+static const int ROCKET_DELTA_HEIGHT = 400;
 
 struct Assets
 {

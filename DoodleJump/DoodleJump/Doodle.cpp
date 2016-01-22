@@ -10,7 +10,7 @@ void initialHero(Game & game, sf::View & view)
 	game.hero.direction.x = DirectionX::NONE;
 	game.hero.deltaHeight = 0;
 	game.hero.lastDirectionX = DirectionX::LEFT;
-	game.qwerty = 0; // TODO: do not optimize using this sheet
+	game.qwerty = 0; // TODO: do not optimize using this sheet // It's no working!
 	sf::Vector2f doodlePosition = game.hero.body->getPosition();
 	game.hero.positionBeforeDown.y = doodlePosition.y;
 	view.setCenter(275, doodlePosition.y);

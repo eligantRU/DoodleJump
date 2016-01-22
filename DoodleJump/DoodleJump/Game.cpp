@@ -4,7 +4,7 @@
 // TODO: No global variable!
 Game game;
 sf::View view;
-sf::Vector2f kostil; // TODO: fix it!
+sf::Vector2f kostil; // TODO: fix it! And...oh yeah! It's no working
 
 void keyPressed(sf::RenderWindow & window, Game & game)
 {
@@ -106,6 +106,90 @@ void render(sf::RenderWindow & window, Game & game) // TODO: try to use std::vec
 	window.display();
 }
 
+Collision checkCollisionPlate(Game & game, sf::Vector2f & doodlePosition, sf::Vector2f platePosition[NUMBER_PLATES])
+{
+	for (int i = 0; i < NUMBER_PLATES; ++i)
+	{
+		if (((doodlePosition.y + DOODLE_HEIGHT >= platePosition[i].y) && (doodlePosition.y + DOODLE_HEIGHT <= platePosition[i].y + PLATE_HEIGHT)
+			&& (doodlePosition.x + DOODLE_WIDTH >= platePosition[i].x) && (doodlePosition.x - PLATE_WIDTH <= platePosition[i].x)))
+		{
+			if (game.plate[i].type == PlateType::CLOUD)
+			{
+				// здесь и должна была бы появиться функция генерации одной новой плиты, которая бала бы частью генерации двух и более плит -- костыль!
+				game.plate[i].body->setPosition(platePosition[i].x, platePosition[i].y + 550); // TODO: fix it!
+			}
+			return  Collision::COLLISION_PLATE;
+		}
+	}
+	// return Collision::NO_COLLISION; // TODO: Function must return value...present value?
+}
+
+Collision checkCollisionBonus(Game & game, sf::Vector2f & doodlePosition, sf::Vector2f bonusPosition[NUMBER_PLATES]) // TODO: duplicated code -- fix!
+{
+	for (int i = 0; i < NUMBER_BONUSES; ++i)
+	{
+		switch (game.bonus[i].type)
+		{
+		case BonusType::SPRING:
+			if (((doodlePosition.y + DOODLE_HEIGHT >= bonusPosition[i].y) && (doodlePosition.y + DOODLE_HEIGHT <= bonusPosition[i].y + SPRING_HEIGHT)
+				&& (doodlePosition.x + DOODLE_WIDTH >= bonusPosition[i].x) && (doodlePosition.x - SPRING_WIDTH <= bonusPosition[i].x)))
+			{				
+				game.bonus[i].body->setTexture(game.assets.SPRING_2_TEXTURE);
+				game.actualBonusId = i;
+
+				return Collision::COLLISION_SPRING;
+			}
+			break;
+		case BonusType::TRAMPOLINE:
+			if (((doodlePosition.y + DOODLE_HEIGHT >= bonusPosition[i].y) && (doodlePosition.y + DOODLE_HEIGHT <= bonusPosition[i].y + TRAMPOLINE_HEIGHT)
+				&& (doodlePosition.x + DOODLE_WIDTH >= bonusPosition[i].x) && (doodlePosition.x - TRAMPOLINE_WIDTH <= bonusPosition[i].x))) 
+			{
+				game.actualBonusId = i;
+				return Collision::COLLISION_TRAMPLANE;
+			}
+			break;
+		case BonusType::HAT_HELICOPTER:
+			if (((doodlePosition.y + DOODLE_HEIGHT >= bonusPosition[i].y) && (doodlePosition.y + DOODLE_HEIGHT <= bonusPosition[i].y + HAT_HELICOPTER_HEIGHT)
+				&& (doodlePosition.x + DOODLE_WIDTH >= bonusPosition[i].x) && (doodlePosition.x - HAT_HELICOPTER_WIDTH <= bonusPosition[i].x)))
+			{
+				game.actualBonusId = i;
+
+				if (game.hero.direction.x == DirectionX::RIGHT)
+				{
+					game.bonus[i].body->setPosition(doodlePosition.x + 15, doodlePosition.y - 15);     // 15 -- подгон, введи точное значение
+				}
+				else if ((game.hero.direction.x == DirectionX::LEFT) || (game.hero.direction.x == DirectionX::NONE))
+				{
+					game.bonus[i].body->setPosition(doodlePosition.x + 15, doodlePosition.y - 15);     // аналогично, не удалять!
+				}
+
+				return Collision::COLLISION_HAT_HELICOPTER;
+			}
+			break;
+		case BonusType::ROCKET:
+			if (((doodlePosition.y + DOODLE_HEIGHT >= bonusPosition[i].y) && (doodlePosition.y + DOODLE_HEIGHT <= bonusPosition[i].y + ROCKET_HEIGHT)
+				&& (doodlePosition.x + DOODLE_WIDTH >= bonusPosition[i].x) && (doodlePosition.x - ROCKET_WIDTH <= bonusPosition[i].x)))
+			{
+				game.actualBonusId = i;
+
+				if (game.hero.direction.x == DirectionX::RIGHT)
+				{
+					game.bonus[i].body->setPosition(doodlePosition.x - ROCKET_WIDTH, doodlePosition.y);
+				}
+				else if ((game.hero.direction.x == DirectionX::LEFT) || (game.hero.direction.x == DirectionX::NONE))
+				{
+					game.bonus[i].body->setPosition(doodlePosition.x + DOODLE_WIDTH, doodlePosition.y);
+				}
+
+				return Collision::COLLISION_ROCKET;
+			}
+			break;
+		}
+	}
+
+	return Collision::NO_COLLISION;
+}
+
 int checkDoodleFall(Game & game)
 {
 	sf::Vector2f doodlePosition = game.hero.body->getPosition();
@@ -122,97 +206,26 @@ int checkDoodleFall(Game & game)
 		bonusPosition[i] = game.bonus[i].body->getPosition();
 	}
 	
-	for (int i = 0; i < NUMBER_PLATES; ++i) // TODO: this cycle is the prototype of collisionPlate() 
-	{
-		if (((doodlePosition.y + DOODLE_HEIGHT >= platePosition[i].y) && (doodlePosition.y + DOODLE_HEIGHT <= platePosition[i].y + PLATE_HEIGHT)
-			&& (doodlePosition.x + DOODLE_WIDTH >= platePosition[i].x) && (doodlePosition.x - PLATE_WIDTH <= platePosition[i].x)))
-		{
-			if (game.plate[i].type == PlateType::CLOUD)
-			{
-				// здесь и должна была бы появиться функция генерации одной новой плиты, которая бала бы частью генерации двух и более плит
-				// костылёк
-				game.plate[i].body->setPosition(platePosition[i].x, platePosition[i].y + 550);
-			}
-			collision = Collision::COLLISION_PLATE;
-			break;
-		}
-	}
-
-	for (int i = 0; i < NUMBER_BONUSES; ++i) // TODO: collisionBonus() based on collisionPlate()
-	{
-		switch (game.bonus[i].type)
-		{
-		case BonusType::SPRING:
-			if (((doodlePosition.y + DOODLE_HEIGHT + SPRING_HEIGHT + 0.5 >= bonusPosition[i].y + SPRING_HEIGHT - 0.5) && (doodlePosition.y - 0.5 <= bonusPosition[i].y - DOODLE_HEIGHT + 0.5)
-				&& (doodlePosition.x + DOODLE_WIDTH + SPRING_WIDTH >= bonusPosition[i].x) && (doodlePosition.x - SPRING_WIDTH <= bonusPosition[i].x)))
-			{
-				collision = Collision::COLLISION_SPRING;
-				game.bonus[i].body->setTexture(game.assets.SPRING_2_TEXTURE);
-				game.actualBonusId = i;
-			}
-			break;
-		case BonusType::TRAMPOLINE:
-			if (((doodlePosition.y + DOODLE_HEIGHT + TRAMPOLINE_HEIGHT + 0.5 >= bonusPosition[i].y + TRAMPOLINE_HEIGHT - 0.5) && (doodlePosition.y - 0.5 <= bonusPosition[i].y - DOODLE_HEIGHT + 0.5)
-				&& (doodlePosition.x + DOODLE_WIDTH + TRAMPOLINE_WIDTH >= bonusPosition[i].x) && (doodlePosition.x - TRAMPOLINE_WIDTH <= bonusPosition[i].x)))
-			{
-				collision = Collision::COLLISION_TRAMPLANE;
-				game.actualBonusId = i;
-			}
-			break;
-		case BonusType::HAT_HELICOPTER:
-			if (((doodlePosition.y + DOODLE_HEIGHT + HAT_HELICOPTER_HEIGHT + 0.5 >= bonusPosition[i].y + HAT_HELICOPTER_HEIGHT - 0.5) && (doodlePosition.y - 0.5 <= bonusPosition[i].y - DOODLE_HEIGHT + 0.5)
-				&& (doodlePosition.x + DOODLE_WIDTH + HAT_HELICOPTER_WIDTH >= bonusPosition[i].x) && (doodlePosition.x - HAT_HELICOPTER_WIDTH <= bonusPosition[i].x)))
-			{
-				collision = Collision::COLLISION_HAT_HELICOPTER;
-				game.actualBonusId = i;
-
-				if (game.hero.direction.x == DirectionX::RIGHT)
-				{
-					game.bonus[i].body->setPosition(doodlePosition.x + 15, doodlePosition.y - 15);     // 15 -- подгон, введи точное значение
-				}
-				else if ((game.hero.direction.x == DirectionX::LEFT) || (game.hero.direction.x == DirectionX::NONE))
-				{
-					game.bonus[i].body->setPosition(doodlePosition.x + 15, doodlePosition.y - 15);     // аналогично, не удалять!
-				}
-			}
-			break;
-		case BonusType::ROCKET:
-			if (((doodlePosition.y + DOODLE_HEIGHT + ROCKET_HEIGHT + 0.5 >= bonusPosition[i].y + ROCKET_HEIGHT - 0.5) && (doodlePosition.y - 0.5 <= bonusPosition[i].y - DOODLE_HEIGHT + 0.5)
-				&& (doodlePosition.x + DOODLE_WIDTH + ROCKET_WIDTH >= bonusPosition[i].x) && (doodlePosition.x - ROCKET_WIDTH <= bonusPosition[i].x)))
-			{
-				collision = Collision::COLLISION_ROCKET;
-				game.actualBonusId = i;
-
-				if (game.hero.direction.x == DirectionX::RIGHT)
-				{
-					game.bonus[i].body->setPosition(doodlePosition.x - ROCKET_WIDTH, doodlePosition.y);
-				}
-				else if ((game.hero.direction.x == DirectionX::LEFT) || (game.hero.direction.x == DirectionX::NONE))
-				{
-					game.bonus[i].body->setPosition(doodlePosition.x + DOODLE_WIDTH, doodlePosition.y);
-				}
-			}
-			break;
-		}
-	}
-
+	collision = checkCollisionBonus(game, doodlePosition, bonusPosition);
+	collision = checkCollisionPlate(game, doodlePosition, platePosition);
+	
 	switch (collision)
 	{
 	case Collision::COLLISION_PLATE:
 		game.actualBonus = BonusType::NO;
-		return 100;
+		return PLATE_DELTA_HEIGHT;
 	case Collision::COLLISION_SPRING:
 		game.actualBonus = BonusType::SPRING;
-		return 75;
+		return SPRING_DELTA_HEIGHT;
 	case Collision::COLLISION_TRAMPLANE:
 		game.actualBonus = BonusType::TRAMPOLINE;
-		return 100;
+		return TRAMPLANE_DELTA_HEIGHT;
 	case Collision::COLLISION_HAT_HELICOPTER:
 		game.actualBonus = BonusType::HAT_HELICOPTER;
-		return 200;
+		return HAT_HELICOPTER_DELTA_HEIGHT;
 	case Collision::COLLISION_ROCKET:
 		game.actualBonus = BonusType::ROCKET;
-		return 400;
+		return ROCKET_DELTA_HEIGHT;
 	default:
 		return 0;
 	}
