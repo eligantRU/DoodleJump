@@ -28,18 +28,25 @@ void onPauseMenu(sf::RenderWindow & window)
 	window.display();
 
 	sf::Event event;
-
-	if (window.pollEvent(event) && sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left)
+	while (window.pollEvent(event))
 	{
-		sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
-
-		if (((mousePosition.y >= 210) && (mousePosition.y <= 260)
-			&& (mousePosition.x >= 215) && (mousePosition.x <= 335)))
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
 		{
-			// Это можно расскомментировать, но ничего не изменится, ибо сверху то же самое
-			//view.setCenter(275, kostil.y + 350); //view.setCenter(275, game.assets.BACKGROUND->getPosition().y + 350); // 350 -- половина экрана
-			//window.setView(view);
 			game.frameFunc = onGameFrame;
+		}
+		if (sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left)
+		{
+			sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
+
+			if (((mousePosition.y >= 210) && (mousePosition.y <= 260)
+				&& (mousePosition.x >= 215) && (mousePosition.x <= 335)))
+			{
+				game.frameFunc = onGameFrame;
+			}
+		}
+		if (event.type == sf::Event::Closed)
+		{
+			window.close();
 		}
 	}
 }

@@ -6,7 +6,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 
-static const int NUMBER_PLATES = 20; // TODO: You can get 'integer devision zero'...Fix initBonuses()! 
+static const int NUMBER_PLATES = 25; // TODO: You can get 'integer devision zero'...Fix initBonuses()! 
 static const int NUMBER_BONUSES = 3;
 static const sf::Time TIME_PER_FRAME = sf::seconds(1.f / 60.f);
 static const float STEP = 3.f;

@@ -38,7 +38,6 @@ void onGameOverMenu(sf::RenderWindow & window)
 	window.display();
 
 	sf::Event event;
-
 	if (window.pollEvent(event) && sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left)
 	{
 		sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
@@ -47,6 +46,11 @@ void onGameOverMenu(sf::RenderWindow & window)
 			&& (mousePosition.x >= 215) && (mousePosition.x <= 335)))
 		{
 			game.frameFunc = onStartMenu;
+		}
+
+		if (event.type == sf::Event::Closed)
+		{
+			window.close();
 		}
 	}
 }

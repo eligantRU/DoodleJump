@@ -41,7 +41,7 @@ void generPlates(Game & game)
 				game.plate[i].body->setTexture(game.assets.PLATE_CLOUD_TEXTURE);
 				break;
 			}
-			game.plate[i].body->setPosition(x, doodlePosition.y + y - 400.f);  // 40?! What is it?
+			game.plate[i].body->setPosition(x, doodlePosition.y + y - 440.f);  // 40?! What is it?
 		}
 	}
 }

@@ -56,5 +56,10 @@ void onStartMenu(sf::RenderWindow & window)
 		{
 			window.close();
 		}
+
+		if (event.type == sf::Event::Closed)
+		{
+			window.close();
+		}
 	}
 }
