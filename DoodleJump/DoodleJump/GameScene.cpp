@@ -277,6 +277,7 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view) // смену те
 	}
 
 	moveDynamicPlates(game);
+	moveBonuses(game);
 	generPlates(game);
 	generBonuses(game);
 
@@ -441,4 +442,25 @@ void initAssets(Game & game) // TODO: fix it! For example: void attachFile(strin
 	{
 		printf("Error loaded arial\n");
 	}
+
+	//sf::SoundBuffer soundBuffer;
+
+	/*if (soundBuffer.loadFromFile("/sounds/trampoline.mp3"))
+	{
+		game.assets.SOUND_TRAMPOLINE.setBuffer(soundBuffer);
+	}
+	else
+	{
+		printf("Error loaded sound\n"); //_exit();
+	}
+
+	if (soundBuffer.loadFromFile("/sounds/propeller.mp3"))
+	{
+		game.assets.SOUND_HAT_HELICOPTER.setBuffer(soundBuffer);
+	}
+
+	if (soundBuffer.loadFromFile("/sounds/feder.mp3"))
+	{
+		game.assets.SOUND_SPRING.setBuffer(soundBuffer);
+	}*/
 }

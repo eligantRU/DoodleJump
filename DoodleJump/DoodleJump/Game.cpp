@@ -4,7 +4,7 @@
 // TODO: No global variable!
 Game game;
 sf::View view;
-sf::Vector2f kostil; // TODO: fix it! And...oh yeah! It's no working
+sf::Vector2f kostil;
 
 void keyPressed(sf::RenderWindow & window, Game & game)
 {
@@ -34,7 +34,7 @@ void keyPressed(sf::RenderWindow & window, Game & game)
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
 		{
 			view.setCenter(275, 350);
-			game.frameFunc = onPauseMenu; // It's no working!
+			game.frameFunc = onPauseMenu;
 		}
 	}
 }
@@ -83,7 +83,7 @@ void render(sf::RenderWindow & window, Game & game) // TODO: try to use std::vec
 	window.clear(sf::Color(230, 230, 230));
 	window.draw(*game.assets.BACKGROUND);
 
-	for (Plate &plate : game.plate)
+	for (Plate & plate : game.plate)
 	{
 		window.draw(*plate.body);
 	}

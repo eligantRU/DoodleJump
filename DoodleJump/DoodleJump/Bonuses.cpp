@@ -1,10 +1,13 @@
 #include "stdafx.h"
 #include "sheet.h"
 
-void buildBonus(Game & game, BonusType bonusType, int bonusIndex, sf::Vector2f platePosition)
+void buildBonus(Game & game, BonusType bonusType, int bonusIndex, sf::Vector2f platePosition, int plateIndex)
 {
 	Bonus & bonus = game.bonus[bonusIndex];
 
+	game.bonus[bonusIndex].direction.x = game.plate[plateIndex].direction.x;
+	game.bonus[bonusIndex].plateIndex = plateIndex;
+	
 	switch (bonusType)
 	{
 		case BonusType::SPRING:
@@ -65,10 +68,10 @@ void initBonuses(Game & game)
 			platePosition.push_back(plate.body->getPosition());
 		}
 	}
-	for (int i = 0; i < NUMBER_BONUSES; ++i)
+	for (int i = 0; i < NUMBER_BONUSES; ++i) // TODO: стоит ли генерировать в самом начале бонусы не только на статичных плитах?
 	{
 		BonusType type = (rand() % 2) ? BonusType::SPRING : BonusType::TRAMPOLINE;
-		buildBonus(game, type, i, platePosition[rand() % platePosition.size()]);
+		buildBonus(game, type, i, platePosition[rand() % platePosition.size()], i); // TODO: what is i?
 	}
 }
 
@@ -87,26 +90,53 @@ void generBonuses(Game & game)
 			for (int plateIndex = 0; plateIndex < NUMBER_PLATES; ++plateIndex)
 			{
 				platePosition = game.plate[plateIndex].body->getPosition();
-				if ((platePosition.y <= doodlePosition.y - 275) && (game.plate[plateIndex].type == PlateType::STATIC))
+				if (platePosition.y <= doodlePosition.y - 275) // && (game.plate[plateIndex].type != PlateType::UNSTABLE)
 				{
 					int randomNum = rand() % 4;
 					switch (randomNum)
 					{
 					case 0:
-						buildBonus(game, BonusType::SPRING, bonusIndex, platePosition);
+						buildBonus(game, BonusType::SPRING, bonusIndex, platePosition, plateIndex);
 						break;
 					case 1:
-						buildBonus(game, BonusType::TRAMPOLINE, bonusIndex, platePosition);
+						buildBonus(game, BonusType::TRAMPOLINE, bonusIndex, platePosition, plateIndex);
 						break;
 					case 2:
-						buildBonus(game, BonusType::HAT_HELICOPTER, bonusIndex, platePosition);
+						buildBonus(game, BonusType::HAT_HELICOPTER, bonusIndex, platePosition, plateIndex);
 						break;
 					case 3:
-						buildBonus(game, BonusType::ROCKET, bonusIndex, platePosition);
+						buildBonus(game, BonusType::ROCKET, bonusIndex, platePosition, plateIndex);
 						break;
 					}
 				}
 			}
+		}
+	}
+}
+
+void moveBonuses(Game & game)
+{
+	sf::Vector2f position(0.f, 0.f);
+
+	for (int bonusIndex = 0; bonusIndex < NUMBER_BONUSES; ++bonusIndex)
+	{
+		game.bonus[bonusIndex].direction.x = game.plate[game.bonus[bonusIndex].plateIndex].direction.x;
+		if (game.bonus[bonusIndex].direction.x != DirectionX::NONE)
+		{
+			if (game.bonus[bonusIndex].direction.x == DirectionX::LEFT)
+			{
+				position.x -= 0.5f * STEP;
+			}
+			if (game.bonus[bonusIndex].direction.x == DirectionX::RIGHT)
+			{
+				position.x += 0.5f * STEP;
+			}
+			game.bonus[bonusIndex].body->move(position);
+			position.x = 0.f;
+		}
+		else
+		{
+			game.bonus[bonusIndex].direction.x = DirectionX::NONE;
 		}
 	}
 }

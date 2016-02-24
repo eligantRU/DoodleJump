@@ -4,8 +4,9 @@
 #include <string>
 #include <functional>
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 
-static const int NUMBER_PLATES = 30; // TODO: You can get 'integer devision zero'...Fix initBonuses()! 
+static const int NUMBER_PLATES = 20; // TODO: You can get 'integer devision zero'...Fix initBonuses()! 
 static const int NUMBER_BONUSES = 5;
 static const sf::Time TIME_PER_FRAME = sf::seconds(1.f / 60.f);
 static const float STEP = 3.f;
@@ -128,6 +129,8 @@ struct Bonus
 {
 	BonusType type;
 	sf::Sprite * body;
+	int plateIndex;
+	Direction direction;
 };
 
 typedef std::function<void(sf::RenderWindow &)> RenderFrameFunc;
@@ -169,7 +172,9 @@ void initBonuses(Game & game);
 
 void generBonuses(Game & game);
 
-void buildBonus(Game & game, BonusType bonusType, int bonusIndex, sf::Vector2f platePosition);
+void buildBonus(Game & game, BonusType bonusType, int bonusIndex, sf::Vector2f platePosition, int plateIndex);
+
+void moveBonuses(Game & game);
 
 // TODO: fix it!
 extern Game game;

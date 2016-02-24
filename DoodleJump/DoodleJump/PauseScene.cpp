@@ -3,7 +3,6 @@
 
 void onPauseMenu(sf::RenderWindow & window)
 {
-	// It's no working!
 	kostil = game.assets.BACKGROUND->getPosition();
 
 	sf::Text backText;
@@ -19,6 +18,10 @@ void onPauseMenu(sf::RenderWindow & window)
 
 
 	window.clear(sf::Color(255, 255, 255));
+
+	view.setCenter(275, kostil.y + 350);
+	window.setView(view);
+
 	window.draw(*game.assets.BACKGROUND);
 	window.draw(back);
 	window.draw(backText);
@@ -33,7 +36,9 @@ void onPauseMenu(sf::RenderWindow & window)
 		if (((mousePosition.y >= 210) && (mousePosition.y <= 260)
 			&& (mousePosition.x >= 215) && (mousePosition.x <= 335)))
 		{
-			view.setCenter(275, kostil.y - 350); // 350 -- половина экрана
+			// Это можно расскомментировать, но ничего не изменится, ибо сверху то же самое
+			//view.setCenter(275, kostil.y + 350); //view.setCenter(275, game.assets.BACKGROUND->getPosition().y + 350); // 350 -- половина экрана
+			//window.setView(view);
 			game.frameFunc = onGameFrame;
 		}
 	}

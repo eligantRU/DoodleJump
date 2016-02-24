@@ -11,7 +11,7 @@ void generPlates(Game & game)
 	{
 		platePosition[i] = game.plate[i].body->getPosition();
 		float x = float(rand() % (550 - PLATE_WIDTH));
-		float y = float(-1 * rand() % 150);               // —юда запилить функцию дл€ равномерной генерации плит по высоте
+		float y = float(-1 * rand() % 150); // —юда запилить функцию дл€ равномерной генерации плит по высоте
 
 		if (platePosition[i].y >= doodlePosition.y + DOODLE_HEIGHT + 275 + 2*PLATE_HEIGHT)
 		{
@@ -51,7 +51,7 @@ void initialPlates(Game & game) // эту функцию можно убрать, либо в неЄ засунуть
 	for (int i = 0; i < NUMBER_PLATES; ++i)
 	{
 		game.plate[i].body = new sf::Sprite;
-		switch (rand() % 3)
+		/*switch (rand() % 3)
 		{
 		case 0:
 			game.plate[i].type = PlateType::STATIC;
@@ -76,14 +76,18 @@ void initialPlates(Game & game) // эту функцию можно убрать, либо в неЄ засунуть
 			game.plate[i].direction.x = DirectionX::NONE;
 			game.plate[i].body->setTexture(game.assets.PLATE_CLOUD_TEXTURE);
 			break;
-		}
+		}*/
+		game.plate[i].type = PlateType::STATIC;  // костыль
+		game.plate[i].direction.x = DirectionX::NONE;
+		game.plate[i].body->setTexture(game.assets.PLATE_STATIC_TEXTURE);
+
 		float x = float(rand() % (550 - PLATE_WIDTH));
 		float y = float(rand() % (700 - PLATE_HEIGHT)); // —юда запилить функцию дл€ равномерной генерации плит по высоте
 		game.plate[i].body->setPosition(x, y);
 	}
 }
 
-void moveDynamicPlates(Game & game)
+void moveDynamicPlates(Game & game) // TODO: придЄтс€ дописать смену направлени€ дл€ бонусов
 {
 	sf::Vector2f position(0.f, 0.f);
 	sf::Vector2f platePosition[NUMBER_PLATES];
