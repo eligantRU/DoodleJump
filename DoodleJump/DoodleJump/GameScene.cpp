@@ -123,7 +123,7 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view) // смену те
 		boostFactor = 2.f;
 		break;
 	case  BonusType::HAT_HELICOPTER:
-		boostFactor = 2.f;
+		boostFactor = 2.5f;
 		break;
 	case  BonusType::ROCKET:
 		boostFactor = 3.f;
@@ -148,45 +148,47 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view) // смену те
 
 	if (game.actualBonus == BonusType::HAT_HELICOPTER) // и это тоже в отдельную функцию
 	{
-		if (game.hero.deltaHeight <= 2)
+		if (game.hero.deltaHeight <= 20)
 		{
 			game.qwerty = -1;
 			game.bonus[game.actualBonusId].body->setTexture(game.assets.HAT_HELOCPTER_FLY_LEFT_TEXTURE);
 			game.bonus[game.actualBonusId].body->rotate(-0.07f);
-			game.bonus[game.actualBonusId].body->move(sf::Vector2f(-2 * STEP, 6 * STEP));
+			game.bonus[game.actualBonusId].body->move(sf::Vector2f(-2 * STEP, 3 * STEP));
 		}
 		if (game.hero.deltaHeight == 0)
 		{
 			game.qwerty = 0;
 			game.actualBonus = BonusType::NO;
+			game.bonus[game.actualBonusId].body->setPosition(0.f, doodlePosition.y + DOODLE_HEIGHT + 275 + 2 * PLATE_HEIGHT); // костыль
 		}
 
-		if ((game.qwerty >= 0) && (game.qwerty <= 2))
+		if ((game.qwerty >= 0) && (game.qwerty <= 5))
 		{
 			game.bonus[game.actualBonusId].body->setTexture(game.assets.HAT_HELOCPTER_FLY_LEFT_TEXTURE);
 			++game.qwerty;
 		}
-		else if ((game.qwerty >= 3) && (game.qwerty <= 4))
+		if ((game.qwerty >= 6) && (game.qwerty <= 10))
 		{
 			game.bonus[game.actualBonusId].body->setTexture(game.assets.HAT_HELOCPTER_DIAGONAL_LEFT_TEXTURE);
 			++game.qwerty;
 		}
-		else if ((game.qwerty >= 5) && (game.qwerty <= 6))
+		if ((game.qwerty >= 11) && (game.qwerty <= 15))
 		{
 			game.bonus[game.actualBonusId].body->setTexture(game.assets.HAT_HELOCPTER_DIAGONAL_RIGHT_TEXTURE);
 			++game.qwerty;
 		}
-		else if ((game.qwerty >= 7) && (game.qwerty <= 8))
+		if ((game.qwerty >= 16) && (game.qwerty <= 20))
 		{
 			game.bonus[game.actualBonusId].body->setTexture(game.assets.HAT_HELOCPTER_FLY_RIGHT_TEXTURE);
 			++game.qwerty;
 		}
-		else if (game.qwerty == 8)
+		
+		if (game.qwerty == 20)
 		{
 			game.qwerty = 0;
 		}
 
-		if ((game.qwerty >= 0) && (game.qwerty <= 8) && (game.actualBonus != BonusType::NO))
+		if ((game.qwerty >= 0) && (game.qwerty <= 20) && (game.actualBonus != BonusType::NO))
 		{
 			if (game.hero.lastDirectionX == DirectionX::RIGHT)
 			{
@@ -212,10 +214,12 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view) // смену те
 		{
 			game.qwerty = 0;
 			game.actualBonus = BonusType::NO;
+			game.bonus[game.actualBonusId].body->setPosition(0.f, doodlePosition.y + DOODLE_HEIGHT + 275 + 2 * PLATE_HEIGHT); // костыль
 		}
 
-		if ((game.qwerty >= 0) && (game.qwerty <= 200))
+		if ((game.qwerty >= 0) && (game.qwerty <= 5))
 		{
+			game.bonus[game.actualBonusId].body = new sf::Sprite; // костыль
 			if (game.hero.lastDirectionX == DirectionX::RIGHT)
 			{
 				game.bonus[game.actualBonusId].body->setTexture(game.assets.ROCKET_1_LEFT_TEXTURE);
@@ -226,8 +230,9 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view) // смену те
 			}
 			++game.qwerty;
 		}
-		if ((game.qwerty >= 201) && (game.qwerty <= 400))
+		if ((game.qwerty >= 6) && (game.qwerty <= 10))
 		{
+			game.bonus[game.actualBonusId].body = new sf::Sprite; // костыль
 			if (game.hero.lastDirectionX == DirectionX::RIGHT)
 			{
 				game.bonus[game.actualBonusId].body->setTexture(game.assets.ROCKET_2_LEFT_TEXTURE);
@@ -238,8 +243,9 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view) // смену те
 			}
 			++game.qwerty;
 		}
-		if ((game.qwerty >= 401) && (game.qwerty <= 600))
+		if ((game.qwerty >= 11) && (game.qwerty <= 15))
 		{
+			game.bonus[game.actualBonusId].body = new sf::Sprite; // костыль
 			if (game.hero.lastDirectionX == DirectionX::RIGHT)
 			{
 				game.bonus[game.actualBonusId].body->setTexture(game.assets.ROCKET_3_LEFT_TEXTURE);
@@ -250,12 +256,12 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view) // смену те
 			}
 			++game.qwerty;
 		}
-		if (game.qwerty == 601)
+		if (game.qwerty == 15)
 		{
 			game.qwerty = 0;
 		}
 
-		if ((game.qwerty >= 0) && (game.qwerty <= 600) && (game.actualBonus != BonusType::NO))
+		if ((game.qwerty >= 0) && (game.qwerty <= 15) && (game.actualBonus != BonusType::NO))
 		{
 			if (game.hero.lastDirectionX == DirectionX::RIGHT)
 			{

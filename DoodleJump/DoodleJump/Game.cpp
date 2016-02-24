@@ -2,6 +2,7 @@
 #include "sheet.h"
 
 // TODO: No global variable!
+// костыль
 Game game;
 sf::View view;
 sf::Vector2f kostil;

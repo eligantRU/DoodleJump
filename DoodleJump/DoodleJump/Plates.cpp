@@ -77,7 +77,7 @@ void initialPlates(Game & game) // эту функцию можно убрать, либо в неё засунуть
 			game.plate[i].body->setTexture(game.assets.PLATE_CLOUD_TEXTURE);
 			break;
 		}*/
-		game.plate[i].type = PlateType::STATIC;  // костыль
+		game.plate[i].type = PlateType::STATIC;  // TODO: костыль...
 		game.plate[i].direction.x = DirectionX::NONE;
 		game.plate[i].body->setTexture(game.assets.PLATE_STATIC_TEXTURE);
 

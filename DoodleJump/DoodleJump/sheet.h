@@ -7,7 +7,7 @@
 #include <SFML/Audio.hpp>
 
 static const int NUMBER_PLATES = 20; // TODO: You can get 'integer devision zero'...Fix initBonuses()! 
-static const int NUMBER_BONUSES = 5;
+static const int NUMBER_BONUSES = 3;
 static const sf::Time TIME_PER_FRAME = sf::seconds(1.f / 60.f);
 static const float STEP = 3.f;
 static const int DOODLE_WIDTH = 45;
@@ -26,7 +26,7 @@ static const int MAX_NUMBER_OF_ITEMS = 3;
 static const int PLATE_DELTA_HEIGHT = 100;
 static const int SPRING_DELTA_HEIGHT = 75;
 static const int TRAMPLANE_DELTA_HEIGHT = 100;
-static const int HAT_HELICOPTER_DELTA_HEIGHT = 200;
+static const int HAT_HELICOPTER_DELTA_HEIGHT = 300;
 static const int ROCKET_DELTA_HEIGHT = 400;
 
 struct Assets
@@ -177,11 +177,13 @@ void buildBonus(Game & game, BonusType bonusType, int bonusIndex, sf::Vector2f p
 void moveBonuses(Game & game);
 
 // TODO: fix it!
+// костыль
 extern Game game;
 extern sf::View view;
 extern sf::Vector2f kostil;
 
 // TODO: All struct must be declare in separate file (Nick)
+// костыль
 #include "PauseScene.h"
 #include "StartScene.h"
 #include "GameOverScene.h"
