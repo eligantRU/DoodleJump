@@ -72,6 +72,7 @@ void initBonuses(Game & game)
 	{
 		BonusType type = (rand() % 2) ? BonusType::SPRING : BonusType::TRAMPOLINE;
 		buildBonus(game, type, i, platePosition[rand() % platePosition.size()], i); // TODO: what is i?
+		// TODO: строка выше вызывает сомнения. Третий и последний параметр совпали. Третий - верен. Последний - ошибка. Fix it!
 	}
 }
 

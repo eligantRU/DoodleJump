@@ -39,24 +39,20 @@ void onStartMenu(sf::RenderWindow & window)
 	window.draw(exitText);
 	window.display();
 
+	
 	sf::Event event;
-
-	if (window.pollEvent(event) && sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left)
+	while (window.pollEvent(event))
 	{
-		sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
-
-		if (((mousePosition.y >= 210) && (mousePosition.y <= 260)
-			&& (mousePosition.x >= 215) && (mousePosition.x <= 335)))
+		if (sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left)
 		{
-			game.frameFunc = onGameFrame;
-		}
+			sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
 
-		if (((mousePosition.y >= 390) && (mousePosition.y <= 440)
-			&& (mousePosition.x >= 215) && (mousePosition.x <= 335)))
-		{
-			window.close();
+			if (((mousePosition.y >= 210) && (mousePosition.y <= 260)
+				&& (mousePosition.x >= 215) && (mousePosition.x <= 335)))
+			{
+				game.frameFunc = onGameFrame;
+			}
 		}
-
 		if (event.type == sf::Event::Closed)
 		{
 			window.close();

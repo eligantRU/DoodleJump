@@ -467,9 +467,10 @@ void initAssets(Game & game) // TODO: fix it! For example: void attachFile(strin
 	}
 	game.assets.PLATE_UNSTABLE_TEXTURE.setSmooth(true);
 
-	//sf::SoundBuffer soundBuffer;
 
-	/*if (soundBuffer.loadFromFile("/sounds/trampoline.mp3"))
+	/*sf::SoundBuffer soundBuffer;
+
+	if (soundBuffer.loadFromFile("/sounds/trampoline.mp3"))
 	{
 		game.assets.SOUND_TRAMPOLINE.setBuffer(soundBuffer);
 	}
