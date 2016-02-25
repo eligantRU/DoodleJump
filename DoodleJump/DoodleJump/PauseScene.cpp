@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "PauseScene.h"
 
-void onPauseMenu(sf::RenderWindow & window)
+void onPauseMenu(sf::RenderWindow & window) // убожество
 {
 	kostil = game.assets.BACKGROUND->getPosition();
 

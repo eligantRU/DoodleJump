@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "sheet.h"
 
-
 void generPlates(Game & game)
 {
 	sf::Vector2f doodlePosition = game.hero.body->getPosition();
@@ -11,11 +10,11 @@ void generPlates(Game & game)
 	{
 		platePosition[i] = game.plate[i].body->getPosition();
 		float x = float(rand() % (550 - PLATE_WIDTH));
-		float y = float(-1 * rand() % 150); // Сюда запилить функцию для равномерной генерации плит по высоте
+		float y = float(-1 * rand() % 150); // TODO: Сюда запилить функцию для равномерной генерации плит по высоте
 
 		if (platePosition[i].y >= doodlePosition.y + DOODLE_HEIGHT + 275 + 2*PLATE_HEIGHT)
 		{
-			switch (rand() % 3)
+			switch (rand() % 4)
 			{
 			case 0:
 				game.plate[i].type = PlateType::STATIC;
@@ -40,8 +39,12 @@ void generPlates(Game & game)
 				game.plate[i].direction.x = DirectionX::NONE;
 				game.plate[i].body->setTexture(game.assets.PLATE_CLOUD_TEXTURE);
 				break;
+			case 3: 
+				game.plate[i].type = PlateType::UNSTABLE;
+				game.plate[i].direction.x = DirectionX::NONE;
+				game.plate[i].body->setTexture(game.assets.PLATE_UNSTABLE_TEXTURE);
 			}
-			game.plate[i].body->setPosition(x, doodlePosition.y + y - 440.f);  // 40?! What is it?
+			game.plate[i].body->setPosition(x, doodlePosition.y + y - 440.f);  // Костыль: 440?! What is it?
 		}
 	}
 }
@@ -87,7 +90,7 @@ void initialPlates(Game & game) // эту функцию можно убрать, либо в неё засунуть
 	}
 }
 
-void moveDynamicPlates(Game & game) // TODO: придётся дописать смену направления для бонусов
+void moveDynamicPlates(Game & game)
 {
 	sf::Vector2f position(0.f, 0.f);
 	sf::Vector2f platePosition[NUMBER_PLATES];

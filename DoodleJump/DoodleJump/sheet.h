@@ -36,6 +36,7 @@ struct Assets
 	sf::Texture PLATE_STATIC_TEXTURE;
 	sf::Texture PLATE_DYNAMIC_TEXTURE;
 	sf::Texture PLATE_CLOUD_TEXTURE;
+	sf::Texture PLATE_UNSTABLE_TEXTURE;
 	sf::Texture SPRING_TEXTURE;
 	sf::Texture SPRING_2_TEXTURE;
 	sf::Texture DOODLE_LEFT_TEXTURE;
@@ -63,7 +64,8 @@ enum class PlateType
 {
 	STATIC,
 	DYNAMIC_X,
-	CLOUD
+	CLOUD,
+	UNSTABLE
 };
 
 enum class Collision
@@ -74,6 +76,7 @@ enum class Collision
 	COLLISION_MISSLE,
 	COLLISION_PLATE,
 	COLLISION_ROCKET,
+	COLLISION_UNSTABLE,
 	NO_COLLISION
 };
 
@@ -140,7 +143,7 @@ struct Game
 	Doodle hero;
 	BonusType actualBonus;
 	int actualBonusId;
-	int qwerty; // What?
+	int qwerty; // TODO: What? R u crazy?
 	Plate plate[NUMBER_PLATES];
 	Bonus bonus[NUMBER_BONUSES];
 	sf::Text text;
@@ -181,6 +184,8 @@ void moveBonuses(Game & game);
 extern Game game;
 extern sf::View view;
 extern sf::Vector2f kostil;
+extern int kostil2;
+extern int unstablePlateID;
 
 // TODO: All struct must be declare in separate file (Nick)
 // костыль

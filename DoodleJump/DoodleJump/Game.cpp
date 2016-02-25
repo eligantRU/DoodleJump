@@ -6,6 +6,8 @@
 Game game;
 sf::View view;
 sf::Vector2f kostil;
+int kostil2 = 0; //костыль
+int unstablePlateID = -1;
 
 void keyPressed(sf::RenderWindow & window, Game & game)
 {
@@ -112,8 +114,15 @@ Collision checkCollisionPlate(Game & game, sf::Vector2f & doodlePosition, sf::Ve
 	for (int i = 0; i < NUMBER_PLATES; ++i)
 	{
 		if (((doodlePosition.y + DOODLE_HEIGHT >= platePosition[i].y) && (doodlePosition.y + DOODLE_HEIGHT <= platePosition[i].y + PLATE_HEIGHT)
-			&& (doodlePosition.x + DOODLE_WIDTH >= platePosition[i].x) && (doodlePosition.x - PLATE_WIDTH <= platePosition[i].x)))
+				&& (doodlePosition.x + DOODLE_WIDTH >= platePosition[i].x) && (doodlePosition.x - PLATE_WIDTH <= platePosition[i].x)))
 		{
+			if (game.plate[i].type == PlateType::UNSTABLE)
+			{
+				kostil2 = 30;
+				unstablePlateID = i;
+				continue;
+			}
+
 			if (game.plate[i].type == PlateType::CLOUD)
 			{
 				// здесь и должна была бы появиться функция генерации одной новой плиты, которая бала бы частью генерации двух и более плит -- костыль!

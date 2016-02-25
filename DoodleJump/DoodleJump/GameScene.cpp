@@ -146,6 +146,18 @@ void update(sf::RenderWindow & window, Game & game, sf::View & view) // смену те
 	}
 	//
 
+	if (unstablePlateID != -1)
+	{
+		game.plate[unstablePlateID].body->rotate(-1.f);
+		game.plate[unstablePlateID].body->move(sf::Vector2f(-1 * STEP, 4 * STEP));
+		--kostil2;
+		if (kostil2 == 0)
+		{
+			game.plate[unstablePlateID].body->setRotation(0);
+			unstablePlateID = -1;
+		}
+	}
+
 	if (game.actualBonus == BonusType::HAT_HELICOPTER) // и это тоже в отдельную функцию
 	{
 		if (game.hero.deltaHeight <= 20)
@@ -448,6 +460,12 @@ void initAssets(Game & game) // TODO: fix it! For example: void attachFile(strin
 	{
 		printf("Error loaded arial\n");
 	}
+
+	if (!game.assets.PLATE_UNSTABLE_TEXTURE.loadFromFile("images/Plate_63_15_Unstable.png"))
+	{
+		printf("Error loaded file");
+	}
+	game.assets.PLATE_UNSTABLE_TEXTURE.setSmooth(true);
 
 	//sf::SoundBuffer soundBuffer;
 

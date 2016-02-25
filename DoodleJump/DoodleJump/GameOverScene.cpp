@@ -2,7 +2,7 @@
 #include "GameOverScene.h"
 
 
-void onGameOverMenu(sf::RenderWindow & window)
+void onGameOverMenu(sf::RenderWindow & window) // убожество
 {
 	game.assets.BACKGROUND->setPosition(0, 0);
 
