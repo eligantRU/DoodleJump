@@ -426,6 +426,12 @@ void initAssets(Game & game) // TODO: fix it! For example: void attachFile(strin
 	}
 	game.assets.DOODLE_JUMP_RIGHT_TEXTURE.setSmooth(true);
 
+	if (!game.assets.DOODLE_SHOOTING_TEXTURE.loadFromFile("images/Doodle_shooting_30_58.png"))
+	{
+		printf("Error loaded file");
+	}
+	game.assets.DOODLE_SHOOTING_TEXTURE.setSmooth(true);
+
 	if (!game.assets.PLATE_STATIC_TEXTURE.loadFromFile("images/Plate_63_15_Green.png"))
 	{
 		printf("Error loaded file");
@@ -467,25 +473,141 @@ void initAssets(Game & game) // TODO: fix it! For example: void attachFile(strin
 	}
 	game.assets.PLATE_UNSTABLE_TEXTURE.setSmooth(true);
 
-
-	/*sf::SoundBuffer soundBuffer;
-
-	if (soundBuffer.loadFromFile("/sounds/trampoline.mp3"))
+	if (!game.assets.PLATE_BROKEN_LEFT_TEXTURE.loadFromFile("images/Plate_broken_left_24_29.png"))
 	{
-		game.assets.SOUND_TRAMPOLINE.setBuffer(soundBuffer);
+		printf("Error loaded file");
 	}
-	else
-	{
-		printf("Error loaded sound\n"); //_exit();
-	}
+	game.assets.PLATE_BROKEN_LEFT_TEXTURE.setSmooth(true);
 
-	if (soundBuffer.loadFromFile("/sounds/propeller.mp3"))
+	if (!game.assets.PLATE_BROKEN_RIGHT_TEXTURE.loadFromFile("images/Plate_broken_right_20_32.png"))
 	{
-		game.assets.SOUND_HAT_HELICOPTER.setBuffer(soundBuffer);
+		printf("Error loaded file");
 	}
+	game.assets.PLATE_BROKEN_RIGHT_TEXTURE.setSmooth(true);
 
-	if (soundBuffer.loadFromFile("/sounds/feder.mp3"))
+	if (!game.assets.TITLE_TEXTURE.loadFromFile("images/Title_202_46.png"))
 	{
-		game.assets.SOUND_SPRING.setBuffer(soundBuffer);
-	}*/
+		printf("Error loaded file");
+	}
+	game.assets.TITLE_TEXTURE.setSmooth(true);
+
+	if (!game.assets.STARS_1_TEXTURE.loadFromFile("images/stars_1_39_30.png"))
+	{
+		printf("Error loaded file");
+	}
+	game.assets.STARS_1_TEXTURE.setSmooth(true);
+
+	if (!game.assets.STARS_2_TEXTURE.loadFromFile("images/stars_2_38_28.png"))
+	{
+		printf("Error loaded file");
+	}
+	game.assets.STARS_2_TEXTURE.setSmooth(true);
+
+	if (!game.assets.BUTTON_ACTIVE_TEXTURE.loadFromFile("images/button_active_104_29.png"))
+	{
+		printf("Error loaded file");
+	}
+	game.assets.BUTTON_ACTIVE_TEXTURE.setSmooth(true);
+
+	if (!game.assets.BUTTON_INACTIVE_TEXTURE.loadFromFile("images/button_inactive_104_29.png"))
+	{
+		printf("Error loaded file");
+	}
+	game.assets.BUTTON_INACTIVE_TEXTURE.setSmooth(true);
+
+	if (!game.assets.HOLE_TEXTURE.loadFromFile("images/hole_60_54.png"))
+	{
+		printf("Error loaded file");
+	}
+	game.assets.HOLE_TEXTURE.setSmooth(true);
+
+	if (!game.assets.GARBAGE_1_TEXTURE.loadFromFile("images/Garbage_1_21_16.png"))
+	{
+		printf("Error loaded file");
+	}
+	game.assets.GARBAGE_1_TEXTURE.setSmooth(true);
+
+	if (!game.assets.GARBAGE_2_TEXTURE.loadFromFile("images/Garbage_2_20_23.png"))
+	{
+		printf("Error loaded file");
+	}
+	game.assets.GARBAGE_2_TEXTURE.setSmooth(true);
+
+	if (!game.assets.GARBAGE_3_TEXTURE.loadFromFile("images/Garbage_3_21_18.png"))
+	{
+		printf("Error loaded file");
+	}
+	game.assets.GARBAGE_3_TEXTURE.setSmooth(true);
+
+	if (!game.assets.GARBAGE_4_TEXTURE.loadFromFile("images/Garbage_4_36_18.png"))
+	{
+		printf("Error loaded file");
+	}
+	game.assets.GARBAGE_4_TEXTURE.setSmooth(true);
+
+	if (!game.assets.GARBAGE_5_TEXTURE.loadFromFile("images/Garbage_5_28_17.png"))
+	{
+		printf("Error loaded file");
+	}
+	game.assets.GARBAGE_5_TEXTURE.setSmooth(true);
+
+	if (!game.assets.LINE_TEXTURE.loadFromFile("images/line_320_5.png"))
+	{
+		printf("Error loaded file");
+	}
+	game.assets.LINE_TEXTURE.setSmooth(true);
+
+	if (!game.assets.MONSTER_FLYING_1_TEXTURE.loadFromFile("images/Monster_flying_1_76_44.png"))
+	{
+		printf("Error loaded file");
+	}
+	game.assets.MONSTER_FLYING_1_TEXTURE.setSmooth(true);
+
+	if (!game.assets.MONSTER_FLYING_2_TEXTURE.loadFromFile("images/Monster_flying_2_76_44.png"))
+	{
+		printf("Error loaded file");
+	}
+	game.assets.MONSTER_FLYING_2_TEXTURE.setSmooth(true);
+
+	if (!game.assets.MONSTER_FLYING_3_TEXTURE.loadFromFile("images/Monster_flying_3_76_44.png"))
+	{
+		printf("Error loaded file");
+	}
+	game.assets.MONSTER_FLYING_3_TEXTURE.setSmooth(true);
+
+	if (!game.assets.MONSTER_FLYING_4_TEXTURE.loadFromFile("images/Monster_flying_4_76_44.png"))
+	{
+		printf("Error loaded file");
+	}
+	game.assets.MONSTER_FLYING_4_TEXTURE.setSmooth(true);
+
+	if (!game.assets.MONSTER_RED_TEXTURE.loadFromFile("images/Monster_red_46_35.png"))
+	{
+		printf("Error loaded file");
+	}
+	game.assets.MONSTER_RED_TEXTURE.setSmooth(true);
+
+	if (!game.assets.MONSTER_PURPLE_TEXTURE.loadFromFile("images/Monster_purple_55_49.png"))
+	{
+		printf("Error loaded file");
+	}
+	game.assets.MONSTER_PURPLE_TEXTURE.setSmooth(true);
+
+	if (!game.assets.MONSTER_GREEN_TEXTURE.loadFromFile("images/Monster_green_82_53.png"))
+	{
+		printf("Error loaded file");
+	}
+	game.assets.MONSTER_GREEN_TEXTURE.setSmooth(true);
+
+	if (!game.assets.MONSTER_BLUE_LEFT_TEXTURE.loadFromFile("images/Monster_blue_left_37_49.png"))
+	{
+		printf("Error loaded file");
+	}
+	game.assets.MONSTER_BLUE_LEFT_TEXTURE.setSmooth(true);
+
+	if (!game.assets.MONSTER_BLUE_RIGHT_TEXTURE.loadFromFile("images/Monster_blue_right_37_49.png"))
+	{
+		printf("Error loaded file");
+	}
+	game.assets.MONSTER_BLUE_RIGHT_TEXTURE.setSmooth(true);
 }

@@ -52,6 +52,12 @@ void onStartMenu(sf::RenderWindow & window)
 			{
 				game.frameFunc = onGameFrame;
 			}
+			if (((mousePosition.y >= 390) && (mousePosition.y <= 440)
+				&& (mousePosition.x >= 215) && (mousePosition.x <= 335)))
+			{
+				window.close();
+			}
+
 		}
 		if (event.type == sf::Event::Closed)
 		{

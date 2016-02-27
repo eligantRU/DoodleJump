@@ -5,6 +5,7 @@
 #include <functional>
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
+#include <SFML/OpenGL.hpp>
 
 static const int NUMBER_PLATES = 25; // TODO: You can get 'integer devision zero'...Fix initBonuses()! 
 static const int NUMBER_BONUSES = 3;
@@ -43,6 +44,7 @@ struct Assets
 	sf::Texture DOODLE_RIGHT_TEXTURE;
 	sf::Texture DOODLE_JUMP_LEFT_TEXTURE;
 	sf::Texture DOODLE_JUMP_RIGHT_TEXTURE;
+	sf::Texture DOODLE_SHOOTING_TEXTURE;
 	sf::Texture HAT_HELOCPTER_DIAGONAL_RIGHT_TEXTURE;
 	sf::Texture HAT_HELOCPTER_DIAGONAL_LEFT_TEXTURE;
 	sf::Texture HAT_HELOCPTER_FLY_RIGHT_TEXTURE;
@@ -57,6 +59,30 @@ struct Assets
 	sf::Texture ROCKET_3_LEFT_TEXTURE;
 	sf::Texture ROCKET_3_RIGHT_TEXTURE;
 	sf::Texture TRAMPOLINE_TEXTURE;
+	sf::Texture PLATE_BROKEN_LEFT_TEXTURE;
+	sf::Texture PLATE_BROKEN_RIGHT_TEXTURE;
+	sf::Texture TITLE_TEXTURE;
+	sf::Texture STARS_1_TEXTURE;
+	sf::Texture STARS_2_TEXTURE;
+	sf::Texture BUTTON_ACTIVE_TEXTURE;
+	sf::Texture BUTTON_INACTIVE_TEXTURE;
+	sf::Texture HOLE_TEXTURE;
+	sf::Texture GARBAGE_1_TEXTURE;
+	sf::Texture GARBAGE_2_TEXTURE;
+	sf::Texture GARBAGE_3_TEXTURE;
+	sf::Texture GARBAGE_4_TEXTURE;
+	sf::Texture GARBAGE_5_TEXTURE;
+	sf::Texture LINE_TEXTURE;
+	sf::Texture MONSTER_FLYING_1_TEXTURE;
+	sf::Texture MONSTER_FLYING_2_TEXTURE;
+	sf::Texture MONSTER_FLYING_3_TEXTURE;
+	sf::Texture MONSTER_FLYING_4_TEXTURE;
+	sf::Texture MONSTER_RED_TEXTURE;
+	sf::Texture MONSTER_PURPLE_TEXTURE;
+	sf::Texture MONSTER_GREEN_TEXTURE;
+	sf::Texture MONSTER_BLUE_LEFT_TEXTURE;
+	sf::Texture MONSTER_BLUE_RIGHT_TEXTURE;
+
 	sf::Font font;
 };
 
