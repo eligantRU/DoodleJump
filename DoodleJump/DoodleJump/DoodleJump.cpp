@@ -4,6 +4,11 @@
 int main(void)
 {
 	srand(unsigned(time(NULL)));
-	enterGameLoop();
+
+	Game * game = new Game();
+	game->launch();
+	delete game;
+	game = NULL;
+	
 	return 0;
 }
