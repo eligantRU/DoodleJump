@@ -9,11 +9,11 @@ public:
 	startScene();
 	~startScene();
 	virtual void onStartMenu(sf::RenderWindow & window);
+private:
 	Collision checkCollisionPlate(void);
 	void moveDoodle(void);
 	Plate plate;
 	Doodle hero;
-
 	sf::Sprite * title;
 	sf::Sprite * insects[NUMBER_INSECTS];
 	sf::Sprite * background;

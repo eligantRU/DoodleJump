@@ -8,7 +8,6 @@ struct pauseScene : public Game
 public:
 	pauseScene();
 	~pauseScene();
-protected:
 	virtual void onPauseMenu(sf::RenderWindow & windowm, sf::View & view);
 private:
 	sf::Sprite * background;
