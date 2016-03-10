@@ -4,16 +4,13 @@ DoodleJump is a popular game in over the world. Status: in developing.
 
 ## Control keys
 * Esc -- exit
-* Left-right-up-down -- move Doodle
+* Left-right -- move Doodle
 
 ### Development
 In the future: 
 - Refactoring
 - Fix plate (re)generation
-- Bonuses on dynamic plates without bugs
-- Enemy
 - Hole
-- Menu
 - Table of records
 
 ```sh
