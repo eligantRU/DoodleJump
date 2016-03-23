@@ -47,7 +47,7 @@ void gameScene::resetGame(void)
 	hero.body->setTexture(assets->DOODLE_LEFT_TEXTURE);
 	hero.body->setScale(sf::Vector2f(1.f, 1.f));
 	hero.body->setPosition(260, 350);
-	hero.speedY = -25.f;
+	hero.speedY = -50.f;
 	hero.lastDirectionX = DirectionX::LEFT;
 	qwerty = 0; // TODO: do not optimize using this sheet
 	hero.positionBeforeDown.y = hero.body->getPosition().y;
