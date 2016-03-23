@@ -3,13 +3,12 @@
 #include "stdafx.h"
 #include "sheet.h"
 
-struct gameOverScene : public Game
+/*struct gameOverScene
 {
 public:
 	gameOverScene();
 	~gameOverScene();
-	virtual void onGameOverMenu(sf::RenderWindow & window, uint64_t & score);
-private:
+	statusGame onGameOverMenu(sf::RenderWindow & window, uint64_t & score);
 	sf::Sprite * background;
 	sf::Sprite * goMenuButton;
 	sf::Sprite * exitButton;
@@ -17,4 +16,4 @@ private:
 	sf::Text goMenuText;
 	sf::Text exitText;
 	sf::Text lastRecord;
-};
+};*/

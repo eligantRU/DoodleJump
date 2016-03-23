@@ -81,20 +81,19 @@ startScene::~startScene()
 {
 	delete title;
 	delete insects[NUMBER_INSECTS];
-	delete background;
 	delete playButton;
 	delete exitButton;
 	delete hole;
 	title = NULL;
 	*insects = NULL;
-	background = NULL;
 	playButton = NULL;
 	exitButton = NULL;
 	hole = NULL;
 }
 
-void startScene::onStartMenu(sf::RenderWindow & window)
+gameResult startScene::onStartMenu(sf::RenderWindow & window)
 {
+	result.collision = Collision::NO_COLLISION;
 	moveDoodle();
 
 	window.clear(sf::Color(255, 255, 255));
@@ -143,14 +142,8 @@ void startScene::onStartMenu(sf::RenderWindow & window)
 			if (((mousePosition.y >= 180) && (mousePosition.y <= 209)
 				&& (mousePosition.x >= 200) && (mousePosition.x <= 300)))
 			{
-				gameScene scene;
-				Game * game = &scene;
-				while (window.isOpen())
-				{
-					game->onGameFrame(window);
-				}
-				delete game;
-				game = NULL;
+				result.gameStatus = statusGame::GAME_SCENE;
+				return result;
 			}
 			if (((mousePosition.y >= 240) && (mousePosition.y <= 269)
 				&& (mousePosition.x >= 250) && (mousePosition.x <= 350)))
@@ -164,6 +157,9 @@ void startScene::onStartMenu(sf::RenderWindow & window)
 			window.close();
 		}
 	}
+
+	result.gameStatus = statusGame::START_SCENE;
+	return result;
 }
 
 void startScene::moveDoodle(void)
@@ -201,6 +197,7 @@ Collision startScene::checkCollisionPlate(void)
 		&& (doodlePosition.x + DOODLE_WIDTH >= platePosition.x) && (doodlePosition.x - PLATE_WIDTH <= platePosition.x)))
 	{
 		return  Collision::COLLISION_PLATE;
+		result.collision = Collision::NO_COLLISION;
 	}
 	return Collision::NO_COLLISION;
 }

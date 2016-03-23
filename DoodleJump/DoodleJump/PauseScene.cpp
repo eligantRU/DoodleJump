@@ -41,12 +41,15 @@ pauseScene::~pauseScene()
 	exitButton = NULL;
 }
 
-void pauseScene::onPauseMenu(sf::RenderWindow & window, sf::View & view) 
+gameResult pauseScene::onPauseMenu(sf::RenderWindow & window) 
 {
-	window.clear(sf::Color(255, 255, 255));
+	backButton->setPosition(view.getCenter().x - 275.f + 200.f, view.getCenter().y - 350.f + 210.f);
+	backText.setPosition(view.getCenter().x - 275.f + 232.f, view.getCenter().y - 350.f + 212.f);
+	exitButton->setPosition(view.getCenter().x - 275.f + 250.f, view.getCenter().y - 350.f + 270.f);
+	exitText.setPosition(view.getCenter().x - 275.f + 280.f, view.getCenter().y - 350.f + 272.f);
+	background->setPosition(view.getCenter().x-275.f, view.getCenter().y - 350.f);
 
-	view.reset(sf::FloatRect(0, 0, 550, 700));
-	window.setView(view);
+	window.clear(sf::Color(255, 255, 255));
 
 	window.draw(*background);
 	window.draw(*backButton);
@@ -55,6 +58,7 @@ void pauseScene::onPauseMenu(sf::RenderWindow & window, sf::View & view)
 	window.draw(exitText);
 	window.display();
 
+	gameResult result;
 	sf::Event event;
 	while (window.pollEvent(event))
 	{
@@ -85,15 +89,8 @@ void pauseScene::onPauseMenu(sf::RenderWindow & window, sf::View & view)
 			if (((mousePosition.y >= 210) && (mousePosition.y <= 239)
 				&& (mousePosition.x >= 200) && (mousePosition.x <= 300)))
 			{
-				gameScene scene;
-				Game * game = &scene;
-				
-				while (window.isOpen())
-				{
-					game->onGameFrame(window);
-				}
-				delete game;
-				game = NULL;
+				result.gameStatus = statusGame::GAME_SCENE;
+				return result;
 			}
 			if (((mousePosition.y >= 270) && (mousePosition.y <= 299)
 				&& (mousePosition.x >= 250) && (mousePosition.x <= 350)))
@@ -107,4 +104,6 @@ void pauseScene::onPauseMenu(sf::RenderWindow & window, sf::View & view)
 			window.close();
 		}
 	}
+	result.gameStatus = statusGame::PAUSE_SCENE;
+	return result;
 }

@@ -47,7 +47,7 @@ gameOverScene::~gameOverScene()
 	exitButton = NULL;
 }
 
-void gameOverScene::onGameOverMenu(sf::RenderWindow & window, uint64_t & score) // убожество
+gameResult gameOverScene::onGameOverMenu(sf::RenderWindow & window, uint64_t & score) // убожество
 {
 	lastRecord.setString("Your last record: " + std::to_string(score));
 
@@ -60,6 +60,7 @@ void gameOverScene::onGameOverMenu(sf::RenderWindow & window, uint64_t & score) 
 	window.draw(lastRecord);
 	window.display();
 
+	gameResult result;
 	sf::Event event;
 	while (window.pollEvent(event))
 	{
@@ -90,12 +91,8 @@ void gameOverScene::onGameOverMenu(sf::RenderWindow & window, uint64_t & score) 
 			if (((mousePosition.y >= 210) && (mousePosition.y <= 239)
 				&& (mousePosition.x >= 200) && (mousePosition.x <= 300)))
 			{
-				startScene scene;
-				Game * game = &scene;
-				while (window.isOpen())
-				{
-					game->onStartMenu(window);
-				}
+				result.gameStatus = statusGame::START_SCENE;
+				return result;
 			}
 			if (((mousePosition.y >= 270) && (mousePosition.y <= 299)
 				&& (mousePosition.x >= 250) && (mousePosition.x <= 350)))
@@ -108,4 +105,6 @@ void gameOverScene::onGameOverMenu(sf::RenderWindow & window, uint64_t & score) 
 			window.close();
 		}
 	}
+	result.gameStatus = statusGame::GAME_OVER_SCENE;
+	return result;
 }

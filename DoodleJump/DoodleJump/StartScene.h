@@ -3,12 +3,12 @@
 #include "stdafx.h"
 #include "sheet.h"
 
-struct startScene : public Game
+struct startScene
 {
 public:
 	startScene();
 	~startScene();
-	virtual void onStartMenu(sf::RenderWindow & window);
+	gameResult onStartMenu(sf::RenderWindow & window);
 private:
 	Collision checkCollisionPlate(void);
 	void moveDoodle(void);
@@ -26,4 +26,6 @@ private:
 	sf::Text playText;
 	sf::Text recordText;
 	sf::Text exitText;
+
+	gameResult result;
 };

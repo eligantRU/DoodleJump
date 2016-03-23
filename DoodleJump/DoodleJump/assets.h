@@ -1,0 +1,62 @@
+#pragma once
+
+#include "stdafx.h"
+
+struct Assets
+{
+public:
+	Assets();
+	~Assets();
+	void addTexture(sf::Texture & texture, std::string string, const bool repeat = false);
+	sf::Texture BACKGROUND_TEXTURE;
+	sf::Texture PLATE_STATIC_TEXTURE;
+	sf::Texture PLATE_DYNAMIC_TEXTURE;
+	sf::Texture PLATE_CLOUD_TEXTURE;
+	sf::Texture PLATE_UNSTABLE_TEXTURE;
+	sf::Texture SPRING_TEXTURE;
+	sf::Texture SPRING_2_TEXTURE;
+	sf::Texture DOODLE_LEFT_TEXTURE;
+	sf::Texture DOODLE_RIGHT_TEXTURE;
+	sf::Texture DOODLE_JUMP_LEFT_TEXTURE;
+	sf::Texture DOODLE_JUMP_RIGHT_TEXTURE;
+	sf::Texture DOODLE_SHOOTING_TEXTURE;
+	sf::Texture HAT_HELOCPTER_DIAGONAL_RIGHT_TEXTURE;
+	sf::Texture HAT_HELOCPTER_DIAGONAL_LEFT_TEXTURE;
+	sf::Texture HAT_HELOCPTER_FLY_RIGHT_TEXTURE;
+	sf::Texture HAT_HELOCPTER_FLY_LEFT_TEXTURE;
+	sf::Texture HAT_HELOCPTER_NONE_RIGHT_TEXTURE;
+	sf::Texture HAT_HELOCPTER_NONE_LEFT_TEXTURE;
+	sf::Texture ROCKET_NONE_TEXTURE;
+	sf::Texture ROCKET_1_LEFT_TEXTURE;
+	sf::Texture ROCKET_1_RIGHT_TEXTURE;
+	sf::Texture ROCKET_2_LEFT_TEXTURE;
+	sf::Texture ROCKET_2_RIGHT_TEXTURE;
+	sf::Texture ROCKET_3_LEFT_TEXTURE;
+	sf::Texture ROCKET_3_RIGHT_TEXTURE;
+	sf::Texture TRAMPOLINE_TEXTURE;
+	sf::Texture PLATE_BROKEN_LEFT_TEXTURE;
+	sf::Texture PLATE_BROKEN_RIGHT_TEXTURE;
+	sf::Texture TITLE_TEXTURE;
+	sf::Texture STARS_1_TEXTURE;
+	sf::Texture STARS_2_TEXTURE;
+	sf::Texture BUTTON_ACTIVE_TEXTURE;
+	sf::Texture BUTTON_INACTIVE_TEXTURE;
+	sf::Texture HOLE_TEXTURE;
+	sf::Texture GARBAGE_1_TEXTURE;
+	sf::Texture GARBAGE_2_TEXTURE;
+	sf::Texture GARBAGE_3_TEXTURE;
+	sf::Texture GARBAGE_4_TEXTURE;
+	sf::Texture GARBAGE_5_TEXTURE;
+	sf::Texture LINE_TEXTURE;
+	sf::Texture MONSTER_FLYING_1_TEXTURE;
+	sf::Texture MONSTER_FLYING_2_TEXTURE;
+	sf::Texture MONSTER_FLYING_3_TEXTURE;
+	sf::Texture MONSTER_FLYING_4_TEXTURE;
+	sf::Texture MONSTER_RED_TEXTURE;
+	sf::Texture MONSTER_PURPLE_TEXTURE;
+	sf::Texture MONSTER_GREEN_TEXTURE;
+	sf::Texture MONSTER_BLUE_LEFT_TEXTURE;
+	sf::Texture MONSTER_BLUE_RIGHT_TEXTURE;
+
+	sf::Font font;
+};

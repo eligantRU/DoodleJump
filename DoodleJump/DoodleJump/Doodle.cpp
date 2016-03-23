@@ -9,8 +9,7 @@ Doodle::Doodle()
 	body->setPosition(260, 350);
 	direction.x = DirectionX::NONE;
 	lastDirectionX = DirectionX::LEFT;
-	sf::Vector2f doodlePosition = body->getPosition(); // TODO: внести это ниже, соптимизить
-	positionBeforeDown.y = doodlePosition.y;
+	positionBeforeDown.y = body->getPosition().y;
 	direction.y = DirectionY::DOWN;
 	speedY = -25.f;
 }
