@@ -77,8 +77,8 @@ void Game::gameLoop(sf::RenderWindow & window)
 			{
 				if (result.gameStatus == statusGame::GAME_OVER_SCENE)
 				{
-					soundGameOverThread.launch();
 					status.gameStatus = statusGame::GAME_OVER_SCENE;
+					soundGameOverThread.launch();
 				}
 				else
 				{
@@ -97,25 +97,28 @@ void Game::gameLoop(sf::RenderWindow & window)
 			break;
 		}
 
-		switch (result.collision)
+		if (result.gameStatus == statusGame::GAME_SCENE)
 		{
-		case Collision::COLLISION_PLATE:
-			soundPlateThread.launch();
-			break; 
-		case Collision::COLLISION_SPRING:
-			soundSpringThread.launch();
-			break;
-		case Collision::COLLISION_TRAMPLANE:
-			soundTrampolineThread.launch();
-			break;
-		case Collision::COLLISION_ROCKET:
-			soundRocketThread.launch();
-			break;
-		case Collision::COLLISION_HAT_HELICOPTER:
-			soundHatHelicopterThread.launch();
-			break;
-		default:
-			break;
+			switch (result.collision)
+			{
+			case Collision::COLLISION_PLATE:
+				soundPlateThread.launch();
+				break;
+			case Collision::COLLISION_SPRING:
+				soundSpringThread.launch();
+				break;
+			case Collision::COLLISION_TRAMPLANE:
+				soundTrampolineThread.launch();
+				break;
+			case Collision::COLLISION_ROCKET:
+				soundRocketThread.launch();
+				break;
+			case Collision::COLLISION_HAT_HELICOPTER:
+				soundHatHelicopterThread.launch();
+				break;
+			default:
+				break;
+			}
 		}
 	}
 }
