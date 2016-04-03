@@ -27,6 +27,8 @@ public:
 	sf::Texture HAT_HELOCPTER_NONE_RIGHT_TEXTURE;
 	sf::Texture HAT_HELOCPTER_NONE_LEFT_TEXTURE;
 	sf::Texture ROCKET_NONE_TEXTURE;
+	sf::Texture ROCKET_0_LEFT_TEXTURE;
+	sf::Texture ROCKET_0_RIGHT_TEXTURE;
 	sf::Texture ROCKET_1_LEFT_TEXTURE;
 	sf::Texture ROCKET_1_RIGHT_TEXTURE;
 	sf::Texture ROCKET_2_LEFT_TEXTURE;
@@ -36,7 +38,8 @@ public:
 	sf::Texture TRAMPOLINE_TEXTURE;
 	sf::Texture PLATE_BROKEN_LEFT_TEXTURE;
 	sf::Texture PLATE_BROKEN_RIGHT_TEXTURE;
-	sf::Texture TITLE_TEXTURE;
+	sf::Texture MAIN_TITLE_TEXTURE;
+	sf::Texture GAME_OVER_TITLE_TEXTURE;
 	sf::Texture STARS_1_TEXTURE;
 	sf::Texture STARS_2_TEXTURE;
 	sf::Texture BUTTON_ACTIVE_TEXTURE;
@@ -57,6 +60,9 @@ public:
 	sf::Texture MONSTER_GREEN_TEXTURE;
 	sf::Texture MONSTER_BLUE_LEFT_TEXTURE;
 	sf::Texture MONSTER_BLUE_RIGHT_TEXTURE;
+	
+	sf::Texture BUTTON_A_TEXTURE;
+	sf::Texture BUTTON_D_TEXTURE;
 
 	sf::Font font;
 };

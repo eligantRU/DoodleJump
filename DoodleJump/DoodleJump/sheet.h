@@ -1,7 +1,18 @@
 #pragma once
 
 #include "stdafx.h"
-#pragma comment(lib,"Winmm.lib")
+
+#if defined(_WIN64) 
+    #pragma comment(lib, "winmm.lib")
+#elif defined(_WIN32) 
+	#pragma comment(lib, "winmm.lib")
+#else 
+	#error "Unknown platform" 
+#endif
+
+//#pragma comment(lib,"Winmm.lib")
+#include <algorithm>
+#include <array>
 #include <string>
 #include <functional>
 #include <SFML/Graphics.hpp>
@@ -9,7 +20,6 @@
 #include <SFML/OpenGL.hpp>
 
 #include "bases.h"
-#include "audio.h"
 #include "assets.h"
 #include "bonus.h"
 #include "plate.h"	
@@ -17,6 +27,7 @@
 #include "pauseScene.h"
 #include "gameFrame.h"
 #include "gameOverScene.h"
+#include "helpScene.h"
 #include "startScene.h"
 #include "game.h"
 

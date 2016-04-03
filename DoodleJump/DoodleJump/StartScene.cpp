@@ -6,8 +6,8 @@ startScene::startScene()
 	hero.speedY = -20.f;
 
 	title = new sf::Sprite;
-	title->setTextureRect(sf::IntRect(0, 0, 202, 46));
-	title->setTexture(assets->TITLE_TEXTURE);
+	title->setTextureRect(sf::IntRect(0, 0, 314, 128));
+	title->setTexture(assets->MAIN_TITLE_TEXTURE);
 	title->setPosition(100, 50);
 
 	playButton = new sf::Sprite;
@@ -32,9 +32,20 @@ startScene::startScene()
 	exitText.setPosition(280.f, 242.f);
 	exitText.setColor(sf::Color(0, 0, 0));
 
+	helpButton = new sf::Sprite;
+	helpButton->setTextureRect(sf::IntRect(0, 0, 104, 29));
+	helpButton->setTexture(assets->BUTTON_INACTIVE_TEXTURE);
+	helpButton->setPosition(350, 475);
+	helpText.setFont(assets->font);
+	helpText.setCharacterSize(20);
+	helpText.setString("Help");
+	helpText.setStyle(sf::Text::Bold);
+	helpText.setPosition(380.f, 477.f);
+	helpText.setColor(sf::Color(0, 0, 0));
+
 	title = new sf::Sprite;
 	title->setTextureRect(sf::IntRect(0, 0, 202, 46));
-	title->setTexture(assets->TITLE_TEXTURE);
+	title->setTexture(assets->MAIN_TITLE_TEXTURE);
 	title->setPosition(100, 50);	
 	
 	hole = new sf::Sprite;
@@ -105,6 +116,8 @@ gameResult startScene::onStartMenu(sf::RenderWindow & window)
 	window.draw(playText);
 	window.draw(*exitButton);
 	window.draw(exitText);
+	window.draw(*helpButton);
+	window.draw(helpText);
 	window.draw(*hole);
 	for (int i = 0; i < NUMBER_INSECTS; ++i)
 	{
@@ -137,6 +150,16 @@ gameResult startScene::onStartMenu(sf::RenderWindow & window)
 			exitButton->setTexture(assets->BUTTON_INACTIVE_TEXTURE);
 		}
 
+		if (((mousePosition.y >= 475) && (mousePosition.y <= 504)
+			&& (mousePosition.x >= 350) && (mousePosition.x <= 450)))
+		{
+			helpButton->setTexture(assets->BUTTON_ACTIVE_TEXTURE);
+		}
+		else
+		{
+			helpButton->setTexture(assets->BUTTON_INACTIVE_TEXTURE);
+		}
+
 		if (sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left)
 		{
 			if (((mousePosition.y >= 180) && (mousePosition.y <= 209)
@@ -149,6 +172,12 @@ gameResult startScene::onStartMenu(sf::RenderWindow & window)
 				&& (mousePosition.x >= 250) && (mousePosition.x <= 350)))
 			{
 				window.close();
+			}
+			if (((mousePosition.y >= 475) && (mousePosition.y <= 504)
+				&& (mousePosition.x >= 350) && (mousePosition.x <= 450)))
+			{
+				result.gameStatus = statusGame::HELP_SCENE;
+				return result;
 			}
 
 		}
@@ -167,7 +196,7 @@ void startScene::moveDoodle(void)
 	doodlePosition = hero.body->getPosition();
 
 	sf::Vector2f position(0.f, 0.f);
-	if (hero.speedY <= 0)
+	if (hero.speedY < 0)
 	{
 		hero.speedY += ACCELERATION;
 		position.y = hero.speedY;
@@ -196,8 +225,8 @@ Collision startScene::checkCollisionPlate(void)
 	if (((doodlePosition.y + DOODLE_HEIGHT >= platePosition.y) && (doodlePosition.y + DOODLE_HEIGHT <= platePosition.y + PLATE_HEIGHT)
 		&& (doodlePosition.x + DOODLE_WIDTH >= platePosition.x) && (doodlePosition.x - PLATE_WIDTH <= platePosition.x)))
 	{
+		result.collision = Collision::COLLISION_PLATE;
 		return  Collision::COLLISION_PLATE;
-		result.collision = Collision::NO_COLLISION;
 	}
 	return Collision::NO_COLLISION;
 }

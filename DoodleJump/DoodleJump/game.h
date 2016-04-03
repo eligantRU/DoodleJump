@@ -11,11 +11,12 @@ public:
 	gameResult onGameOverMenu(sf::RenderWindow & window, uint64_t & score);
 private:
 	sf::Sprite * background;
+	sf::Sprite * playAgainButton;
 	sf::Sprite * goMenuButton;
-	sf::Sprite * exitButton;
+	sf::Sprite * title;
 
+	sf::Text playAgainText;
 	sf::Text goMenuText;
-	sf::Text exitText;
 	sf::Text lastRecord;
 };
 
@@ -34,6 +35,23 @@ private:
 	sf::Text exitText;
 };
 
+struct helpScene
+{
+public:
+	helpScene();
+	~helpScene();
+	gameResult onHelpMenu(sf::RenderWindow & window);
+private:
+	sf::Sprite * background;
+	sf::Sprite * goMenuButton;
+	sf::Sprite * buttonA;
+	sf::Sprite * buttonD;
+
+	sf::Text goMenuText;
+	sf::Text helpText1;
+	sf::Text helpText2;
+};
+
 struct Game
 {
 public:
@@ -42,6 +60,7 @@ public:
 	void launch(void);
 private:
 	startScene sceneStart;
+	helpScene sceneHelp;
 	gameScene sceneGame;
 	gameOverScene sceneGameOver;
 	pauseScene scenePause;
@@ -53,7 +72,8 @@ private:
 	void playPlateSound(void);
 	void playSpringSound(void);
 	void playTrampolineSound(void);
-	void playGameOverSound(void);
 	void playRocketSound(void);
 	void playHatHelicopterSound(void);
+	void playStartGameSound(void);
+	void playGameOverSound(void);
 };

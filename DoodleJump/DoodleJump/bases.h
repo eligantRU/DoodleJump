@@ -2,10 +2,10 @@
 
 #include "stdafx.h"
 
-static const int NUMBER_PLATES = 20; 
+static const int NUMBER_PLATES = 40; 
 static const int NUMBER_BONUSES = 1;
 static const int NUMBER_INSECTS = 5;
-static const float STEP = 5.f;
+static const float STEP = 6.f;
 static const float ACCELERATION = 1.f;
 static const int DOODLE_WIDTH = 45;
 static const int DOODLE_HEIGHT = 45;
@@ -17,15 +17,15 @@ static const int HAT_HELICOPTER_WIDTH = 30;
 static const int HAT_HELICOPTER_HEIGHT = 18;
 static const int ROCKET_WIDTH = 23;
 static const int ROCKET_HEIGHT = 36;
-static const int TRAMPOLINE_WIDTH = 20;
-static const int TRAMPOLINE_HEIGHT = 7;
+static const int TRAMPOLINE_WIDTH = 36;
+static const int TRAMPOLINE_HEIGHT = 13;
 static const int HOLE_WIDTH = 60;
 static const int HOLE_HEIGHT = 54;
 static const float PLATE_DELTA_HEIGHT = 22.f;
-static const float SPRING_DELTA_HEIGHT = 45.f;
-static const float TRAMPLANE_DELTA_HEIGHT = 60.f;
+static const float SPRING_DELTA_HEIGHT = 60.f;
+static const float TRAMPLANE_DELTA_HEIGHT = 65.f;
 static const float HAT_HELICOPTER_DELTA_HEIGHT = 200.f;
-static const float ROCKET_DELTA_HEIGHT = 300.f;
+static const float ROCKET_DELTA_HEIGHT = 180.f;
 
 enum class PlateType
 {
@@ -81,6 +81,7 @@ struct Direction
 enum class statusGame
 {
 	START_SCENE,
+	HELP_SCENE,
 	GAME_SCENE,
 	PAUSE_SCENE,
 	GAME_OVER_SCENE

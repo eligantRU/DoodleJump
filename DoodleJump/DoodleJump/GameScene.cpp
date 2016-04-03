@@ -8,16 +8,18 @@ gameScene::gameScene()
 	endOfGame = false;
 	isPause = false;
 	view.reset(sf::FloatRect(0, 0, 550, 700));
+	hero.speedY = -50.f;
 	qwerty = 0; // TODO: do not optimize using this sheet
 	unstablePlatesCounter = 0;
-	unstablePlateID = -1;
-	initBonuses(); 
+	offsetFallBonus.x = 0.f;
+	offsetFallBonus.y = 0.f;
+	initBonuses();
 
 	hole = new sf::Sprite;
 	hole->setTextureRect(sf::IntRect(0, 0, 60, 54));
 	hole->setTexture(assets->HOLE_TEXTURE);
 	holePosition.x = float(rand() % (550 - HOLE_WIDTH));
-	holePosition.y = -1.f * float(rand() % 1000) - 750.f;
+	holePosition.y = -1.f * float(rand() % 15000) - 10.f * 750.f;
 	hole->setPosition(holePosition.x, holePosition.y);
 
 	text.setFont(assets->font);
@@ -28,12 +30,48 @@ gameScene::gameScene()
 	background = new sf::Sprite;
 	background->setTextureRect(sf::IntRect(0, 0, 550, 700));
 	background->setTexture(assets->BACKGROUND_TEXTURE);
+
+	resetGame();
 }
 
 gameScene::~gameScene()
 {
 	delete background;
 	background = NULL;
+}
+
+gameResult gameScene::onGameFrame(sf::RenderWindow & window)
+{
+	if (!endOfGame)
+	{
+		result.collision = Collision::NO_COLLISION;
+		keyPressed(window);
+		update(window);
+		window.setView(view);
+		render(window);
+		window.display();
+
+		result.points = points;
+		if (isPause)
+		{
+			result.gameStatus = statusGame::PAUSE_SCENE;
+			isPause = false;
+		}
+		else
+		{
+			result.gameStatus = statusGame::GAME_SCENE;
+		}
+		return result;
+	}
+	else
+	{
+		view.setCenter(275, 350);
+		window.setView(view);
+		result.points = points;
+		result.gameStatus = statusGame::GAME_OVER_SCENE;
+		resetGame();
+		return result;
+	}
 }
 
 void gameScene::resetGame(void)
@@ -43,9 +81,10 @@ void gameScene::resetGame(void)
 	endOfGame = false;
 	points = 0;
 	actualBonus = BonusType::NO;
+	offsetFallBonus.x = 0.f;
+	offsetFallBonus.y = 0.f;
 
 	hero.body->setTexture(assets->DOODLE_LEFT_TEXTURE);
-	hero.body->setScale(sf::Vector2f(1.f, 1.f));
 	hero.body->setPosition(260, 350);
 	hero.speedY = -50.f;
 	hero.lastDirectionX = DirectionX::LEFT;
@@ -53,314 +92,167 @@ void gameScene::resetGame(void)
 	hero.positionBeforeDown.y = hero.body->getPosition().y;
 	view.setCenter(275, 350);
 
-	for (int i = 0; i < NUMBER_PLATES; ++i)
+	plate[0].body->setPosition(275 - PLATE_WIDTH/2, 700 - PLATE_HEIGHT);
+	for (int i = 1; i < NUMBER_PLATES/2; ++(++i))
 	{
 		plate[i].body = new sf::Sprite;
 		plate[i].type = PlateType::STATIC;
 		plate[i].body->setTexture(assets->PLATE_STATIC_TEXTURE);
-		float x = float(rand() % (550 - PLATE_WIDTH));
-		float y = float(rand() % (700 - PLATE_HEIGHT)); 
-		plate[i].body->setPosition(x, y);
-	}
 
+		float y1 = float((rand() % 152) + 90);
+		float x1 = (sqrt(484*484 - y1*y1))/2;
+		float y2 = float((rand() % 152) + 90);
+		float x2 = (sqrt(484 * 484 - y1*y1)) / 2;
+		if ((plate[i - 1].body->getPosition().x + x1 >= 550 - PLATE_WIDTH) && (plate[i - 1].body->getPosition().x - x1 <= 0))
+		{
+			x1 = float(rand() % (550-PLATE_WIDTH));
+		}
+
+		plate[i].body->setPosition(x1, plate[i-1].body->getPosition().y - y1);
+		plate[i].body->setPosition(x2, plate[i-1].body->getPosition().y - y2);
+	}
+	view.setCenter(275, 350);
 	initBonuses();
 }
 
-void gameScene::generHole(void)
+void gameScene::generPlates(void)
 {
-	if (hole->getPosition().y >= view.getCenter().y + 350.f)
+	if (plate[0].body->getPosition().y > view.getCenter().x + 350.f)
 	{
-		holePosition.x = float(rand() % (550 - HOLE_WIDTH));
-		holePosition.y = hero.body->getPosition().y -1.f * float(rand() % 7500) - 750.f;
-		hole->setPosition(sf::Vector2f(holePosition.x, holePosition.y));
+		plate[0].type = PlateType::STATIC;
+		plate[0].body->setTexture(assets->PLATE_DYNAMIC_TEXTURE);
+		plate[0].body->setPosition(float(rand() % (550 - PLATE_WIDTH)), view.getCenter().y - 350 - PLATE_HEIGHT);
 	}
-}
 
-void gameScene::generBonuses(void)
-{
-	sf::Vector2f doodlePosition = hero.body->getPosition();
-	sf::Vector2f bonusPosition[NUMBER_BONUSES];
-	sf::Vector2f platePosition;
-
-	for (int bonusIndex = 0; bonusIndex < NUMBER_BONUSES; ++bonusIndex)
+	sf::Vector2f platePosition[NUMBER_PLATES];
+	for (int i = 0; i < NUMBER_PLATES; ++i)
 	{
-		bonusPosition[bonusIndex] = bonus[bonusIndex].body->getPosition();
+		platePosition[i] = plate[i].body->getPosition();
+	}
+	std::array<float, NUMBER_PLATES> platePositionY;
+	for (int i = 0; i < NUMBER_PLATES; ++i)
+	{
+		platePositionY[i] = plate[i].body->getPosition().y;
+	}
+	std::sort(platePositionY.begin(), platePositionY.end(), std::greater<int>());
 
-		if (bonusPosition[bonusIndex].y > view.getCenter().y + 350 + ROCKET_HEIGHT) 
+	for (int i = 1; i < NUMBER_PLATES / 2; ++(++i))
+	{
+		float y1 = float((rand() % 152) + 90);
+		float x1 = (sqrt(484 * 484 - y1 * y1)) / 2;
+
+
+		if (platePosition[i].y > view.getCenter().y + 350.f)
 		{
-			for (int plateIndex = 0; plateIndex < NUMBER_PLATES; ++plateIndex)
+			if ((plate[i].body->getPosition().x + x1 >= 550 - PLATE_WIDTH) && (plate[i].body->getPosition().x - x1 <= 0))
 			{
-				platePosition = plate[plateIndex].body->getPosition();
-				if ((platePosition.y <= doodlePosition.y - 275) && ((plate[plateIndex].type == PlateType::STATIC) || (plate[plateIndex].type == PlateType::STATIC_DYNAMIC_X)))
+				x1 = float(rand() % (550 - PLATE_WIDTH));
+			}
+
+			if ((plate[i].type == PlateType::UNSTABLE) || (plate[i].type == PlateType::UNSTABLE_DYNAMIC_X))
+			{
+				--unstablePlatesCounter;
+			}
+
+			plate[i].body->setRotation(0);
+			switch (rand() % 3)
+			{
+			case 0:
+				plate[i].type = PlateType::STATIC;
+				plate[i].body->setTexture(assets->PLATE_STATIC_TEXTURE);
+				plate[i].speedX = 0;
+				break;
+			case 1:
+				plate[i].type = PlateType::STATIC_DYNAMIC_X;
+				plate[i].body->setTexture(assets->PLATE_DYNAMIC_TEXTURE);
+
+				plate[i].speedX = (rand() % 3) + 1;
+				if (rand() % 2)
 				{
-					int randomNum = rand() % 4;
-					switch (randomNum)
+					plate[i].speedX *= -1;
+				}
+				break;
+			case 2:
+				plate[i].type = PlateType::CLOUD;
+				plate[i].body->setTexture(assets->PLATE_CLOUD_TEXTURE);
+				plate[i].speedX = 0;
+				break;
+			}
+			plate[i].body->setPosition(x1, platePositionY[NUMBER_PLATES-1] - y1); 
+
+			for (int j = 1; j < NUMBER_PLATES/ 2; ++(++j)) // NOTE: Oh my God...What the f*ck r u doing?
+			{
+				float y2 = float((rand() % 152) + 90);
+				float x2 = float(rand() % (550 - PLATE_WIDTH));
+
+				if (platePosition[j].y > view.getCenter().y + 350.f)
+				{
+					/*int divider;
+					if (unstablePlatesCounter < 1)
+					{
+						divider = 5;
+					}
+					else
+					{
+						divider = 3;
+					}
+
+					if ((plate[i].type == PlateType::UNSTABLE) || (plate[i].type == PlateType::UNSTABLE_DYNAMIC_X))
+					{
+						--unstablePlatesCounter;
+					}*/
+
+					plate[i].body->setRotation(0);
+					switch (rand() % 3)
 					{
 					case 0:
-						buildBonus(BonusType::SPRING, bonusIndex, platePosition, plateIndex);
+						plate[i].type = PlateType::STATIC;
+						plate[i].body->setTexture(assets->PLATE_STATIC_TEXTURE);
+						plate[i].speedX = 0;
 						break;
 					case 1:
-						buildBonus(BonusType::TRAMPOLINE, bonusIndex, platePosition, plateIndex);
+						plate[i].type = PlateType::STATIC_DYNAMIC_X;
+						plate[i].body->setTexture(assets->PLATE_DYNAMIC_TEXTURE);
+
+						plate[i].speedX = (rand() % 3) + 1;
+						if (rand() % 2)
+						{
+							plate[i].speedX *= -1;
+						}
 						break;
 					case 2:
-						buildBonus(BonusType::HAT_HELICOPTER, bonusIndex, platePosition, plateIndex);
+						plate[i].type = PlateType::CLOUD;
+						plate[i].body->setTexture(assets->PLATE_CLOUD_TEXTURE);
+						plate[i].speedX = 0;
 						break;
 					case 3:
-						buildBonus(BonusType::ROCKET, bonusIndex, platePosition, plateIndex);
+						plate[i].type = PlateType::UNSTABLE;
+						plate[i].body->setTexture(assets->PLATE_UNSTABLE_TEXTURE);
+						plate[i].speedX = 0;
+						++unstablePlatesCounter;
+						break;
+					case 4:
+						plate[i].type = PlateType::UNSTABLE_DYNAMIC_X;
+						plate[i].body->setTexture(assets->PLATE_UNSTABLE_TEXTURE);
+
+						plate[i].speedX = (rand() % 3) + 1;
+						if (rand() % 2)
+						{
+							plate[i].speedX *= -1;
+						}
+						++unstablePlatesCounter;
 						break;
 					}
+
+					plate[j].body->setPosition(x2, platePositionY[NUMBER_PLATES - 1] - y1);
+					break;
 				}
 			}
 		}
 	}
 }
 
-void gameScene::dropUnstablePlates(void)
-{
-	for (int plateIndex = 0; plateIndex < NUMBER_PLATES; ++plateIndex)
-	{
-		if (plate[plateIndex].fallingPlate == true)
-		{
-			plate[plateIndex].body->rotate(-1.f);
-			plate[plateIndex].body->move(sf::Vector2f(-1 * STEP, 4 * STEP));
-			if (plate[plateIndex].body->getPosition().y >= view.getCenter().y + 350)
-			{
-				plate[plateIndex].body->setRotation(0);
-				plate[plateIndex].fallingPlate = false;
-			}
-		}
-	}
-}
-
-void gameScene::update(sf::RenderWindow & window) // смену текстур в отдельные функции...убожество!
-{
-	sf::Vector2f position(0.f, 0.f);
-	sf::Vector2f doodlePosition = hero.body->getPosition();
-
-	if (hero.direction.x == DirectionX::RIGHT)
-	{
-		position.x += STEP;
-		hero.body->setTexture(assets->DOODLE_JUMP_RIGHT_TEXTURE);
-	}
-	else if (hero.direction.x == DirectionX::LEFT)
-	{
-		position.x -= STEP;
-		hero.body->setTexture(assets->DOODLE_JUMP_LEFT_TEXTURE);
-	}
-
-	if (hero.speedY <= 0)
-	{
-		hero.speedY += ACCELERATION;
-		position.y = hero.speedY;
-
-		if (hero.body->getPosition().y < hero.positionBeforeDown.y)
-		{
-			hero.positionBeforeDown = hero.body->getPosition();
-		}
-	}
-	else
-	{
-		float testingFall = checkDoodleFall();
-		if (testingFall == 0)
-		{
-			actualBonus = BonusType::NO;
-			hero.speedY += ACCELERATION/8;
-			position.y = hero.speedY;
-			if (hero.body->getPosition().y < hero.positionBeforeDown.y)
-			{
-				hero.positionBeforeDown = hero.body->getPosition();
-			}
-		}
-		else
-		{
-			hero.speedY = -testingFall; 
-		}
-	}
-	hero.body->move(position);
-
-	checkCylinderEffect(doodlePosition);
-	
-	
-	if (actualBonus == BonusType::HAT_HELICOPTER) // в отдельную функцию
-	{
-		if (hero.speedY < 10)
-		{
-			bonus[actualBonusId].body->setTexture(assets->HAT_HELOCPTER_FLY_LEFT_TEXTURE);
-			bonus[actualBonusId].body->rotate(-0.07f);
-			bonus[actualBonusId].body->move(sf::Vector2f(-2 * STEP, 3 * STEP));
-		}
-		if (hero.speedY == 0)
-		{
-			qwerty = 0;
-			actualBonus = BonusType::NO;
-			bonus[actualBonusId].body->setPosition(0.f, doodlePosition.y + DOODLE_HEIGHT + 275 + 2 * PLATE_HEIGHT); // костыль
-		}
-
-		if ((qwerty >= 0) && (qwerty <= 5))
-		{
-			delete bonus[actualBonusId].body;
-			bonus[actualBonusId].body = new sf::Sprite;
-			bonus[actualBonusId].body->setTexture(assets->HAT_HELOCPTER_FLY_LEFT_TEXTURE);
-			++qwerty;
-		}
-		if ((qwerty >= 6) && (qwerty <= 10))
-		{
-			delete bonus[actualBonusId].body;
-			bonus[actualBonusId].body = new sf::Sprite;
-			bonus[actualBonusId].body->setTexture(assets->HAT_HELOCPTER_DIAGONAL_LEFT_TEXTURE);
-			++qwerty;
-		}
-		if ((qwerty >= 11) && (qwerty <= 15))
-		{
-			delete bonus[actualBonusId].body;
-			bonus[actualBonusId].body = new sf::Sprite;
-			bonus[actualBonusId].body->setTexture(assets->HAT_HELOCPTER_DIAGONAL_RIGHT_TEXTURE);
-			++qwerty;
-		}
-		if ((qwerty >= 16) && (qwerty <= 20))
-		{
-			delete bonus[actualBonusId].body;
-			bonus[actualBonusId].body = new sf::Sprite;
-			bonus[actualBonusId].body->setTexture(assets->HAT_HELOCPTER_FLY_RIGHT_TEXTURE);
-			++qwerty;
-		}
-		if (qwerty == 20)
-		{
-			qwerty = 0;
-		}
-
-		if ((qwerty >= 0) && (qwerty <= 20) && (actualBonus != BonusType::NO))
-		{
-			if (hero.lastDirectionX == DirectionX::RIGHT)
-			{
-				bonus[actualBonusId].body->setPosition(hero.body->getPosition().x, hero.body->getPosition().y - 14);
-			}
-			else if (hero.lastDirectionX == DirectionX::LEFT)
-			{
-				bonus[actualBonusId].body->setPosition(hero.body->getPosition().x + 15, hero.body->getPosition().y - 14);
-			}
-		}
-	}
-	
-	if (actualBonus == BonusType::ROCKET) // в отдельную функцию
-	{
-		if (hero.speedY <= 15)
-		{
-			bonus[actualBonusId].body->setTexture(assets->ROCKET_NONE_TEXTURE);
-			bonus[actualBonusId].body->rotate(-0.07f);
-			bonus[actualBonusId].body->move(sf::Vector2f(-2 * STEP, 6 * STEP));
-		}
-		if (hero.speedY == 0)
-		{
-			qwerty = 0;
-			actualBonus = BonusType::NO;
-			bonus[actualBonusId].body->setPosition(0.f, doodlePosition.y + DOODLE_HEIGHT + 275 + 2 * PLATE_HEIGHT); // костыль
-		}
-
-		if ((qwerty >= 0) && (qwerty <= 5))
-		{
-			delete bonus[actualBonusId].body;
-			bonus[actualBonusId].body = new sf::Sprite; 
-			if (hero.lastDirectionX == DirectionX::RIGHT)
-			{
-				bonus[actualBonusId].body->setTexture(assets->ROCKET_1_LEFT_TEXTURE);
-			}
-			else if (hero.lastDirectionX == DirectionX::LEFT)
-			{
-				bonus[actualBonusId].body->setTexture(assets->ROCKET_1_RIGHT_TEXTURE);
-			}
-			++qwerty;
-		}
-		if ((qwerty >= 6) && (qwerty <= 10))
-		{
-			delete bonus[actualBonusId].body;
-			bonus[actualBonusId].body = new sf::Sprite; 
-			if (hero.lastDirectionX == DirectionX::RIGHT)
-			{
-				bonus[actualBonusId].body->setTexture(assets->ROCKET_2_LEFT_TEXTURE);
-			}
-			else if (hero.lastDirectionX == DirectionX::LEFT)
-			{
-				bonus[actualBonusId].body->setTexture(assets->ROCKET_2_RIGHT_TEXTURE);
-			}
-			++qwerty;
-		}
-		if ((qwerty >= 11) && (qwerty <= 15))
-		{
-			delete bonus[actualBonusId].body;
-			bonus[actualBonusId].body = new sf::Sprite; 
-			if (hero.lastDirectionX == DirectionX::RIGHT)
-			{
-				bonus[actualBonusId].body->setTexture(assets->ROCKET_3_LEFT_TEXTURE);
-			}
-			else if (hero.lastDirectionX == DirectionX::LEFT)
-			{
-				bonus[actualBonusId].body->setTexture(assets->ROCKET_3_RIGHT_TEXTURE);
-			}
-			++qwerty;
-		}
-		if (qwerty == 15)
-		{
-			qwerty = 0;
-		}
-
-		if ((qwerty >= 0) && (qwerty <= 15) && (actualBonus != BonusType::NO))
-		{
-			if (hero.lastDirectionX == DirectionX::RIGHT)
-			{
-				if ((qwerty >= 0) && (qwerty <= 5))
-				{
-					bonus[actualBonusId].body->setPosition(hero.body->getPosition().x - ROCKET_WIDTH+11, hero.body->getPosition().y);
-				}
-				if ((qwerty >= 6) && (qwerty <= 10))
-				{
-					bonus[actualBonusId].body->setPosition(hero.body->getPosition().x - ROCKET_WIDTH+8, hero.body->getPosition().y);
-				}
-				if ((qwerty >= 11) && (qwerty <= 15))
-				{
-					bonus[actualBonusId].body->setPosition(hero.body->getPosition().x - ROCKET_WIDTH+5, hero.body->getPosition().y);
-				}
-			}
-			else if (hero.lastDirectionX == DirectionX::LEFT)
-			{
-				if ((qwerty >= 0) && (qwerty <= 5))
-				{
-					bonus[actualBonusId].body->setPosition(hero.body->getPosition().x + DOODLE_WIDTH, hero.body->getPosition().y);
-				}
-				if ((qwerty >= 6) && (qwerty <= 10))
-				{
-					bonus[actualBonusId].body->setPosition(hero.body->getPosition().x + DOODLE_WIDTH-1, hero.body->getPosition().y);					
-				}
-				if ((qwerty >= 11) && (qwerty <= 15))
-				{
-					bonus[actualBonusId].body->setPosition(hero.body->getPosition().x + DOODLE_WIDTH-4, hero.body->getPosition().y);
-				}
-			}
-		}
-	}
-
-	if ((hero.speedY <= 0) && (doodlePosition.y <= hero.positionBeforeDown.y))
-	{
-		view.setCenter(275, doodlePosition.y);
-		background->setPosition(0, doodlePosition.y - 350);
-		text.setPosition(0, doodlePosition.y - 350);
-		++points;
-	}
-
-	moveBonuses();
-	dropUnstablePlates();
-	moveDynamicPlates();
-	generPlates();
-	generBonuses();
-	generHole();
-
-	if (checkGameEnd())
-	{
-		endOfGame = true;
-	}
-}
-
-void gameScene::generPlates(void)
+/*void gameScene::generPlates(void)
 {
 	sf::Vector2f platePosition[NUMBER_PLATES];
 
@@ -370,7 +262,7 @@ void gameScene::generPlates(void)
 		float x = float(rand() % (550 - PLATE_WIDTH));
 		float y = float(rand() % 150); // TODO: —юда запилить функцию дл€ равномерной генерации плит по высоте
 
-		if (platePosition[i].y >= view.getCenter().y + 350.f)
+		if (platePosition[i].y > view.getCenter().y + 350.f + ROCKET_HEIGHT)
 		{
 			int divider;
 			if (unstablePlatesCounter < 3)
@@ -431,57 +323,405 @@ void gameScene::generPlates(void)
 			plate[i].body->setPosition(x, view.getCenter().y - 350.f - y);
 		}
 	}
+}*/
+
+/*void gameScene::resetGame(void)
+{
+	view.reset(sf::FloatRect(0, 0, 550, 700));
+	text.setPosition(0, 0);
+	endOfGame = false;
+	points = 0;
+	actualBonus = BonusType::NO;	
+	offsetFallBonus.x = 0.f;
+	offsetFallBonus.y = 0.f;
+
+	hero.body->setTexture(assets->DOODLE_LEFT_TEXTURE);
+	hero.body->setScale(sf::Vector2f(1.f, 1.f));
+	hero.body->setPosition(260, 350);
+	hero.speedY = -50.f;
+	hero.lastDirectionX = DirectionX::LEFT;
+	qwerty = 0; // TODO: do not optimize using this sheet
+	hero.positionBeforeDown.y = hero.body->getPosition().y;
+	view.setCenter(275, 350);
+
+	for (int i = 0; i < NUMBER_PLATES; ++i)
+	{
+		plate[i].body = new sf::Sprite;
+		plate[i].type = PlateType::STATIC;
+		plate[i].body->setTexture(assets->PLATE_STATIC_TEXTURE);
+		float x = float(rand() % (550 - PLATE_WIDTH));
+		float y = float(rand() % (700 - PLATE_HEIGHT)); 
+		plate[i].body->setPosition(x, y);
+	}
+	
+	initBonuses();
+}*/
+
+void gameScene::generHole(void)
+{
+	if (hole->getPosition().y >= view.getCenter().y + 350.f)
+	{
+		holePosition.x = float(rand() % (550 - HOLE_WIDTH));
+		holePosition.y = hero.body->getPosition().y -1.f * float(rand() % 15000) - 10.f * 750.f;
+		hole->setPosition(sf::Vector2f(holePosition.x, holePosition.y));
+	}
 }
 
-gameResult gameScene::onGameFrame(sf::RenderWindow & window)
+void gameScene::generBonuses(void)
 {
-	if (!endOfGame)
-	{
-		result.collision = Collision::NO_COLLISION;
-		keyPressed(window);
-		update(window);
-		window.setView(view);
-		render(window);
-		window.display();
+	sf::Vector2f doodlePosition = hero.body->getPosition();
+	sf::Vector2f bonusPosition[NUMBER_BONUSES];
+	sf::Vector2f platePosition;
 
-		result.points = points;
-		if (isPause)
+	for (int bonusIndex = 0; bonusIndex < NUMBER_BONUSES; ++bonusIndex)
+	{
+		bonusPosition[bonusIndex] = bonus[bonusIndex].body->getPosition();
+
+		if (bonusPosition[bonusIndex].y > view.getCenter().y + 350) 
 		{
-			result.gameStatus = statusGame::PAUSE_SCENE;
-			isPause = false;
+			for (int plateIndex = 0; plateIndex < NUMBER_PLATES; ++plateIndex)
+			{
+				platePosition = plate[plateIndex].body->getPosition();
+				if ((platePosition.y < view.getCenter().y - 350 - ROCKET_HEIGHT) && ((plate[plateIndex].type == PlateType::STATIC) || (plate[plateIndex].type == PlateType::STATIC_DYNAMIC_X)))
+				{
+					int randomNum = rand() % 4;
+					switch (randomNum)
+					{
+					case 0:
+						buildBonus(BonusType::SPRING, bonusIndex, platePosition, plateIndex);
+						break;
+					case 1:
+						buildBonus(BonusType::TRAMPOLINE, bonusIndex, platePosition, plateIndex);
+						break;
+					case 2:
+						buildBonus(BonusType::HAT_HELICOPTER, bonusIndex, platePosition, plateIndex);
+						break;
+					case 3:
+						buildBonus(BonusType::ROCKET, bonusIndex, platePosition, plateIndex);
+						break;
+					}
+				}
+			}
 		}
-		else
+	}
+}
+
+void gameScene::dropUnstablePlates(void)
+{
+	for (int plateIndex = 0; plateIndex < NUMBER_PLATES; ++plateIndex)
+	{
+		if (plate[plateIndex].fallingPlate == true)
 		{
-			result.gameStatus = statusGame::GAME_SCENE;
+			plate[plateIndex].body->rotate(-1.f);
+			plate[plateIndex].body->move(sf::Vector2f(-1 * STEP, 4 * STEP));
+			if (plate[plateIndex].body->getPosition().y >= view.getCenter().y + 350)
+			{
+				plate[plateIndex].body->setRotation(0);
+				plate[plateIndex].fallingPlate = false;
+			}
 		}
-		return result;
+	}
+}
+
+void gameScene::update(sf::RenderWindow & window) // смену текстур в отдельные функции...убожество!
+{
+	sf::Vector2f position(0.f, 0.f);
+	sf::Vector2f doodlePosition = hero.body->getPosition();
+
+	if (hero.direction.x == DirectionX::RIGHT)
+	{
+		position.x += STEP;
+		hero.body->setTexture(assets->DOODLE_JUMP_RIGHT_TEXTURE);
+	}
+	else if (hero.direction.x == DirectionX::LEFT)
+	{
+		position.x -= STEP;
+		hero.body->setTexture(assets->DOODLE_JUMP_LEFT_TEXTURE);
+	}
+
+	if (hero.speedY < 0)
+	{
+		hero.speedY += ACCELERATION;
+		position.y = hero.speedY;
+
+		if (hero.body->getPosition().y < hero.positionBeforeDown.y)
+		{
+			hero.positionBeforeDown = hero.body->getPosition();
+		}
 	}
 	else
 	{
-		view.setCenter(275, 350);
-		window.setView(view);
-		result.points = points;
-		result.gameStatus = statusGame::GAME_OVER_SCENE;
-		resetGame();
-		return result;
+		float testingFall = checkDoodleFall();
+		if (testingFall == 0)
+		{
+			actualBonus = BonusType::NO;
+			hero.speedY += ACCELERATION/8;
+			position.y = hero.speedY;
+			if (hero.body->getPosition().y < hero.positionBeforeDown.y)
+			{
+				hero.positionBeforeDown = hero.body->getPosition();
+			}
+		}
+		else
+		{
+			hero.speedY = -testingFall; 
+		}
+	}
+	hero.body->move(position);
+
+	checkCylinderEffect(doodlePosition);
+	
+	
+	if (actualBonus == BonusType::HAT_HELICOPTER) // в отдельную функцию
+	{
+		if ((hero.speedY >= 0) || (bonus[actualBonusId].body->getPosition().y < view.getCenter().y - 350 - HAT_HELICOPTER_HEIGHT))
+		{
+			qwerty = 0;
+			actualBonus = BonusType::NO;
+			offsetFallBonus.x = 0.f;
+			offsetFallBonus.y = 0.f;
+			bonus[actualBonusId].body->setRotation(0);
+			bonus[actualBonusId].body->setPosition(-100.f, doodlePosition.y - DOODLE_HEIGHT - 350 - HAT_HELICOPTER_HEIGHT); // костыль
+		}
+
+		if ((qwerty >= 0) && (qwerty <= 5))
+		{
+			delete bonus[actualBonusId].body;
+			bonus[actualBonusId].body = new sf::Sprite;
+			bonus[actualBonusId].body->setTexture(assets->HAT_HELOCPTER_FLY_LEFT_TEXTURE);
+			++qwerty;
+		}
+		if ((qwerty >= 6) && (qwerty <= 10))
+		{
+			delete bonus[actualBonusId].body;
+			bonus[actualBonusId].body = new sf::Sprite;
+			bonus[actualBonusId].body->setTexture(assets->HAT_HELOCPTER_DIAGONAL_LEFT_TEXTURE);
+			++qwerty;
+		}
+		if ((qwerty >= 11) && (qwerty <= 15))
+		{
+			delete bonus[actualBonusId].body;
+			bonus[actualBonusId].body = new sf::Sprite;
+			bonus[actualBonusId].body->setTexture(assets->HAT_HELOCPTER_DIAGONAL_RIGHT_TEXTURE);
+			++qwerty;
+		}
+		if ((qwerty >= 16) && (qwerty <= 20))
+		{
+			delete bonus[actualBonusId].body;
+			bonus[actualBonusId].body = new sf::Sprite;
+			bonus[actualBonusId].body->setTexture(assets->HAT_HELOCPTER_FLY_RIGHT_TEXTURE);
+			++qwerty;
+		}
+		if (qwerty == 20)
+		{
+			qwerty = 0;
+		}
+
+		if ((qwerty >= 0) && (qwerty <= 20) && (actualBonus != BonusType::NO) && (hero.speedY < -0.05f * HAT_HELICOPTER_DELTA_HEIGHT))
+		{
+			if (hero.lastDirectionX == DirectionX::RIGHT)
+			{
+				bonus[actualBonusId].body->setPosition(hero.body->getPosition().x, hero.body->getPosition().y - 14);
+			}
+			else if (hero.lastDirectionX == DirectionX::LEFT)
+			{
+				bonus[actualBonusId].body->setPosition(hero.body->getPosition().x + 15, hero.body->getPosition().y - 14);
+			}
+		}
+		
+		if (hero.speedY >= -0.05f * HAT_HELICOPTER_DELTA_HEIGHT)
+		{
+			bonus[actualBonusId].body = new sf::Sprite;
+			bonus[actualBonusId].body->setTexture(assets->HAT_HELOCPTER_NONE_LEFT_TEXTURE);
+			if (actualBonus != BonusType::NO)
+			{
+				bonus[actualBonusId].body->setPosition(hero.body->getPosition().x, hero.body->getPosition().y - 14);
+			}
+			bonus[actualBonusId].body->rotate(-10.f);
+			offsetFallBonus.x += -2.f * STEP;
+			offsetFallBonus.y += 6.f * STEP;
+			bonus[actualBonusId].body->move(sf::Vector2f(offsetFallBonus));
+		}
+	}
+
+	if (actualBonus == BonusType::TRAMPOLINE) // в отдельную функцию
+	{
+		if (hero.speedY >= 0)
+		{
+			hero.body->setRotation(0.f);
+			actualBonus = BonusType::NO;
+		}
+		else
+		{
+			hero.body->rotate(360.f / TRAMPLANE_DELTA_HEIGHT);
+		}
+	}
+	
+	if (actualBonus == BonusType::ROCKET) // в отдельную функцию
+	{
+		if ((hero.speedY >= 0) || (bonus[actualBonusId].body->getPosition().y < view.getCenter().y - 350 - ROCKET_HEIGHT))
+		{
+			qwerty = 0;
+			actualBonus = BonusType::NO;
+			offsetFallBonus.x = 0.f;
+			offsetFallBonus.y = 0.f;
+			bonus[actualBonusId].body->setRotation(0);
+			bonus[actualBonusId].body->setPosition(-100.f, doodlePosition.y - DOODLE_HEIGHT - 350 - ROCKET_HEIGHT); // костыль
+		}
+
+		if ((qwerty >= 0) && (qwerty <= 2))
+		{
+			delete bonus[actualBonusId].body;
+			bonus[actualBonusId].body = new sf::Sprite; 
+			if (hero.lastDirectionX == DirectionX::RIGHT)
+			{
+				bonus[actualBonusId].body->setTexture(assets->ROCKET_0_LEFT_TEXTURE);
+			}
+			else if (hero.lastDirectionX == DirectionX::LEFT)
+			{
+				bonus[actualBonusId].body->setTexture(assets->ROCKET_0_RIGHT_TEXTURE);
+			}
+			++qwerty;
+		}
+		if ((qwerty >= 3) && (qwerty <= 5))
+		{
+			delete bonus[actualBonusId].body;
+			bonus[actualBonusId].body = new sf::Sprite; 
+			if (hero.lastDirectionX == DirectionX::RIGHT)
+			{
+				bonus[actualBonusId].body->setTexture(assets->ROCKET_1_LEFT_TEXTURE);
+			}
+			else if (hero.lastDirectionX == DirectionX::LEFT)
+			{
+				bonus[actualBonusId].body->setTexture(assets->ROCKET_1_RIGHT_TEXTURE);
+			}
+			++qwerty;
+		}
+		if ((qwerty >= 6) && (qwerty <= 8))
+		{
+			delete bonus[actualBonusId].body;
+			bonus[actualBonusId].body = new sf::Sprite; 
+			if (hero.lastDirectionX == DirectionX::RIGHT)
+			{
+				bonus[actualBonusId].body->setTexture(assets->ROCKET_2_LEFT_TEXTURE);
+			}
+			else if (hero.lastDirectionX == DirectionX::LEFT)
+			{
+				bonus[actualBonusId].body->setTexture(assets->ROCKET_2_RIGHT_TEXTURE);
+			}
+			++qwerty;
+		}
+		if ((qwerty >= 9) && (qwerty <= 11))
+		{
+			delete bonus[actualBonusId].body;
+			bonus[actualBonusId].body = new sf::Sprite;
+			if (hero.lastDirectionX == DirectionX::RIGHT)
+			{
+				bonus[actualBonusId].body->setTexture(assets->ROCKET_3_LEFT_TEXTURE);
+			}
+			else if (hero.lastDirectionX == DirectionX::LEFT)
+			{
+				bonus[actualBonusId].body->setTexture(assets->ROCKET_3_RIGHT_TEXTURE);
+			}
+			++qwerty;
+		}
+		if (qwerty == 11)
+		{
+			qwerty = 0;
+		}
+
+		if ((qwerty >= 0) && (qwerty <= 11) && (actualBonus != BonusType::NO) && (hero.speedY < -0.05f * ROCKET_DELTA_HEIGHT))
+		{
+			if (hero.lastDirectionX == DirectionX::RIGHT)
+			{
+				if ((qwerty >= 0) && (qwerty <= 2))
+				{
+					bonus[actualBonusId].body->setPosition(hero.body->getPosition().x - 13, hero.body->getPosition().y);
+				}
+				if ((qwerty >= 3) && (qwerty <= 5))
+				{
+					bonus[actualBonusId].body->setPosition(hero.body->getPosition().x - 13, hero.body->getPosition().y);
+				}
+				if ((qwerty >= 6) && (qwerty <= 8))
+				{
+					bonus[actualBonusId].body->setPosition(hero.body->getPosition().x - 15, hero.body->getPosition().y);
+				}
+				if ((qwerty >= 9) && (qwerty <= 11))
+				{
+					bonus[actualBonusId].body->setPosition(hero.body->getPosition().x - 17, hero.body->getPosition().y);
+				}
+			}
+			else if (hero.lastDirectionX == DirectionX::LEFT)
+			{
+				if ((qwerty >= 0) && (qwerty <= 2))
+				{
+					bonus[actualBonusId].body->setPosition(hero.body->getPosition().x + DOODLE_WIDTH + 1, hero.body->getPosition().y);
+				}
+				if ((qwerty >= 3) && (qwerty <= 5))
+				{
+					bonus[actualBonusId].body->setPosition(hero.body->getPosition().x + DOODLE_WIDTH + 1, hero.body->getPosition().y);
+				}
+				if ((qwerty >= 6) && (qwerty <= 8))
+				{
+					bonus[actualBonusId].body->setPosition(hero.body->getPosition().x + DOODLE_WIDTH, hero.body->getPosition().y);					
+				}
+				if ((qwerty >= 9) && (qwerty <= 11))
+				{
+					bonus[actualBonusId].body->setPosition(hero.body->getPosition().x + DOODLE_WIDTH - 5, hero.body->getPosition().y);
+				}
+			}
+		}
+		
+		if (hero.speedY >= -0.05f * ROCKET_DELTA_HEIGHT)
+		{
+			bonus[actualBonusId].body = new sf::Sprite;
+			bonus[actualBonusId].body->setTexture(assets->ROCKET_NONE_TEXTURE);
+			if (actualBonus != BonusType::NO)
+			{
+				bonus[actualBonusId].body->setPosition(hero.body->getPosition().x, hero.body->getPosition().y);
+			}
+			bonus[actualBonusId].body->rotate(-10.f);
+			offsetFallBonus.x += -2.f * STEP;
+			offsetFallBonus.y += 6.f * STEP;
+			bonus[actualBonusId].body->move(sf::Vector2f(offsetFallBonus));
+		}
+	}
+
+	if ((hero.speedY <= 0) && (doodlePosition.y <= hero.positionBeforeDown.y))
+	{
+		view.setCenter(275, doodlePosition.y);
+		background->setPosition(0, doodlePosition.y - 350);
+		text.setPosition(0, doodlePosition.y - 350);
+		++points;
+	}
+
+	moveBonuses();
+	dropUnstablePlates();
+	moveDynamicPlates();
+	generPlates();
+	generBonuses();
+	generHole();
+
+	if (checkGameEnd())
+	{
+		endOfGame = true;
 	}
 }
 
 bool gameScene::checkGameEnd(void)
 {
 	sf::Vector2f doodlePosition = hero.body->getPosition();
-	if ((checkCollisionHole(doodlePosition) == Collision::COLLISION_HOLE) && ((actualBonus != BonusType::ROCKET) && (actualBonus != BonusType::HAT_HELICOPTER)))
+	if ((checkCollisionHole(doodlePosition) == Collision::COLLISION_HOLE) && ((actualBonus == BonusType::NO)))
 	{
 		return true;
 	}
-	if (hero.body->getPosition().y <= view.getCenter().y + 350.f + hero.speedY + DOODLE_HEIGHT)
+	if ((hero.body->getPosition().y <= view.getCenter().y + 350.f) || actualBonus != BonusType::NO) // бага нет, работает, не костыль, но терзают сомнени€
+		//(hero.body->getPosition().y <= view.getCenter().y + 700.f + hero.speedY + DOODLE_HEIGHT) // бага нет, но костыль
+		//(hero.body->getPosition().y <= view.getCenter().y + 350.f + hero.speedY + DOODLE_HEIGHT) // было
 	{
 		return false;
 	}
-	else
-	{
-		return true;
-	}
+	return true;
 }
 
 void gameScene::render(sf::RenderWindow & window) // TODO: try to use std::vector
@@ -585,7 +825,7 @@ void gameScene::moveBonuses(void)
 
 void gameScene::checkCylinderEffect(sf::Vector2f & doodlePosition)
 {
-	if (doodlePosition.x <= -1 * DOODLE_WIDTH)
+	if (doodlePosition.x <= -DOODLE_WIDTH)
 	{
 		hero.body->setPosition(550 - DOODLE_WIDTH, doodlePosition.y);
 	}

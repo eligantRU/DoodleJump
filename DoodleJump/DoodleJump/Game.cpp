@@ -26,7 +26,7 @@ void Game::playPlateSound(void)
 
 void Game::playSpringSound(void)
 {
-	PlaySound(L"sounds/springshoes.wav", NULL, NULL); // TODO: Ќе тот звук!
+	PlaySound(L"sounds/feder.wav", NULL, NULL);
 }
 
 void Game::playTrampolineSound(void)
@@ -34,19 +34,24 @@ void Game::playTrampolineSound(void)
 	PlaySound(L"sounds/trampoline.wav", NULL, NULL);
 }
 
-void Game::playGameOverSound(void)
-{
-	PlaySound(L"sounds/pada.wav", NULL, NULL);
-}
-
 void Game::playRocketSound(void)
 {
-	PlaySound(L"sounds/rocket.wav", NULL, NULL);
+	PlaySound(L"sounds/jetpack.wav", NULL, NULL);
 }
 
 void Game::playHatHelicopterSound(void)
 {
 	PlaySound(L"sounds/propeller.wav", NULL, NULL);
+}
+
+void Game::playStartGameSound(void)
+{
+	PlaySound(L"sounds/start.wav", NULL, NULL);
+}
+
+void Game::playGameOverSound(void)
+{
+	PlaySound(L"sounds/pada.wav", NULL, NULL);
 }
 
 void Game::gameLoop(sf::RenderWindow & window)
@@ -56,16 +61,29 @@ void Game::gameLoop(sf::RenderWindow & window)
 	sf::Thread soundPlateThread(&Game::playPlateSound, this);
 	sf::Thread soundSpringThread(&Game::playSpringSound, this);
 	sf::Thread soundTrampolineThread(&Game::playTrampolineSound, this);
-	sf::Thread soundGameOverThread(&Game::playGameOverSound, this);
 	sf::Thread soundRocketThread(&Game::playRocketSound, this);
 	sf::Thread soundHatHelicopterThread(&Game::playHatHelicopterSound, this);
+	sf::Thread soundStartGameThread(&Game::playStartGameSound, this);
+	sf::Thread soundGameOverThread(&Game::playGameOverSound, this);
+
 	while (window.isOpen())
 	{
 		switch (status.gameStatus)
 		{
 		case statusGame::START_SCENE:
-			status = sceneStart.onStartMenu(window);
-			//status.gameStatus = result.gameStatus;
+			result = sceneStart.onStartMenu(window);
+			status.gameStatus = result.gameStatus; 
+			if (result.gameStatus == statusGame::GAME_SCENE)
+			{
+				soundStartGameThread.launch(); // TODO: ќбработчик снизу, вытащи вниз
+			}
+			else
+			{
+				if (result.gameStatus == statusGame::HELP_SCENE)
+				{
+					status.gameStatus = statusGame::HELP_SCENE;
+				}
+			}
 			break;
 		case statusGame::GAME_SCENE:
 			result = sceneGame.onGameFrame(window);
@@ -78,7 +96,7 @@ void Game::gameLoop(sf::RenderWindow & window)
 				if (result.gameStatus == statusGame::GAME_OVER_SCENE)
 				{
 					status.gameStatus = statusGame::GAME_OVER_SCENE;
-					soundGameOverThread.launch();
+					soundGameOverThread.launch(); // TODO: ќбработчик снизу, вытащи вниз
 				}
 				else
 				{
@@ -90,35 +108,35 @@ void Game::gameLoop(sf::RenderWindow & window)
 			}
 			break;
 		case statusGame::GAME_OVER_SCENE:
-			status = sceneGameOver.onGameOverMenu(window, result.points);
+			status = sceneGameOver.onGameOverMenu(window, result.points); // NOTE: не требует росписи на if'ы т.к. сразу в status присваиваетс€
 			break;
 		case statusGame::PAUSE_SCENE:
-			status = scenePause.onPauseMenu(window);
+			status = scenePause.onPauseMenu(window); // NOTE: не требует росписи на if'ы т.к. сразу в status присваиваетс€
+			break;
+		case statusGame::HELP_SCENE:
+			status = sceneHelp.onHelpMenu(window); // NOTE: не требует росписи на if'ы т.к. сразу в status присваиваетс€
 			break;
 		}
 
-		if (result.gameStatus == statusGame::GAME_SCENE)
+		switch (result.collision)
 		{
-			switch (result.collision)
-			{
-			case Collision::COLLISION_PLATE:
-				soundPlateThread.launch();
-				break;
-			case Collision::COLLISION_SPRING:
-				soundSpringThread.launch();
-				break;
-			case Collision::COLLISION_TRAMPLANE:
-				soundTrampolineThread.launch();
-				break;
-			case Collision::COLLISION_ROCKET:
-				soundRocketThread.launch();
-				break;
-			case Collision::COLLISION_HAT_HELICOPTER:
-				soundHatHelicopterThread.launch();
-				break;
-			default:
-				break;
-			}
+		case Collision::COLLISION_PLATE:
+			soundPlateThread.launch();
+			break;
+		case Collision::COLLISION_SPRING:
+			soundSpringThread.launch();
+			break;
+		case Collision::COLLISION_TRAMPLANE:
+			soundTrampolineThread.launch();
+			break;
+		case Collision::COLLISION_ROCKET:
+			soundRocketThread.launch();
+			break;
+		case Collision::COLLISION_HAT_HELICOPTER:
+			soundHatHelicopterThread.launch();
+			break;
+		default:
+			break;
 		}
 	}
 }

@@ -11,7 +11,7 @@ Doodle::Doodle()
 	lastDirectionX = DirectionX::LEFT;
 	positionBeforeDown.y = body->getPosition().y;
 	direction.y = DirectionY::DOWN;
-	speedY = -25.f;
+	speedY = -50.f;
 }
 
 Doodle::~Doodle()

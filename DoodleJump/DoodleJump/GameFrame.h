@@ -37,7 +37,6 @@ private:
 	uint64_t points;
 	BonusType actualBonus;
 	int actualBonusId;
-	int unstablePlateID;
 	sf::Vector2f holePosition;
 	int unstablePlatesCounter;
 	sf::Sprite * background;
@@ -45,6 +44,7 @@ private:
 	bool isPause;
 	gameResult result;
 	void resetGame(void);
+	sf::Vector2f offsetFallBonus;
 
 	// Enemy * enemy[NUMBER_ENEMY];
 };

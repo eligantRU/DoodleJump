@@ -19,6 +19,7 @@ private:
 	sf::Sprite * background;
 	sf::Sprite * playButton;
 	sf::Sprite * exitButton;
+	sf::Sprite * helpButton;
 	sf::Sprite * hole;
 	sf::Vector2f platePosition;
 	sf::Vector2f doodlePosition;
@@ -26,6 +27,7 @@ private:
 	sf::Text playText;
 	sf::Text recordText;
 	sf::Text exitText;
+	sf::Text helpText;
 
 	gameResult result;
 };

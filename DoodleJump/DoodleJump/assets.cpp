@@ -6,8 +6,10 @@
 Assets::Assets()
 {
 	addTexture(BACKGROUND_TEXTURE, "images/background.png", true);
-	addTexture(TRAMPOLINE_TEXTURE, "images/TRAMPOLINE_20_7.png");
+	addTexture(TRAMPOLINE_TEXTURE, "images/TRAMPOLINE_36_13.png");
 	addTexture(ROCKET_NONE_TEXTURE, "images/Rocket_none_23_36.png");
+	addTexture(ROCKET_0_LEFT_TEXTURE, "images/Rocket_left_12_36.png");
+	addTexture(ROCKET_0_RIGHT_TEXTURE, "images/Rocket_right_12_36.png");
 	addTexture(ROCKET_1_LEFT_TEXTURE, "images/Rocket_left_1_12_40.png");
 	addTexture(ROCKET_1_RIGHT_TEXTURE, "images/Rocket_right_1_12_40.png");
 	addTexture(ROCKET_2_LEFT_TEXTURE, "images/Rocket_left_2_15_52.png");
@@ -33,7 +35,8 @@ Assets::Assets()
 	addTexture(PLATE_UNSTABLE_TEXTURE, "images/Plate_63_15_Unstable.png");
 	addTexture(PLATE_BROKEN_LEFT_TEXTURE, "images/Plate_broken_left_24_29.png");
 	addTexture(PLATE_BROKEN_RIGHT_TEXTURE, "images/Plate_broken_right_20_32.png");
-	addTexture(TITLE_TEXTURE, "images/Title_202_46.png");
+	addTexture(MAIN_TITLE_TEXTURE, "images/Title_202_46.png");
+	addTexture(GAME_OVER_TITLE_TEXTURE, "images/gameOver_236_96.png");
 	addTexture(STARS_1_TEXTURE, "images/stars_1_39_30.png");
 	addTexture(STARS_2_TEXTURE, "images/stars_2_38_28.png");
 	addTexture(BUTTON_ACTIVE_TEXTURE, "images/button_active_104_29.png");
@@ -54,6 +57,9 @@ Assets::Assets()
 	addTexture(MONSTER_GREEN_TEXTURE, "images/Monster_green_82_53.png");
 	addTexture(MONSTER_BLUE_LEFT_TEXTURE, "images/Monster_blue_left_37_49.png");
 	addTexture(MONSTER_BLUE_RIGHT_TEXTURE, "images/Monster_blue_right_37_49.png");
+	
+	addTexture(BUTTON_A_TEXTURE, "images/A_key_94_78.png");
+	addTexture(BUTTON_D_TEXTURE, "images/D_key_92_78.png");
 
 	if (!font.loadFromFile("arial.ttf"))
 	{
