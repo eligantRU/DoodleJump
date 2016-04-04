@@ -1,10 +1,9 @@
 #include "stdafx.h"
-#include "helpScene.h"
+#include "sheet.h"
 
 helpScene::helpScene()
 {	
 	goMenuButton = new sf::Sprite;
-	goMenuButton->setTextureRect(sf::IntRect(0, 0, 104, 29));
 	goMenuButton->setTexture(assets->BUTTON_INACTIVE_TEXTURE);
 	goMenuButton->setPosition(200, 210);
 	goMenuText.setFont(assets->font);
@@ -56,9 +55,23 @@ helpScene::~helpScene()
 	buttonD = NULL;
 }
 
-gameResult helpScene::onHelpMenu(sf::RenderWindow & window) // убожество
+gameResult helpScene::onHelpMenu(sf::RenderWindow & window)
 {
-	window.clear(sf::Color(0, 255, 255));
+	result.gameStatus = statusGame::HELP_SCENE;
+	result.collision = Collision::NO_COLLISION;
+	result.points = 0;
+
+	render(window);
+	window.display();
+
+	checkEvents(window);
+	return result;
+}
+
+
+void helpScene::render(sf::RenderWindow & window)
+{
+	window.clear(sf::Color(255, 255, 255));
 	window.draw(*background);
 	window.draw(*goMenuButton);
 	window.draw(goMenuText);
@@ -66,39 +79,45 @@ gameResult helpScene::onHelpMenu(sf::RenderWindow & window) // убожество
 	window.draw(*buttonA);
 	window.draw(*buttonD);
 	window.draw(helpText2);
-	window.display();
+}
 
-	gameResult result;
-	result.collision = Collision::NO_COLLISION;
+void helpScene::checkEvents(sf::RenderWindow & window)
+{
 	sf::Event event;
 	while (window.pollEvent(event))
 	{
 		sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
-
-		if (((mousePosition.y >= 210) && (mousePosition.y <= 239)
-			&& (mousePosition.x >= 200) && (mousePosition.x <= 300)))
-		{
-			goMenuButton->setTexture(assets->BUTTON_ACTIVE_TEXTURE);
-		}
-		else
-		{
-			goMenuButton->setTexture(assets->BUTTON_INACTIVE_TEXTURE);
-		}
-
-		if (sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left)
-		{
-			if (((mousePosition.y >= 210) && (mousePosition.y <= 239)
-				&& (mousePosition.x >= 200) && (mousePosition.x <= 300)))
-			{
-				result.gameStatus = statusGame::START_SCENE;
-				return result;
-			}
-		}
+		checkMouseOnButtons(mousePosition);
+		checkMouseClick(window, event, mousePosition);
 		if (event.type == sf::Event::Closed)
 		{
 			window.close();
 		}
 	}
-	result.gameStatus = statusGame::HELP_SCENE;
-	return result;
+}
+
+void helpScene::checkMouseOnButtons(sf::Vector2i & mousePosition)
+{
+	if (((mousePosition.y >= 210) && (mousePosition.y <= 239)
+		&& (mousePosition.x >= 200) && (mousePosition.x <= 300)))
+	{
+		goMenuButton->setTexture(assets->BUTTON_ACTIVE_TEXTURE);
+	}
+	else
+	{
+		goMenuButton->setTexture(assets->BUTTON_INACTIVE_TEXTURE);
+	}
+}
+
+
+void helpScene::checkMouseClick(sf::RenderWindow & window, sf::Event & event, sf::Vector2i & mousePosition)
+{
+	if (sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left)
+	{
+		if (((mousePosition.y >= 210) && (mousePosition.y <= 239)
+			&& (mousePosition.x >= 200) && (mousePosition.x <= 300)))
+		{
+			result.gameStatus = statusGame::START_SCENE;
+		}
+	}
 }

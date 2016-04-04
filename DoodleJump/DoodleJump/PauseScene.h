@@ -2,13 +2,13 @@
 
 #include "stdafx.h"
 #include "sheet.h"
-/*
+
 struct pauseScene
 {
 public:
 	pauseScene();
 	~pauseScene();
-	statusGame onPauseMenu(sf::RenderWindow & window);
+	gameResult onPauseMenu(sf::RenderWindow & window);
 private:
 	sf::Sprite * background;
 	sf::Sprite * backButton;
@@ -16,4 +16,4 @@ private:
 
 	sf::Text backText;
 	sf::Text exitText;
-};*/
+};

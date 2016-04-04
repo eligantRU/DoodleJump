@@ -94,6 +94,8 @@ gameResult startScene::onStartMenu(sf::RenderWindow & window)
 {
 	result.gameStatus = statusGame::START_SCENE;
 	result.collision = Collision::NO_COLLISION;
+	result.points = 0;
+
 	moveDoodle();
 
 	render(window);
