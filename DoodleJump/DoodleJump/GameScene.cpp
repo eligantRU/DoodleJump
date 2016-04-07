@@ -169,7 +169,6 @@ void gameScene::animateRocket(void)
 			offsetFallBonus.x = 0.f;
 			offsetFallBonus.y = 0.f;
 			bonus[actualBonusId].body->setRotation(0);
-			bonus[actualBonusId].body->setPosition(-100.f, hero.body->getPosition().y - DOODLE_HEIGHT - 350 - ROCKET_HEIGHT); // костыль
 		}
 
 		if ((animationCounter >= 0) && (animationCounter <= 2))
@@ -302,7 +301,6 @@ void gameScene::animateHatHelicopter(void)
 			offsetFallBonus.x = 0.f;
 			offsetFallBonus.y = 0.f;
 			bonus[actualBonusId].body->setRotation(0);
-			bonus[actualBonusId].body->setPosition(-100.f, hero.body->getPosition().y - DOODLE_HEIGHT - 350 - HAT_HELICOPTER_HEIGHT); // костыль
 		}
 
 		if ((animationCounter >= 0) && (animationCounter <= 5))
