@@ -14,6 +14,7 @@ private:
 	void checkEvents(sf::RenderWindow & window);
 	void checkMouseOnButtons(sf::Vector2i & mousePosition);
 	void checkMouseClick(sf::RenderWindow & window, sf::Event & event, sf::Vector2i & mousePosition);
+
 	sf::Sprite * background;
 	sf::Sprite * goMenuButton;
 	sf::Sprite * buttonA;

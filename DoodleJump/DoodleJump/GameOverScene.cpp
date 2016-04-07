@@ -52,11 +52,23 @@ gameOverScene::~gameOverScene()
 	playAgainButton = NULL;
 }
 
-gameResult gameOverScene::onGameOverMenu(sf::RenderWindow & window, uint64_t & score) // убожество
+gameResult gameOverScene::onGameOverMenu(sf::RenderWindow & window, uint64_t & score)
 {
+	result.gameStatus = statusGame::GAME_OVER_SCENE;
+	result.collision = Collision::NO_COLLISION;
+	result.points = 0;
 	lastRecord.setString("Your record: " + std::to_string(score));
 
-	window.clear(sf::Color(0, 255, 255));
+	render(window);
+	window.display();
+
+	checkEvents(window);
+	return result;
+}
+
+void gameOverScene::render(sf::RenderWindow & window)
+{
+	window.clear(sf::Color(255, 255, 255));
 	window.draw(*background);
 	window.draw(*title);
 	window.draw(*goMenuButton);
@@ -64,54 +76,61 @@ gameResult gameOverScene::onGameOverMenu(sf::RenderWindow & window, uint64_t & s
 	window.draw(*playAgainButton);
 	window.draw(playAgainText);
 	window.draw(lastRecord);
-	window.display();
+}
 
-	gameResult result;
+void gameOverScene::checkEvents(sf::RenderWindow & window)
+{
 	sf::Event event;
 	while (window.pollEvent(event))
 	{
 		sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
-
-		if (((mousePosition.y >= 210) && (mousePosition.y <= 239)
-			&& (mousePosition.x >= 200) && (mousePosition.x <= 300)))
-		{
-			goMenuButton->setTexture(assets->BUTTON_ACTIVE_TEXTURE);
-		}
-		else
-		{
-			goMenuButton->setTexture(assets->BUTTON_INACTIVE_TEXTURE);
-		}
-
-		if (((mousePosition.y >= 270) && (mousePosition.y <= 299)
-			&& (mousePosition.x >= 250) && (mousePosition.x <= 350)))
-		{
-			playAgainButton->setTexture(assets->BUTTON_ACTIVE_TEXTURE);
-		}
-		else
-		{
-			playAgainButton->setTexture(assets->BUTTON_INACTIVE_TEXTURE);
-		}
-		
-		if (sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left)
-		{
-			if (((mousePosition.y >= 210) && (mousePosition.y <= 239)
-				&& (mousePosition.x >= 200) && (mousePosition.x <= 300)))
-			{
-				result.gameStatus = statusGame::START_SCENE;
-				return result;
-			}
-			if (((mousePosition.y >= 270) && (mousePosition.y <= 299)
-				&& (mousePosition.x >= 250) && (mousePosition.x <= 350)))
-			{
-				result.gameStatus = statusGame::GAME_SCENE;
-				return result;
-			}
-		}
+		checkMouseOnButtons(mousePosition);
+		checkMouseClick(window, event, mousePosition);
 		if (event.type == sf::Event::Closed)
 		{
 			window.close();
 		}
 	}
-	result.gameStatus = statusGame::GAME_OVER_SCENE;
-	return result;
 }
+
+void gameOverScene::checkMouseOnButtons(sf::Vector2i & mousePosition)
+{
+	if (((mousePosition.y >= 210) && (mousePosition.y <= 239)
+		&& (mousePosition.x >= 200) && (mousePosition.x <= 300)))
+	{
+		goMenuButton->setTexture(assets->BUTTON_ACTIVE_TEXTURE);
+	}
+	else
+	{
+		goMenuButton->setTexture(assets->BUTTON_INACTIVE_TEXTURE);
+	}
+
+	if (((mousePosition.y >= 270) && (mousePosition.y <= 299)
+		&& (mousePosition.x >= 250) && (mousePosition.x <= 350)))
+	{
+		playAgainButton->setTexture(assets->BUTTON_ACTIVE_TEXTURE);
+	}
+	else
+	{
+		playAgainButton->setTexture(assets->BUTTON_INACTIVE_TEXTURE);
+	}
+}
+
+
+void gameOverScene::checkMouseClick(sf::RenderWindow & window, sf::Event & event, sf::Vector2i & mousePosition)
+{
+	if (sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left)
+	{
+		if (((mousePosition.y >= 210) && (mousePosition.y <= 239)
+			&& (mousePosition.x >= 200) && (mousePosition.x <= 300)))
+		{
+			result.gameStatus = statusGame::START_SCENE;
+		}
+		if (((mousePosition.y >= 270) && (mousePosition.y <= 299)
+			&& (mousePosition.x >= 250) && (mousePosition.x <= 350)))
+		{
+			result.gameStatus = statusGame::GAME_SCENE;
+		}
+	}
+}
+
