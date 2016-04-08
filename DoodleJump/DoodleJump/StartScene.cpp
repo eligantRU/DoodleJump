@@ -1,9 +1,10 @@
 #include "stdafx.h"
 #include "sheet.h"
 
-startScene::startScene(Assets * assets)
+startScene::startScene(Assets * assets, sf::View * view)
 {
 	this->assets = assets;
+	this->view = view;
 	hero = new Doodle(assets);
 	plate = new Plate(assets);
 	hero->speedY = -20.f;

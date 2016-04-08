@@ -1,9 +1,10 @@
 #include "stdafx.h"
 #include "sheet.h"
 
-gameScene::gameScene(Assets * assets)
+gameScene::gameScene(Assets * assets, sf::View * view)
 {
 	this->assets = assets;
+	this->view = view;
 	this->hero = new Doodle(assets);
 	for (int i = 0; i < NUMBER_PLATES; ++i)
 	{
@@ -14,7 +15,7 @@ gameScene::gameScene(Assets * assets)
 	points = 0;
 	endOfGame = false;
 	isPause = false;
-	view.reset(sf::FloatRect(0, 0, 550, 700));
+	view->reset(sf::FloatRect(0, 0, 550, 700));
 	hero->speedY = -50.f;
 	animationCounter = 0;
 	unstablePlatesCounter = 0;
@@ -54,7 +55,7 @@ SGameResult gameScene::onGameFrame(sf::RenderWindow & window)
 		result.collision = Collision::NO_COLLISION;
 		keyPressed(window);
 		update(window);
-		window.setView(view);
+		window.setView(*view);
 		render(window);
 		window.display();
 
@@ -72,8 +73,8 @@ SGameResult gameScene::onGameFrame(sf::RenderWindow & window)
 	}
 	else
 	{
-		view.setCenter(275, 350);
-		window.setView(view);
+		view->setCenter(275, 350);
+		window.setView(*view);
 		result.points = points;
 		result.status = gameStatus::GAME_OVER_SCENE;
 		resetGame();
@@ -169,7 +170,7 @@ void gameScene::animateRocket(void)
 {
 	if (actualBonus == BonusType::ROCKET)
 	{
-		if ((hero->speedY >= 0) || (bonus[actualBonusId].body->getPosition().y < view.getCenter().y - 350 - ROCKET_HEIGHT))
+		if ((hero->speedY >= 0) || (bonus[actualBonusId].body->getPosition().y < view->getCenter().y - 350 - ROCKET_HEIGHT))
 		{
 			animationCounter = 0;
 			actualBonus = BonusType::NO;
@@ -301,7 +302,7 @@ void gameScene::animateHatHelicopter(void)
 {
 	if (actualBonus == BonusType::HAT_HELICOPTER)
 	{
-		if ((hero->speedY >= 0) || (bonus[actualBonusId].body->getPosition().y < view.getCenter().y - 350 - HAT_HELICOPTER_HEIGHT))
+		if ((hero->speedY >= 0) || (bonus[actualBonusId].body->getPosition().y < view->getCenter().y - 350 - HAT_HELICOPTER_HEIGHT))
 		{
 			animationCounter = 0;
 			actualBonus = BonusType::NO;
@@ -380,7 +381,7 @@ void gameScene::update(sf::RenderWindow & window)
 
 	if ((hero->speedY <= 0) && (doodlePosition.y <= hero->positionBeforeDown.y))
 	{
-		view.setCenter(275, doodlePosition.y);
+		view->setCenter(275, doodlePosition.y);
 		background->setPosition(0, doodlePosition.y - 350);
 		scoreNum.setPosition(0, doodlePosition.y - 350);
 		++points;
@@ -401,7 +402,7 @@ void gameScene::update(sf::RenderWindow & window)
 
 void gameScene::resetGame(void)
 {
-	view.reset(sf::FloatRect(0, 0, 550, 700));
+	view->reset(sf::FloatRect(0, 0, 550, 700));
 	scoreNum.setPosition(0, 0);
 	endOfGame = false;
 	points = 0;
@@ -415,7 +416,7 @@ void gameScene::resetGame(void)
 	hero->lastDirectionX = DirectionX::LEFT;
 	animationCounter = 0;
 	hero->positionBeforeDown.y = hero->body->getPosition().y;
-	view.setCenter(275, 350);
+	view->setCenter(275, 350);
 
 	plate[0]->body->setPosition(275 - PLATE_WIDTH/2, 700 - PLATE_HEIGHT);
 	for (int i = 1; i < NUMBER_PLATES/2; ++(++i))
@@ -436,17 +437,17 @@ void gameScene::resetGame(void)
 		plate[i]->body->setPosition(x1, plate[i-1]->body->getPosition().y - y1);
 		plate[i]->body->setPosition(x2, plate[i-1]->body->getPosition().y - y2);
 	}
-	view.setCenter(275, 350);
+	view->setCenter(275, 350);
 	initBonuses();
 }
 
 void gameScene::generPlates(void)
 {
-	if (plate[0]->body->getPosition().y > view.getCenter().x + 350.f)
+	if (plate[0]->body->getPosition().y > view->getCenter().x + 350.f)
 	{
 		plate[0]->type = PlateType::STATIC;
 		plate[0]->body->setTexture(assets->PLATE_DYNAMIC_TEXTURE);
-		plate[0]->body->setPosition(float(rand() % (550 - PLATE_WIDTH)), view.getCenter().y - 350 - PLATE_HEIGHT);
+		plate[0]->body->setPosition(float(rand() % (550 - PLATE_WIDTH)), view->getCenter().y - 350 - PLATE_HEIGHT);
 	}
 
 	sf::Vector2f platePosition[NUMBER_PLATES];
@@ -467,7 +468,7 @@ void gameScene::generPlates(void)
 		float x1 = (sqrt(484 * 484 - y1 * y1)) / 2;
 
 
-		if (platePosition[i].y > view.getCenter().y + 350.f)
+		if (platePosition[i].y > view->getCenter().y + 350.f)
 		{
 			if ((plate[i]->body->getPosition().x + x1 >= 550 - PLATE_WIDTH) && (plate[i]->body->getPosition().x - x1 <= 0))
 			{
@@ -510,7 +511,7 @@ void gameScene::generPlates(void)
 				float y2 = float((rand() % 152) + 90);
 				float x2 = float(rand() % (550 - PLATE_WIDTH));
 
-				if (platePosition[j].y > view.getCenter().y + 350.f)
+				if (platePosition[j].y > view->getCenter().y + 350.f)
 				{
 					/*int divider;
 					if (unstablePlatesCounter < 1)
@@ -579,7 +580,7 @@ void gameScene::generPlates(void)
 
 void gameScene::generHole(void)
 {
-	if (hole->getPosition().y >= view.getCenter().y + 350.f)
+	if (hole->getPosition().y >= view->getCenter().y + 350.f)
 	{
 		holePosition.x = float(rand() % (550 - HOLE_WIDTH));
 		holePosition.y = hero->body->getPosition().y -1.f * float(rand() % 15000) - 10.f * 750.f;
@@ -596,12 +597,12 @@ void gameScene::generBonuses(void)
 	{
 		bonusPosition[bonusIndex] = bonus[bonusIndex].body->getPosition();
 
-		if (bonusPosition[bonusIndex].y > view.getCenter().y + 350) 
+		if (bonusPosition[bonusIndex].y > view->getCenter().y + 350)
 		{
 			for (int plateIndex = 0; plateIndex < NUMBER_PLATES; ++plateIndex)
 			{
 				platePosition = plate[plateIndex]->body->getPosition();
-				if ((platePosition.y < view.getCenter().y - 350 - ROCKET_HEIGHT) && ((plate[plateIndex]->type == PlateType::STATIC) || (plate[plateIndex]->type == PlateType::STATIC_DYNAMIC_X)))
+				if ((platePosition.y < view->getCenter().y - 350 - ROCKET_HEIGHT) && ((plate[plateIndex]->type == PlateType::STATIC) || (plate[plateIndex]->type == PlateType::STATIC_DYNAMIC_X)))
 				{
 					int randomNum = rand() % 4;
 					switch (randomNum)
@@ -633,7 +634,7 @@ void gameScene::dropUnstablePlates(void)
 		{
 			plate[plateIndex]->body->rotate(-1.f);
 			plate[plateIndex]->body->move(sf::Vector2f(-1 * STEP, 4 * STEP));
-			if (plate[plateIndex]->body->getPosition().y >= view.getCenter().y + 350)
+			if (plate[plateIndex]->body->getPosition().y >= view->getCenter().y + 350)
 			{
 				plate[plateIndex]->body->setRotation(0);
 				plate[plateIndex]->fallingPlate = false;
@@ -649,7 +650,7 @@ bool gameScene::checkGameEnd(void)
 	{
 		return true;
 	}
-	if ((hero->body->getPosition().y <= view.getCenter().y + 350.f))
+	if ((hero->body->getPosition().y <= view->getCenter().y + 350.f))
 	{
 		return false;
 	}
@@ -698,6 +699,7 @@ void gameScene::keyPressed(sf::RenderWindow & window)
 		{
 			hero->direction.x = DirectionX::NONE; // It's no working!
 		}*/
+
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 		{
 			hero->direction.x = DirectionX::LEFT;

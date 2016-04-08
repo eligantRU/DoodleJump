@@ -6,11 +6,12 @@
 struct gameScene
 {
 public:
-	gameScene(Assets * assets);
+	gameScene(Assets * assets, sf::View * view);
 	~gameScene();
 	SGameResult onGameFrame(sf::RenderWindow & window);
 private:
 	Assets * assets;
+	sf::View * view;
 	Bonus bonus[NUMBER_BONUSES];
 	Plate * plate[NUMBER_PLATES];
 	Doodle * hero;

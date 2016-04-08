@@ -1,9 +1,10 @@
 #include "stdafx.h"
 #include "sheet.h"
 
-pauseScene::pauseScene(Assets * assets)
+pauseScene::pauseScene(Assets * assets, sf::View * view)
 {
 	this->assets = assets;
+	this->view = view;
 	backButton = new sf::Sprite;
 	backButton->setTextureRect(sf::IntRect(0, 0, 104, 29));
 	backButton->setTexture(assets->BUTTON_INACTIVE_TEXTURE);
@@ -45,11 +46,11 @@ pauseScene::~pauseScene()
 SGameResult pauseScene::onPauseMenu(sf::RenderWindow & window) 
 {
 	// TODO: next five lines need refactoring
-	backButton->setPosition(view.getCenter().x - 275.f + 200.f, view.getCenter().y - 350.f + 210.f);
-	backText.setPosition(view.getCenter().x - 275.f + 232.f, view.getCenter().y - 350.f + 212.f);
-	exitButton->setPosition(view.getCenter().x - 275.f + 250.f, view.getCenter().y - 350.f + 270.f);
-	exitText.setPosition(view.getCenter().x - 275.f + 280.f, view.getCenter().y - 350.f + 272.f);
-	background->setPosition(view.getCenter().x - 275.f, view.getCenter().y - 350.f);
+	backButton->setPosition(view->getCenter().x - 275.f + 200.f, view->getCenter().y - 350.f + 210.f);
+	backText.setPosition(view->getCenter().x - 275.f + 232.f, view->getCenter().y - 350.f + 212.f);
+	exitButton->setPosition(view->getCenter().x - 275.f + 250.f, view->getCenter().y - 350.f + 270.f);
+	exitText.setPosition(view->getCenter().x - 275.f + 280.f, view->getCenter().y - 350.f + 272.f);
+	background->setPosition(view->getCenter().x - 275.f, view->getCenter().y - 350.f);
 
 	result.status = gameStatus::PAUSE_SCENE;
 	result.collision = Collision::NO_COLLISION;

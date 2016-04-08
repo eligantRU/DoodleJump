@@ -22,5 +22,3 @@
 #include "helpScene.h"
 #include "startScene.h"
 #include "game.h"
-
-extern sf::View view; // TODO: remove it

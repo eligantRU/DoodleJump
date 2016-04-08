@@ -6,11 +6,12 @@
 struct startScene
 {
 public:
-	startScene(Assets * assets);
+	startScene(Assets * assets, sf::View * view);
 	~startScene();
 	SGameResult onStartMenu(sf::RenderWindow & window);
 private:
 	Assets * assets;
+	sf::View * view;
 	void render(sf::RenderWindow & window);
 	void checkEvents(sf::RenderWindow & window);
 	void checkMouseOnButtons(sf::Vector2i & mousePosition);

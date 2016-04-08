@@ -3,12 +3,13 @@
 
 Game::Game()
 {
-	this->assets = new Assets();
-	sceneStart = new startScene(assets);
-	sceneHelp = new helpScene(assets);
-	sceneGame = new gameScene(assets);
-	sceneGameOver = new gameOverScene(assets);
-	scenePause = new pauseScene(assets);
+	assets = new Assets();
+	view = new sf::View();
+	sceneStart = new startScene(assets, view);
+	sceneHelp = new helpScene(assets, view);
+	sceneGame = new gameScene(assets, view);
+	sceneGameOver = new gameOverScene(assets, view);
+	scenePause = new pauseScene(assets, view);
 }
 
 Game::~Game()
@@ -154,9 +155,9 @@ void Game::launch(void)
 	sf::RenderWindow window(sf::VideoMode(550, 700), "Doodle Jump", sf::Style::Close, settings);
 	window.setVerticalSyncEnabled(true);
 	window.setFramerateLimit(60);
-	view.reset(sf::FloatRect(0, 0, 550, 700));
-	view.setCenter(275, 350);
-	window.setView(view);
+	view->reset(sf::FloatRect(0, 0, 550, 700));
+	view->setCenter(275, 350);
+	window.setView(*view);
 	gameState.status = gameStatus::START_SCENE;
 
 	gameLoop(window);

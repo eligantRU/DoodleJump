@@ -6,11 +6,12 @@
 struct helpScene
 {
 public:
-	helpScene(Assets * assets);
+	helpScene(Assets * assets, sf::View * view);
 	~helpScene();
 	SGameResult onHelpMenu(sf::RenderWindow & window);
 private:
 	Assets * assets;
+	sf::View * view;
 	void render(sf::RenderWindow & window);
 	void checkEvents(sf::RenderWindow & window);
 	void checkMouseOnButtons(sf::Vector2i & mousePosition);
