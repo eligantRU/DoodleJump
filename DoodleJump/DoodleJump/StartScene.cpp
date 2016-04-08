@@ -93,9 +93,9 @@ startScene::~startScene()
 	hole = NULL;
 }
 
-gameResult startScene::onStartMenu(sf::RenderWindow & window)
+SGameResult startScene::onStartMenu(sf::RenderWindow & window)
 {
-	result.gameStatus = statusGame::START_SCENE;
+	result.status = gameStatus::START_SCENE;
 	result.collision = Collision::NO_COLLISION;
 	result.points = 0;
 
@@ -169,7 +169,7 @@ void startScene::checkMouseClick(sf::RenderWindow & window, sf::Event & event, s
 		if (((mousePosition.y >= 180) && (mousePosition.y <= 209)
 			&& (mousePosition.x >= 200) && (mousePosition.x <= 300)))
 		{
-			result.gameStatus = statusGame::GAME_SCENE;
+			result.status = gameStatus::GAME_SCENE;
 		}
 		if (((mousePosition.y >= 240) && (mousePosition.y <= 269)
 			&& (mousePosition.x >= 250) && (mousePosition.x <= 350)))
@@ -179,7 +179,7 @@ void startScene::checkMouseClick(sf::RenderWindow & window, sf::Event & event, s
 		if (((mousePosition.y >= 475) && (mousePosition.y <= 504)
 			&& (mousePosition.x >= 350) && (mousePosition.x <= 450)))
 		{
-			result.gameStatus = statusGame::HELP_SCENE;
+			result.status = gameStatus::HELP_SCENE;
 		}
 	}
 }

@@ -61,7 +61,7 @@ void Game::playGameOverSound(void)
 
 void Game::gameLoop(sf::RenderWindow & window)
 {
-	gameResult result;
+	SGameResult result;
 
 	sf::Thread soundPlateThread(&Game::playPlateSound, this);
 	sf::Thread soundSpringThread(&Game::playSpringSound, this);
@@ -73,53 +73,53 @@ void Game::gameLoop(sf::RenderWindow & window)
 
 	while (window.isOpen())
 	{
-		switch (status.gameStatus)
+		switch (gameState.status)
 		{
-		case statusGame::START_SCENE:
+		case gameStatus::START_SCENE:
 			result = sceneStart->onStartMenu(window);
-			status.gameStatus = result.gameStatus; 
-			if (result.gameStatus == statusGame::GAME_SCENE)
+			gameState.status = result.status; 
+			if (result.status == gameStatus::GAME_SCENE)
 			{
 				soundStartGameThread.launch(); // TODO: Обработчик снизу, вытащи вниз
 			}
 			else
 			{
-				if (result.gameStatus == statusGame::HELP_SCENE)
+				if (result.status == gameStatus::HELP_SCENE)
 				{
-					status.gameStatus = statusGame::HELP_SCENE;
+					gameState.status = gameStatus::HELP_SCENE;
 				}
 			}
 			break;
-		case statusGame::GAME_SCENE:
+		case gameStatus::GAME_SCENE:
 			result = sceneGame->onGameFrame(window);
-			if (result.gameStatus == statusGame::GAME_SCENE)
+			if (result.status == gameStatus::GAME_SCENE)
 			{
-				status.gameStatus = statusGame::GAME_SCENE;
+				gameState.status = gameStatus::GAME_SCENE;
 			}
 			else
 			{
-				if (result.gameStatus == statusGame::GAME_OVER_SCENE)
+				if (result.status == gameStatus::GAME_OVER_SCENE)
 				{
-					status.gameStatus = statusGame::GAME_OVER_SCENE;
+					gameState.status = gameStatus::GAME_OVER_SCENE;
 					soundGameOverThread.launch(); // TODO: Обработчик снизу, вытащи вниз
 				}
 				else
 				{
-					if (result.gameStatus == statusGame::PAUSE_SCENE)
+					if (result.status == gameStatus::PAUSE_SCENE)
 					{
-						status.gameStatus = statusGame::PAUSE_SCENE;
+						gameState.status = gameStatus::PAUSE_SCENE;
 					}
 				}
 			}
 			break;
-		case statusGame::GAME_OVER_SCENE:
-			status = sceneGameOver->onGameOverMenu(window, result.points); // NOTE: не требует росписи на if'ы т.к. сразу в status присваивается
+		case gameStatus::GAME_OVER_SCENE:
+			gameState = sceneGameOver->onGameOverMenu(window, result.points); // NOTE: не требует росписи на if'ы т.к. сразу в gameState присваивается
 			break;
-		case statusGame::PAUSE_SCENE:
-			status = scenePause->onPauseMenu(window); // NOTE: не требует росписи на if'ы т.к. сразу в status присваивается
+		case gameStatus::PAUSE_SCENE:
+			gameState = scenePause->onPauseMenu(window); // NOTE: не требует росписи на if'ы т.к. сразу в gameState присваивается
 			break;
-		case statusGame::HELP_SCENE:
-			status = sceneHelp->onHelpMenu(window); // NOTE: не требует росписи на if'ы т.к. сразу в status присваивается
+		case gameStatus::HELP_SCENE:
+			gameState = sceneHelp->onHelpMenu(window); // NOTE: не требует росписи на if'ы т.к. сразу в gameState присваивается
 			break;
 		}
 
@@ -157,7 +157,7 @@ void Game::launch(void)
 	view.reset(sf::FloatRect(0, 0, 550, 700));
 	view.setCenter(275, 350);
 	window.setView(view);
-	status.gameStatus = statusGame::START_SCENE;
+	gameState.status = gameStatus::START_SCENE;
 
 	gameLoop(window);
 }

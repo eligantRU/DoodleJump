@@ -78,7 +78,7 @@ struct Direction
 	DirectionY y;
 };
 
-enum class statusGame
+enum class gameStatus
 {
 	START_SCENE,
 	HELP_SCENE,
@@ -87,9 +87,9 @@ enum class statusGame
 	GAME_OVER_SCENE
 };
 
-struct gameResult
+struct SGameResult
 {
 	uint64_t points;
-	statusGame gameStatus;
+	gameStatus status;
 	Collision collision;
 };

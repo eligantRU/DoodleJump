@@ -8,7 +8,7 @@ struct helpScene
 public:
 	helpScene(Assets * assets);
 	~helpScene();
-	gameResult onHelpMenu(sf::RenderWindow & window);
+	SGameResult onHelpMenu(sf::RenderWindow & window);
 private:
 	Assets * assets;
 	void render(sf::RenderWindow & window);
@@ -25,5 +25,5 @@ private:
 	sf::Text helpText1;
 	sf::Text helpText2;
 
-	gameResult result;
+	SGameResult result;
 };

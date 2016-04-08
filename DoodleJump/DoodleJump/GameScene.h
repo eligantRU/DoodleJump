@@ -8,7 +8,7 @@ struct gameScene
 public:
 	gameScene(Assets * assets);
 	~gameScene();
-	gameResult onGameFrame(sf::RenderWindow & window);
+	SGameResult onGameFrame(sf::RenderWindow & window);
 private:
 	Assets * assets;
 	Bonus bonus[NUMBER_BONUSES];
@@ -50,7 +50,7 @@ private:
 	int unstablePlatesCounter;
 	sf::Sprite * background;
 	bool isPause;
-	gameResult result;
+	SGameResult result;
 	void resetGame(void);
 	sf::Vector2f offsetFallBonus;
 

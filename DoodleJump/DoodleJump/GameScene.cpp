@@ -47,7 +47,7 @@ gameScene::~gameScene()
 	background = NULL;
 }
 
-gameResult gameScene::onGameFrame(sf::RenderWindow & window)
+SGameResult gameScene::onGameFrame(sf::RenderWindow & window)
 {
 	if (!endOfGame)
 	{
@@ -61,12 +61,12 @@ gameResult gameScene::onGameFrame(sf::RenderWindow & window)
 		result.points = points;
 		if (isPause)
 		{
-			result.gameStatus = statusGame::PAUSE_SCENE;
+			result.status = gameStatus::PAUSE_SCENE;
 			isPause = false;
 		}
 		else
 		{
-			result.gameStatus = statusGame::GAME_SCENE;
+			result.status = gameStatus::GAME_SCENE;
 		}
 		return result;
 	}
@@ -75,7 +75,7 @@ gameResult gameScene::onGameFrame(sf::RenderWindow & window)
 		view.setCenter(275, 350);
 		window.setView(view);
 		result.points = points;
-		result.gameStatus = statusGame::GAME_OVER_SCENE;
+		result.status = gameStatus::GAME_OVER_SCENE;
 		resetGame();
 		return result;
 	}

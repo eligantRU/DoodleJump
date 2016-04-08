@@ -8,7 +8,7 @@ struct startScene
 public:
 	startScene(Assets * assets);
 	~startScene();
-	gameResult onStartMenu(sf::RenderWindow & window);
+	SGameResult onStartMenu(sf::RenderWindow & window);
 private:
 	Assets * assets;
 	void render(sf::RenderWindow & window);
@@ -34,5 +34,5 @@ private:
 	sf::Text exitText;
 	sf::Text helpText;
 
-	gameResult result;
+	SGameResult result;
 };

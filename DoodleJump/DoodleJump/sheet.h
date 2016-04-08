@@ -23,4 +23,4 @@
 #include "startScene.h"
 #include "game.h"
 
-extern sf::View view; // TODO: узконаправленное решение возникшей проблемы
+extern sf::View view; // TODO: remove it

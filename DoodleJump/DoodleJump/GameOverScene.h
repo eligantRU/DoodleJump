@@ -8,7 +8,7 @@ struct gameOverScene
 public:
 	gameOverScene(Assets * assets);
 	~gameOverScene();
-	gameResult onGameOverMenu(sf::RenderWindow & window, uint64_t & score);
+	SGameResult onGameOverMenu(sf::RenderWindow & window, uint64_t & score);
 private:
 	Assets * assets;
 	void render(sf::RenderWindow & window);
@@ -25,5 +25,5 @@ private:
 	sf::Text goMenuText;
 	sf::Text lastRecord;
 
-	gameResult result;
+	SGameResult result;
 };

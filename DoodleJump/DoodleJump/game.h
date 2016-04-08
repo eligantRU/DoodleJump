@@ -20,7 +20,7 @@ private:
 	RenderFrameFunc frameFunc;
 	std::vector<sf::Vector2f> platePosition;
 	void gameLoop(sf::RenderWindow & window);
-	gameResult status;
+	SGameResult gameState;
 	void playPlateSound(void);
 	void playSpringSound(void);
 	void playTrampolineSound(void);

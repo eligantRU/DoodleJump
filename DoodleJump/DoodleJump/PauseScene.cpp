@@ -42,7 +42,7 @@ pauseScene::~pauseScene()
 	exitButton = NULL;
 }
 
-gameResult pauseScene::onPauseMenu(sf::RenderWindow & window) 
+SGameResult pauseScene::onPauseMenu(sf::RenderWindow & window) 
 {
 	// TODO: next five lines need refactoring
 	backButton->setPosition(view.getCenter().x - 275.f + 200.f, view.getCenter().y - 350.f + 210.f);
@@ -51,7 +51,7 @@ gameResult pauseScene::onPauseMenu(sf::RenderWindow & window)
 	exitText.setPosition(view.getCenter().x - 275.f + 280.f, view.getCenter().y - 350.f + 272.f);
 	background->setPosition(view.getCenter().x - 275.f, view.getCenter().y - 350.f);
 
-	result.gameStatus = statusGame::PAUSE_SCENE;
+	result.status = gameStatus::PAUSE_SCENE;
 	result.collision = Collision::NO_COLLISION;
 	result.points = 0;
 
@@ -118,7 +118,7 @@ void pauseScene::checkMouseClick(sf::RenderWindow & window, sf::Event & event, s
 		if (((mousePosition.y >= 210) && (mousePosition.y <= 239)
 			&& (mousePosition.x >= 200) && (mousePosition.x <= 300)))
 		{
-			result.gameStatus = statusGame::GAME_SCENE;
+			result.status = gameStatus::GAME_SCENE;
 		}
 		if (((mousePosition.y >= 270) && (mousePosition.y <= 299)
 			&& (mousePosition.x >= 250) && (mousePosition.x <= 350)))

@@ -8,7 +8,7 @@ struct pauseScene
 public:
 	pauseScene(Assets * assets);
 	~pauseScene();
-	gameResult onPauseMenu(sf::RenderWindow & window);
+	SGameResult onPauseMenu(sf::RenderWindow & window);
 private:
 	Assets * assets;
 	void render(sf::RenderWindow & window);
@@ -22,5 +22,5 @@ private:
 	sf::Text backText;
 	sf::Text exitText;
 
-	gameResult result;
+	SGameResult result;
 };

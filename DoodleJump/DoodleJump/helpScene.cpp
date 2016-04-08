@@ -56,9 +56,9 @@ helpScene::~helpScene()
 	buttonD = NULL;
 }
 
-gameResult helpScene::onHelpMenu(sf::RenderWindow & window)
+SGameResult helpScene::onHelpMenu(sf::RenderWindow & window)
 {
-	result.gameStatus = statusGame::HELP_SCENE;
+	result.status = gameStatus::HELP_SCENE;
 	result.collision = Collision::NO_COLLISION;
 	result.points = 0;
 
@@ -118,7 +118,7 @@ void helpScene::checkMouseClick(sf::RenderWindow & window, sf::Event & event, sf
 		if (((mousePosition.y >= 210) && (mousePosition.y <= 239)
 			&& (mousePosition.x >= 200) && (mousePosition.x <= 300)))
 		{
-			result.gameStatus = statusGame::START_SCENE;
+			result.status = gameStatus::START_SCENE;
 		}
 	}
 }
