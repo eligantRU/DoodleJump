@@ -113,7 +113,7 @@ void pauseScene::checkMouseOnButtons(sf::Vector2i & mousePosition)
 
 void pauseScene::checkMouseClick(sf::RenderWindow & window, sf::Event & event, sf::Vector2i & mousePosition)
 {
-	if (sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left)
+	if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left)
 	{
 		if (((mousePosition.y >= 210) && (mousePosition.y <= 239)
 			&& (mousePosition.x >= 200) && (mousePosition.x <= 300)))

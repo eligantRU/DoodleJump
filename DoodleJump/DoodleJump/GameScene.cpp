@@ -679,9 +679,25 @@ void gameScene::render(sf::RenderWindow & window)
 void gameScene::keyPressed(sf::RenderWindow & window)
 {
 	sf::Event event;
-
 	while (window.pollEvent(event))
 	{
+		/*if (event.type == sf::Event::KeyPressed)
+		{
+			if (event.key.code == sf::Keyboard::A)
+			{
+				hero->direction.x = DirectionX::LEFT;
+				hero->lastDirectionX = DirectionX::LEFT;
+			}
+			else if (event.key.code == sf::Keyboard::D)
+			{
+				hero->direction.x = DirectionX::RIGHT;
+				hero->lastDirectionX = DirectionX::RIGHT;
+			}
+		}
+		else
+		{
+			hero->direction.x = DirectionX::NONE; // It's no working!
+		}*/
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 		{
 			hero->direction.x = DirectionX::LEFT;
@@ -701,7 +717,7 @@ void gameScene::keyPressed(sf::RenderWindow & window)
 		{
 			window.close();
 		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+		if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
 		{
 			isPause = true;
 		}
