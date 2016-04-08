@@ -2,15 +2,7 @@
 
 #include "stdafx.h"
 
-#if defined(_WIN64) 
-    #pragma comment(lib, "winmm.lib")
-#elif defined(_WIN32) 
-	#pragma comment(lib, "winmm.lib")
-#else 
-	#error "Unknown platform" 
-#endif
-
-//#pragma comment(lib,"Winmm.lib")
+#pragma comment(lib,"Winmm.lib")
 #include <algorithm>
 #include <array>
 #include <string>
@@ -31,5 +23,4 @@
 #include "startScene.h"
 #include "game.h"
 
-extern Assets * assets; // TODO: узконаправленное решение возникшей проблемы
 extern sf::View view; // TODO: узконаправленное решение возникшей проблемы

@@ -6,18 +6,19 @@
 struct startScene
 {
 public:
-	startScene();
+	startScene(Assets * assets);
 	~startScene();
 	gameResult onStartMenu(sf::RenderWindow & window);
 private:
+	Assets * assets;
 	void render(sf::RenderWindow & window);
 	void checkEvents(sf::RenderWindow & window);
 	void checkMouseOnButtons(sf::Vector2i & mousePosition);
 	void checkMouseClick(sf::RenderWindow & window, sf::Event & event, sf::Vector2i & mousePosition);
 	Collision checkCollisionPlate(void);
 	void moveDoodle(void);
-	Plate plate;
-	Doodle hero;
+	Plate * plate;
+	Doodle * hero;
 	sf::Sprite * title;
 	sf::Sprite * insects[NUMBER_INSECTS];
 	sf::Sprite * background;

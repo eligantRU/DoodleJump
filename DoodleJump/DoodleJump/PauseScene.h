@@ -6,10 +6,11 @@
 struct pauseScene
 {
 public:
-	pauseScene();
+	pauseScene(Assets * assets);
 	~pauseScene();
 	gameResult onPauseMenu(sf::RenderWindow & window);
 private:
+	Assets * assets;
 	void render(sf::RenderWindow & window);
 	void checkEvents(sf::RenderWindow & window);
 	void checkMouseOnButtons(sf::Vector2i & mousePosition);

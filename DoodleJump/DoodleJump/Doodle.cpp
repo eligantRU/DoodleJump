@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "sheet.h"
 
-Doodle::Doodle()
+Doodle::Doodle(Assets * assets)
 {
 	body = new sf::Sprite;
 	body->setTexture(assets->DOODLE_LEFT_TEXTURE);

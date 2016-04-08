@@ -6,10 +6,11 @@
 struct gameOverScene
 {
 public:
-	gameOverScene();
+	gameOverScene(Assets * assets);
 	~gameOverScene();
 	gameResult onGameOverMenu(sf::RenderWindow & window, uint64_t & score);
 private:
+	Assets * assets;
 	void render(sf::RenderWindow & window);
 	void checkEvents(sf::RenderWindow & window);
 	void checkMouseOnButtons(sf::Vector2i & mousePosition);

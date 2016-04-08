@@ -1,8 +1,9 @@
 #include "stdafx.h"
 #include "sheet.h"
 
-pauseScene::pauseScene()
+pauseScene::pauseScene(Assets * assets)
 {
+	this->assets = assets;
 	backButton = new sf::Sprite;
 	backButton->setTextureRect(sf::IntRect(0, 0, 104, 29));
 	backButton->setTexture(assets->BUTTON_INACTIVE_TEXTURE);

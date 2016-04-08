@@ -6,13 +6,14 @@
 struct gameScene
 {
 public:
-	gameScene();
+	gameScene(Assets * assets);
 	~gameScene();
 	gameResult onGameFrame(sf::RenderWindow & window);
 private:
+	Assets * assets;
 	Bonus bonus[NUMBER_BONUSES];
-	Plate plate[NUMBER_PLATES];
-	Doodle hero;
+	Plate * plate[NUMBER_PLATES];
+	Doodle * hero;
 	sf::Sprite * hole;
 	bool endOfGame;
 	void render(sf::RenderWindow & window);

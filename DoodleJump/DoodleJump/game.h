@@ -10,11 +10,12 @@ public:
 	~Game();
 	void launch(void);
 private:
-	startScene sceneStart;
-	helpScene sceneHelp;
-	gameScene sceneGame;
-	gameOverScene sceneGameOver;
-	pauseScene scenePause;
+	Assets * assets;
+	startScene * sceneStart;
+	helpScene * sceneHelp;
+	gameScene * sceneGame;
+	gameOverScene * sceneGameOver;
+	pauseScene * scenePause;
 	typedef std::function<void(sf::RenderWindow & )> RenderFrameFunc;
 	RenderFrameFunc frameFunc;
 	std::vector<sf::Vector2f> platePosition;

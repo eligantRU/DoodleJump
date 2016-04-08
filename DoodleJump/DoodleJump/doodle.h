@@ -6,10 +6,9 @@
 struct Doodle
 {
 public:
-	Doodle();
+	Doodle(Assets * assets);
 	~Doodle();
 	sf::Sprite * body;
-	sf::Texture texture;
 	Direction direction;
 	Collision collision;
 	int deltaHeight;
@@ -17,4 +16,5 @@ public:
 	sf::Vector2f positionBeforeDown;
 	float speedY;
 private:
+	Assets * assets;
 };

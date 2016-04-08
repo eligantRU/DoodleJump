@@ -3,12 +3,17 @@
 
 Game::Game()
 {
-	
+	this->assets = new Assets();
+	sceneStart = new startScene(assets);
+	sceneHelp = new helpScene(assets);
+	sceneGame = new gameScene(assets);
+	sceneGameOver = new gameOverScene(assets);
+	scenePause = new pauseScene(assets);
 }
 
 Game::~Game()
 {
-	// TODO: прибери за собой
+	
 }
 
 /*void Game::gameLoop(sf::RenderWindow & window)
@@ -71,7 +76,7 @@ void Game::gameLoop(sf::RenderWindow & window)
 		switch (status.gameStatus)
 		{
 		case statusGame::START_SCENE:
-			result = sceneStart.onStartMenu(window);
+			result = sceneStart->onStartMenu(window);
 			status.gameStatus = result.gameStatus; 
 			if (result.gameStatus == statusGame::GAME_SCENE)
 			{
@@ -86,7 +91,7 @@ void Game::gameLoop(sf::RenderWindow & window)
 			}
 			break;
 		case statusGame::GAME_SCENE:
-			result = sceneGame.onGameFrame(window);
+			result = sceneGame->onGameFrame(window);
 			if (result.gameStatus == statusGame::GAME_SCENE)
 			{
 				status.gameStatus = statusGame::GAME_SCENE;
@@ -108,13 +113,13 @@ void Game::gameLoop(sf::RenderWindow & window)
 			}
 			break;
 		case statusGame::GAME_OVER_SCENE:
-			status = sceneGameOver.onGameOverMenu(window, result.points); // NOTE: не требует росписи на if'ы т.к. сразу в status присваивается
+			status = sceneGameOver->onGameOverMenu(window, result.points); // NOTE: не требует росписи на if'ы т.к. сразу в status присваивается
 			break;
 		case statusGame::PAUSE_SCENE:
-			status = scenePause.onPauseMenu(window); // NOTE: не требует росписи на if'ы т.к. сразу в status присваивается
+			status = scenePause->onPauseMenu(window); // NOTE: не требует росписи на if'ы т.к. сразу в status присваивается
 			break;
 		case statusGame::HELP_SCENE:
-			status = sceneHelp.onHelpMenu(window); // NOTE: не требует росписи на if'ы т.к. сразу в status присваивается
+			status = sceneHelp->onHelpMenu(window); // NOTE: не требует росписи на if'ы т.к. сразу в status присваивается
 			break;
 		}
 

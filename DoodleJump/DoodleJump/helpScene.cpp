@@ -1,8 +1,9 @@
 #include "stdafx.h"
 #include "sheet.h"
 
-helpScene::helpScene()
+helpScene::helpScene(Assets * assets)
 {	
+	this->assets = assets;
 	goMenuButton = new sf::Sprite;
 	goMenuButton->setTexture(assets->BUTTON_INACTIVE_TEXTURE);
 	goMenuButton->setPosition(200, 210);

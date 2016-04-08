@@ -2,7 +2,6 @@
 #include <SFML/Graphics.hpp>
 #include "sheet.h"
 
-Assets * assets = new Assets(); // TODO: узконаправленное решение возникшей проблемы
 sf::View view; // TODO: узконаправленное решение возникшей проблемы
 
 int main(void)

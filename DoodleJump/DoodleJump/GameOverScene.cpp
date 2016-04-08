@@ -1,8 +1,9 @@
 #include "stdafx.h"
 #include "sheet.h"
 
-gameOverScene::gameOverScene()
+gameOverScene::gameOverScene(Assets * assets)
 {
+	this->assets = assets;
 	title = new sf::Sprite;
 	title->setTextureRect(sf::IntRect(0, 0, 236, 96));
 	title->setTexture(assets->GAME_OVER_TITLE_TEXTURE);

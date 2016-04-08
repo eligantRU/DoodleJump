@@ -11,7 +11,8 @@ public:
 	PlateType type;
 	bool fallingPlate;
 	int speedX;
-	Plate();
+	Plate(Assets * assets);
 	~Plate();
 private:
+	Assets * assets;
 };
