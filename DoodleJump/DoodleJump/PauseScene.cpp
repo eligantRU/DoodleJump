@@ -2,9 +2,9 @@
 #include "sheet.h"
 
 pauseScene::pauseScene(Assets * assets, sf::View * view)
+	:assets(assets)
+	,view(view)
 {
-	this->assets = assets;
-	this->view = view;
 	backButton = new sf::Sprite;
 	backButton->setTextureRect(sf::IntRect(0, 0, 104, 29));
 	backButton->setTexture(assets->BUTTON_INACTIVE_TEXTURE);
@@ -45,13 +45,14 @@ pauseScene::~pauseScene()
 
 SGameResult pauseScene::onPauseMenu(sf::RenderWindow & window) 
 {
-	// TODO: next five lines need refactoring
-	backButton->setPosition(view->getCenter().x - 275.f + 200.f, view->getCenter().y - 350.f + 210.f);
-	backText.setPosition(view->getCenter().x - 275.f + 232.f, view->getCenter().y - 350.f + 212.f);
-	exitButton->setPosition(view->getCenter().x - 275.f + 250.f, view->getCenter().y - 350.f + 270.f);
-	exitText.setPosition(view->getCenter().x - 275.f + 280.f, view->getCenter().y - 350.f + 272.f);
-	background->setPosition(view->getCenter().x - 275.f, view->getCenter().y - 350.f);
+	sf::Vector2f center = view->getCenter();
+	backButton->setPosition(center.x - 275.f + 200.f, center.y - 350.f + 210.f);
+	backText.setPosition(center.x - 275.f + 232.f, center.y - 350.f + 212.f);
+	exitButton->setPosition(center.x - 275.f + 250.f, center.y - 350.f + 270.f);
+	exitText.setPosition(center.x - 275.f + 280.f, center.y - 350.f + 272.f);
+	background->setPosition(center.x - 275.f, center.y - 350.f);
 
+	// TODO: create new method(clearResult()) in Game
 	result.status = gameStatus::PAUSE_SCENE;
 	result.collision = Collision::NO_COLLISION;
 	result.points = 0;
@@ -111,11 +112,14 @@ void pauseScene::checkMouseOnButtons(sf::Vector2i & mousePosition)
 	}
 }
 
-
+// TODO: no need to pass mousePosition
 void pauseScene::checkMouseClick(sf::RenderWindow & window, sf::Event & event, sf::Vector2i & mousePosition)
 {
 	if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left)
 	{
+		// TODO: get mouse pos here
+		// http://stackoverflow.com/questions/13244928/getting-dimensions-of-text-in-sfml
+		// NOTE: getLocalBounds/getGlobalBounds and sf::FloatRect::contains(sf::Vector2f const& point)
 		if (((mousePosition.y >= 210) && (mousePosition.y <= 239)
 			&& (mousePosition.x >= 200) && (mousePosition.x <= 300)))
 		{

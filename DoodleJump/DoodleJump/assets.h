@@ -8,6 +8,7 @@ public:
 	Assets();
 	~Assets();
 	void addTexture(sf::Texture & texture, std::string string, const bool repeat = false);
+	sf::Image ICON;
 	sf::Texture BACKGROUND_TEXTURE;
 	sf::Texture PLATE_STATIC_TEXTURE;
 	sf::Texture PLATE_DYNAMIC_TEXTURE;

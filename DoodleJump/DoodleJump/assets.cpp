@@ -65,6 +65,12 @@ Assets::Assets()
 	{
 		printf("Error loaded arial\n");
 	}
+
+	if (!ICON.loadFromFile("images/icon.png"))
+	{
+		printf("Error loaded icon\n");
+	}
+	// TODO: create addSound() & addFont() 
 }
 
 Assets::~Assets()

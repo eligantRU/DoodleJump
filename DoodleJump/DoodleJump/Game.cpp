@@ -64,6 +64,7 @@ void Game::gameLoop(sf::RenderWindow & window)
 {
 	SGameResult result;
 
+	// TODO: do not use thread
 	sf::Thread soundPlateThread(&Game::playPlateSound, this);
 	sf::Thread soundSpringThread(&Game::playSpringSound, this);
 	sf::Thread soundTrampolineThread(&Game::playTrampolineSound, this);
@@ -124,6 +125,7 @@ void Game::gameLoop(sf::RenderWindow & window)
 			break;
 		}
 
+		// TODO: don't play sound here
 		switch (result.collision)
 		{
 		case Collision::COLLISION_PLATE:
@@ -151,8 +153,9 @@ void Game::launch(void)
 {
 	sf::ContextSettings settings;
 	settings.antialiasingLevel = 16;
-
 	sf::RenderWindow window(sf::VideoMode(550, 700), "Doodle Jump", sf::Style::Close, settings);
+	sf::Image icon = assets->ICON;;
+	window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
 	window.setVerticalSyncEnabled(true);
 	window.setFramerateLimit(60);
 	view->reset(sf::FloatRect(0, 0, 550, 700));
