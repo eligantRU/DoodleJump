@@ -5,7 +5,6 @@
 int main(void)
 {
 	srand(unsigned(time(NULL)));
-
 	Game * game = new Game();
 	game->launch();
 	delete game;

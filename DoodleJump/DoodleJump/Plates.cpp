@@ -9,7 +9,7 @@ Plate::Plate(Assets * assets)
 	body->setTexture(assets->PLATE_STATIC_TEXTURE);
 	fallingPlate = false;
 	float x = float(rand() % (550 - PLATE_WIDTH));
-	float y = float(rand() % (700 - PLATE_HEIGHT)); // —юда запилить функцию дл€ равномерной генерации плит по высоте
+	float y = float(rand() % (700 - PLATE_HEIGHT));
 	body->setPosition(x, y);
 	speedX = 0;
 }

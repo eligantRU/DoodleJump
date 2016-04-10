@@ -70,7 +70,7 @@ Assets::Assets()
 	{
 		printf("Error loaded icon\n");
 	}
-	// TODO: create addSound() & addFont() 
+	// TODO: create addSound(), addFont() & addIcon(). In which -- addFile()
 }
 
 Assets::~Assets()

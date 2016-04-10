@@ -88,9 +88,8 @@ void helpScene::checkEvents(sf::RenderWindow & window)
 	sf::Event event;
 	while (window.pollEvent(event))
 	{
-		sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
-		checkMouseOnButtons(mousePosition);
-		checkMouseClick(window, event, mousePosition);
+		checkMouseOnButtons(sf::Mouse::getPosition(window));
+		checkMouseClick(window, event);
 		if (event.type == sf::Event::Closed)
 		{
 			window.close();
@@ -112,10 +111,11 @@ void helpScene::checkMouseOnButtons(sf::Vector2i & mousePosition)
 }
 
 
-void helpScene::checkMouseClick(sf::RenderWindow & window, sf::Event & event, sf::Vector2i & mousePosition)
+void helpScene::checkMouseClick(sf::RenderWindow & window, sf::Event & event)
 {
 	if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left)
 	{
+		const sf::Vector2i mousePosition(event.mouseButton.x, event.mouseButton.y);
 		if (((mousePosition.y >= 210) && (mousePosition.y <= 239)
 			&& (mousePosition.x >= 200) && (mousePosition.x <= 300)))
 		{

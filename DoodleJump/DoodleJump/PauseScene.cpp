@@ -79,9 +79,8 @@ void pauseScene::checkEvents(sf::RenderWindow & window)
 	sf::Event event;
 	while (window.pollEvent(event))
 	{
-		sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
-		checkMouseOnButtons(mousePosition);
-		checkMouseClick(window, event, mousePosition);
+		checkMouseOnButtons(sf::Mouse::getPosition(window));
+		checkMouseClick(window, event);
 		if (event.type == sf::Event::Closed)
 		{
 			window.close();
@@ -112,12 +111,11 @@ void pauseScene::checkMouseOnButtons(sf::Vector2i & mousePosition)
 	}
 }
 
-// TODO: no need to pass mousePosition
-void pauseScene::checkMouseClick(sf::RenderWindow & window, sf::Event & event, sf::Vector2i & mousePosition)
+void pauseScene::checkMouseClick(sf::RenderWindow & window, sf::Event & event)
 {
 	if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left)
 	{
-		// TODO: get mouse pos here
+		const sf::Vector2i mousePosition(event.mouseButton.x, event.mouseButton.y);
 		// http://stackoverflow.com/questions/13244928/getting-dimensions-of-text-in-sfml
 		// NOTE: getLocalBounds/getGlobalBounds and sf::FloatRect::contains(sf::Vector2f const& point)
 		if (((mousePosition.y >= 210) && (mousePosition.y <= 239)
@@ -130,6 +128,5 @@ void pauseScene::checkMouseClick(sf::RenderWindow & window, sf::Event & event, s
 		{
 			window.close();
 		}
-
 	}
 }

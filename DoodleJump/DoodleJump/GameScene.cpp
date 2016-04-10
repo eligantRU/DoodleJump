@@ -48,7 +48,7 @@ gameScene::~gameScene()
 	background = NULL;
 }
 
-SGameResult gameScene::onGameFrame(sf::RenderWindow & window)
+SGameResult gameScene::onGameFrame(sf::RenderWindow & window) // TODO: Need refactoring!
 {
 	if (!endOfGame)
 	{
@@ -80,6 +80,8 @@ SGameResult gameScene::onGameFrame(sf::RenderWindow & window)
 		resetGame();
 		return result;
 	}
+	//window.setView(*view);
+	//return result;
 }
 
 void gameScene::moveDoodle(void)
@@ -648,12 +650,14 @@ bool gameScene::checkGameEnd(void)
 	sf::Vector2f doodlePosition = hero->body->getPosition();
 	if ((checkCollisionHole(doodlePosition) == Collision::COLLISION_HOLE) && ((actualBonus == BonusType::NO)))
 	{
+		PlaySound(L"sounds/crnarupa.wav", NULL, SND_ASYNC | SND_NODEFAULT);
 		return true;
 	}
-	if ((hero->body->getPosition().y <= view->getCenter().y + 350.f))
+	if ((doodlePosition.y <= view->getCenter().y + 350.f))
 	{
 		return false;
 	}
+	PlaySound(L"sounds/pada.wav", NULL, SND_ASYNC | SND_NODEFAULT);
 	return true;
 }
 
@@ -682,24 +686,6 @@ void gameScene::keyPressed(sf::RenderWindow & window)
 	sf::Event event;
 	while (window.pollEvent(event))
 	{
-		/*if (event.type == sf::Event::KeyPressed)
-		{
-			if (event.key.code == sf::Keyboard::A)
-			{
-				hero->direction.x = DirectionX::LEFT;
-				hero->lastDirectionX = DirectionX::LEFT;
-			}
-			else if (event.key.code == sf::Keyboard::D)
-			{
-				hero->direction.x = DirectionX::RIGHT;
-				hero->lastDirectionX = DirectionX::RIGHT;
-			}
-		}
-		else
-		{
-			hero->direction.x = DirectionX::NONE; // It's no working!
-		}*/
-
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 		{
 			hero->direction.x = DirectionX::LEFT;
@@ -877,22 +863,27 @@ float gameScene::checkDoodleFall(void)
 	case Collision::COLLISION_PLATE:
 		actualBonus = BonusType::NO;
 		result.collision = Collision::COLLISION_PLATE;
+		PlaySound(L"sounds/jump.wav", NULL, SND_ASYNC | SND_NODEFAULT);
 		return PLATE_DELTA_HEIGHT;
 	case Collision::COLLISION_SPRING:
 		actualBonus = BonusType::SPRING;
 		result.collision = Collision::COLLISION_SPRING;
+		PlaySound(L"sounds/feder.wav", NULL, SND_ASYNC | SND_NODEFAULT);
 		return SPRING_DELTA_HEIGHT;
 	case Collision::COLLISION_TRAMPLANE:
 		actualBonus = BonusType::TRAMPOLINE;
 		result.collision = Collision::COLLISION_TRAMPLANE;
+		PlaySound(L"sounds/trampoline.wav", NULL, SND_ASYNC | SND_NODEFAULT);
 		return TRAMPLANE_DELTA_HEIGHT;
 	case Collision::COLLISION_HAT_HELICOPTER:
 		actualBonus = BonusType::HAT_HELICOPTER;
 		result.collision = Collision::COLLISION_HAT_HELICOPTER;
+		PlaySound(L"sounds/propeller.wav", NULL, SND_ASYNC | SND_NODEFAULT);
 		return HAT_HELICOPTER_DELTA_HEIGHT;
 	case Collision::COLLISION_ROCKET:
 		actualBonus = BonusType::ROCKET;
 		result.collision = Collision::COLLISION_ROCKET;
+		PlaySound(L"sounds/jetpack.wav", NULL, SND_ASYNC | SND_NODEFAULT);
 		return ROCKET_DELTA_HEIGHT;
 	default:
 		result.collision = Collision::NO_COLLISION;

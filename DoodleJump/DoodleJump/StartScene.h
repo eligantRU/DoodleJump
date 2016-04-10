@@ -15,7 +15,7 @@ private:
 	void render(sf::RenderWindow & window);
 	void checkEvents(sf::RenderWindow & window);
 	void checkMouseOnButtons(sf::Vector2i & mousePosition);
-	void checkMouseClick(sf::RenderWindow & window, sf::Event & event, sf::Vector2i & mousePosition);
+	void checkMouseClick(sf::RenderWindow & window, sf::Event & event);
 	Collision checkCollisionPlate(void);
 	void moveDoodle(void);
 	Plate * plate;
