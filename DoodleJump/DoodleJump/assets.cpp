@@ -5,7 +5,7 @@
 
 Assets::Assets()
 {
-	addTexture(BACKGROUND_TEXTURE, "images/background.png", true);
+	addRepeatedTexture(BACKGROUND_TEXTURE, "images/background.png");
 	addTexture(TRAMPOLINE_TEXTURE, "images/TRAMPOLINE_36_13.png");
 	addTexture(ROCKET_NONE_TEXTURE, "images/Rocket_none_23_36.png");
 	addTexture(ROCKET_0_LEFT_TEXTURE, "images/Rocket_left_12_36.png");
@@ -57,20 +57,11 @@ Assets::Assets()
 	addTexture(MONSTER_GREEN_TEXTURE, "images/Monster_green_82_53.png");
 	addTexture(MONSTER_BLUE_LEFT_TEXTURE, "images/Monster_blue_left_37_49.png");
 	addTexture(MONSTER_BLUE_RIGHT_TEXTURE, "images/Monster_blue_right_37_49.png");
-	
 	addTexture(BUTTON_A_TEXTURE, "images/A_key_94_78.png");
 	addTexture(BUTTON_D_TEXTURE, "images/D_key_92_78.png");
 
-	if (!font.loadFromFile("arial.ttf"))
-	{
-		printf("Error loaded arial\n");
-	}
-
-	if (!ICON.loadFromFile("images/icon.png"))
-	{
-		printf("Error loaded icon\n");
-	}
-	// TODO: create addSound(), addFont() & addIcon(). In which -- addFile()
+	addFont(font, "arial.ttf");
+	addImage(ICON, "images/icon.png");
 }
 
 Assets::~Assets()
@@ -78,12 +69,37 @@ Assets::~Assets()
 
 }
 
-void Assets::addTexture(sf::Texture & texture, std::string string, const bool repeat) 
+void Assets::addTexture(sf::Texture & texture, std::string string)
 {
 	if (!texture.loadFromFile(string))
 	{
-		printf("Error loaded file");
+		MessageBoxA(NULL, "File not founded", "Error", MB_ICONERROR | MB_OK);
+		_exit(-1);
 	}
 	texture.setSmooth(true);
-	texture.setRepeated(repeat);
+	texture.setRepeated(false);
+}
+
+void Assets::addRepeatedTexture(sf::Texture & texture, std::string string)
+{
+	addTexture(texture, string);
+	texture.setRepeated(true);
+}
+
+void Assets::addFont(sf::Font & font, std::string string)
+{
+	if (!font.loadFromFile(string))
+	{
+		MessageBoxA(NULL, "File not founded", "Error", MB_ICONERROR | MB_OK);
+		_exit(-1);
+	}
+}
+
+void Assets::addImage(sf::Image & image, std::string string)
+{
+	if (!image.loadFromFile(string))
+	{
+		MessageBoxA(NULL, "File not founded", "Error", MB_ICONERROR | MB_OK);
+		_exit(-1);
+	}
 }

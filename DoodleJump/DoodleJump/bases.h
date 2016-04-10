@@ -72,12 +72,6 @@ enum class BonusType
 	NO
 };
 
-struct Direction
-{
-	DirectionX x;
-	DirectionY y;
-};
-
 enum class gameStatus
 {
 	START_SCENE,
@@ -85,6 +79,12 @@ enum class gameStatus
 	GAME_SCENE,
 	PAUSE_SCENE,
 	GAME_OVER_SCENE
+};
+
+struct Direction
+{
+	DirectionX x;
+	DirectionY y;
 };
 
 struct SGameResult

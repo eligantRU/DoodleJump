@@ -7,7 +7,10 @@ struct Assets
 public:
 	Assets();
 	~Assets();
-	void addTexture(sf::Texture & texture, std::string string, const bool repeat = false);
+	void addTexture(sf::Texture & texture, std::string string);
+	void addRepeatedTexture(sf::Texture & texture, std::string string);
+	void addFont(sf::Font & font, std::string string); 
+	void addImage(sf::Image & image, std::string string);
 	sf::Image ICON;
 	sf::Texture BACKGROUND_TEXTURE;
 	sf::Texture PLATE_STATIC_TEXTURE;

@@ -906,7 +906,7 @@ Collision gameScene::checkCollisionPlate(sf::Vector2f & doodlePosition, sf::Vect
 
 			if (plate[i]->type == PlateType::CLOUD)
 			{
-				plate[i]->body->setPosition(100.f, 1000.f); // TODO: u know
+				plate[i]->body->setPosition(100.f, 1000.f);
 			}
 			return  Collision::COLLISION_PLATE;
 		}
