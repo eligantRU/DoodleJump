@@ -51,17 +51,20 @@ SGameResult pauseScene::onPauseMenu(sf::RenderWindow & window)
 	exitButton->setPosition(center.x - 275.f + 250.f, center.y - 350.f + 270.f);
 	exitText.setPosition(center.x - 275.f + 280.f, center.y - 350.f + 272.f);
 	background->setPosition(center.x - 275.f, center.y - 350.f);
+	
+	clearResult();
 
-	// TODO: create new method(clearResult()) in Game
+	checkEvents(window);
+	render(window);
+	window.display();
+	return result;
+}
+
+void pauseScene::clearResult(void)
+{
 	result.status = gameStatus::PAUSE_SCENE;
 	result.collision = Collision::NO_COLLISION;
 	result.points = 0;
-
-	render(window);
-	window.display();
-
-	checkEvents(window);
-	return result;
 }
 
 void pauseScene::render(sf::RenderWindow & window)
@@ -121,6 +124,7 @@ void pauseScene::checkMouseClick(sf::RenderWindow & window, sf::Event & event)
 		if (((mousePosition.y >= 210) && (mousePosition.y <= 239)
 			&& (mousePosition.x >= 200) && (mousePosition.x <= 300)))
 		{
+			backButton->setTexture(assets->BUTTON_INACTIVE_TEXTURE);
 			result.status = gameStatus::GAME_SCENE;
 		}
 		if (((mousePosition.y >= 270) && (mousePosition.y <= 299)

@@ -48,11 +48,12 @@ gameScene::~gameScene()
 	background = NULL;
 }
 
-SGameResult gameScene::onGameFrame(sf::RenderWindow & window) // TODO: Need refactoring!
+SGameResult gameScene::onGameFrame(sf::RenderWindow & window)
 {
+	result.collision = Collision::NO_COLLISION;
+
 	if (!endOfGame)
 	{
-		result.collision = Collision::NO_COLLISION;
 		keyPressed(window);
 		update(window);
 		window.setView(*view);
@@ -69,7 +70,6 @@ SGameResult gameScene::onGameFrame(sf::RenderWindow & window) // TODO: Need refa
 		{
 			result.status = gameStatus::GAME_SCENE;
 		}
-		return result;
 	}
 	else
 	{
@@ -78,10 +78,8 @@ SGameResult gameScene::onGameFrame(sf::RenderWindow & window) // TODO: Need refa
 		result.points = points;
 		result.status = gameStatus::GAME_OVER_SCENE;
 		resetGame();
-		return result;
 	}
-	//window.setView(*view);
-	//return result;
+	return result;
 }
 
 void gameScene::moveDoodle(void)
@@ -112,7 +110,7 @@ void gameScene::moveDoodleVertical(float & positionY)
 	{
 		hero->speedY += ACCELERATION;
 		positionY = hero->speedY;
-
+		
 		if (hero->body->getPosition().y < hero->positionBeforeDown.y)
 		{
 			hero->positionBeforeDown = hero->body->getPosition();
@@ -140,237 +138,250 @@ void gameScene::moveDoodleVertical(float & positionY)
 
 void gameScene::animateBonus(void)
 {
-	animateSpring();
-	animateTrampoline();
-	animateRocket();
-	animateHatHelicopter();
+	if (actualBonus != BonusType::NO)
+	{
+		switch (actualBonus)
+		{
+		case BonusType::SPRING:
+			animateSpring();
+			break;
+		case BonusType::TRAMPOLINE:
+			animateTrampoline();
+			break;
+		case BonusType::ROCKET:
+			animateRocket();
+			break;
+		case BonusType::HAT_HELICOPTER:
+			animateHatHelicopter();
+			break;
+		default:
+			break;
+		}
+	}
 }
 
 void gameScene::animateSpring(void)
 {
-
+	if ((hero->speedY >= 0) || (bonus[actualBonusId].body->getPosition().y < view->getCenter().y - 350 - SPRING_HEIGHT))
+	{
+		actualBonus = BonusType::NO;
+	}
+	else
+	{
+		bonus[actualBonusId].body->setTexture(assets->SPRING_2_TEXTURE);
+	}
 }
 
 void gameScene::animateTrampoline(void)
 {
-	if (actualBonus == BonusType::TRAMPOLINE)
+	if (hero->speedY >= 0)
 	{
-		if (hero->speedY >= 0)
-		{
-			hero->body->setRotation(0.f);
-			actualBonus = BonusType::NO;
-		}
-		else
-		{
-			hero->body->rotate(360.f / TRAMPLANE_DELTA_HEIGHT);
-		}
+		hero->body->setRotation(0.f);
+		actualBonus = BonusType::NO;
 	}
-
+	else
+	{
+		hero->body->rotate(360.f / TRAMPLANE_DELTA_HEIGHT);
+	}
 }
 
 void gameScene::animateRocket(void)
 {
-	if (actualBonus == BonusType::ROCKET)
+	if ((hero->speedY >= 0) || (bonus[actualBonusId].body->getPosition().y < view->getCenter().y - 350 - ROCKET_HEIGHT))
 	{
-		if ((hero->speedY >= 0) || (bonus[actualBonusId].body->getPosition().y < view->getCenter().y - 350 - ROCKET_HEIGHT))
-		{
-			animationCounter = 0;
-			actualBonus = BonusType::NO;
-			offsetFallBonus.x = 0.f;
-			offsetFallBonus.y = 0.f;
-			bonus[actualBonusId].body->setRotation(0);
-		}
+		animationCounter = 0;
+		actualBonus = BonusType::NO;
+		offsetFallBonus.x = 0.f;
+		offsetFallBonus.y = 0.f;
+		bonus[actualBonusId].body->setRotation(0);
+	}
 
-		if ((animationCounter >= 0) && (animationCounter <= 2))
+	if ((animationCounter >= 0) && (animationCounter <= 2))
+	{
+		delete bonus[actualBonusId].body;
+		bonus[actualBonusId].body = new sf::Sprite;
+		if (hero->lastDirectionX == DirectionX::RIGHT)
 		{
-			delete bonus[actualBonusId].body;
-			bonus[actualBonusId].body = new sf::Sprite;
-			if (hero->lastDirectionX == DirectionX::RIGHT)
-			{
-				bonus[actualBonusId].body->setTexture(assets->ROCKET_0_LEFT_TEXTURE);
-			}
-			else if (hero->lastDirectionX == DirectionX::LEFT)
-			{
-				bonus[actualBonusId].body->setTexture(assets->ROCKET_0_RIGHT_TEXTURE);
-			}
-			++animationCounter;
+			bonus[actualBonusId].body->setTexture(assets->ROCKET_0_LEFT_TEXTURE);
 		}
-		if ((animationCounter >= 3) && (animationCounter <= 5))
+		else if (hero->lastDirectionX == DirectionX::LEFT)
 		{
-			delete bonus[actualBonusId].body;
-			bonus[actualBonusId].body = new sf::Sprite;
-			if (hero->lastDirectionX == DirectionX::RIGHT)
-			{
-				bonus[actualBonusId].body->setTexture(assets->ROCKET_1_LEFT_TEXTURE);
-			}
-			else if (hero->lastDirectionX == DirectionX::LEFT)
-			{
-				bonus[actualBonusId].body->setTexture(assets->ROCKET_1_RIGHT_TEXTURE);
-			}
-			++animationCounter;
+			bonus[actualBonusId].body->setTexture(assets->ROCKET_0_RIGHT_TEXTURE);
 		}
-		if ((animationCounter >= 6) && (animationCounter <= 8))
+		++animationCounter;
+	}
+	if ((animationCounter >= 3) && (animationCounter <= 5))
+	{
+		delete bonus[actualBonusId].body;
+		bonus[actualBonusId].body = new sf::Sprite;
+		if (hero->lastDirectionX == DirectionX::RIGHT)
 		{
-			delete bonus[actualBonusId].body;
-			bonus[actualBonusId].body = new sf::Sprite;
-			if (hero->lastDirectionX == DirectionX::RIGHT)
-			{
-				bonus[actualBonusId].body->setTexture(assets->ROCKET_2_LEFT_TEXTURE);
-			}
-			else if (hero->lastDirectionX == DirectionX::LEFT)
-			{
-				bonus[actualBonusId].body->setTexture(assets->ROCKET_2_RIGHT_TEXTURE);
-			}
-			++animationCounter;
+			bonus[actualBonusId].body->setTexture(assets->ROCKET_1_LEFT_TEXTURE);
 		}
-		if ((animationCounter >= 9) && (animationCounter <= 11))
+		else if (hero->lastDirectionX == DirectionX::LEFT)
 		{
-			delete bonus[actualBonusId].body;
-			bonus[actualBonusId].body = new sf::Sprite;
-			if (hero->lastDirectionX == DirectionX::RIGHT)
-			{
-				bonus[actualBonusId].body->setTexture(assets->ROCKET_3_LEFT_TEXTURE);
-			}
-			else if (hero->lastDirectionX == DirectionX::LEFT)
-			{
-				bonus[actualBonusId].body->setTexture(assets->ROCKET_3_RIGHT_TEXTURE);
-			}
-			++animationCounter;
+			bonus[actualBonusId].body->setTexture(assets->ROCKET_1_RIGHT_TEXTURE);
 		}
-		if (animationCounter == 11)
+		++animationCounter;
+	}
+	if ((animationCounter >= 6) && (animationCounter <= 8))
+	{
+		delete bonus[actualBonusId].body;
+		bonus[actualBonusId].body = new sf::Sprite;
+		if (hero->lastDirectionX == DirectionX::RIGHT)
 		{
-			animationCounter = 0;
+			bonus[actualBonusId].body->setTexture(assets->ROCKET_2_LEFT_TEXTURE);
 		}
+		else if (hero->lastDirectionX == DirectionX::LEFT)
+		{
+			bonus[actualBonusId].body->setTexture(assets->ROCKET_2_RIGHT_TEXTURE);
+		}
+		++animationCounter;
+	}
+	if ((animationCounter >= 9) && (animationCounter <= 11))
+	{
+		delete bonus[actualBonusId].body;
+		bonus[actualBonusId].body = new sf::Sprite;
+		if (hero->lastDirectionX == DirectionX::RIGHT)
+		{
+			bonus[actualBonusId].body->setTexture(assets->ROCKET_3_LEFT_TEXTURE);
+		}
+		else if (hero->lastDirectionX == DirectionX::LEFT)
+		{
+			bonus[actualBonusId].body->setTexture(assets->ROCKET_3_RIGHT_TEXTURE);
+		}
+		++animationCounter;
+	}
+	if (animationCounter == 11)
+	{
+		animationCounter = 0;
+	}
 
-		if ((animationCounter >= 0) && (animationCounter <= 11) && (actualBonus != BonusType::NO) && (hero->speedY < -0.05f * ROCKET_DELTA_HEIGHT))
+	if ((animationCounter >= 0) && (animationCounter <= 11) && (actualBonus != BonusType::NO) && (hero->speedY < -0.05f * ROCKET_DELTA_HEIGHT))
+	{
+		if (hero->lastDirectionX == DirectionX::RIGHT)
 		{
-			if (hero->lastDirectionX == DirectionX::RIGHT)
+			if ((animationCounter >= 0) && (animationCounter <= 2))
 			{
-				if ((animationCounter >= 0) && (animationCounter <= 2))
-				{
-					bonus[actualBonusId].body->setPosition(hero->body->getPosition().x - 13, hero->body->getPosition().y);
-				}
-				if ((animationCounter >= 3) && (animationCounter <= 5))
-				{
-					bonus[actualBonusId].body->setPosition(hero->body->getPosition().x - 13, hero->body->getPosition().y);
-				}
-				if ((animationCounter >= 6) && (animationCounter <= 8))
-				{
-					bonus[actualBonusId].body->setPosition(hero->body->getPosition().x - 15, hero->body->getPosition().y);
-				}
-				if ((animationCounter >= 9) && (animationCounter <= 11))
-				{
-					bonus[actualBonusId].body->setPosition(hero->body->getPosition().x - 17, hero->body->getPosition().y);
-				}
+				bonus[actualBonusId].body->setPosition(hero->body->getPosition().x - 13, hero->body->getPosition().y);
 			}
-			else if (hero->lastDirectionX == DirectionX::LEFT)
+			if ((animationCounter >= 3) && (animationCounter <= 5))
 			{
-				if ((animationCounter >= 0) && (animationCounter <= 2))
-				{
-					bonus[actualBonusId].body->setPosition(hero->body->getPosition().x + DOODLE_WIDTH + 1, hero->body->getPosition().y);
-				}
-				if ((animationCounter >= 3) && (animationCounter <= 5))
-				{
-					bonus[actualBonusId].body->setPosition(hero->body->getPosition().x + DOODLE_WIDTH + 1, hero->body->getPosition().y);
-				}
-				if ((animationCounter >= 6) && (animationCounter <= 8))
-				{
-					bonus[actualBonusId].body->setPosition(hero->body->getPosition().x + DOODLE_WIDTH, hero->body->getPosition().y);
-				}
-				if ((animationCounter >= 9) && (animationCounter <= 11))
-				{
-					bonus[actualBonusId].body->setPosition(hero->body->getPosition().x + DOODLE_WIDTH - 5, hero->body->getPosition().y);
-				}
+				bonus[actualBonusId].body->setPosition(hero->body->getPosition().x - 13, hero->body->getPosition().y);
+			}
+			if ((animationCounter >= 6) && (animationCounter <= 8))
+			{
+				bonus[actualBonusId].body->setPosition(hero->body->getPosition().x - 15, hero->body->getPosition().y);
+			}
+			if ((animationCounter >= 9) && (animationCounter <= 11))
+			{
+				bonus[actualBonusId].body->setPosition(hero->body->getPosition().x - 17, hero->body->getPosition().y);
 			}
 		}
+		else if (hero->lastDirectionX == DirectionX::LEFT)
+		{
+			if ((animationCounter >= 0) && (animationCounter <= 2))
+			{
+				bonus[actualBonusId].body->setPosition(hero->body->getPosition().x + DOODLE_WIDTH + 1, hero->body->getPosition().y);
+			}
+			if ((animationCounter >= 3) && (animationCounter <= 5))
+			{
+				bonus[actualBonusId].body->setPosition(hero->body->getPosition().x + DOODLE_WIDTH + 1, hero->body->getPosition().y);
+			}
+			if ((animationCounter >= 6) && (animationCounter <= 8))
+			{
+				bonus[actualBonusId].body->setPosition(hero->body->getPosition().x + DOODLE_WIDTH, hero->body->getPosition().y);
+			}
+			if ((animationCounter >= 9) && (animationCounter <= 11))
+			{
+				bonus[actualBonusId].body->setPosition(hero->body->getPosition().x + DOODLE_WIDTH - 5, hero->body->getPosition().y);
+			}
+		}
+	}
 
-		if (hero->speedY >= -0.05f * ROCKET_DELTA_HEIGHT)
+	if (hero->speedY >= -0.05f * ROCKET_DELTA_HEIGHT)
+	{
+		bonus[actualBonusId].body = new sf::Sprite;
+		bonus[actualBonusId].body->setTexture(assets->ROCKET_NONE_TEXTURE);
+		if (actualBonus != BonusType::NO)
 		{
-			bonus[actualBonusId].body = new sf::Sprite;
-			bonus[actualBonusId].body->setTexture(assets->ROCKET_NONE_TEXTURE);
-			if (actualBonus != BonusType::NO)
-			{
-				bonus[actualBonusId].body->setPosition(hero->body->getPosition().x, hero->body->getPosition().y);
-			}
-			bonus[actualBonusId].body->rotate(-10.f);
-			offsetFallBonus.x += -2.f * STEP;
-			offsetFallBonus.y += 6.f * STEP;
-			bonus[actualBonusId].body->move(sf::Vector2f(offsetFallBonus));
+			bonus[actualBonusId].body->setPosition(hero->body->getPosition().x, hero->body->getPosition().y);
 		}
+		bonus[actualBonusId].body->rotate(-10.f);
+		offsetFallBonus.x += -2.f * STEP;
+		offsetFallBonus.y += 6.f * STEP;
+		bonus[actualBonusId].body->move(sf::Vector2f(offsetFallBonus));
 	}
 }
 
 void gameScene::animateHatHelicopter(void)
 {
-	if (actualBonus == BonusType::HAT_HELICOPTER)
+	if ((hero->speedY >= 0) || (bonus[actualBonusId].body->getPosition().y < view->getCenter().y - 350 - HAT_HELICOPTER_HEIGHT))
 	{
-		if ((hero->speedY >= 0) || (bonus[actualBonusId].body->getPosition().y < view->getCenter().y - 350 - HAT_HELICOPTER_HEIGHT))
-		{
-			animationCounter = 0;
-			actualBonus = BonusType::NO;
-			offsetFallBonus.x = 0.f;
-			offsetFallBonus.y = 0.f;
-			bonus[actualBonusId].body->setRotation(0);
-		}
+		animationCounter = 0;
+		actualBonus = BonusType::NO;
+		offsetFallBonus.x = 0.f;
+		offsetFallBonus.y = 0.f;
+		bonus[actualBonusId].body->setRotation(0);
+	}
 
-		if ((animationCounter >= 0) && (animationCounter <= 5))
-		{
-			delete bonus[actualBonusId].body;
-			bonus[actualBonusId].body = new sf::Sprite;
-			bonus[actualBonusId].body->setTexture(assets->HAT_HELOCPTER_FLY_LEFT_TEXTURE);
-			++animationCounter;
-		}
-		if ((animationCounter >= 6) && (animationCounter <= 10))
-		{
-			delete bonus[actualBonusId].body;
-			bonus[actualBonusId].body = new sf::Sprite;
-			bonus[actualBonusId].body->setTexture(assets->HAT_HELOCPTER_DIAGONAL_LEFT_TEXTURE);
-			++animationCounter;
-		}
-		if ((animationCounter >= 11) && (animationCounter <= 15))
-		{
-			delete bonus[actualBonusId].body;
-			bonus[actualBonusId].body = new sf::Sprite;
-			bonus[actualBonusId].body->setTexture(assets->HAT_HELOCPTER_DIAGONAL_RIGHT_TEXTURE);
-			++animationCounter;
-		}
-		if ((animationCounter >= 16) && (animationCounter <= 20))
-		{
-			delete bonus[actualBonusId].body;
-			bonus[actualBonusId].body = new sf::Sprite;
-			bonus[actualBonusId].body->setTexture(assets->HAT_HELOCPTER_FLY_RIGHT_TEXTURE);
-			++animationCounter;
-		}
-		if (animationCounter == 20)
-		{
-			animationCounter = 0;
-		}
+	if ((animationCounter >= 0) && (animationCounter <= 5))
+	{
+		delete bonus[actualBonusId].body;
+		bonus[actualBonusId].body = new sf::Sprite;
+		bonus[actualBonusId].body->setTexture(assets->HAT_HELOCPTER_FLY_LEFT_TEXTURE);
+		++animationCounter;
+	}
+	if ((animationCounter >= 6) && (animationCounter <= 10))
+	{
+		delete bonus[actualBonusId].body;
+		bonus[actualBonusId].body = new sf::Sprite;
+		bonus[actualBonusId].body->setTexture(assets->HAT_HELOCPTER_DIAGONAL_LEFT_TEXTURE);
+		++animationCounter;
+	}
+	if ((animationCounter >= 11) && (animationCounter <= 15))
+	{
+		delete bonus[actualBonusId].body;
+		bonus[actualBonusId].body = new sf::Sprite;
+		bonus[actualBonusId].body->setTexture(assets->HAT_HELOCPTER_DIAGONAL_RIGHT_TEXTURE);
+		++animationCounter;
+	}
+	if ((animationCounter >= 16) && (animationCounter <= 20))
+	{
+		delete bonus[actualBonusId].body;
+		bonus[actualBonusId].body = new sf::Sprite;
+		bonus[actualBonusId].body->setTexture(assets->HAT_HELOCPTER_FLY_RIGHT_TEXTURE);
+		++animationCounter;
+	}
+	if (animationCounter == 20)
+	{
+		animationCounter = 0;
+	}
 
-		if ((animationCounter >= 0) && (animationCounter <= 20) && (actualBonus != BonusType::NO) && (hero->speedY < -0.05f * HAT_HELICOPTER_DELTA_HEIGHT))
+	if ((animationCounter >= 0) && (animationCounter <= 20) && (actualBonus != BonusType::NO) && (hero->speedY < -0.05f * HAT_HELICOPTER_DELTA_HEIGHT))
+	{
+		if (hero->lastDirectionX == DirectionX::RIGHT)
 		{
-			if (hero->lastDirectionX == DirectionX::RIGHT)
-			{
-				bonus[actualBonusId].body->setPosition(hero->body->getPosition().x, hero->body->getPosition().y - 14);
-			}
-			else if (hero->lastDirectionX == DirectionX::LEFT)
-			{
-				bonus[actualBonusId].body->setPosition(hero->body->getPosition().x + 15, hero->body->getPosition().y - 14);
-			}
+			bonus[actualBonusId].body->setPosition(hero->body->getPosition().x, hero->body->getPosition().y - 14);
 		}
+		else if (hero->lastDirectionX == DirectionX::LEFT)
+		{
+			bonus[actualBonusId].body->setPosition(hero->body->getPosition().x + 15, hero->body->getPosition().y - 14);
+		}
+	}
 
-		if (hero->speedY >= -0.05f * HAT_HELICOPTER_DELTA_HEIGHT)
+	if (hero->speedY >= -0.05f * HAT_HELICOPTER_DELTA_HEIGHT)
+	{
+		bonus[actualBonusId].body = new sf::Sprite;
+		bonus[actualBonusId].body->setTexture(assets->HAT_HELOCPTER_NONE_LEFT_TEXTURE);
+		if (actualBonus != BonusType::NO)
 		{
-			bonus[actualBonusId].body = new sf::Sprite;
-			bonus[actualBonusId].body->setTexture(assets->HAT_HELOCPTER_NONE_LEFT_TEXTURE);
-			if (actualBonus != BonusType::NO)
-			{
-				bonus[actualBonusId].body->setPosition(hero->body->getPosition().x, hero->body->getPosition().y - 14);
-			}
-			bonus[actualBonusId].body->rotate(-10.f);
-			offsetFallBonus.x += -2.f * STEP;
-			offsetFallBonus.y += 6.f * STEP;
-			bonus[actualBonusId].body->move(sf::Vector2f(offsetFallBonus));
+			bonus[actualBonusId].body->setPosition(hero->body->getPosition().x, hero->body->getPosition().y - 14);
 		}
+		bonus[actualBonusId].body->rotate(-10.f);
+		offsetFallBonus.x += -2.f * STEP;
+		offsetFallBonus.y += 6.f * STEP;
+		bonus[actualBonusId].body->move(sf::Vector2f(offsetFallBonus));
 	}
 }
 
@@ -865,6 +876,11 @@ float gameScene::checkDoodleFall(void)
 		result.collision = Collision::COLLISION_PLATE;
 		PlaySound(L"sounds/jump.wav", NULL, SND_ASYNC | SND_NODEFAULT);
 		return PLATE_DELTA_HEIGHT;
+	case Collision::COLLISION_GHOST_PLATE:
+		actualBonus = BonusType::NO;
+		result.collision = Collision::COLLISION_GHOST_PLATE;
+		PlaySound(L"sounds/bijeli.wav", NULL, SND_ASYNC | SND_NODEFAULT);
+		return PLATE_DELTA_HEIGHT;
 	case Collision::COLLISION_SPRING:
 		actualBonus = BonusType::SPRING;
 		result.collision = Collision::COLLISION_SPRING;
@@ -907,6 +923,7 @@ Collision gameScene::checkCollisionPlate(sf::Vector2f & doodlePosition, sf::Vect
 			if (plate[i]->type == PlateType::CLOUD)
 			{
 				plate[i]->body->setPosition(100.f, 1000.f);
+				return Collision::COLLISION_GHOST_PLATE;
 			}
 			return  Collision::COLLISION_PLATE;
 		}
@@ -934,7 +951,6 @@ Collision gameScene::checkCollisionBonus(sf::Vector2f & doodlePosition, sf::Vect
 			if (((doodlePosition.y + DOODLE_HEIGHT >= bonusPosition[bonusIndex].y) && (doodlePosition.y + DOODLE_HEIGHT <= bonusPosition[bonusIndex].y + SPRING_HEIGHT)
 				&& (doodlePosition.x + DOODLE_WIDTH >= bonusPosition[bonusIndex].x) && (doodlePosition.x - SPRING_WIDTH <= bonusPosition[bonusIndex].x)))
 			{
-				bonus[bonusIndex].body->setTexture(assets->SPRING_2_TEXTURE);
 				actualBonusId = bonusIndex;
 				return Collision::COLLISION_SPRING;
 			}
@@ -952,14 +968,6 @@ Collision gameScene::checkCollisionBonus(sf::Vector2f & doodlePosition, sf::Vect
 				&& (doodlePosition.x + DOODLE_WIDTH >= bonusPosition[bonusIndex].x) && (doodlePosition.x - HAT_HELICOPTER_WIDTH <= bonusPosition[bonusIndex].x)))
 			{
 				actualBonusId = bonusIndex;
-				if (hero->direction.x == DirectionX::RIGHT)
-				{
-					bonus[bonusIndex].body->setPosition(doodlePosition.x + 15, doodlePosition.y - 15);
-				}
-				else if ((hero->direction.x == DirectionX::LEFT) || (hero->direction.x == DirectionX::NONE))
-				{
-					bonus[bonusIndex].body->setPosition(doodlePosition.x + 15, doodlePosition.y - 15);
-				}
 				return Collision::COLLISION_HAT_HELICOPTER;
 			}
 			break;
@@ -968,15 +976,6 @@ Collision gameScene::checkCollisionBonus(sf::Vector2f & doodlePosition, sf::Vect
 				&& (doodlePosition.x + DOODLE_WIDTH >= bonusPosition[bonusIndex].x) && (doodlePosition.x - ROCKET_WIDTH <= bonusPosition[bonusIndex].x)))
 			{
 				actualBonusId = bonusIndex;
-
-				if (hero->direction.x == DirectionX::RIGHT)
-				{
-					bonus[bonusIndex].body->setPosition(doodlePosition.x - ROCKET_WIDTH, doodlePosition.y);
-				}
-				else if ((hero->direction.x == DirectionX::LEFT) || (hero->direction.x == DirectionX::NONE))
-				{
-					bonus[bonusIndex].body->setPosition(doodlePosition.x + DOODLE_WIDTH, doodlePosition.y);
-				}
 				return Collision::COLLISION_ROCKET;
 			}
 			break;

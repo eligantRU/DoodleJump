@@ -126,11 +126,13 @@ void gameOverScene::checkMouseClick(sf::RenderWindow & window, sf::Event & event
 		if (((mousePosition.y >= 210) && (mousePosition.y <= 239)
 			&& (mousePosition.x >= 200) && (mousePosition.x <= 300)))
 		{
+			goMenuButton->setTexture(assets->BUTTON_INACTIVE_TEXTURE);
 			result.status = gameStatus::START_SCENE;
 		}
 		if (((mousePosition.y >= 270) && (mousePosition.y <= 299)
 			&& (mousePosition.x >= 250) && (mousePosition.x <= 350)))
 		{
+			playAgainButton->setTexture(assets->BUTTON_INACTIVE_TEXTURE);
 			result.status = gameStatus::GAME_SCENE;
 		}
 	}

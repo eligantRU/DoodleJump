@@ -7,6 +7,7 @@
 #include <array>
 #include <string>
 #include <functional>
+#include <memory>
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include <SFML/OpenGL.hpp>

@@ -59,17 +59,20 @@ helpScene::~helpScene()
 
 SGameResult helpScene::onHelpMenu(sf::RenderWindow & window)
 {
-	result.status = gameStatus::HELP_SCENE;
-	result.collision = Collision::NO_COLLISION;
-	result.points = 0;
-
-	render(window);
-	window.display();
+	clearResult();
 
 	checkEvents(window);
+	render(window);
+	window.display();
 	return result;
 }
 
+void helpScene::clearResult(void)
+{
+	result.status = gameStatus::HELP_SCENE;
+	result.collision = Collision::NO_COLLISION;
+	result.points = 0;
+}
 
 void helpScene::render(sf::RenderWindow & window)
 {
@@ -119,6 +122,7 @@ void helpScene::checkMouseClick(sf::RenderWindow & window, sf::Event & event)
 		if (((mousePosition.y >= 210) && (mousePosition.y <= 239)
 			&& (mousePosition.x >= 200) && (mousePosition.x <= 300)))
 		{
+			goMenuButton->setTexture(assets->BUTTON_INACTIVE_TEXTURE);
 			result.status = gameStatus::START_SCENE;
 		}
 	}

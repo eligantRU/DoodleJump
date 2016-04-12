@@ -11,7 +11,7 @@ public:
 	void launch(void);
 private:
 	Assets * assets;
-	sf::View * view;
+	sf::View * view; void clear(void);
 	startScene * sceneStart;
 	helpScene * sceneHelp;
 	gameScene * sceneGame;

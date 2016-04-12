@@ -96,17 +96,21 @@ startScene::~startScene()
 
 SGameResult startScene::onStartMenu(sf::RenderWindow & window)
 {
-	result.status = gameStatus::START_SCENE;
-	result.collision = Collision::NO_COLLISION;
-	result.points = 0;
+	clearResult();
 
 	moveDoodle();
-
+	checkEvents(window);
 	render(window);
 	window.display();
 
-	checkEvents(window);
 	return result;
+}
+
+void startScene::clearResult(void)
+{
+	result.status = gameStatus::START_SCENE;
+	result.collision = Collision::NO_COLLISION;
+	result.points = 0;
 }
 
 void startScene::render(sf::RenderWindow & window)
@@ -171,6 +175,7 @@ void startScene::checkMouseClick(sf::RenderWindow & window, sf::Event & event)
 		if (((mousePosition.y >= 180) && (mousePosition.y <= 209)
 			&& (mousePosition.x >= 200) && (mousePosition.x <= 300)))
 		{
+			playButton->setTexture(assets->BUTTON_INACTIVE_TEXTURE);
 			result.status = gameStatus::GAME_SCENE;
 		}
 		if (((mousePosition.y >= 240) && (mousePosition.y <= 269)
@@ -181,6 +186,7 @@ void startScene::checkMouseClick(sf::RenderWindow & window, sf::Event & event)
 		if (((mousePosition.y >= 475) && (mousePosition.y <= 504)
 			&& (mousePosition.x >= 350) && (mousePosition.x <= 450)))
 		{
+			helpButton->setTexture(assets->BUTTON_INACTIVE_TEXTURE);
 			result.status = gameStatus::HELP_SCENE;
 		}
 	}
