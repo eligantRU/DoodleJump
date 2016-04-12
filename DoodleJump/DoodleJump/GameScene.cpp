@@ -477,9 +477,8 @@ void gameScene::generPlates(void)
 
 	for (int i = 1; i < NUMBER_PLATES / 2; ++(++i))
 	{
-		float y1 = float((rand() % 152) + 90);
-		float x1 = (sqrt(484 * 484 - y1 * y1)) / 2;
-
+		float y1 = float((rand() % 182) + 60);
+		float x1 = float(rand() % (550 - PLATE_WIDTH));	//float x1 = (sqrt(484 * 484 - y1 * y1)) / 2;
 
 		if (platePosition[i].y > view->getCenter().y + 350.f)
 		{
@@ -521,7 +520,7 @@ void gameScene::generPlates(void)
 
 			for (int j = 1; j < NUMBER_PLATES/ 2; ++(++j)) // NOTE: Oh my God...What the f*ck r u doing?
 			{
-				float y2 = float((rand() % 152) + 90);
+				float y2 = float((rand() % 182) + 60);
 				float x2 = float(rand() % (550 - PLATE_WIDTH));
 
 				if (platePosition[j].y > view->getCenter().y + 350.f)
@@ -540,7 +539,6 @@ void gameScene::generPlates(void)
 					{
 						--unstablePlatesCounter;
 					}*/
-
 					plate[i]->body->setRotation(0);
 					switch (rand() % 3)
 					{
@@ -583,7 +581,7 @@ void gameScene::generPlates(void)
 						break;
 					}
 
-					plate[j]->body->setPosition(x2, platePositionY[NUMBER_PLATES - 1] - y1);
+					plate[j]->body->setPosition(x2, platePositionY[NUMBER_PLATES - 1] - y2);
 					break;
 				}
 			}
