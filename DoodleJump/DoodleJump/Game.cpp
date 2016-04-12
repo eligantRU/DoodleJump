@@ -25,11 +25,6 @@ Game::~Game()
 	}
 }*/
 
-void Game::clear(void)
-{
-
-}
-
 void Game::gameLoop(sf::RenderWindow & window)
 {
 	while (window.isOpen())

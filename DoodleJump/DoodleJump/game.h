@@ -11,7 +11,7 @@ public:
 	void launch(void);
 private:
 	Assets * assets;
-	sf::View * view; void clear(void);
+	sf::View * view;
 	startScene * sceneStart;
 	helpScene * sceneHelp;
 	gameScene * sceneGame;
@@ -21,13 +21,6 @@ private:
 	RenderFrameFunc frameFunc;
 	std::vector<sf::Vector2f> platePosition;
 	void gameLoop(sf::RenderWindow & window);
-	void playPlateSound(void);
-	void playSpringSound(void);
-	void playTrampolineSound(void);
-	void playRocketSound(void);
-	void playHatHelicopterSound(void);
-	void playStartGameSound(void);
-	void playGameOverSound(void);
 
 	SGameResult gameState;
 };
