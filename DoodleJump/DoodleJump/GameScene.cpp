@@ -480,7 +480,7 @@ void GameScene::generPlates(void)
 		float y1 = float((rand() % 182) + 60);
 		float x1 = float(rand() % (550 - PLATE_WIDTH));	//float x1 = (sqrt(484 * 484 - y1 * y1)) / 2;
 
-		if (platePosition[i].y > view->getCenter().y + 350.f)
+		if (platePosition[i].y > view->getCenter().y + 350.f + ROCKET_HEIGHT)
 		{
 			if ((plate[i]->body->getPosition().x + x1 >= 550 - PLATE_WIDTH) && (plate[i]->body->getPosition().x - x1 <= 0))
 			{
@@ -523,7 +523,7 @@ void GameScene::generPlates(void)
 				float y2 = float((rand() % 182) + 60);
 				float x2 = float(rand() % (550 - PLATE_WIDTH));
 
-				if (platePosition[j].y > view->getCenter().y + 350.f)
+				if (platePosition[j].y > view->getCenter().y + 350.f + ROCKET_HEIGHT)
 				{
 					/*int divider;
 					if (unstablePlatesCounter < 1)

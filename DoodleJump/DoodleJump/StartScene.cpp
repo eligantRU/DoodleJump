@@ -47,8 +47,8 @@ StartScene::StartScene(Assets & assets, sf::View & view)
 
 	title = new sf::Sprite;
 	title->setTexture(assets.MAIN_TITLE_TEXTURE);
-	title->setPosition(100, 50);	
-	
+	title->setPosition(100, 50);
+
 	hole = new sf::Sprite;
 	hole->setTexture(assets.HOLE_TEXTURE);
 	hole->setPosition(300, 350);
@@ -69,7 +69,7 @@ StartScene::StartScene(Assets & assets, sf::View & view)
 	insects[4] = new sf::Sprite;
 	insects[4]->setTexture(assets.GARBAGE_5_TEXTURE);
 	insects[4]->setPosition(400, 400);
-	
+
 	background = new sf::Sprite;
 	background->setTextureRect(sf::IntRect(0, 0, 550, 700));
 	background->setTexture(assets.BACKGROUND_TEXTURE);

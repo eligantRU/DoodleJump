@@ -12,6 +12,4 @@ public:
 	int speedX;
 	Plate(Assets * assets);
 	~Plate();
-private:
-	Assets * assets;
 };

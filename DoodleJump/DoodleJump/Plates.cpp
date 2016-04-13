@@ -3,7 +3,6 @@
 
 Plate::Plate(Assets * assets)
 {	
-	this->assets = assets;
 	body = new sf::Sprite;
 	type = PlateType::STATIC;
 	body->setTexture(assets->PLATE_STATIC_TEXTURE);

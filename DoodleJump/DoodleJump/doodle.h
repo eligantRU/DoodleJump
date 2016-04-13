@@ -15,6 +15,4 @@ public:
 	DirectionX lastDirectionX;
 	sf::Vector2f positionBeforeDown;
 	float speedY;
-private:
-	Assets * assets;
 };

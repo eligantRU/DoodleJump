@@ -28,6 +28,7 @@ private:
 	void animateHatHelicopter(void);
 	void initBonuses(void);
 	void moveBonuses(void);
+	void generPlates(void);
 	void generBonuses(void);
 	void update(sf::RenderWindow & window);
 	void keyPressed(sf::RenderWindow & window);
@@ -41,7 +42,6 @@ private:
 	Collision checkCollisionHole(sf::Vector2f & doodlePosition);
 	void buildBonus(BonusType bonusType, int bonusIndex, sf::Vector2f platePosition, int plateIndex);
 	void moveDynamicPlates(void);
-	void generPlates(void);
 	int animationCounter;
 	sf::Text scoreNum;
 	uint64_t points;
