@@ -9,5 +9,5 @@ Bonus::Bonus()
 Bonus::~Bonus()
 {
 	delete body;
-	body = NULL;
+	body = nullptr;
 }

@@ -73,7 +73,7 @@ enum class BonusType
 	NO
 };
 
-enum class gameStatus
+enum class GameStatus
 {
 	START_SCENE,
 	HELP_SCENE,
@@ -82,7 +82,7 @@ enum class gameStatus
 	GAME_OVER_SCENE
 };
 
-struct Direction
+struct SDirection
 {
 	DirectionX x;
 	DirectionY y;
@@ -91,6 +91,6 @@ struct Direction
 struct SGameResult
 {
 	uint64_t points;
-	gameStatus status;
+	GameStatus status;
 	Collision collision;
 };

@@ -3,11 +3,11 @@
 #include "stdafx.h"
 #include "sheet.h"
 
-struct gameScene
+struct GameScene
 {
 public:
-	gameScene(Assets * assets, sf::View * view);
-	~gameScene();
+	GameScene(Assets & assets, sf::View & view);
+	~GameScene();
 	SGameResult onGameFrame(sf::RenderWindow & window);
 private:
 	Assets * assets;

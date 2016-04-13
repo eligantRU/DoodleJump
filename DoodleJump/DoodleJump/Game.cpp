@@ -5,11 +5,11 @@ Game::Game()
 {
 	assets = new Assets();
 	view = new sf::View();
-	sceneStart = new startScene(assets, view);
-	sceneHelp = new helpScene(assets, view);
-	sceneGame = new gameScene(assets, view);
-	sceneGameOver = new gameOverScene(assets, view);
-	scenePause = new pauseScene(assets, view);
+	sceneStart = new StartScene(*assets, *view);
+	sceneHelp = new HelpScene(*assets, *view);
+	sceneGame = new GameScene(*assets, *view);
+	sceneGameOver = new GameOverScene(*assets, *view);
+	scenePause = new PauseScene(*assets, *view);
 }
 
 Game::~Game()
@@ -31,19 +31,19 @@ void Game::gameLoop(sf::RenderWindow & window)
 	{
 		switch (gameState.status)
 		{
-		case gameStatus::START_SCENE:
+		case GameStatus::START_SCENE:
 			gameState = sceneStart->onStartMenu(window);
 			break;
-		case gameStatus::GAME_SCENE:
+		case GameStatus::GAME_SCENE:
 			gameState = sceneGame->onGameFrame(window);
 			break;
-		case gameStatus::GAME_OVER_SCENE:
+		case GameStatus::GAME_OVER_SCENE:
 			gameState = sceneGameOver->onGameOverMenu(window, gameState.points);
 			break;
-		case gameStatus::PAUSE_SCENE:
+		case GameStatus::PAUSE_SCENE:
 			gameState = scenePause->onPauseMenu(window);
 			break;
-		case gameStatus::HELP_SCENE:
+		case GameStatus::HELP_SCENE:
 			gameState = sceneHelp->onHelpMenu(window);
 			break;
 		}
@@ -62,7 +62,7 @@ void Game::launch(void)
 	view->reset(sf::FloatRect(0, 0, 550, 700));
 	view->setCenter(275, 350);
 	window.setView(*view);
-	gameState.status = gameStatus::START_SCENE;
+	gameState.status = GameStatus::START_SCENE;
 
 	gameLoop(window);
 }

@@ -3,11 +3,11 @@
 #include "stdafx.h"
 #include "sheet.h"
 
-struct gameOverScene
+struct GameOverScene
 {
 public:
-	gameOverScene(Assets * assets, sf::View * view);
-	~gameOverScene();
+	GameOverScene(Assets & assets, sf::View & view);
+	~GameOverScene();
 	SGameResult onGameOverMenu(sf::RenderWindow & window, uint64_t & score);
 private:
 	Assets * assets;

@@ -73,7 +73,7 @@ void Assets::addTexture(sf::Texture & texture, std::string string)
 {
 	if (!texture.loadFromFile(string))
 	{
-		MessageBoxA(NULL, "File not founded", "Error", MB_ICONERROR | MB_OK);
+		MessageBoxA(nullptr, "File not founded", "Error", MB_ICONERROR | MB_OK);
 		_exit(-1);
 	}
 	texture.setSmooth(true);
@@ -90,7 +90,7 @@ void Assets::addFont(sf::Font & font, std::string string)
 {
 	if (!font.loadFromFile(string))
 	{
-		MessageBoxA(NULL, "File not founded", "Error", MB_ICONERROR | MB_OK);
+		MessageBoxA(nullptr, "File not founded", "Error", MB_ICONERROR | MB_OK);
 		_exit(-1);
 	}
 }
@@ -99,7 +99,7 @@ void Assets::addImage(sf::Image & image, std::string string)
 {
 	if (!image.loadFromFile(string))
 	{
-		MessageBoxA(NULL, "File not founded", "Error", MB_ICONERROR | MB_OK);
+		MessageBoxA(nullptr, "File not founded", "Error", MB_ICONERROR | MB_OK);
 		_exit(-1);
 	}
 }

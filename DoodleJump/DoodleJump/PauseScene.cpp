@@ -1,15 +1,15 @@
 #include "stdafx.h"
 #include "sheet.h"
 
-pauseScene::pauseScene(Assets * assets, sf::View * view)
-	:assets(assets)
-	,view(view)
+PauseScene::PauseScene(Assets & assets, sf::View & view)
+	:assets(&assets)
+	,view(&view)
 {
 	backButton = new sf::Sprite;
 	backButton->setTextureRect(sf::IntRect(0, 0, 104, 29));
-	backButton->setTexture(assets->BUTTON_INACTIVE_TEXTURE);
+	backButton->setTexture(assets.BUTTON_INACTIVE_TEXTURE);
 	backButton->setPosition(200, 210);
-	backText.setFont(assets->font);
+	backText.setFont(assets.font);
 	backText.setCharacterSize(20);
 	backText.setString("Back");
 	backText.setStyle(sf::Text::Bold);
@@ -18,9 +18,9 @@ pauseScene::pauseScene(Assets * assets, sf::View * view)
 
 	exitButton = new sf::Sprite;
 	exitButton->setTextureRect(sf::IntRect(0, 0, 104, 29));
-	exitButton->setTexture(assets->BUTTON_INACTIVE_TEXTURE);
+	exitButton->setTexture(assets.BUTTON_INACTIVE_TEXTURE);
 	exitButton->setPosition(250, 270);
-	exitText.setFont(assets->font);
+	exitText.setFont(assets.font);
 	exitText.setCharacterSize(20);
 	exitText.setString("Exit");
 	exitText.setStyle(sf::Text::Bold);
@@ -29,21 +29,21 @@ pauseScene::pauseScene(Assets * assets, sf::View * view)
 
 	background = new sf::Sprite;
 	background->setTextureRect(sf::IntRect(0, 0, 550, 700));
-	background->setTexture(assets->BACKGROUND_TEXTURE);
+	background->setTexture(assets.BACKGROUND_TEXTURE);
 	background->setPosition(0, 0);
 }
 
-pauseScene::~pauseScene()
+PauseScene::~PauseScene()
 {
 	delete background;
 	delete backButton;
 	delete exitButton;
-	background = NULL;
-	backButton = NULL;
-	exitButton = NULL;
+	background = nullptr;
+	backButton = nullptr;
+	exitButton = nullptr;
 }
 
-SGameResult pauseScene::onPauseMenu(sf::RenderWindow & window) 
+SGameResult PauseScene::onPauseMenu(sf::RenderWindow & window) 
 {
 	sf::Vector2f center = view->getCenter();
 	backButton->setPosition(center.x - 275.f + 200.f, center.y - 350.f + 210.f);
@@ -60,14 +60,14 @@ SGameResult pauseScene::onPauseMenu(sf::RenderWindow & window)
 	return result;
 }
 
-void pauseScene::clearResult(void)
+void PauseScene::clearResult(void)
 {
-	result.status = gameStatus::PAUSE_SCENE;
+	result.status = GameStatus::PAUSE_SCENE;
 	result.collision = Collision::NO_COLLISION;
 	result.points = 0;
 }
 
-void pauseScene::render(sf::RenderWindow & window)
+void PauseScene::render(sf::RenderWindow & window)
 {
 	window.clear(sf::Color(255, 255, 255));
 	window.draw(*background);
@@ -77,7 +77,7 @@ void pauseScene::render(sf::RenderWindow & window)
 	window.draw(exitText);
 }
 
-void pauseScene::checkEvents(sf::RenderWindow & window)
+void PauseScene::checkEvents(sf::RenderWindow & window)
 {
 	sf::Event event;
 	while (window.pollEvent(event))
@@ -91,7 +91,7 @@ void pauseScene::checkEvents(sf::RenderWindow & window)
 	}
 }
 
-void pauseScene::checkMouseOnButtons(sf::Vector2i & mousePosition)
+void PauseScene::checkMouseOnButtons(sf::Vector2i & mousePosition)
 {
 	if (((mousePosition.y >= 210) && (mousePosition.y <= 239)
 		&& (mousePosition.x >= 200) && (mousePosition.x <= 300)))
@@ -114,7 +114,7 @@ void pauseScene::checkMouseOnButtons(sf::Vector2i & mousePosition)
 	}
 }
 
-void pauseScene::checkMouseClick(sf::RenderWindow & window, sf::Event & event)
+void PauseScene::checkMouseClick(sf::RenderWindow & window, sf::Event & event)
 {
 	if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left)
 	{
@@ -125,7 +125,7 @@ void pauseScene::checkMouseClick(sf::RenderWindow & window, sf::Event & event)
 			&& (mousePosition.x >= 200) && (mousePosition.x <= 300)))
 		{
 			backButton->setTexture(assets->BUTTON_INACTIVE_TEXTURE);
-			result.status = gameStatus::GAME_SCENE;
+			result.status = GameStatus::GAME_SCENE;
 		}
 		if (((mousePosition.y >= 270) && (mousePosition.y <= 299)
 			&& (mousePosition.x >= 250) && (mousePosition.x <= 350)))

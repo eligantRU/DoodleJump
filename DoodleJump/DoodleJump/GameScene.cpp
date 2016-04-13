@@ -1,21 +1,21 @@
 #include "stdafx.h"
 #include "sheet.h"
 
-gameScene::gameScene(Assets * assets, sf::View * view)
+GameScene::GameScene(Assets & assets, sf::View & view)
+	:assets(&assets)
+	, view(&view)
 {
-	this->assets = assets;
-	this->view = view;
-	this->hero = new Doodle(assets);
+	hero = new Doodle(&assets);
 	for (int i = 0; i < NUMBER_PLATES; ++i)
 	{
-		plate[i] = new Plate(assets);
+		plate[i] = new Plate(&assets);
 	}
 
 	actualBonus = BonusType::NO;
 	points = 0;
 	endOfGame = false;
 	isPause = false;
-	view->reset(sf::FloatRect(0, 0, 550, 700));
+	view.reset(sf::FloatRect(0, 0, 550, 700));
 	hero->speedY = -50.f;
 	animationCounter = 0;
 	unstablePlatesCounter = 0;
@@ -24,31 +24,31 @@ gameScene::gameScene(Assets * assets, sf::View * view)
 
 	hole = new sf::Sprite;
 	hole->setTextureRect(sf::IntRect(0, 0, 60, 54));
-	hole->setTexture(assets->HOLE_TEXTURE);
+	hole->setTexture(assets.HOLE_TEXTURE);
 	holePosition.x = float(rand() % (550 - HOLE_WIDTH));
 	holePosition.y = -1.f * float(rand() % 15000) - 10.f * 750.f;
 	hole->setPosition(holePosition.x, holePosition.y);
 
-	scoreNum.setFont(assets->font);
+	scoreNum.setFont(assets.font);
 	scoreNum.setCharacterSize(20);
 	scoreNum.setStyle(sf::Text::Bold);
 	scoreNum.setColor(sf::Color(0, 0, 0));
 
 	background = new sf::Sprite;
 	background->setTextureRect(sf::IntRect(0, 0, 550, 700));
-	background->setTexture(assets->BACKGROUND_TEXTURE);
+	background->setTexture(assets.BACKGROUND_TEXTURE);
 
 	initBonuses();
 	resetGame();
 }
 
-gameScene::~gameScene()
+GameScene::~GameScene()
 {
 	delete background;
-	background = NULL;
+	background = nullptr;
 }
 
-SGameResult gameScene::onGameFrame(sf::RenderWindow & window)
+SGameResult GameScene::onGameFrame(sf::RenderWindow & window)
 {
 	result.collision = Collision::NO_COLLISION;
 
@@ -63,12 +63,12 @@ SGameResult gameScene::onGameFrame(sf::RenderWindow & window)
 		result.points = points;
 		if (isPause)
 		{
-			result.status = gameStatus::PAUSE_SCENE;
+			result.status = GameStatus::PAUSE_SCENE;
 			isPause = false;
 		}
 		else
 		{
-			result.status = gameStatus::GAME_SCENE;
+			result.status = GameStatus::GAME_SCENE;
 		}
 	}
 	else
@@ -76,13 +76,13 @@ SGameResult gameScene::onGameFrame(sf::RenderWindow & window)
 		view->setCenter(275, 350);
 		window.setView(*view);
 		result.points = points;
-		result.status = gameStatus::GAME_OVER_SCENE;
+		result.status = GameStatus::GAME_OVER_SCENE;
 		resetGame();
 	}
 	return result;
 }
 
-void gameScene::moveDoodle(void)
+void GameScene::moveDoodle(void)
 {
 	sf::Vector2f position(0.f, 0.f);
 	moveDoodleHorizontal(position.x);
@@ -90,7 +90,7 @@ void gameScene::moveDoodle(void)
 	hero->body->move(position);
 }
 
-void gameScene::moveDoodleHorizontal(float & positionX)
+void GameScene::moveDoodleHorizontal(float & positionX)
 {
 	if (hero->direction.x == DirectionX::RIGHT)
 	{
@@ -104,7 +104,7 @@ void gameScene::moveDoodleHorizontal(float & positionX)
 	}
 }
 
-void gameScene::moveDoodleVertical(float & positionY)
+void GameScene::moveDoodleVertical(float & positionY)
 {
 	if (hero->speedY < 0)
 	{
@@ -136,7 +136,7 @@ void gameScene::moveDoodleVertical(float & positionY)
 	}
 }
 
-void gameScene::animateBonus(void)
+void GameScene::animateBonus(void)
 {
 	if (actualBonus != BonusType::NO)
 	{
@@ -160,7 +160,7 @@ void gameScene::animateBonus(void)
 	}
 }
 
-void gameScene::animateSpring(void)
+void GameScene::animateSpring(void)
 {
 	if ((hero->speedY >= 0) || (bonus[actualBonusId].body->getPosition().y < view->getCenter().y - 350 - SPRING_HEIGHT))
 	{
@@ -172,7 +172,7 @@ void gameScene::animateSpring(void)
 	}
 }
 
-void gameScene::animateTrampoline(void)
+void GameScene::animateTrampoline(void)
 {
 	if (hero->speedY >= 0)
 	{
@@ -185,7 +185,7 @@ void gameScene::animateTrampoline(void)
 	}
 }
 
-void gameScene::animateRocket(void)
+void GameScene::animateRocket(void)
 {
 	if ((hero->speedY >= 0) || (bonus[actualBonusId].body->getPosition().y < view->getCenter().y - 350 - ROCKET_HEIGHT))
 	{
@@ -314,7 +314,7 @@ void gameScene::animateRocket(void)
 	}
 }
 
-void gameScene::animateHatHelicopter(void)
+void GameScene::animateHatHelicopter(void)
 {
 	if ((hero->speedY >= 0) || (bonus[actualBonusId].body->getPosition().y < view->getCenter().y - 350 - HAT_HELICOPTER_HEIGHT))
 	{
@@ -385,7 +385,7 @@ void gameScene::animateHatHelicopter(void)
 	}
 }
 
-void gameScene::update(sf::RenderWindow & window)
+void GameScene::update(sf::RenderWindow & window)
 {
 	moveDoodle();
 	sf::Vector2f doodlePosition = hero->body->getPosition();
@@ -413,7 +413,7 @@ void gameScene::update(sf::RenderWindow & window)
 	}
 }
 
-void gameScene::resetGame(void)
+void GameScene::resetGame(void)
 {
 	view->reset(sf::FloatRect(0, 0, 550, 700));
 	scoreNum.setPosition(0, 0);
@@ -454,7 +454,7 @@ void gameScene::resetGame(void)
 	initBonuses();
 }
 
-void gameScene::generPlates(void)
+void GameScene::generPlates(void)
 {
 	if (plate[0]->body->getPosition().y > view->getCenter().x + 350.f)
 	{
@@ -589,7 +589,7 @@ void gameScene::generPlates(void)
 	}
 }
 
-void gameScene::generHole(void)
+void GameScene::generHole(void)
 {
 	if (hole->getPosition().y >= view->getCenter().y + 350.f)
 	{
@@ -599,7 +599,7 @@ void gameScene::generHole(void)
 	}
 }
 
-void gameScene::generBonuses(void)
+void GameScene::generBonuses(void)
 {
 	sf::Vector2f bonusPosition[NUMBER_BONUSES];
 	sf::Vector2f platePosition;
@@ -637,7 +637,7 @@ void gameScene::generBonuses(void)
 	}
 }
 
-void gameScene::dropUnstablePlates(void)
+void GameScene::dropUnstablePlates(void)
 {
 	for (int plateIndex = 0; plateIndex < NUMBER_PLATES; ++plateIndex)
 	{
@@ -654,23 +654,23 @@ void gameScene::dropUnstablePlates(void)
 	}
 }
 
-bool gameScene::checkGameEnd(void)
+bool GameScene::checkGameEnd(void)
 {
 	sf::Vector2f doodlePosition = hero->body->getPosition();
 	if ((checkCollisionHole(doodlePosition) == Collision::COLLISION_HOLE) && ((actualBonus == BonusType::NO)))
 	{
-		PlaySound(L"sounds/crnarupa.wav", NULL, SND_ASYNC | SND_NODEFAULT);
+		PlaySound(L"sounds/crnarupa.wav", nullptr, SND_ASYNC | SND_NODEFAULT);
 		return true;
 	}
 	if ((doodlePosition.y <= view->getCenter().y + 350.f))
 	{
 		return false;
 	}
-	PlaySound(L"sounds/pada.wav", NULL, SND_ASYNC | SND_NODEFAULT);
+	PlaySound(L"sounds/pada.wav", nullptr, SND_ASYNC | SND_NODEFAULT);
 	return true;
 }
 
-void gameScene::render(sf::RenderWindow & window)
+void GameScene::render(sf::RenderWindow & window)
 {
 	//for (std::vector<sf::Sprite*>::const_iterator it = needRender.begin(); it != needRender.end(); ++it) // NOTE: try to use std::vector
 	window.clear(sf::Color(255, 255, 255));
@@ -690,7 +690,7 @@ void gameScene::render(sf::RenderWindow & window)
 	window.draw(scoreNum);
 }
 
-void gameScene::keyPressed(sf::RenderWindow & window)
+void GameScene::keyPressed(sf::RenderWindow & window)
 {
 	sf::Event event;
 	while (window.pollEvent(event))
@@ -721,7 +721,7 @@ void gameScene::keyPressed(sf::RenderWindow & window)
 	}
 }
 
-void gameScene::moveDynamicPlates(void)
+void GameScene::moveDynamicPlates(void)
 {
 	sf::Vector2f platePosition[NUMBER_PLATES];
 
@@ -749,7 +749,7 @@ void gameScene::moveDynamicPlates(void)
 	}
 }
 
-void gameScene::moveBonuses(void)
+void GameScene::moveBonuses(void)
 {
 	for (int bonusIndex = 0; bonusIndex < NUMBER_BONUSES; ++bonusIndex)
 	{
@@ -762,7 +762,7 @@ void gameScene::moveBonuses(void)
 	}
 }
 
-void gameScene::checkCylinderEffect(sf::Vector2f & doodlePosition)
+void GameScene::checkCylinderEffect(sf::Vector2f & doodlePosition)
 {
 	if (doodlePosition.x <= -DOODLE_WIDTH)
 	{
@@ -774,7 +774,7 @@ void gameScene::checkCylinderEffect(sf::Vector2f & doodlePosition)
 	}
 }
 
-void gameScene::initBonuses(void)
+void GameScene::initBonuses(void)
 {
 	std::vector<sf::Vector2f> platePosition;
 	for (int plateIndex = 0; plateIndex < NUMBER_PLATES; ++plateIndex)
@@ -790,11 +790,11 @@ void gameScene::initBonuses(void)
 	}
 }
 
-void gameScene::buildBonus(BonusType bonusType, int bonusIndex, sf::Vector2f platePosition, int plateIndex)
+void GameScene::buildBonus(BonusType bonusType, int bonusIndex, sf::Vector2f platePosition, int plateIndex)
 {
 	bonus[bonusIndex].plateIndex = plateIndex;
 	delete bonus[bonusIndex].body;
-	bonus[bonusIndex].body = NULL;
+	bonus[bonusIndex].body = nullptr;
 
 	switch (bonusType)
 	{
@@ -845,7 +845,7 @@ void gameScene::buildBonus(BonusType bonusType, int bonusIndex, sf::Vector2f pla
 	}
 }
 
-float gameScene::checkDoodleFall(void)
+float GameScene::checkDoodleFall(void)
 {
 	sf::Vector2f doodlePosition = hero->body->getPosition();
 	sf::Vector2f platePosition[NUMBER_PLATES];
@@ -872,32 +872,32 @@ float gameScene::checkDoodleFall(void)
 	case Collision::COLLISION_PLATE:
 		actualBonus = BonusType::NO;
 		result.collision = Collision::COLLISION_PLATE;
-		PlaySound(L"sounds/jump.wav", NULL, SND_ASYNC | SND_NODEFAULT);
+		PlaySound(L"sounds/jump.wav", nullptr, SND_ASYNC | SND_NODEFAULT);
 		return PLATE_DELTA_HEIGHT;
 	case Collision::COLLISION_GHOST_PLATE:
 		actualBonus = BonusType::NO;
 		result.collision = Collision::COLLISION_GHOST_PLATE;
-		PlaySound(L"sounds/bijeli.wav", NULL, SND_ASYNC | SND_NODEFAULT);
+		PlaySound(L"sounds/bijeli.wav", nullptr, SND_ASYNC | SND_NODEFAULT);
 		return PLATE_DELTA_HEIGHT;
 	case Collision::COLLISION_SPRING:
 		actualBonus = BonusType::SPRING;
 		result.collision = Collision::COLLISION_SPRING;
-		PlaySound(L"sounds/feder.wav", NULL, SND_ASYNC | SND_NODEFAULT);
+		PlaySound(L"sounds/feder.wav", nullptr, SND_ASYNC | SND_NODEFAULT);
 		return SPRING_DELTA_HEIGHT;
 	case Collision::COLLISION_TRAMPLANE:
 		actualBonus = BonusType::TRAMPOLINE;
 		result.collision = Collision::COLLISION_TRAMPLANE;
-		PlaySound(L"sounds/trampoline.wav", NULL, SND_ASYNC | SND_NODEFAULT);
+		PlaySound(L"sounds/trampoline.wav", nullptr, SND_ASYNC | SND_NODEFAULT);
 		return TRAMPLANE_DELTA_HEIGHT;
 	case Collision::COLLISION_HAT_HELICOPTER:
 		actualBonus = BonusType::HAT_HELICOPTER;
 		result.collision = Collision::COLLISION_HAT_HELICOPTER;
-		PlaySound(L"sounds/propeller.wav", NULL, SND_ASYNC | SND_NODEFAULT);
+		PlaySound(L"sounds/propeller.wav", nullptr, SND_ASYNC | SND_NODEFAULT);
 		return HAT_HELICOPTER_DELTA_HEIGHT;
 	case Collision::COLLISION_ROCKET:
 		actualBonus = BonusType::ROCKET;
 		result.collision = Collision::COLLISION_ROCKET;
-		PlaySound(L"sounds/jetpack.wav", NULL, SND_ASYNC | SND_NODEFAULT);
+		PlaySound(L"sounds/jetpack.wav", nullptr, SND_ASYNC | SND_NODEFAULT);
 		return ROCKET_DELTA_HEIGHT;
 	default:
 		result.collision = Collision::NO_COLLISION;
@@ -905,7 +905,7 @@ float gameScene::checkDoodleFall(void)
 	}
 }
 
-Collision gameScene::checkCollisionPlate(sf::Vector2f & doodlePosition, sf::Vector2f platePosition[NUMBER_PLATES])
+Collision GameScene::checkCollisionPlate(sf::Vector2f & doodlePosition, sf::Vector2f platePosition[NUMBER_PLATES])
 {
 	for (int i = 0; i < NUMBER_PLATES; ++i)
 	{
@@ -929,7 +929,7 @@ Collision gameScene::checkCollisionPlate(sf::Vector2f & doodlePosition, sf::Vect
 	return Collision::NO_COLLISION;
 }
 
-Collision gameScene::checkCollisionHole(sf::Vector2f & doodlePosition)
+Collision GameScene::checkCollisionHole(sf::Vector2f & doodlePosition)
 {
 	if (((doodlePosition.y + DOODLE_HEIGHT >= holePosition.y) && (doodlePosition.y + DOODLE_HEIGHT <= holePosition.y + HOLE_HEIGHT)
 		&& (doodlePosition.x + DOODLE_WIDTH >= holePosition.x) && (doodlePosition.x - HOLE_WIDTH <= holePosition.x)))
@@ -939,7 +939,7 @@ Collision gameScene::checkCollisionHole(sf::Vector2f & doodlePosition)
 	return Collision::NO_COLLISION;
 }
 
-Collision gameScene::checkCollisionBonus(sf::Vector2f & doodlePosition, sf::Vector2f bonusPosition[NUMBER_PLATES])
+Collision GameScene::checkCollisionBonus(sf::Vector2f & doodlePosition, sf::Vector2f bonusPosition[NUMBER_PLATES])
 {
 	for (int bonusIndex = 0; bonusIndex < NUMBER_BONUSES; ++bonusIndex)
 	{

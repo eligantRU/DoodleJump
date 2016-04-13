@@ -9,7 +9,7 @@ public:
 	Doodle(Assets * assets);
 	~Doodle();
 	sf::Sprite * body;
-	Direction direction;
+	SDirection direction;
 	Collision collision;
 	int deltaHeight;
 	DirectionX lastDirectionX;

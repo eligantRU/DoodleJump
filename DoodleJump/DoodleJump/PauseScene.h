@@ -3,11 +3,11 @@
 #include "stdafx.h"
 #include "sheet.h"
 
-struct pauseScene
+struct PauseScene
 {
 public:
-	pauseScene(Assets * assets, sf::View * view);
-	~pauseScene();
+	PauseScene(Assets & assets, sf::View & view);
+	~PauseScene();
 	SGameResult onPauseMenu(sf::RenderWindow & window);
 private:
 	Assets * assets;

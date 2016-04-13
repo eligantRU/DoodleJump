@@ -1,14 +1,14 @@
 #include "stdafx.h"
 #include "sheet.h"
 
-helpScene::helpScene(Assets * assets, sf::View * view)
+HelpScene::HelpScene(Assets & assets, sf::View & view)
+	:assets(&assets)
+	, view(&view)
 {	
-	this->assets = assets;
-	this->view = view;
 	goMenuButton = new sf::Sprite;
-	goMenuButton->setTexture(assets->BUTTON_INACTIVE_TEXTURE);
+	goMenuButton->setTexture(assets.BUTTON_INACTIVE_TEXTURE);
 	goMenuButton->setPosition(200, 210);
-	goMenuText.setFont(assets->font);
+	goMenuText.setFont(assets.font);
 	goMenuText.setCharacterSize(20);
 	goMenuText.setString("back");
 	goMenuText.setStyle(sf::Text::Bold);
@@ -16,23 +16,23 @@ helpScene::helpScene(Assets * assets, sf::View * view)
 	goMenuText.setColor(sf::Color(0, 0, 0));
 
 	buttonA = new sf::Sprite;
-	buttonA->setTexture(assets->BUTTON_A_TEXTURE);
+	buttonA->setTexture(assets.BUTTON_A_TEXTURE);
 	buttonA->setScale(sf::Vector2f(0.5f, 0.5f));
 	buttonA->setPosition(170, 295);
 
 	buttonD = new sf::Sprite;
-	buttonD->setTexture(assets->BUTTON_D_TEXTURE);
+	buttonD->setTexture(assets.BUTTON_D_TEXTURE);
 	buttonD->setScale(sf::Vector2f(0.5f, 0.5f));
 	buttonD->setPosition(230, 295);
 	
-	helpText1.setFont(assets->font);
+	helpText1.setFont(assets.font);
 	helpText1.setCharacterSize(20);
 	helpText1.setString("Press");
 	helpText1.setStyle(sf::Text::Bold);
 	helpText1.setPosition(100.f, 300.f);
 	helpText1.setColor(sf::Color(0, 0, 0));
 
-	helpText2.setFont(assets->font);
+	helpText2.setFont(assets.font);
 	helpText2.setCharacterSize(20);
 	helpText2.setString("to move Doodle");
 	helpText2.setStyle(sf::Text::Bold);
@@ -41,23 +41,23 @@ helpScene::helpScene(Assets * assets, sf::View * view)
 
 	background = new sf::Sprite;
 	background->setTextureRect(sf::IntRect(0, 0, 550, 700));
-	background->setTexture(assets->BACKGROUND_TEXTURE);
+	background->setTexture(assets.BACKGROUND_TEXTURE);
 	background->setPosition(0, 0);
 }
 
-helpScene::~helpScene()
+HelpScene::~HelpScene()
 {
 	delete background;
 	delete goMenuButton;
 	delete buttonA;
 	delete buttonD;
-	background = NULL;
-	goMenuButton = NULL;
-	buttonA = NULL;
-	buttonD = NULL;
+	background = nullptr;
+	goMenuButton = nullptr;
+	buttonA = nullptr;
+	buttonD = nullptr;
 }
 
-SGameResult helpScene::onHelpMenu(sf::RenderWindow & window)
+SGameResult HelpScene::onHelpMenu(sf::RenderWindow & window)
 {
 	clearResult();
 
@@ -67,14 +67,14 @@ SGameResult helpScene::onHelpMenu(sf::RenderWindow & window)
 	return result;
 }
 
-void helpScene::clearResult(void)
+void HelpScene::clearResult(void)
 {
-	result.status = gameStatus::HELP_SCENE;
+	result.status = GameStatus::HELP_SCENE;
 	result.collision = Collision::NO_COLLISION;
 	result.points = 0;
 }
 
-void helpScene::render(sf::RenderWindow & window)
+void HelpScene::render(sf::RenderWindow & window)
 {
 	window.clear(sf::Color(255, 255, 255));
 	window.draw(*background);
@@ -86,7 +86,7 @@ void helpScene::render(sf::RenderWindow & window)
 	window.draw(helpText2);
 }
 
-void helpScene::checkEvents(sf::RenderWindow & window)
+void HelpScene::checkEvents(sf::RenderWindow & window)
 {
 	sf::Event event;
 	while (window.pollEvent(event))
@@ -100,7 +100,7 @@ void helpScene::checkEvents(sf::RenderWindow & window)
 	}
 }
 
-void helpScene::checkMouseOnButtons(sf::Vector2i & mousePosition)
+void HelpScene::checkMouseOnButtons(sf::Vector2i & mousePosition)
 {
 	if (((mousePosition.y >= 210) && (mousePosition.y <= 239)
 		&& (mousePosition.x >= 200) && (mousePosition.x <= 300)))
@@ -114,7 +114,7 @@ void helpScene::checkMouseOnButtons(sf::Vector2i & mousePosition)
 }
 
 
-void helpScene::checkMouseClick(sf::RenderWindow & window, sf::Event & event)
+void HelpScene::checkMouseClick(sf::RenderWindow & window, sf::Event & event)
 {
 	if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left)
 	{
@@ -123,7 +123,7 @@ void helpScene::checkMouseClick(sf::RenderWindow & window, sf::Event & event)
 			&& (mousePosition.x >= 200) && (mousePosition.x <= 300)))
 		{
 			goMenuButton->setTexture(assets->BUTTON_INACTIVE_TEXTURE);
-			result.status = gameStatus::START_SCENE;
+			result.status = GameStatus::START_SCENE;
 		}
 	}
 }

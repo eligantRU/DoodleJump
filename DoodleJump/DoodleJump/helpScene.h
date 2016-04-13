@@ -3,11 +3,11 @@
 #include "stdafx.h"
 #include "sheet.h"
 
-struct helpScene
+struct HelpScene
 {
 public:
-	helpScene(Assets * assets, sf::View * view);
-	~helpScene();
+	HelpScene(Assets & assets, sf::View & view);
+	~HelpScene();
 	SGameResult onHelpMenu(sf::RenderWindow & window);
 private:
 	Assets * assets;

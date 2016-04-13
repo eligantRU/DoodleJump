@@ -17,5 +17,5 @@ Plate::Plate(Assets * assets)
 Plate::~Plate()
 {
 	delete body;
-	body = NULL;
+	body = nullptr;
 }

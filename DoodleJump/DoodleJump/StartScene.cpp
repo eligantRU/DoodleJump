@@ -1,24 +1,24 @@
 #include "stdafx.h"
 #include "sheet.h"
 
-startScene::startScene(Assets * assets, sf::View * view)
+StartScene::StartScene(Assets & assets, sf::View & view)
+	:assets(&assets)
+	, view(&view)
 {
-	this->assets = assets;
-	this->view = view;
-	hero = new Doodle(assets);
-	plate = new Plate(assets);
+	hero = new Doodle(&assets);
+	plate = new Plate(&assets);
 	hero->speedY = -20.f;
-	hero->body->setTexture(assets->DOODLE_RIGHT_TEXTURE);
+	hero->body->setTexture(assets.DOODLE_RIGHT_TEXTURE);
 	hero->body->setPosition(sf::Vector2f(110.f, 500.f - DOODLE_HEIGHT));
 
 	title = new sf::Sprite;
-	title->setTexture(assets->MAIN_TITLE_TEXTURE);
+	title->setTexture(assets.MAIN_TITLE_TEXTURE);
 	title->setPosition(100, 50);
 
 	playButton = new sf::Sprite;
-	playButton->setTexture(assets->BUTTON_INACTIVE_TEXTURE);
+	playButton->setTexture(assets.BUTTON_INACTIVE_TEXTURE);
 	playButton->setPosition(200, 180);
-	playText.setFont(assets->font);
+	playText.setFont(assets.font);
 	playText.setCharacterSize(20);
 	playText.setString("Play");
 	playText.setStyle(sf::Text::Bold);
@@ -26,9 +26,9 @@ startScene::startScene(Assets * assets, sf::View * view)
 	playText.setColor(sf::Color(0, 0, 0));
 
 	exitButton = new sf::Sprite;
-	exitButton->setTexture(assets->BUTTON_INACTIVE_TEXTURE);
+	exitButton->setTexture(assets.BUTTON_INACTIVE_TEXTURE);
 	exitButton->setPosition(250, 240);
-	exitText.setFont(assets->font);
+	exitText.setFont(assets.font);
 	exitText.setCharacterSize(20);
 	exitText.setString("Exit");
 	exitText.setStyle(sf::Text::Bold);
@@ -36,9 +36,9 @@ startScene::startScene(Assets * assets, sf::View * view)
 	exitText.setColor(sf::Color(0, 0, 0));
 
 	helpButton = new sf::Sprite;
-	helpButton->setTexture(assets->BUTTON_INACTIVE_TEXTURE);
+	helpButton->setTexture(assets.BUTTON_INACTIVE_TEXTURE);
 	helpButton->setPosition(350, 475);
-	helpText.setFont(assets->font);
+	helpText.setFont(assets.font);
 	helpText.setCharacterSize(20);
 	helpText.setString("Help");
 	helpText.setStyle(sf::Text::Bold);
@@ -46,33 +46,33 @@ startScene::startScene(Assets * assets, sf::View * view)
 	helpText.setColor(sf::Color(0, 0, 0));
 
 	title = new sf::Sprite;
-	title->setTexture(assets->MAIN_TITLE_TEXTURE);
+	title->setTexture(assets.MAIN_TITLE_TEXTURE);
 	title->setPosition(100, 50);	
 	
 	hole = new sf::Sprite;
-	hole->setTexture(assets->HOLE_TEXTURE);
+	hole->setTexture(assets.HOLE_TEXTURE);
 	hole->setPosition(300, 350);
 	hole->setScale(sf::Vector2f(1.25f, 1.25f));
 
 	insects[0] = new sf::Sprite;
-	insects[0]->setTexture(assets->GARBAGE_1_TEXTURE);
+	insects[0]->setTexture(assets.GARBAGE_1_TEXTURE);
 	insects[0]->setPosition(450, 250);
 	insects[1] = new sf::Sprite;
-	insects[1]->setTexture(assets->GARBAGE_2_TEXTURE);
+	insects[1]->setTexture(assets.GARBAGE_2_TEXTURE);
 	insects[1]->setPosition(300, 300);
 	insects[2] = new sf::Sprite;
-	insects[2]->setTexture(assets->GARBAGE_3_TEXTURE);
+	insects[2]->setTexture(assets.GARBAGE_3_TEXTURE);
 	insects[2]->setPosition(210, 215);
 	insects[3] = new sf::Sprite;
-	insects[3]->setTexture(assets->GARBAGE_4_TEXTURE);
+	insects[3]->setTexture(assets.GARBAGE_4_TEXTURE);
 	insects[3]->setPosition(50, 50);
 	insects[4] = new sf::Sprite;
-	insects[4]->setTexture(assets->GARBAGE_5_TEXTURE);
+	insects[4]->setTexture(assets.GARBAGE_5_TEXTURE);
 	insects[4]->setPosition(400, 400);
 	
 	background = new sf::Sprite;
 	background->setTextureRect(sf::IntRect(0, 0, 550, 700));
-	background->setTexture(assets->BACKGROUND_TEXTURE);
+	background->setTexture(assets.BACKGROUND_TEXTURE);
 	background->setPosition(0, 0);
 
 	platePosition.x = 100.f;
@@ -80,21 +80,21 @@ startScene::startScene(Assets * assets, sf::View * view)
 	plate->body->setPosition(platePosition);
 }
 
-startScene::~startScene()
+StartScene::~StartScene()
 {
 	delete title;
 	delete *insects;
 	delete playButton;
 	delete exitButton;
 	delete hole;
-	title = NULL;
-	*insects = NULL;
-	playButton = NULL;
-	exitButton = NULL;
-	hole = NULL;
+	title = nullptr;
+	*insects = nullptr;
+	playButton = nullptr;
+	exitButton = nullptr;
+	hole = nullptr;
 }
 
-SGameResult startScene::onStartMenu(sf::RenderWindow & window)
+SGameResult StartScene::onStartMenu(sf::RenderWindow & window)
 {
 	clearResult();
 
@@ -106,14 +106,14 @@ SGameResult startScene::onStartMenu(sf::RenderWindow & window)
 	return result;
 }
 
-void startScene::clearResult(void)
+void StartScene::clearResult(void)
 {
-	result.status = gameStatus::START_SCENE;
+	result.status = GameStatus::START_SCENE;
 	result.collision = Collision::NO_COLLISION;
 	result.points = 0;
 }
 
-void startScene::render(sf::RenderWindow & window)
+void StartScene::render(sf::RenderWindow & window)
 {
 	window.clear(sf::Color(255, 255, 255));
 	window.draw(*background);
@@ -133,7 +133,7 @@ void startScene::render(sf::RenderWindow & window)
 	}
 }
 
-void startScene::checkMouseOnButtons(sf::Vector2i & mousePosition)
+void StartScene::checkMouseOnButtons(sf::Vector2i & mousePosition)
 {
 	if (((mousePosition.y >= 180) && (mousePosition.y <= 209)
 		&& (mousePosition.x >= 200) && (mousePosition.x <= 300)))
@@ -167,7 +167,7 @@ void startScene::checkMouseOnButtons(sf::Vector2i & mousePosition)
 }
 
 
-void startScene::checkMouseClick(sf::RenderWindow & window, sf::Event & event)
+void StartScene::checkMouseClick(sf::RenderWindow & window, sf::Event & event)
 {
 	if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left)
 	{
@@ -176,7 +176,7 @@ void startScene::checkMouseClick(sf::RenderWindow & window, sf::Event & event)
 			&& (mousePosition.x >= 200) && (mousePosition.x <= 300)))
 		{
 			playButton->setTexture(assets->BUTTON_INACTIVE_TEXTURE);
-			result.status = gameStatus::GAME_SCENE;
+			result.status = GameStatus::GAME_SCENE;
 		}
 		if (((mousePosition.y >= 240) && (mousePosition.y <= 269)
 			&& (mousePosition.x >= 250) && (mousePosition.x <= 350)))
@@ -187,12 +187,12 @@ void startScene::checkMouseClick(sf::RenderWindow & window, sf::Event & event)
 			&& (mousePosition.x >= 350) && (mousePosition.x <= 450)))
 		{
 			helpButton->setTexture(assets->BUTTON_INACTIVE_TEXTURE);
-			result.status = gameStatus::HELP_SCENE;
+			result.status = GameStatus::HELP_SCENE;
 		}
 	}
 }
 
-void startScene::checkEvents(sf::RenderWindow & window)
+void StartScene::checkEvents(sf::RenderWindow & window)
 {
 	sf::Event event;
 	while (window.pollEvent(event))
@@ -206,7 +206,7 @@ void startScene::checkEvents(sf::RenderWindow & window)
 	}
 }
 
-void startScene::moveDoodle(void)
+void StartScene::moveDoodle(void)
 {
 	doodlePosition = hero->body->getPosition();
 
@@ -235,13 +235,13 @@ void startScene::moveDoodle(void)
 	hero->body->move(position);
 }
 
-Collision startScene::checkCollisionPlate(void)
+Collision StartScene::checkCollisionPlate(void)
 {
 	if (((doodlePosition.y + DOODLE_HEIGHT >= platePosition.y) && (doodlePosition.y + DOODLE_HEIGHT <= platePosition.y + PLATE_HEIGHT)
 		&& (doodlePosition.x + DOODLE_WIDTH >= platePosition.x) && (doodlePosition.x - PLATE_WIDTH <= platePosition.x)))
 	{
 		result.collision = Collision::COLLISION_PLATE;
-		PlaySound(L"sounds/jump.wav", NULL, SND_ASYNC | SND_NODEFAULT);
+		PlaySound(L"sounds/jump.wav", nullptr, SND_ASYNC | SND_NODEFAULT);
 		return  Collision::COLLISION_PLATE;
 	}
 	return Collision::NO_COLLISION;

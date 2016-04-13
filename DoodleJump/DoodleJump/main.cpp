@@ -4,11 +4,11 @@
 
 int main(void)
 {
-	srand(unsigned(time(NULL)));
+	srand(unsigned(time(nullptr)));
 	Game * game = new Game();
 	game->launch();
 	delete game;
-	game = NULL;
+	game = nullptr;
 
 	return 0;
 }

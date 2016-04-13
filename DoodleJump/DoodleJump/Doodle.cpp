@@ -17,5 +17,5 @@ Doodle::Doodle(Assets * assets)
 Doodle::~Doodle()
 {
 	delete body;
-	body = NULL;
+	body = nullptr;
 }
