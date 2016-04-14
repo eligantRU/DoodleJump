@@ -5,7 +5,7 @@ StartScene::StartScene(Assets & assets, sf::View & view)
 	:assets(&assets)
 	, view(&view)
 {
-	hero = new Doodle(&assets);
+	hero = new Doodle(assets);
 	plate = new Plate(&assets);
 	hero->speedY = -20.f;
 	hero->body->setTexture(assets.DOODLE_RIGHT_TEXTURE);

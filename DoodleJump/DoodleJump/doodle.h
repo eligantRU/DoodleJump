@@ -6,13 +6,18 @@
 struct Doodle
 {
 public:
-	Doodle(Assets * assets);
+	Doodle(Assets & assets);
 	~Doodle();
+	void updateDirection(bool isLeft, bool isRight);
+	void setDirection(DirectionX direction);
+	DirectionX getDirection(void);
+	DirectionX getLastDirection(void);
 	sf::Sprite * body;
-	SDirection direction;
 	Collision collision;
-	int deltaHeight;
-	DirectionX lastDirectionX;
 	sf::Vector2f positionBeforeDown;
 	float speedY;
+private:
+	SDirection direction;
+	DirectionX lastDirection;
+	Assets * assets;
 };

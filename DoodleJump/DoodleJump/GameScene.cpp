@@ -5,7 +5,7 @@ GameScene::GameScene(Assets & assets, sf::View & view)
 	:assets(&assets)
 	, view(&view)
 {
-	hero = new Doodle(&assets);
+	hero = new Doodle(assets);
 	for (int i = 0; i < NUMBER_PLATES; ++i)
 	{
 		plate[i] = new Plate(&assets);
@@ -21,6 +21,8 @@ GameScene::GameScene(Assets & assets, sf::View & view)
 	unstablePlatesCounter = 0;
 	offsetFallBonus.x = 0.f;
 	offsetFallBonus.y = 0.f;
+	isLeft = false;
+	isRight = false;
 
 	hole = new sf::Sprite;
 	hole->setTextureRect(sf::IntRect(0, 0, 60, 54));
@@ -54,7 +56,7 @@ SGameResult GameScene::onGameFrame(sf::RenderWindow & window)
 
 	if (!endOfGame)
 	{
-		keyPressed(window);
+		checkEvents(window);
 		update(window);
 		window.setView(*view);
 		render(window);
@@ -92,15 +94,14 @@ void GameScene::moveDoodle(void)
 
 void GameScene::moveDoodleHorizontal(float & positionX)
 {
-	if (hero->direction.x == DirectionX::RIGHT)
+	DirectionX doodleDirection = hero->getDirection();
+	if (doodleDirection == DirectionX::RIGHT)
 	{
 		positionX += STEP;
-		hero->body->setTexture(assets->DOODLE_JUMP_RIGHT_TEXTURE);
 	}
-	else if (hero->direction.x == DirectionX::LEFT)
+	else if (doodleDirection  == DirectionX::LEFT)
 	{
 		positionX -= STEP;
-		hero->body->setTexture(assets->DOODLE_JUMP_LEFT_TEXTURE);
 	}
 }
 
@@ -187,6 +188,7 @@ void GameScene::animateTrampoline(void)
 
 void GameScene::animateRocket(void)
 {
+	DirectionX doodleLastDirection = hero->getLastDirection();
 	if ((hero->speedY >= 0) || (bonus[actualBonusId].body->getPosition().y < view->getCenter().y - 350 - ROCKET_HEIGHT))
 	{
 		animationCounter = 0;
@@ -200,11 +202,11 @@ void GameScene::animateRocket(void)
 	{
 		delete bonus[actualBonusId].body;
 		bonus[actualBonusId].body = new sf::Sprite;
-		if (hero->lastDirectionX == DirectionX::RIGHT)
+		if (doodleLastDirection == DirectionX::RIGHT)
 		{
 			bonus[actualBonusId].body->setTexture(assets->ROCKET_0_LEFT_TEXTURE);
 		}
-		else if (hero->lastDirectionX == DirectionX::LEFT)
+		else if (doodleLastDirection == DirectionX::LEFT)
 		{
 			bonus[actualBonusId].body->setTexture(assets->ROCKET_0_RIGHT_TEXTURE);
 		}
@@ -214,11 +216,11 @@ void GameScene::animateRocket(void)
 	{
 		delete bonus[actualBonusId].body;
 		bonus[actualBonusId].body = new sf::Sprite;
-		if (hero->lastDirectionX == DirectionX::RIGHT)
+		if (doodleLastDirection == DirectionX::RIGHT)
 		{
 			bonus[actualBonusId].body->setTexture(assets->ROCKET_1_LEFT_TEXTURE);
 		}
-		else if (hero->lastDirectionX == DirectionX::LEFT)
+		else if (doodleLastDirection == DirectionX::LEFT)
 		{
 			bonus[actualBonusId].body->setTexture(assets->ROCKET_1_RIGHT_TEXTURE);
 		}
@@ -228,11 +230,11 @@ void GameScene::animateRocket(void)
 	{
 		delete bonus[actualBonusId].body;
 		bonus[actualBonusId].body = new sf::Sprite;
-		if (hero->lastDirectionX == DirectionX::RIGHT)
+		if (doodleLastDirection == DirectionX::RIGHT)
 		{
 			bonus[actualBonusId].body->setTexture(assets->ROCKET_2_LEFT_TEXTURE);
 		}
-		else if (hero->lastDirectionX == DirectionX::LEFT)
+		else if (doodleLastDirection == DirectionX::LEFT)
 		{
 			bonus[actualBonusId].body->setTexture(assets->ROCKET_2_RIGHT_TEXTURE);
 		}
@@ -242,11 +244,11 @@ void GameScene::animateRocket(void)
 	{
 		delete bonus[actualBonusId].body;
 		bonus[actualBonusId].body = new sf::Sprite;
-		if (hero->lastDirectionX == DirectionX::RIGHT)
+		if (doodleLastDirection == DirectionX::RIGHT)
 		{
 			bonus[actualBonusId].body->setTexture(assets->ROCKET_3_LEFT_TEXTURE);
 		}
-		else if (hero->lastDirectionX == DirectionX::LEFT)
+		else if (doodleLastDirection == DirectionX::LEFT)
 		{
 			bonus[actualBonusId].body->setTexture(assets->ROCKET_3_RIGHT_TEXTURE);
 		}
@@ -259,7 +261,7 @@ void GameScene::animateRocket(void)
 
 	if ((animationCounter >= 0) && (animationCounter <= 11) && (actualBonus != BonusType::NO) && (hero->speedY < -0.05f * ROCKET_DELTA_HEIGHT))
 	{
-		if (hero->lastDirectionX == DirectionX::RIGHT)
+		if (doodleLastDirection == DirectionX::RIGHT)
 		{
 			if ((animationCounter >= 0) && (animationCounter <= 2))
 			{
@@ -278,7 +280,7 @@ void GameScene::animateRocket(void)
 				bonus[actualBonusId].body->setPosition(hero->body->getPosition().x - 17, hero->body->getPosition().y);
 			}
 		}
-		else if (hero->lastDirectionX == DirectionX::LEFT)
+		else if (doodleLastDirection == DirectionX::LEFT)
 		{
 			if ((animationCounter >= 0) && (animationCounter <= 2))
 			{
@@ -360,11 +362,12 @@ void GameScene::animateHatHelicopter(void)
 
 	if ((animationCounter >= 0) && (animationCounter <= 20) && (actualBonus != BonusType::NO) && (hero->speedY < -0.05f * HAT_HELICOPTER_DELTA_HEIGHT))
 	{
-		if (hero->lastDirectionX == DirectionX::RIGHT)
+		DirectionX doodleLastDirection = hero->getLastDirection();
+		if (doodleLastDirection == DirectionX::RIGHT)
 		{
 			bonus[actualBonusId].body->setPosition(hero->body->getPosition().x, hero->body->getPosition().y - 14);
 		}
-		else if (hero->lastDirectionX == DirectionX::LEFT)
+		else if (doodleLastDirection == DirectionX::LEFT)
 		{
 			bonus[actualBonusId].body->setPosition(hero->body->getPosition().x + 15, hero->body->getPosition().y - 14);
 		}
@@ -421,12 +424,14 @@ void GameScene::resetGame(void)
 	points = 0;
 	actualBonus = BonusType::NO;
 	offsetFallBonus.x = 0.f;
-	offsetFallBonus.y = 0.f;
+	offsetFallBonus.y = 0.f; 
+	isLeft = false;
+	isRight = false;
+	hero->setDirection(DirectionX::NONE);
 
 	hero->body->setTexture(assets->DOODLE_LEFT_TEXTURE);
 	hero->body->setPosition(260, 350);
 	hero->speedY = -50.f;
-	hero->lastDirectionX = DirectionX::LEFT;
 	animationCounter = 0;
 	hero->positionBeforeDown.y = hero->body->getPosition().y;
 	view->setCenter(275, 350);
@@ -690,25 +695,12 @@ void GameScene::render(sf::RenderWindow & window)
 	window.draw(scoreNum);
 }
 
-void GameScene::keyPressed(sf::RenderWindow & window)
+void GameScene::checkEvents(sf::RenderWindow & window)
 {
 	sf::Event event;
 	while (window.pollEvent(event))
 	{
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-		{
-			hero->direction.x = DirectionX::LEFT;
-			hero->lastDirectionX = DirectionX::LEFT;
-		}
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-		{
-			hero->direction.x = DirectionX::RIGHT;
-			hero->lastDirectionX = DirectionX::RIGHT;
-		}
-		else
-		{
-			hero->direction.x = DirectionX::NONE;
-		}
+		checkKeyboard(event);
 
 		if (event.type == sf::Event::Closed)
 		{
@@ -717,6 +709,58 @@ void GameScene::keyPressed(sf::RenderWindow & window)
 		if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
 		{
 			isPause = true;
+		}
+	}
+}
+
+void GameScene::checkKeyboard(sf::Event event)
+{
+	bool isNeedUpdate = false;
+	checkKeyPressed(event, isNeedUpdate);
+	checkKeyRealesed(event, isNeedUpdate);
+
+	if (isNeedUpdate)
+	{
+		hero->updateDirection(isLeft, isRight);
+	}
+}
+
+void GameScene::checkKeyPressed(sf::Event event, bool & isNeedUpdate)
+{
+	if (event.type == sf::Event::KeyPressed)
+	{
+		switch (event.key.code)
+		{
+		case sf::Keyboard::A:
+			isLeft = true;
+			isNeedUpdate = true;
+			break;
+		case sf::Keyboard::D:
+			isRight = true;
+			isNeedUpdate = true;
+			break;
+		default:
+			break;
+		}
+	}
+}
+
+void GameScene::checkKeyRealesed(sf::Event event, bool & isNeedUpdate)
+{
+	if (event.type == sf::Event::KeyReleased)
+	{
+		switch (event.key.code)
+		{
+		case sf::Keyboard::A:
+			isLeft = false;
+			isNeedUpdate = true;
+			break;
+		case sf::Keyboard::D:
+			isRight = false;
+			isNeedUpdate = true;
+			break;
+		default:
+			break;
 		}
 	}
 }

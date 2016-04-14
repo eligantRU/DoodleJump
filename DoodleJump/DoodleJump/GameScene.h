@@ -31,7 +31,10 @@ private:
 	void generPlates(void);
 	void generBonuses(void);
 	void update(sf::RenderWindow & window);
-	void keyPressed(sf::RenderWindow & window);
+	void checkEvents(sf::RenderWindow & window);
+	void checkKeyboard(sf::Event event); 
+	void checkKeyPressed(sf::Event event, bool & isNeedUpdate);
+	void checkKeyRealesed(sf::Event event, bool & isNeedUpdate);
 	float checkDoodleFall(void);
 	void dropUnstablePlates(void);
 	void generHole(void);
@@ -56,4 +59,7 @@ private:
 	sf::Vector2f offsetFallBonus;
 
 	// Enemy * enemy[NUMBER_ENEMY];
+
+	bool isLeft;
+	bool isRight;
 };
