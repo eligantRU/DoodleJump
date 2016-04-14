@@ -43,7 +43,11 @@ void Doodle::updateDirection(bool isLeft, bool isRight)
 	{
 		setDirection(DirectionX::RIGHT);
 		lastDirection = DirectionX::RIGHT;
-	}		
+	}
+	if (isLeft && isRight)
+	{
+		setDirection(DirectionX::NONE);
+	}
 }
 
 void Doodle::setDirection(DirectionX newDirection)
