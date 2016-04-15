@@ -59,7 +59,7 @@ SGameResult GameScene::onGameFrame(sf::RenderWindow & window)
 		if (isPause)
 		{
 			isPause = false;
-			view->setCenter(WINDOW_WIDTH/2, background->getPosition().y);
+			view->setCenter(WINDOW_WIDTH/2, background->getPosition().y + WINDOW_HEIGHT/2);
 			window.setView(*view);
 		}
 		checkEvents(window);
