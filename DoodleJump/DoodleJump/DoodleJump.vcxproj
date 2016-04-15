@@ -22,6 +22,7 @@
     <ClInclude Include="assets.h" />
     <ClInclude Include="bases.h" />
     <ClInclude Include="bonuses.h" />
+    <ClInclude Include="Button.h" />
     <ClInclude Include="doodle.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="GameOverScene.h" />
@@ -40,6 +41,7 @@
   <ItemGroup>
     <ClCompile Include="assets.cpp" />
     <ClCompile Include="Bonuses.cpp" />
+    <ClCompile Include="Button.cpp" />
     <ClCompile Include="Doodle.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameOverScene.cpp" />

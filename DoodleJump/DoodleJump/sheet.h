@@ -14,6 +14,7 @@
 
 #include "bases.h"
 #include "assets.h"
+#include "Button.h"
 #include "bonuses.h"
 #include "plates.h"	
 #include "doodle.h"

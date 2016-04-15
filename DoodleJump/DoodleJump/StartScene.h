@@ -24,17 +24,13 @@ private:
 	sf::Sprite * title;
 	sf::Sprite * insects[NUMBER_INSECTS];
 	sf::Sprite * background;
-	sf::Sprite * playButton;
-	sf::Sprite * exitButton;
-	sf::Sprite * helpButton;
 	sf::Sprite * hole;
 	sf::Vector2f platePosition;
 	sf::Vector2f doodlePosition;
 
-	sf::Text playText;
-	sf::Text recordText;
-	sf::Text exitText;
-	sf::Text helpText;
+	Button * playButton;
+	Button * exitButton;
+	Button * helpButton;
 
 	SGameResult result;
 };

@@ -3,7 +3,7 @@
 
 StartScene::StartScene(Assets & assets, sf::View & view)
 	:assets(&assets)
-	, view(&view)
+	,view(&view)
 {
 	hero = new Doodle(assets);
 	plate = new Plate(&assets);
@@ -14,36 +14,10 @@ StartScene::StartScene(Assets & assets, sf::View & view)
 	title = new sf::Sprite;
 	title->setTexture(assets.MAIN_TITLE_TEXTURE);
 	title->setPosition(100, 50);
-
-	playButton = new sf::Sprite;
-	playButton->setTexture(assets.BUTTON_INACTIVE_TEXTURE);
-	playButton->setPosition(200, 180);
-	playText.setFont(assets.font);
-	playText.setCharacterSize(20);
-	playText.setString("Play");
-	playText.setStyle(sf::Text::Bold);
-	playText.setPosition(232.f, 182.f);
-	playText.setColor(sf::Color(0, 0, 0));
-
-	exitButton = new sf::Sprite;
-	exitButton->setTexture(assets.BUTTON_INACTIVE_TEXTURE);
-	exitButton->setPosition(250, 240);
-	exitText.setFont(assets.font);
-	exitText.setCharacterSize(20);
-	exitText.setString("Exit");
-	exitText.setStyle(sf::Text::Bold);
-	exitText.setPosition(280.f, 242.f);
-	exitText.setColor(sf::Color(0, 0, 0));
-
-	helpButton = new sf::Sprite;
-	helpButton->setTexture(assets.BUTTON_INACTIVE_TEXTURE);
-	helpButton->setPosition(350, 475);
-	helpText.setFont(assets.font);
-	helpText.setCharacterSize(20);
-	helpText.setString("Help");
-	helpText.setStyle(sf::Text::Bold);
-	helpText.setPosition(380.f, 477.f);
-	helpText.setColor(sf::Color(0, 0, 0));
+	
+	playButton = new Button("Play", sf::Vector2f(232.f, 182.f), assets);
+	exitButton = new Button("Exit", sf::Vector2f(250.f, 240.f), assets);
+	helpButton = new Button("Help", sf::Vector2f(350.f, 475.f), assets);
 
 	title = new sf::Sprite;
 	title->setTexture(assets.MAIN_TITLE_TEXTURE);
@@ -120,75 +94,37 @@ void StartScene::render(sf::RenderWindow & window)
 	window.draw(*title);
 	window.draw(*plate->body);
 	window.draw(*hero->body);
-	window.draw(*playButton);
-	window.draw(playText);
-	window.draw(*exitButton);
-	window.draw(exitText);
-	window.draw(*helpButton);
-	window.draw(helpText);
+	playButton->draw(window);
+	exitButton->draw(window);
+	helpButton->draw(window);
 	window.draw(*hole);
-	for (int i = 0; i < NUMBER_INSECTS; ++i)
+
+	for (auto insect : insects)
 	{
-		window.draw(*insects[i]);
+		window.draw(*insect);
 	}
 }
 
 void StartScene::checkMouseOnButtons(sf::Vector2i & mousePosition)
 {
-	if (((mousePosition.y >= 180) && (mousePosition.y <= 209)
-		&& (mousePosition.x >= 200) && (mousePosition.x <= 300)))
-	{
-		playButton->setTexture(assets->BUTTON_ACTIVE_TEXTURE);
-	}
-	else
-	{
-		playButton->setTexture(assets->BUTTON_INACTIVE_TEXTURE);
-	}
-
-	if (((mousePosition.y >= 240) && (mousePosition.y <= 269)
-		&& (mousePosition.x >= 250) && (mousePosition.x <= 350)))
-	{
-		exitButton->setTexture(assets->BUTTON_ACTIVE_TEXTURE);
-	}
-	else
-	{
-		exitButton->setTexture(assets->BUTTON_INACTIVE_TEXTURE);
-	}
-
-	if (((mousePosition.y >= 475) && (mousePosition.y <= 504)
-		&& (mousePosition.x >= 350) && (mousePosition.x <= 450)))
-	{
-		helpButton->setTexture(assets->BUTTON_ACTIVE_TEXTURE);
-	}
-	else
-	{
-		helpButton->setTexture(assets->BUTTON_INACTIVE_TEXTURE);
-	}
+	playButton->onMouse(mousePosition);
+	exitButton->onMouse(mousePosition);
+	helpButton->onMouse(mousePosition);
 }
-
 
 void StartScene::checkMouseClick(sf::RenderWindow & window, sf::Event & event)
 {
-	if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left)
+	if (playButton->onClick(event))
 	{
-		const sf::Vector2i mousePosition(event.mouseButton.x, event.mouseButton.y);
-		if (((mousePosition.y >= 180) && (mousePosition.y <= 209)
-			&& (mousePosition.x >= 200) && (mousePosition.x <= 300)))
-		{
-			playButton->setTexture(assets->BUTTON_INACTIVE_TEXTURE);
-			result.status = GameStatus::GAME_SCENE;
-		}
-		if (((mousePosition.y >= 240) && (mousePosition.y <= 269)
-			&& (mousePosition.x >= 250) && (mousePosition.x <= 350)))
-		{
-			window.close();
-		}
-		if (((mousePosition.y >= 475) && (mousePosition.y <= 504)
-			&& (mousePosition.x >= 350) && (mousePosition.x <= 450)))
-		{
-			helpButton->setTexture(assets->BUTTON_INACTIVE_TEXTURE);
-			result.status = GameStatus::HELP_SCENE;
-		}
+		result.status = GameStatus::GAME_SCENE;
+	}
+	if (exitButton->onClick(event))
+	{
+		window.close();
+	}
+	if (helpButton->onClick(event))
+	{
+		result.status = GameStatus::HELP_SCENE;
 	}
 }
 

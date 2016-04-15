@@ -19,13 +19,13 @@ private:
 	void clearResult(void);
 
 	sf::Sprite * background;
-	sf::Sprite * goMenuButton;
 	sf::Sprite * buttonA;
 	sf::Sprite * buttonD;
 
-	sf::Text goMenuText;
 	sf::Text helpText1;
 	sf::Text helpText2;
+
+	Button * goMenuButton;
 
 	SGameResult result;
 };

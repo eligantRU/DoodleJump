@@ -18,11 +18,9 @@ private:
 	void checkMouseClick(sf::RenderWindow & window, sf::Event & event);
 	void clearResult(void);
 	sf::Sprite * background;
-	sf::Sprite * backButton;
-	sf::Sprite * exitButton;
 
-	sf::Text backText;
-	sf::Text exitText;
+	Button * backButton;
+	Button * exitButton;
 
 	SGameResult result;
 };

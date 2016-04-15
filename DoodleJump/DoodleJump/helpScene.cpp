@@ -3,17 +3,9 @@
 
 HelpScene::HelpScene(Assets & assets, sf::View & view)
 	:assets(&assets)
-	, view(&view)
+	,view(&view)
 {	
-	goMenuButton = new sf::Sprite;
-	goMenuButton->setTexture(assets.BUTTON_INACTIVE_TEXTURE);
-	goMenuButton->setPosition(200, 210);
-	goMenuText.setFont(assets.font);
-	goMenuText.setCharacterSize(20);
-	goMenuText.setString("back");
-	goMenuText.setStyle(sf::Text::Bold);
-	goMenuText.setPosition(232.f, 212.f);
-	goMenuText.setColor(sf::Color(0, 0, 0));
+	goMenuButton = new Button("Back", sf::Vector2f(200.f, 210.f), assets);
 
 	buttonA = new sf::Sprite;
 	buttonA->setTexture(assets.BUTTON_A_TEXTURE);
@@ -78,12 +70,11 @@ void HelpScene::render(sf::RenderWindow & window)
 {
 	window.clear(sf::Color(255, 255, 255));
 	window.draw(*background);
-	window.draw(*goMenuButton);
-	window.draw(goMenuText);
+	goMenuButton->draw(window);
 	window.draw(helpText1);
+	window.draw(helpText2);
 	window.draw(*buttonA);
 	window.draw(*buttonD);
-	window.draw(helpText2);
 }
 
 void HelpScene::checkEvents(sf::RenderWindow & window)
@@ -102,28 +93,13 @@ void HelpScene::checkEvents(sf::RenderWindow & window)
 
 void HelpScene::checkMouseOnButtons(sf::Vector2i & mousePosition)
 {
-	if (((mousePosition.y >= 210) && (mousePosition.y <= 239)
-		&& (mousePosition.x >= 200) && (mousePosition.x <= 300)))
-	{
-		goMenuButton->setTexture(assets->BUTTON_ACTIVE_TEXTURE);
-	}
-	else
-	{
-		goMenuButton->setTexture(assets->BUTTON_INACTIVE_TEXTURE);
-	}
+	goMenuButton->onMouse(mousePosition);
 }
-
 
 void HelpScene::checkMouseClick(sf::RenderWindow & window, sf::Event & event)
 {
-	if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left)
+	if (goMenuButton->onClick(event))
 	{
-		const sf::Vector2i mousePosition(event.mouseButton.x, event.mouseButton.y);
-		if (((mousePosition.y >= 210) && (mousePosition.y <= 239)
-			&& (mousePosition.x >= 200) && (mousePosition.x <= 300)))
-		{
-			goMenuButton->setTexture(assets->BUTTON_INACTIVE_TEXTURE);
-			result.status = GameStatus::START_SCENE;
-		}
+		result.status = GameStatus::START_SCENE;
 	}
 }

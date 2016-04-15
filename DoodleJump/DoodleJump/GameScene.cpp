@@ -56,6 +56,12 @@ SGameResult GameScene::onGameFrame(sf::RenderWindow & window)
 
 	if (!endOfGame)
 	{
+		if (isPause)
+		{
+			isPause = false;
+			view->setCenter(WINDOW_WIDTH/2, background->getPosition().y);
+			window.setView(*view);
+		}
 		checkEvents(window);
 		update(window);
 		window.setView(*view);
@@ -65,8 +71,9 @@ SGameResult GameScene::onGameFrame(sf::RenderWindow & window)
 		result.points = points;
 		if (isPause)
 		{
+			view->setCenter(275, 350); 
+			window.setView(*view);
 			result.status = GameStatus::PAUSE_SCENE;
-			isPause = false;
 		}
 		else
 		{

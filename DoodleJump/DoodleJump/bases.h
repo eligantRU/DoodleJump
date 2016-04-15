@@ -26,6 +26,10 @@ static const float SPRING_DELTA_HEIGHT = 60.f;
 static const float TRAMPLANE_DELTA_HEIGHT = 65.f;
 static const float HAT_HELICOPTER_DELTA_HEIGHT = 200.f;
 static const float ROCKET_DELTA_HEIGHT = 180.f;
+static const int BUTTON_WIDTH = 100;
+static const int BUTTON_HEIGHT = 29;
+static const int WINDOW_WIDTH = 550;
+static const int WINDOW_HEIGHT = 700;
 
 enum class PlateType
 {

@@ -15,16 +15,15 @@ private:
 	void render(sf::RenderWindow & window);
 	void checkEvents(sf::RenderWindow & window);
 	void checkMouseOnButtons(sf::Vector2i & mousePosition);
-	void checkMouseClick(sf::RenderWindow & window, sf::Event & event);
+	void checkMouseClick(sf::Event & event);
 
 	sf::Sprite * background;
-	sf::Sprite * playAgainButton;
-	sf::Sprite * goMenuButton;
 	sf::Sprite * title;
 
-	sf::Text playAgainText;
-	sf::Text goMenuText;
 	sf::Text lastRecord;
+
+	Button * playAgainButton;
+	Button * goMenuButton;
 
 	SGameResult result;
 };
