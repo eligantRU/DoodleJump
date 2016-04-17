@@ -11,7 +11,7 @@ public:
 	void addRepeatedTexture(sf::Texture & texture, std::string string);
 	void addFont(sf::Font & font, std::string string); 
 	void addImage(sf::Image & image, std::string string);
-	sf::Image ICON;
+	sf::Image WINDOW_ICON;
 	sf::Texture BACKGROUND_TEXTURE;
 	sf::Texture PLATE_STATIC_TEXTURE;
 	sf::Texture PLATE_DYNAMIC_TEXTURE;

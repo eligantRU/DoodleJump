@@ -55,7 +55,7 @@ void Game::launch(void)
 	sf::ContextSettings settings;
 	settings.antialiasingLevel = 16;
 	sf::RenderWindow window(sf::VideoMode(550, 700), "Doodle Jump", sf::Style::Close, settings);
-	sf::Image icon = assets->ICON;;
+	sf::Image icon = assets->WINDOW_ICON;;
 	window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
 	window.setVerticalSyncEnabled(true);
 	window.setFramerateLimit(60);
