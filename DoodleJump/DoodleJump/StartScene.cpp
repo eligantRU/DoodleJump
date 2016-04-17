@@ -142,8 +142,6 @@ void StartScene::checkEvents(sf::RenderWindow & window)
 
 void StartScene::moveDoodle(void)
 {
-	doodlePosition = hero->getPosition();
-
 	sf::Vector2f position(0.f, 0.f);
 	if (hero->getSpeedY() < 0)
 	{
@@ -163,7 +161,7 @@ void StartScene::moveDoodle(void)
 		}
 		else
 		{
-			hero->setSpeedY(hero->getSpeedY() - PLATE_DELTA_HEIGHT);
+			hero->setSpeedY(-PLATE_DELTA_HEIGHT);
 		}
 	}
 	hero->move(position);
@@ -171,6 +169,9 @@ void StartScene::moveDoodle(void)
 
 Collision StartScene::checkCollisionPlate(void)
 {
+	sf::Vector2f doodlePosition = hero->getPosition();
+	sf::Vector2f platePosition = plate->getPosition();
+
 	if (((doodlePosition.y + DOODLE_HEIGHT >= platePosition.y) && (doodlePosition.y + DOODLE_HEIGHT <= platePosition.y + PLATE_HEIGHT)
 		&& (doodlePosition.x + DOODLE_WIDTH >= platePosition.x) && (doodlePosition.x - PLATE_WIDTH <= platePosition.x)))
 	{
