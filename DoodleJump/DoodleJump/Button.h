@@ -13,10 +13,9 @@ public:
 	void setPosition(sf::Vector2f position);
 	void setTexture(sf::Texture & texture);
 	void draw(sf::RenderWindow & window);
-	float getStringLengthPx(std::string str);
-	sf::Vector2f getRelativePosition(void);
-	sf::Sprite * body;
-	sf::Text text;
 private:
-	Assets * assets;
+	float getStringLengthPx(const std::string str);
+	sf::Sprite * m_body;
+	sf::Text m_text;
+	Assets * m_assets;
 };

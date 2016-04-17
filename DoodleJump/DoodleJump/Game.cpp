@@ -17,14 +17,6 @@ Game::~Game()
 	
 }
 
-/*void Game::gameLoop(sf::RenderWindow & window)
-{
-	while (window.isOpen())
-	{
-		frameFunc(window);
-	}
-}*/
-
 void Game::gameLoop(sf::RenderWindow & window)
 {
 	while (window.isOpen())

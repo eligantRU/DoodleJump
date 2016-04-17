@@ -7,9 +7,9 @@ StartScene::StartScene(Assets & assets, sf::View & view)
 {
 	hero = new Doodle(assets);
 	plate = new Plate(&assets);
-	hero->speedY = -20.f;
-	hero->body->setTexture(assets.DOODLE_RIGHT_TEXTURE);
-	hero->body->setPosition(sf::Vector2f(110.f, 500.f - DOODLE_HEIGHT));
+	hero->setSpeedY(-20.f);
+	hero->setTexture(assets.DOODLE_RIGHT_TEXTURE);
+	hero->setPosition(sf::Vector2f(110.f, 500.f - DOODLE_HEIGHT));
 
 	title = new sf::Sprite;
 	title->setTexture(assets.MAIN_TITLE_TEXTURE);
@@ -49,9 +49,7 @@ StartScene::StartScene(Assets & assets, sf::View & view)
 	background->setTexture(assets.BACKGROUND_TEXTURE);
 	background->setPosition(0, 0);
 
-	platePosition.x = 100.f;
-	platePosition.y = 500.f;
-	plate->body->setPosition(platePosition);
+	plate->setPosition(sf::Vector2f(100.f, 500.f));
 }
 
 StartScene::~StartScene()
@@ -92,8 +90,8 @@ void StartScene::render(sf::RenderWindow & window)
 	window.clear(sf::Color(255, 255, 255));
 	window.draw(*background);
 	window.draw(*title);
-	window.draw(*plate->body);
-	window.draw(*hero->body);
+	plate->draw(window);
+	hero->draw(window);
 	playButton->draw(window);
 	exitButton->draw(window);
 	helpButton->draw(window);
@@ -144,31 +142,31 @@ void StartScene::checkEvents(sf::RenderWindow & window)
 
 void StartScene::moveDoodle(void)
 {
-	doodlePosition = hero->body->getPosition();
+	doodlePosition = hero->getPosition();
 
 	sf::Vector2f position(0.f, 0.f);
-	if (hero->speedY < 0)
+	if (hero->getSpeedY() < 0)
 	{
-		hero->speedY += ACCELERATION;
-		position.y = hero->speedY;
+		hero->setSpeedY(hero->getSpeedY() + ACCELERATION);
+		position.y = hero->getSpeedY();
 
-		hero->body->setTexture(assets->DOODLE_JUMP_RIGHT_TEXTURE);
+		hero->setTexture(assets->DOODLE_JUMP_RIGHT_TEXTURE);
 	}
 	else
 	{
 		if (checkCollisionPlate() == Collision::NO_COLLISION)
 		{
-			hero->speedY += ACCELERATION / 8;
-			position.y = hero->speedY;
+			hero->setSpeedY(hero->getSpeedY() + ACCELERATION / 8);
+			position.y = hero->getSpeedY();
 
-			hero->body->setTexture(assets->DOODLE_RIGHT_TEXTURE);
+			hero->setTexture(assets->DOODLE_RIGHT_TEXTURE);
 		}
 		else
 		{
-			hero->speedY = -PLATE_DELTA_HEIGHT;
+			hero->setSpeedY(hero->getSpeedY() - PLATE_DELTA_HEIGHT);
 		}
 	}
-	hero->body->move(position);
+	hero->move(position);
 }
 
 Collision StartScene::checkCollisionPlate(void)
