@@ -19,6 +19,7 @@ public:
 	void setDirection(DirectionX direction);
 	void setSpeedY(float speed);
 	float getSpeedY(void);
+	void correctSkin(void);
 	sf::Vector2f getPositionBeforeDown(void);
 	void setPositionBeforeDown(sf::Vector2f position);
 	DirectionX getDirection(void);

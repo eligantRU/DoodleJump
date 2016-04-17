@@ -386,6 +386,7 @@ void GameScene::update(sf::RenderWindow & window)
 {
 	(void)window;
 	moveDoodle();
+	hero->correctSkin();
 	sf::Vector2f doodlePosition = hero->getPosition();
 	checkCylinderEffect(doodlePosition);
 	animateBonus();

@@ -90,10 +90,24 @@ void Doodle::setDirection(DirectionX newDirection)
 	switch (newDirection)
 	{
 	case DirectionX::LEFT:
-		m_body->setTexture(m_assets->DOODLE_JUMP_LEFT_TEXTURE);
+		if (getSpeedY() < 0)
+		{
+			setTexture(m_assets->DOODLE_JUMP_LEFT_TEXTURE);
+		}
+		else
+		{
+			setTexture(m_assets->DOODLE_LEFT_TEXTURE);
+		}
 		break;
 	case DirectionX::RIGHT:
-		m_body->setTexture(m_assets->DOODLE_JUMP_RIGHT_TEXTURE);
+		if (getSpeedY() < 0)
+		{
+			setTexture(m_assets->DOODLE_JUMP_RIGHT_TEXTURE);
+		}
+		else
+		{
+			setTexture(m_assets->DOODLE_RIGHT_TEXTURE);
+		}
 		break;
 	case DirectionX::NONE:
 		break;
@@ -120,4 +134,31 @@ sf::Vector2f Doodle::getPositionBeforeDown(void)
 void Doodle::setPositionBeforeDown(sf::Vector2f position)
 {
 	m_positionBeforeDown = position;
+}
+
+void Doodle::correctSkin(void)
+{
+	auto lastDirection = getLastDirection();
+	if (getSpeedY() > 0)
+	{
+		if (lastDirection == DirectionX::LEFT)
+		{
+			setTexture(m_assets->DOODLE_JUMP_LEFT_TEXTURE);
+		}
+		else if (lastDirection == DirectionX::RIGHT)
+		{
+			setTexture(m_assets->DOODLE_JUMP_RIGHT_TEXTURE);
+		}
+	}
+	else
+	{
+		if (lastDirection == DirectionX::LEFT)
+		{
+			setTexture(m_assets->DOODLE_LEFT_TEXTURE);
+		}
+		else if (lastDirection == DirectionX::RIGHT)
+		{
+			setTexture(m_assets->DOODLE_RIGHT_TEXTURE);
+		}
+	}
 }
