@@ -8,9 +8,6 @@
 #include <string>
 #include <functional>
 #include <memory>
-#include <SFML/Graphics.hpp>
-#include <SFML/Audio.hpp>
-#include <SFML/OpenGL.hpp>
 
 #include "bases.h"
 #include "assets.h"

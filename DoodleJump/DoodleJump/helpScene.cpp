@@ -91,13 +91,14 @@ void HelpScene::checkEvents(sf::RenderWindow & window)
 	}
 }
 
-void HelpScene::checkMouseOnButtons(sf::Vector2i & mousePosition)
+void HelpScene::checkMouseOnButtons(sf::Vector2i mousePosition)
 {
 	goMenuButton->onMouse(mousePosition);
 }
 
 void HelpScene::checkMouseClick(sf::RenderWindow & window, sf::Event & event)
 {
+	(void)window;
 	if (goMenuButton->onClick(event))
 	{
 		result.status = GameStatus::START_SCENE;

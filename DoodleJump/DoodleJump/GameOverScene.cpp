@@ -73,7 +73,7 @@ void GameOverScene::checkEvents(sf::RenderWindow & window)
 	}
 }
 
-void GameOverScene::checkMouseOnButtons(sf::Vector2i & mousePosition)
+void GameOverScene::checkMouseOnButtons(sf::Vector2i mousePosition)
 {
 	goMenuButton->onMouse(mousePosition);
 	playAgainButton->onMouse(mousePosition);

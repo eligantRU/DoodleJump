@@ -14,7 +14,7 @@ private:
 	sf::View * view;
 	void render(sf::RenderWindow & window);
 	void checkEvents(sf::RenderWindow & window);
-	void checkMouseOnButtons(sf::Vector2i & mousePosition);
+	void checkMouseOnButtons(sf::Vector2i mousePosition);
 	void checkMouseClick(sf::RenderWindow & window, sf::Event & event);
 	void clearResult(void);
 	sf::Sprite * background;

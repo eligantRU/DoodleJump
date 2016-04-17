@@ -14,3 +14,11 @@
 #include <string>
 #include <stdint.h>
 #include <functional>
+
+#pragma warning (push, 3)
+
+#include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
+#include <SFML/OpenGL.hpp>
+
+#pragma warning (pop)

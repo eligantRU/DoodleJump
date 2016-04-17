@@ -62,7 +62,7 @@ void PauseScene::checkEvents(sf::RenderWindow & window)
 	}
 }
 
-void PauseScene::checkMouseOnButtons(sf::Vector2i & mousePosition)
+void PauseScene::checkMouseOnButtons(sf::Vector2i mousePosition)
 {
 	backButton->onMouse(mousePosition);
 	exitButton->onMouse(mousePosition);

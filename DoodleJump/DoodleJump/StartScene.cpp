@@ -105,7 +105,7 @@ void StartScene::render(sf::RenderWindow & window)
 	}
 }
 
-void StartScene::checkMouseOnButtons(sf::Vector2i & mousePosition)
+void StartScene::checkMouseOnButtons(sf::Vector2i mousePosition)
 {
 	playButton->onMouse(mousePosition);
 	exitButton->onMouse(mousePosition);

@@ -397,6 +397,7 @@ void GameScene::animateHatHelicopter(void)
 
 void GameScene::update(sf::RenderWindow & window)
 {
+	(void)window;
 	moveDoodle();
 	sf::Vector2f doodlePosition = hero->body->getPosition();
 	checkCylinderEffect(doodlePosition);
@@ -485,7 +486,7 @@ void GameScene::generPlates(void)
 	{
 		platePositionY[i] = plate[i]->body->getPosition().y;
 	}
-	std::sort(platePositionY.begin(), platePositionY.end(), std::greater<int>());
+	std::sort(platePositionY.begin(), platePositionY.end(), std::greater<float>());
 
 	for (int i = 1; i < NUMBER_PLATES / 2; ++(++i))
 	{
@@ -674,7 +675,7 @@ bool GameScene::checkGameEnd(void)
 		PlaySound(L"sounds/crnarupa.wav", nullptr, SND_ASYNC | SND_NODEFAULT);
 		return true;
 	}
-	if ((doodlePosition.y <= view->getCenter().y + 350.f))
+	if (doodlePosition.y < view->getCenter().y + 350.f - DOODLE_HEIGHT)
 	{
 		return false;
 	}
