@@ -143,22 +143,22 @@ void Doodle::correctSkin(void)
 	{
 		if (lastDirection == DirectionX::LEFT)
 		{
-			setTexture(m_assets->DOODLE_JUMP_LEFT_TEXTURE);
+			setTexture(m_assets->DOODLE_LEFT_TEXTURE);
 		}
 		else if (lastDirection == DirectionX::RIGHT)
 		{
-			setTexture(m_assets->DOODLE_JUMP_RIGHT_TEXTURE);
+			setTexture(m_assets->DOODLE_RIGHT_TEXTURE);
 		}
 	}
 	else
 	{
 		if (lastDirection == DirectionX::LEFT)
 		{
-			setTexture(m_assets->DOODLE_LEFT_TEXTURE);
+			setTexture(m_assets->DOODLE_JUMP_LEFT_TEXTURE);
 		}
 		else if (lastDirection == DirectionX::RIGHT)
 		{
-			setTexture(m_assets->DOODLE_RIGHT_TEXTURE);
+			setTexture(m_assets->DOODLE_JUMP_RIGHT_TEXTURE);
 		}
 	}
 }

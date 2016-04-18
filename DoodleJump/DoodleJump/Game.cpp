@@ -5,11 +5,14 @@ Game::Game()
 {
 	assets = new Assets();
 	view = new sf::View();
+
 	sceneStart = new StartScene(*assets, *view);
 	sceneHelp = new HelpScene(*assets, *view);
 	sceneGame = new GameScene(*assets, *view);
-	sceneGameOver = new GameOverScene(*assets, *view);
 	scenePause = new PauseScene(*assets, *view);
+
+	std::function<uint64_t()> getter = std::bind(&GameScene::getScore, sceneGame);
+	sceneGameOver = new GameOverScene(*assets, *view, getter);
 }
 
 Game::~Game()
@@ -30,7 +33,7 @@ void Game::gameLoop(sf::RenderWindow & window)
 			gameState = sceneGame->onGameFrame(window);
 			break;
 		case GameStatus::GAME_OVER_SCENE:
-			gameState = sceneGameOver->onGameOverMenu(window, gameState.points);
+			gameState = sceneGameOver->onGameOverMenu(window);
 			break;
 		case GameStatus::PAUSE_SCENE:
 			gameState = scenePause->onPauseMenu(window);

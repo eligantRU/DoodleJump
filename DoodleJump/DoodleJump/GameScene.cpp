@@ -52,6 +52,10 @@ GameScene::~GameScene()
 
 SGameResult GameScene::onGameFrame(sf::RenderWindow & window)
 {
+	if (result.status == GameStatus::GAME_OVER_SCENE)
+	{
+	resetGame();
+	}
 	result.collision = Collision::NO_COLLISION;
 
 	if (!endOfGame)
@@ -86,7 +90,7 @@ SGameResult GameScene::onGameFrame(sf::RenderWindow & window)
 		window.setView(*view);
 		result.points = points;
 		result.status = GameStatus::GAME_OVER_SCENE;
-		resetGame();
+		
 	}
 	return result;
 }
@@ -393,9 +397,9 @@ void GameScene::update(sf::RenderWindow & window)
 
 	if ((hero->getSpeedY() <= 0) && (doodlePosition.y <= hero->getPositionBeforeDown().y))
 	{
-		view->setCenter(275, doodlePosition.y);
-		background->setPosition(0, doodlePosition.y - 350);
-		scoreNum.setPosition(0, doodlePosition.y - 350);
+		view->setCenter(WINDOW_WIDTH/2, doodlePosition.y);
+		background->setPosition(0, doodlePosition.y - WINDOW_HEIGHT / 2);
+		scoreNum.setPosition(0, doodlePosition.y - WINDOW_HEIGHT / 2);
 		++points;
 	}
 
@@ -1014,4 +1018,9 @@ Collision GameScene::checkCollisionBonus(sf::Vector2f & doodlePosition, sf::Vect
 		}
 	}
 	return Collision::NO_COLLISION;
+}
+
+uint64_t GameScene::getScore(void)
+{
+	return points;
 }

@@ -9,6 +9,7 @@ public:
 	GameScene(Assets & assets, sf::View & view);
 	~GameScene();
 	SGameResult onGameFrame(sf::RenderWindow & window);
+	uint64_t getScore(void);
 private:
 	Assets * assets;
 	sf::View * view;

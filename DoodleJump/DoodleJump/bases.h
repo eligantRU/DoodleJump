@@ -2,9 +2,10 @@
 
 #include "stdafx.h"
 
-static const int NUMBER_PLATES = 40; 
+static const int NUMBER_PLATES = 50; 
 static const int NUMBER_BONUSES = 1;
 static const int NUMBER_INSECTS = 5;
+static const int NUMBER_UNSTABLE_PLATES = 3;
 static const float STEP = 6.f;
 static const float ACCELERATION = 1.f;
 static const int DOODLE_WIDTH = 45;

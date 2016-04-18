@@ -1,9 +1,10 @@
 #include "stdafx.h"
 #include "sheet.h"
 
-GameOverScene::GameOverScene(Assets & assets, sf::View & view)
+GameOverScene::GameOverScene(Assets & assets, sf::View & view, std::function<uint64_t()> getter)
 	:assets(&assets)
 	,view(&view)
+	,m_getter(getter)
 {
 	title = new sf::Sprite;
 	title->setTextureRect(sf::IntRect(0, 0, 236, 96));
@@ -35,13 +36,14 @@ GameOverScene::~GameOverScene()
 	playAgainButton = nullptr;
 }
 
-SGameResult GameOverScene::onGameOverMenu(sf::RenderWindow & window, uint64_t & score)
+SGameResult GameOverScene::onGameOverMenu(sf::RenderWindow & window)
 {
+	m_score = m_getter();
 	result.status = GameStatus::GAME_OVER_SCENE;
 	result.collision = Collision::NO_COLLISION;
-	result.points = score;
-	lastRecord.setString("Your record: " + std::to_string(score));
-
+	result.points =	m_score;
+	lastRecord.setString("Your record: " + std::to_string(m_score));
+	
 	render(window);
 	window.display();
 
