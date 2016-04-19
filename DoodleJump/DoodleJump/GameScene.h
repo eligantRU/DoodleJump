@@ -11,13 +11,6 @@ public:
 	SGameResult onGameFrame(sf::RenderWindow & window);
 	uint64_t getScore(void);
 private:
-	Assets * assets;
-	sf::View * view;
-	Bonus bonus[NUMBER_BONUSES];
-	Plate * plate[NUMBER_PLATES];
-	Doodle * hero;
-	sf::Sprite * hole;
-	bool endOfGame;
 	void render(sf::RenderWindow & window);
 	void moveDoodle(void);
 	void moveDoodleHorizontal(float & positionX);
@@ -46,21 +39,30 @@ private:
 	Collision checkCollisionHole(sf::Vector2f & doodlePosition);
 	void buildBonus(BonusType bonusType, int bonusIndex, sf::Vector2f platePosition, int plateIndex);
 	void moveDynamicPlates(void);
-	int animationCounter;
-	sf::Text scoreNum;
-	uint64_t points;
-	BonusType actualBonus;
-	int actualBonusId;
-	sf::Vector2f holePosition;
-	int unstablePlatesCounter;
-	sf::Sprite * background;
-	bool isPause;
-	SGameResult result;
 	void resetGame(void);
-	sf::Vector2f offsetFallBonus;
 
-	// Enemy * enemy[NUMBER_ENEMY];
+	Assets * m_assets;
+	sf::View * m_view;
 
-	bool isLeft;
-	bool isRight;
+	Doodle * m_hero;
+	Bonus * m_bonuses[NUMBER_BONUSES];
+	Plate * m_plates[NUMBER_PLATES];
+	// Enemy * m_enemy[NUMBER_ENEMY];
+	sf::Sprite * m_hole;
+
+	uint64_t m_points = 0;
+	sf::Text m_scoreNum;
+
+	BonusType m_actualBonus;
+	int m_animationCounter = 0;
+	int m_actualBonusId;
+	sf::Vector2f m_holePosition;
+	int m_unstablePlatesCounter = 0;
+	sf::Sprite * m_background;
+	SGameResult m_result;
+	sf::Vector2f m_offsetFallBonus;
+	bool m_endOfGame = false;
+	bool m_isPause = false;
+	bool m_isLeft = false;
+	bool m_isRight = false;
 };

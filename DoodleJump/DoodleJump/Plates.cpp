@@ -1,11 +1,11 @@
 #include "stdafx.h"
 #include "sheet.h"
 
-Plate::Plate(Assets * assets)
+Plate::Plate(Assets & assets)
 {	
 	m_body = new sf::Sprite;
 	m_type = PlateType::STATIC;
-	m_body->setTexture(assets->PLATE_STATIC_TEXTURE);
+	m_body->setTexture(assets.PLATE_STATIC_TEXTURE);
 	setPosition(sf::Vector2f(float(rand() % (550 - PLATE_WIDTH)), float(rand() % (700 - PLATE_HEIGHT))));
 }
 

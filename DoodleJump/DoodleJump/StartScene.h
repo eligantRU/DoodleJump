@@ -10,28 +10,28 @@ public:
 	~StartScene();
 	SGameResult onStartMenu(sf::RenderWindow & window);
 private:
+	Collision checkCollisionPlate(void);
 	void render(sf::RenderWindow & window);
 	void checkEvents(sf::RenderWindow & window);
 	void checkMouseOnButtons(sf::Vector2i mousePosition);
 	void checkMouseClick(sf::RenderWindow & window, sf::Event & event);
 	void clearResult(void);
-	Collision checkCollisionPlate(void);
 	void moveDoodle(void);
 
-	Assets * assets;
-	sf::View * view;
+	Assets * m_assets;
+	sf::View * m_view;
 
-	Plate * plate;
-	Doodle * hero;
+	Plate * m_plate;
+	Doodle * m_hero;
 
-	sf::Sprite * title;
-	sf::Sprite * insects[NUMBER_INSECTS];
-	sf::Sprite * background;
-	sf::Sprite * hole;
+	sf::Sprite * m_title;
+	sf::Sprite * m_insects[NUMBER_INSECTS];
+	sf::Sprite * m_background;
+	sf::Sprite * m_hole;
 
-	Button * playButton;
-	Button * exitButton;
-	Button * helpButton;
+	Button * m_playButton;
+	Button * m_exitButton;
+	Button * m_helpButton;
 
 	SGameResult result;
 };

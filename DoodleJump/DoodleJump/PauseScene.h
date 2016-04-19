@@ -10,17 +10,19 @@ public:
 	~PauseScene();
 	SGameResult onPauseMenu(sf::RenderWindow & window);
 private:
-	Assets * assets;
-	sf::View * view;
 	void render(sf::RenderWindow & window);
 	void checkEvents(sf::RenderWindow & window);
 	void checkMouseOnButtons(sf::Vector2i mousePosition);
 	void checkMouseClick(sf::RenderWindow & window, sf::Event & event);
 	void clearResult(void);
-	sf::Sprite * background;
 
-	Button * backButton;
-	Button * exitButton;
+	Assets * m_assets;
+	sf::View * m_view;
 
-	SGameResult result;
+	sf::Sprite * m_background;
+
+	Button * m_backButton;
+	Button * m_exitButton;
+
+	SGameResult m_result;
 };

@@ -10,22 +10,23 @@ public:
 	~GameOverScene();
 	SGameResult onGameOverMenu(sf::RenderWindow & window);
 private:
-	Assets * assets;
-	sf::View * view;
 	void render(sf::RenderWindow & window);
 	void checkEvents(sf::RenderWindow & window);
 	void checkMouseOnButtons(sf::Vector2i mousePosition);
 	void checkMouseClick(sf::Event & event);
 	std::function<uint64_t()> m_getter;
 
-	sf::Sprite * background;
-	sf::Sprite * title;
+	Assets * m_assets;
+	sf::View * m_view;
+
+	sf::Sprite * m_background;
+	sf::Sprite * m_title;
+
 	uint64_t m_score;
+	sf::Text m_lastRecord;
 
-	sf::Text lastRecord;
+	Button * m_playAgainButton;
+	Button * m_goMenuButton;
 
-	Button * playAgainButton;
-	Button * goMenuButton;
-
-	SGameResult result;
+	SGameResult m_result;
 };

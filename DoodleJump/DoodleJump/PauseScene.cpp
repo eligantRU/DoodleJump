@@ -2,26 +2,26 @@
 #include "sheet.h"
 
 PauseScene::PauseScene(Assets & assets, sf::View & view)
-	:assets(&assets)
-	,view(&view)
+	:m_assets(&assets)
+	, m_view(&view)
 {
-	backButton = new Button("Back", sf::Vector2f(200.f, 210.f), assets);
-	exitButton = new Button("Exit", sf::Vector2f(250.f, 270.f), assets);
+	m_backButton = new Button("Back", sf::Vector2f(200.f, 210.f), *m_assets);
+	m_exitButton = new Button("Exit", sf::Vector2f(250.f, 270.f), *m_assets);
 
-	background = new sf::Sprite;
-	background->setTextureRect(sf::IntRect(0, 0, 550, 700));
-	background->setPosition(0.f, 0.f);
-	background->setTexture(assets.BACKGROUND_TEXTURE);
+	m_background = new sf::Sprite;
+	m_background->setTextureRect(sf::IntRect(0, 0, 550, 700));
+	m_background->setPosition(0.f, 0.f);
+	m_background->setTexture(m_assets->BACKGROUND_TEXTURE);
 }
 
 PauseScene::~PauseScene()
 {
-	delete background;
-	delete backButton;
-	delete exitButton;
-	background = nullptr;
-	backButton = nullptr;
-	exitButton = nullptr;
+	delete m_background;
+	delete m_backButton;
+	delete m_exitButton;
+	m_background = nullptr;
+	m_backButton = nullptr;
+	m_exitButton = nullptr;
 }
 
 SGameResult PauseScene::onPauseMenu(sf::RenderWindow & window) 
@@ -30,22 +30,22 @@ SGameResult PauseScene::onPauseMenu(sf::RenderWindow & window)
 	checkEvents(window);
 	render(window);
 	window.display();
-	return result;
+	return m_result;
 }
 
 void PauseScene::clearResult(void)
 {
-	result.status = GameStatus::PAUSE_SCENE;
-	result.collision = Collision::NO_COLLISION;
-	result.points = 0;
+	m_result.status = GameStatus::PAUSE_SCENE;
+	m_result.collision = Collision::NO_COLLISION;
+	m_result.points = 0;
 }
 
 void PauseScene::render(sf::RenderWindow & window)
 {
 	window.clear(sf::Color(255, 255, 255));
-	window.draw(*background);
-	backButton->draw(window);
-	exitButton->draw(window);
+	window.draw(*m_background);
+	m_backButton->draw(window);
+	m_exitButton->draw(window);
 }
 
 void PauseScene::checkEvents(sf::RenderWindow & window)
@@ -64,17 +64,17 @@ void PauseScene::checkEvents(sf::RenderWindow & window)
 
 void PauseScene::checkMouseOnButtons(sf::Vector2i mousePosition)
 {
-	backButton->onMouse(mousePosition);
-	exitButton->onMouse(mousePosition);
+	m_backButton->onMouse(mousePosition);
+	m_exitButton->onMouse(mousePosition);
 }
 
 void PauseScene::checkMouseClick(sf::RenderWindow & window, sf::Event & event)
 {
-	if (backButton->onClick(event))
+	if (m_backButton->onClick(event))
 	{
-		result.status = GameStatus::GAME_SCENE;
+		m_result.status = GameStatus::GAME_SCENE;
 	}
-	if (exitButton->onClick(event))
+	if (m_exitButton->onClick(event))
 	{
 		window.close();
 	}
