@@ -662,7 +662,7 @@ void GameScene::dropUnstablePlates(void)
 bool GameScene::checkGameEnd(void)
 {
 	sf::Vector2f doodlePosition = m_hero->getPosition();
-	if ((checkCollisionHole(doodlePosition) == Collision::COLLISION_HOLE) && ((m_actualBonus == BonusType::NO)))
+	if ((checkCollisionHole() == Collision::COLLISION_HOLE) && ((m_actualBonus == BonusType::NO)))
 	{
 		PlaySound(L"sounds/crnarupa.wav", nullptr, SND_ASYNC | SND_NODEFAULT);
 		return true;
@@ -886,24 +886,12 @@ void GameScene::buildBonus(BonusType bonusType, int bonusIndex, sf::Vector2f pla
 
 float GameScene::checkDoodleFall(void)
 {
-	sf::Vector2f doodlePosition = m_hero->getPosition();
-	sf::Vector2f platePosition[NUMBER_PLATES];
-	sf::Vector2f bonusPosition[NUMBER_BONUSES];
 	Collision collision = Collision::NO_COLLISION;
 
-	for (int i = 0; i < NUMBER_PLATES; ++i)
-	{
-		platePosition[i] = m_plates[i]->getPosition();
-	}
-	for (int i = 0; i < NUMBER_BONUSES; ++i)
-	{
-		bonusPosition[i] = m_bonuses[i]->getPosition();
-	}
-
-	collision = checkCollisionBonus(doodlePosition, bonusPosition);
+	collision = checkCollisionBonus();
 	if (collision == Collision::NO_COLLISION)
 	{
-		collision = checkCollisionPlate(doodlePosition, platePosition);
+		collision = checkCollisionPlate();
 	}
 
 	switch (collision)
@@ -944,8 +932,15 @@ float GameScene::checkDoodleFall(void)
 	}
 }
 
-Collision GameScene::checkCollisionPlate(sf::Vector2f & doodlePosition, sf::Vector2f platePosition[NUMBER_PLATES])
+Collision GameScene::checkCollisionPlate(void)
 {
+	auto doodlePosition = m_hero->getPosition();
+	std::array<sf::Vector2f, NUMBER_PLATES> platePosition;
+	for (int i = 0; i < NUMBER_PLATES; ++i)
+	{
+		platePosition[i] = m_plates[i]->getPosition();
+	}
+	
 	for (int i = 0; i < NUMBER_PLATES; ++i)
 	{
 		if (((doodlePosition.y + DOODLE_HEIGHT >= platePosition[i].y) && (doodlePosition.y + DOODLE_HEIGHT <= platePosition[i].y + PLATE_HEIGHT)
@@ -968,8 +963,9 @@ Collision GameScene::checkCollisionPlate(sf::Vector2f & doodlePosition, sf::Vect
 	return Collision::NO_COLLISION;
 }
 
-Collision GameScene::checkCollisionHole(sf::Vector2f & doodlePosition)
+Collision GameScene::checkCollisionHole(void)
 {
+	auto doodlePosition = m_hero->getPosition();
 	if (((doodlePosition.y + DOODLE_HEIGHT >= m_holePosition.y) && (doodlePosition.y + DOODLE_HEIGHT <= m_holePosition.y + HOLE_HEIGHT)
 		&& (doodlePosition.x + DOODLE_WIDTH >= m_holePosition.x) && (doodlePosition.x - HOLE_WIDTH <= m_holePosition.x)))
 	{
@@ -978,8 +974,15 @@ Collision GameScene::checkCollisionHole(sf::Vector2f & doodlePosition)
 	return Collision::NO_COLLISION;
 }
 
-Collision GameScene::checkCollisionBonus(sf::Vector2f & doodlePosition, sf::Vector2f bonusPosition[NUMBER_PLATES])
+Collision GameScene::checkCollisionBonus(void)
 {
+	auto doodlePosition = m_hero->getPosition();
+	std::array<sf::Vector2f, NUMBER_BONUSES> bonusPosition;
+	for (int i = 0; i < NUMBER_BONUSES; ++i)
+	{
+		bonusPosition[i] = m_bonuses[i]->getPosition();
+	}
+
 	for (int bonusIndex = 0; bonusIndex < NUMBER_BONUSES; ++bonusIndex)
 	{
 		switch (m_bonuses[bonusIndex]->getBonusType())

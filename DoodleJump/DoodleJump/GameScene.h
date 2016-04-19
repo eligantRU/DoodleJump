@@ -34,9 +34,9 @@ private:
 	void generHole(void);
 	bool checkGameEnd(void);
 	void checkCylinderEffect(sf::Vector2f & doodlePosition);
-	Collision checkCollisionPlate(sf::Vector2f & doodlePosition, sf::Vector2f platePosition[NUMBER_PLATES]);
-	Collision checkCollisionBonus(sf::Vector2f & doodlePosition, sf::Vector2f bonusPosition[NUMBER_PLATES]);
-	Collision checkCollisionHole(sf::Vector2f & doodlePosition);
+	Collision checkCollisionPlate(void);
+	Collision checkCollisionBonus(void);
+	Collision checkCollisionHole(void);
 	void buildBonus(BonusType bonusType, int bonusIndex, sf::Vector2f platePosition, int plateIndex);
 	void moveDynamicPlates(void);
 	void resetGame(void);
