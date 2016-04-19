@@ -18,20 +18,20 @@ private:
 	void clearResult(void);
 	void moveDoodle(void);
 
-	Assets * m_assets;
-	sf::View * m_view;
+	std::unique_ptr<Assets> m_assets; //Assets * m_assets;
+	std::unique_ptr<sf::View> m_view; //sf::View * m_view;
 
-	Plate * m_plate;
-	Doodle * m_hero;
+	std::unique_ptr<Plate> m_plate; //Plate * m_plate;
+	std::unique_ptr<Doodle> m_hero; //Doodle * m_hero;
 
-	sf::Sprite * m_title;
-	sf::Sprite * m_insects[NUMBER_INSECTS];
-	sf::Sprite * m_background;
-	sf::Sprite * m_hole;
+	std::unique_ptr<sf::Sprite> m_title; //sf::Sprite * m_title;
+	std::unique_ptr<sf::Sprite> m_insects[NUMBER_INSECTS]; //sf::Sprite * m_insects[NUMBER_INSECTS];
+	std::unique_ptr<sf::Sprite> m_background; //sf::Sprite * m_background;
+	std::unique_ptr<sf::Sprite> m_hole; //sf::Sprite * m_hole;
 
-	Button * m_playButton;
-	Button * m_exitButton;
-	Button * m_helpButton;
+	std::unique_ptr<Button> m_playButton; //Button * m_playButton;
+	std::unique_ptr<Button> m_exitButton; //Button * m_exitButton;
+	std::unique_ptr<Button> m_helpButton; //Button * m_helpButton;
 
 	SGameResult result;
 };

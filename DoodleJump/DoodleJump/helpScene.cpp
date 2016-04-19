@@ -3,16 +3,16 @@
 
 HelpScene::HelpScene(Assets & assets, sf::View & view)
 	:m_assets(&assets)
-	, m_view(&view)
+	,m_view(&view)
 {	
-	m_goMenuButton = new Button("Back", sf::Vector2f(232.f, 182.f), *m_assets);
+	m_goMenuButton = std::make_unique<Button>("Back", sf::Vector2f(232.f, 182.f), *m_assets);
 
-	m_buttonA = new sf::Sprite;
+	m_buttonA = std::make_unique<sf::Sprite>();
 	m_buttonA->setTexture(m_assets->BUTTON_A_TEXTURE);
 	m_buttonA->setScale(sf::Vector2f(0.5f, 0.5f));
 	m_buttonA->setPosition(170, 295);
 
-	m_buttonD = new sf::Sprite;
+	m_buttonD = std::make_unique<sf::Sprite>();
 	m_buttonD->setTexture(m_assets->BUTTON_D_TEXTURE);
 	m_buttonD->setScale(sf::Vector2f(0.5f, 0.5f));
 	m_buttonD->setPosition(230, 295);
@@ -31,7 +31,7 @@ HelpScene::HelpScene(Assets & assets, sf::View & view)
 	m_helpText2.setPosition(290.f, 300.f);
 	m_helpText2.setColor(sf::Color(0, 0, 0));
 
-	m_background = new sf::Sprite;
+	m_background = std::make_unique<sf::Sprite>();
 	m_background->setTextureRect(sf::IntRect(0, 0, 550, 700));
 	m_background->setTexture(m_assets->BACKGROUND_TEXTURE);
 	m_background->setPosition(0, 0);
@@ -39,10 +39,10 @@ HelpScene::HelpScene(Assets & assets, sf::View & view)
 
 HelpScene::~HelpScene()
 {
-	delete m_background;
-	delete m_goMenuButton;
-	delete m_buttonA;
-	delete m_buttonD;
+	//delete m_background;
+	//delete m_goMenuButton;
+	//delete m_buttonA;
+	//delete m_buttonD;
 	m_background = nullptr;
 	m_goMenuButton = nullptr;
 	m_buttonA = nullptr;
