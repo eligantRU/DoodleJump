@@ -81,8 +81,6 @@ SGameResult StartScene::onStartMenu(sf::RenderWindow & window)
 void StartScene::clearResult(void)
 {
 	result.status = GameStatus::START_SCENE;
-	result.collision = Collision::NO_COLLISION;
-	result.points = 0;
 }
 
 void StartScene::render(sf::RenderWindow & window)
@@ -175,7 +173,6 @@ Collision StartScene::checkCollisionPlate(void)
 	if (((doodlePosition.y + DOODLE_HEIGHT >= platePosition.y) && (doodlePosition.y + DOODLE_HEIGHT <= platePosition.y + PLATE_HEIGHT)
 		&& (doodlePosition.x + DOODLE_WIDTH >= platePosition.x) && (doodlePosition.x - PLATE_WIDTH <= platePosition.x)))
 	{
-		result.collision = Collision::COLLISION_PLATE;
 		PlaySound(L"sounds/jump.wav", nullptr, SND_ASYNC | SND_NODEFAULT);
 		return  Collision::COLLISION_PLATE;
 	}

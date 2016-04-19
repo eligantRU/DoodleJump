@@ -5,8 +5,8 @@ PauseScene::PauseScene(Assets & assets, sf::View & view)
 	:m_assets(&assets)
 	, m_view(&view)
 {
-	m_backButton = new Button("Back", sf::Vector2f(200.f, 210.f), *m_assets);
-	m_exitButton = new Button("Exit", sf::Vector2f(250.f, 270.f), *m_assets);
+	m_backButton = new Button("Back", sf::Vector2f(232.f, 182.f), *m_assets);
+	m_exitButton = new Button("Exit", sf::Vector2f(250.f, 240.f), *m_assets);
 
 	m_background = new sf::Sprite;
 	m_background->setTextureRect(sf::IntRect(0, 0, 550, 700));
@@ -36,8 +36,6 @@ SGameResult PauseScene::onPauseMenu(sf::RenderWindow & window)
 void PauseScene::clearResult(void)
 {
 	m_result.status = GameStatus::PAUSE_SCENE;
-	m_result.collision = Collision::NO_COLLISION;
-	m_result.points = 0;
 }
 
 void PauseScene::render(sf::RenderWindow & window)

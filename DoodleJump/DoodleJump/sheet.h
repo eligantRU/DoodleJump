@@ -3,11 +3,6 @@
 #include "stdafx.h"
 
 #pragma comment(lib,"Winmm.lib")
-#include <algorithm>
-#include <array>
-#include <string>
-#include <functional>
-#include <memory>
 
 #include "bases.h"
 #include "assets.h"

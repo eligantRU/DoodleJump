@@ -93,9 +93,7 @@ struct SDirection
 	DirectionY y;
 };
 
-struct SGameResult
+struct SGameResult // NOTE: in future u can use this to exchange data from scene to scene
 {
-	uint64_t points;
 	GameStatus status;
-	Collision collision;
 };

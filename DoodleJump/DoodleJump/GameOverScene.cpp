@@ -11,13 +11,13 @@ GameOverScene::GameOverScene(Assets & assets, sf::View & view, std::function<uin
 	m_title->setTexture(m_assets->GAME_OVER_TITLE_TEXTURE);
 	m_title->setPosition(150, 30);
 
-	m_goMenuButton = new Button("Menu", sf::Vector2f(200.f, 210.f), *m_assets);
-	m_playAgainButton = new Button("Play", sf::Vector2f(250.f, 270.f), *m_assets);
+	m_goMenuButton = new Button("Menu", sf::Vector2f(232.f, 182.f), *m_assets);
+	m_playAgainButton = new Button("Play", sf::Vector2f(250.f, 240.f), *m_assets);
 
 	m_lastRecord.setFont(m_assets->font);
 	m_lastRecord.setCharacterSize(24);
 	m_lastRecord.setStyle(sf::Text::Bold);
-	m_lastRecord.setPosition(190.f, 150.f);
+	m_lastRecord.setPosition(190.f, 140.f);
 	m_lastRecord.setColor(sf::Color(0, 0, 0));
 
 	m_background = new sf::Sprite;
@@ -40,8 +40,6 @@ SGameResult GameOverScene::onGameOverMenu(sf::RenderWindow & window)
 {
 	m_score = m_getter();
 	m_result.status = GameStatus::GAME_OVER_SCENE;
-	m_result.collision = Collision::NO_COLLISION;
-	m_result.points =	m_score;
 	m_lastRecord.setString("Your record: " + std::to_string(m_score));
 	
 	render(window);
@@ -93,4 +91,3 @@ void GameOverScene::checkMouseClick(sf::Event & event)
 		m_result.status = GameStatus::GAME_SCENE;
 	}
 }
-

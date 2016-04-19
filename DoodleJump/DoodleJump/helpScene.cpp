@@ -5,7 +5,7 @@ HelpScene::HelpScene(Assets & assets, sf::View & view)
 	:m_assets(&assets)
 	, m_view(&view)
 {	
-	m_goMenuButton = new Button("Back", sf::Vector2f(200.f, 210.f), *m_assets);
+	m_goMenuButton = new Button("Back", sf::Vector2f(232.f, 182.f), *m_assets);
 
 	m_buttonA = new sf::Sprite;
 	m_buttonA->setTexture(m_assets->BUTTON_A_TEXTURE);
@@ -62,8 +62,6 @@ SGameResult HelpScene::onHelpMenu(sf::RenderWindow & window)
 void HelpScene::clearResult(void)
 {
 	m_result.status = GameStatus::HELP_SCENE;
-	m_result.collision = Collision::NO_COLLISION;
-	m_result.points = 0;
 }
 
 void HelpScene::render(sf::RenderWindow & window)

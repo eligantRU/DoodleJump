@@ -53,7 +53,6 @@ SGameResult GameScene::onGameFrame(sf::RenderWindow & window)
 	{
 		resetGame();
 	}
-	m_result.collision = Collision::NO_COLLISION;
 
 	if (!m_endOfGame)
 	{
@@ -69,7 +68,6 @@ SGameResult GameScene::onGameFrame(sf::RenderWindow & window)
 		render(window);
 		window.display();
 
-		m_result.points = m_points;
 		if (m_isPause)
 		{
 			m_view->setCenter(275, 350);
@@ -85,9 +83,7 @@ SGameResult GameScene::onGameFrame(sf::RenderWindow & window)
 	{
 		m_view->setCenter(275, 350);
 		window.setView(*m_view);
-		m_result.points = m_points;
-		m_result.status = GameStatus::GAME_OVER_SCENE;
-		
+		m_result.status = GameStatus::GAME_OVER_SCENE;		
 	}
 	return m_result;
 }
@@ -898,36 +894,29 @@ float GameScene::checkDoodleFall(void)
 	{
 	case Collision::COLLISION_PLATE:
 		m_actualBonus = BonusType::NO;
-		m_result.collision = Collision::COLLISION_PLATE;
 		PlaySound(L"sounds/jump.wav", nullptr, SND_ASYNC | SND_NODEFAULT);
 		return PLATE_DELTA_HEIGHT;
 	case Collision::COLLISION_GHOST_PLATE:
 		m_actualBonus = BonusType::NO;
-		m_result.collision = Collision::COLLISION_GHOST_PLATE;
 		PlaySound(L"sounds/bijeli.wav", nullptr, SND_ASYNC | SND_NODEFAULT);
 		return PLATE_DELTA_HEIGHT;
 	case Collision::COLLISION_SPRING:
 		m_actualBonus = BonusType::SPRING;
-		m_result.collision = Collision::COLLISION_SPRING;
 		PlaySound(L"sounds/feder.wav", nullptr, SND_ASYNC | SND_NODEFAULT);
 		return SPRING_DELTA_HEIGHT;
 	case Collision::COLLISION_TRAMPLANE:
 		m_actualBonus = BonusType::TRAMPOLINE;
-		m_result.collision = Collision::COLLISION_TRAMPLANE;
 		PlaySound(L"sounds/trampoline.wav", nullptr, SND_ASYNC | SND_NODEFAULT);
 		return TRAMPLANE_DELTA_HEIGHT;
 	case Collision::COLLISION_HAT_HELICOPTER:
 		m_actualBonus = BonusType::HAT_HELICOPTER;
-		m_result.collision = Collision::COLLISION_HAT_HELICOPTER;
 		PlaySound(L"sounds/propeller.wav", nullptr, SND_ASYNC | SND_NODEFAULT);
 		return HAT_HELICOPTER_DELTA_HEIGHT;
 	case Collision::COLLISION_ROCKET:
 		m_actualBonus = BonusType::ROCKET;
-		m_result.collision = Collision::COLLISION_ROCKET;
 		PlaySound(L"sounds/jetpack.wav", nullptr, SND_ASYNC | SND_NODEFAULT);
 		return ROCKET_DELTA_HEIGHT;
 	default:
-		m_result.collision = Collision::NO_COLLISION;
 		return 0.f;
 	}
 }
