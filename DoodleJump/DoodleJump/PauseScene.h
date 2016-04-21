@@ -16,13 +16,13 @@ private:
 	void checkMouseClick(sf::RenderWindow & window, sf::Event & event);
 	void clearResult(void);
 
-	Assets * m_assets;
-	sf::View * m_view;
+	std::unique_ptr<Assets> m_assets;
+	std::unique_ptr<sf::View> m_view;
 
-	sf::Sprite * m_background;
+	std::unique_ptr<sf::Sprite> m_background;
 
-	Button * m_backButton;
-	Button * m_exitButton;
+	std::unique_ptr<Button> m_backButton;
+	std::unique_ptr<Button> m_exitButton;
 
 	SGameResult m_result;
 };

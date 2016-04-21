@@ -39,14 +39,10 @@ HelpScene::HelpScene(Assets & assets, sf::View & view)
 
 HelpScene::~HelpScene()
 {
-	//delete m_background;
-	//delete m_goMenuButton;
-	//delete m_buttonA;
-	//delete m_buttonD;
-	m_background = nullptr;
 	m_goMenuButton = nullptr;
 	m_buttonA = nullptr;
 	m_buttonD = nullptr;
+	m_background = nullptr;
 }
 
 SGameResult HelpScene::onHelpMenu(sf::RenderWindow & window)

@@ -19,10 +19,6 @@ StartScene::StartScene(Assets & assets, sf::View & view)
 	m_exitButton = std::make_unique<Button>("Exit", sf::Vector2f(250.f, 240.f), *m_assets);
 	m_helpButton = std::make_unique<Button>("Help", sf::Vector2f(350.f, 475.f), *m_assets);
 
-	m_title = std::make_unique<sf::Sprite>();
-	m_title->setTexture(m_assets->MAIN_TITLE_TEXTURE);
-	m_title->setPosition(100, 50);
-
 	m_hole = std::make_unique<sf::Sprite>();
 	m_hole->setTexture(m_assets->HOLE_TEXTURE);
 	m_hole->setPosition(300, 350);
@@ -54,16 +50,15 @@ StartScene::StartScene(Assets & assets, sf::View & view)
 
 StartScene::~StartScene()
 {
-	//delete m_title;
-	//delete *m_insects;
-	//delete m_playButton;
-	//delete m_exitButton;
-	//delete m_hole;
-	m_title = nullptr;
 	*m_insects = nullptr;
+	m_hero = nullptr;
+	m_plate = nullptr;
+	m_hole = nullptr;
+	m_title = nullptr;
 	m_playButton = nullptr;
 	m_exitButton = nullptr;
-	m_hole = nullptr;
+	m_helpButton = nullptr;
+	m_background = nullptr;
 }
 
 SGameResult StartScene::onStartMenu(sf::RenderWindow & window)
@@ -99,10 +94,6 @@ void StartScene::render(sf::RenderWindow & window)
 	{
 		window.draw(*insect);
 	}
-	/*for (int i = 0; i < NUMBER_INSECTS; ++i)
-	{
-		window.draw(*m_insects[i]);
-	}*/
 }
 
 void StartScene::checkMouseOnButtons(sf::Vector2i mousePosition)

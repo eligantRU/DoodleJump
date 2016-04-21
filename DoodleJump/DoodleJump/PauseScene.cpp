@@ -5,10 +5,10 @@ PauseScene::PauseScene(Assets & assets, sf::View & view)
 	:m_assets(&assets)
 	, m_view(&view)
 {
-	m_backButton = new Button("Back", sf::Vector2f(232.f, 182.f), *m_assets);
-	m_exitButton = new Button("Exit", sf::Vector2f(250.f, 240.f), *m_assets);
+	m_backButton = std::make_unique<Button>("Back", sf::Vector2f(232.f, 182.f), *m_assets);
+	m_exitButton = std::make_unique<Button>("Exit", sf::Vector2f(250.f, 240.f), *m_assets);
 
-	m_background = new sf::Sprite;
+	m_background = std::make_unique<sf::Sprite>(sf::Sprite());
 	m_background->setTextureRect(sf::IntRect(0, 0, 550, 700));
 	m_background->setPosition(0.f, 0.f);
 	m_background->setTexture(m_assets->BACKGROUND_TEXTURE);
@@ -16,9 +16,6 @@ PauseScene::PauseScene(Assets & assets, sf::View & view)
 
 PauseScene::~PauseScene()
 {
-	delete m_background;
-	delete m_backButton;
-	delete m_exitButton;
 	m_background = nullptr;
 	m_backButton = nullptr;
 	m_exitButton = nullptr;

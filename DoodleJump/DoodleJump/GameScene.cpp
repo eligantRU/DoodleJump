@@ -5,14 +5,14 @@ GameScene::GameScene(Assets & assets, sf::View & view)
 	:m_assets(&assets)
 	,m_view(&view)
 {
-	m_hero = new Doodle(*m_assets);
+	m_hero = std::make_unique<Doodle>(*m_assets);
 	for (int i = 0; i < NUMBER_PLATES; ++i)
 	{
-		m_plates[i] = new Plate(*m_assets);
+		m_plates[i] = std::make_unique<Plate>(*m_assets);
 	}
 	for (int i = 0; i < NUMBER_BONUSES; ++i)
 	{
-		m_bonuses[i] = new Bonus();
+		m_bonuses[i] = std::make_unique<Bonus>();
 	}
 
 	m_actualBonus = BonusType::NO;
@@ -21,7 +21,7 @@ GameScene::GameScene(Assets & assets, sf::View & view)
 	m_offsetFallBonus.x = 0.f;
 	m_offsetFallBonus.y = 0.f;
 
-	m_hole = new sf::Sprite;
+	m_hole = std::make_unique<sf::Sprite>();
 	m_hole->setTextureRect(sf::IntRect(0, 0, 60, 54));
 	m_hole->setTexture(m_assets->HOLE_TEXTURE);
 	m_holePosition.x = float(rand() % (550 - HOLE_WIDTH));
@@ -33,7 +33,7 @@ GameScene::GameScene(Assets & assets, sf::View & view)
 	m_scoreNum.setStyle(sf::Text::Bold);
 	m_scoreNum.setColor(sf::Color(0, 0, 0));
 
-	m_background = new sf::Sprite;
+	m_background = std::make_unique<sf::Sprite>();
 	m_background->setTextureRect(sf::IntRect(0, 0, 550, 700));
 	m_background->setTexture(m_assets->BACKGROUND_TEXTURE);
 
@@ -43,7 +43,10 @@ GameScene::GameScene(Assets & assets, sf::View & view)
 
 GameScene::~GameScene()
 {
-	delete m_background;
+	m_hero = nullptr;
+	*m_plates = nullptr;
+	*m_bonuses = nullptr;
+	m_hole = nullptr;
 	m_background = nullptr;
 }
 
@@ -56,7 +59,7 @@ SGameResult GameScene::onGameFrame(sf::RenderWindow & window)
 
 	if (!m_endOfGame)
 	{
-		if (m_isPause)
+		if (m_isPause) // TODO: pause handler
 		{
 			m_isPause = false;
 			m_view->setCenter(WINDOW_WIDTH/2, m_background->getPosition().y + WINDOW_HEIGHT/2);
@@ -68,7 +71,7 @@ SGameResult GameScene::onGameFrame(sf::RenderWindow & window)
 		render(window);
 		window.display();
 
-		if (m_isPause)
+		if (m_isPause) // TODO: pause handler
 		{
 			m_view->setCenter(275, 350);
 			window.setView(*m_view);
@@ -116,13 +119,13 @@ void GameScene::moveDoodleVertical(float & positionY)
 		m_hero->setSpeedY(m_hero->getSpeedY() + ACCELERATION);
 		positionY = m_hero->getSpeedY();
 		
-		if (m_hero->getPosition().y < m_hero->getPositionBeforeDown().y)
+		if (m_hero->getPosition().y < m_hero->getPositionBeforeDown().y) // TODO: positionBeforeDOwn handler
 		{
 			m_hero->setPositionBeforeDown(m_hero->getPosition());
 		}
 	}
 	else
-	{
+	{ // TODO: falling doodle handler
 		float testingFall = checkDoodleFall();
 		if (testingFall == 0)
 		{
@@ -190,7 +193,7 @@ void GameScene::animateTrampoline(void)
 	}
 }
 
-void GameScene::animateRocket(void)
+void GameScene::animateRocket(void) // TODO: handlers...this code NEED MORE HANDLERS!
 {
 	DirectionX doodleLastDirection = m_hero->getLastDirection();
 	sf::Vector2f doodlePosition = m_hero->getPosition();
@@ -314,7 +317,7 @@ void GameScene::animateRocket(void)
 	}
 }
 
-void GameScene::animateHatHelicopter(void)
+void GameScene::animateHatHelicopter(void) // TODO: handlers...this code NEED MORE HANDLERS!
 {
 	sf::Vector2f doodlePosition = m_hero->getPosition();
 
@@ -387,11 +390,11 @@ void GameScene::update(sf::RenderWindow & window)
 	(void)window;
 	moveDoodle();
 	m_hero->correctSkin();
-	sf::Vector2f doodlePosition = m_hero->getPosition();
-	checkCylinderEffect(doodlePosition);
+	sf::Vector2f doodlePosition = m_hero->getPosition(); // TODO: remove it
+	checkCylinderEffect(doodlePosition); // TODO: get doodle position inside
 	animateBonus();
 
-	if ((m_hero->getSpeedY() <= 0) && (doodlePosition.y <= m_hero->getPositionBeforeDown().y))
+	if ((m_hero->getSpeedY() <= 0) && (doodlePosition.y <= m_hero->getPositionBeforeDown().y)) // TODO: this code need handler
 	{
 		m_view->setCenter(WINDOW_WIDTH/2, doodlePosition.y);
 		m_background->setPosition(0, doodlePosition.y - WINDOW_HEIGHT / 2);
@@ -406,7 +409,7 @@ void GameScene::update(sf::RenderWindow & window)
 	generBonuses();
 	generHole();
 
-	if (checkGameEnd())
+	if (checkGameEnd()) // TODO: m_endOfGame = true; can be encapsulated in checkGameEnd()
 	{
 		m_endOfGame = true;
 	}
@@ -677,12 +680,12 @@ void GameScene::render(sf::RenderWindow & window)
 	window.clear(sf::Color(255, 255, 255));
 
 	window.draw(*m_background);
-	for (auto plate : m_plates)
+	for (auto &plate : m_plates)
 	{
 		plate->draw(window);
 	}
 	m_hero->draw(window);
-	for (auto bonus : m_bonuses)
+	for (auto &bonus : m_bonuses)
 	{
 		bonus->draw(window);
 	}
@@ -761,7 +764,7 @@ void GameScene::checkKeyRealesed(sf::Event event, bool & isNeedUpdate)
 	}
 }
 
-void GameScene::moveDynamicPlates(void)
+void GameScene::moveDynamicPlates(void) // TODO: getSpeedX() ONE TIME! Optimize!
 {
 	sf::Vector2f platePosition[NUMBER_PLATES];
 
@@ -804,6 +807,8 @@ void GameScene::moveBonuses(void)
 
 void GameScene::checkCylinderEffect(sf::Vector2f & doodlePosition)
 {
+	// TODO: get doodle position here
+
 	if (doodlePosition.x <= -DOODLE_WIDTH)
 	{
 		m_hero->setPosition(sf::Vector2f(float(550 - DOODLE_WIDTH), doodlePosition.y));
@@ -830,7 +835,7 @@ void GameScene::initBonuses(void)
 	}
 }
 
-void GameScene::buildBonus(BonusType bonusType, int bonusIndex, sf::Vector2f platePosition, int plateIndex)
+void GameScene::buildBonus(BonusType bonusType, int bonusIndex, sf::Vector2f platePosition, int plateIndex) // TODO: this code really want to be refactored
 {
 	m_bonuses[bonusIndex]->setPlateIndex(plateIndex);
 	m_bonuses[bonusIndex]->setRotation(0.f);
@@ -880,7 +885,7 @@ void GameScene::buildBonus(BonusType bonusType, int bonusIndex, sf::Vector2f pla
 	}
 }
 
-float GameScene::checkDoodleFall(void)
+float GameScene::checkDoodleFall(void) // TODO: try to write handler else not too bad
 {
 	Collision collision = Collision::NO_COLLISION;
 
@@ -963,7 +968,7 @@ Collision GameScene::checkCollisionHole(void)
 	return Collision::NO_COLLISION;
 }
 
-Collision GameScene::checkCollisionBonus(void)
+Collision GameScene::checkCollisionBonus(void) // TODO: this code want to be refactored to
 {
 	auto doodlePosition = m_hero->getPosition();
 	std::array<sf::Vector2f, NUMBER_BONUSES> bonusPosition;

@@ -16,17 +16,17 @@ private:
 	void checkMouseClick(sf::Event & event);
 	std::function<uint64_t()> m_getter;
 
-	Assets * m_assets;
-	sf::View * m_view;
+	std::unique_ptr<Assets> m_assets;
+	std::unique_ptr<sf::View> m_view;
 
-	sf::Sprite * m_background;
-	sf::Sprite * m_title;
+	std::unique_ptr<sf::Sprite> m_background;
+	std::unique_ptr<sf::Sprite> m_title;
+
+	std::unique_ptr<Button> m_playAgainButton;
+	std::unique_ptr<Button> m_goMenuButton;
 
 	uint64_t m_score;
 	sf::Text m_lastRecord;
-
-	Button * m_playAgainButton;
-	Button * m_goMenuButton;
 
 	SGameResult m_result;
 };
