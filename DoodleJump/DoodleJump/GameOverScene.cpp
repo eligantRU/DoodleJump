@@ -14,7 +14,7 @@ GameOverScene::GameOverScene(Assets & assets, sf::View & view, std::function<uin
 	m_goMenuButton = std::make_unique<Button>("Menu", sf::Vector2f(232.f, 182.f), *m_assets);
 	m_playAgainButton = std::make_unique<Button>("Play", sf::Vector2f(250.f, 240.f), *m_assets);
 
-	m_lastRecord.setFont(m_assets->font);
+	m_lastRecord.setFont(m_assets->ARIAL_FONT);
 	m_lastRecord.setCharacterSize(24);
 	m_lastRecord.setStyle(sf::Text::Bold);
 	m_lastRecord.setPosition(190.f, 140.f);

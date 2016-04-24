@@ -17,14 +17,14 @@ HelpScene::HelpScene(Assets & assets, sf::View & view)
 	m_buttonD->setScale(sf::Vector2f(0.5f, 0.5f));
 	m_buttonD->setPosition(230, 295);
 	
-	m_helpText1.setFont(m_assets->font);
+	m_helpText1.setFont(m_assets->ARIAL_FONT);
 	m_helpText1.setCharacterSize(20);
 	m_helpText1.setString("Press");
 	m_helpText1.setStyle(sf::Text::Bold);
 	m_helpText1.setPosition(100.f, 300.f);
 	m_helpText1.setColor(sf::Color(0, 0, 0));
 
-	m_helpText2.setFont(m_assets->font);
+	m_helpText2.setFont(m_assets->ARIAL_FONT);
 	m_helpText2.setCharacterSize(20);
 	m_helpText2.setString("to move Doodle");
 	m_helpText2.setStyle(sf::Text::Bold);

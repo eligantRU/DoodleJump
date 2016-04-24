@@ -28,7 +28,7 @@ GameScene::GameScene(Assets & assets, sf::View & view)
 	m_holePosition.y = -1.f * float(rand() % 15000) - 10.f * 750.f;
 	m_hole->setPosition(m_holePosition.x, m_holePosition.y);
 
-	m_scoreNum.setFont(m_assets->font);
+	m_scoreNum.setFont(m_assets->ARIAL_FONT);
 	m_scoreNum.setCharacterSize(20);
 	m_scoreNum.setStyle(sf::Text::Bold);
 	m_scoreNum.setColor(sf::Color(0, 0, 0));
@@ -678,7 +678,7 @@ void GameScene::render(sf::RenderWindow & window)
 {
 	//for (std::vector<sf::Sprite*>::const_iterator it = needRender.begin(); it != needRender.end(); ++it) // NOTE: try to use std::vector
 	window.clear(sf::Color(255, 255, 255));
-
+	
 	window.draw(*m_background);
 	for (auto &plate : m_plates)
 	{

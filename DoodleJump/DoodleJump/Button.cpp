@@ -10,7 +10,7 @@ Button::Button(std::string text, sf::Vector2f position, Assets & assets)
 	setTexture(assets.BUTTON_INACTIVE_TEXTURE);
 	setPosition(position);
 	setText(text);
-	m_text.setFont(assets.font);
+	m_text.setFont(assets.ARIAL_FONT);
 	m_text.setCharacterSize(20);
 	m_text.setStyle(sf::Text::Bold);
 	m_text.setColor(sf::Color(0, 0, 0));
@@ -31,7 +31,7 @@ void Button::setPosition(sf::Vector2f position)
 float Button::getStringLengthPx(const std::string str)
 {
 	sf::Text text;
-	text.setFont(m_assets->font);
+	text.setFont(m_assets->ARIAL_FONT);
 	text.setCharacterSize(20);
 	text.setStyle(sf::Text::Bold);
 	text.setColor(sf::Color(0, 0, 0));

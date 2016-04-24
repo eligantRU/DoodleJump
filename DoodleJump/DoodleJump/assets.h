@@ -11,6 +11,7 @@ public:
 	void addRepeatedTexture(sf::Texture & texture, std::string string);
 	void addFont(sf::Font & font, std::string string); 
 	void addImage(sf::Image & image, std::string string);
+
 	sf::Image WINDOW_ICON;
 	sf::Texture BACKGROUND_TEXTURE;
 	sf::Texture PLATE_STATIC_TEXTURE;
@@ -68,5 +69,5 @@ public:
 	sf::Texture BUTTON_A_TEXTURE;
 	sf::Texture BUTTON_D_TEXTURE;
 
-	sf::Font font;
+	sf::Font ARIAL_FONT;
 };

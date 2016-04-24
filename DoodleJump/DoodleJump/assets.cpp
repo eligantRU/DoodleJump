@@ -60,7 +60,7 @@ Assets::Assets()
 	addTexture(BUTTON_A_TEXTURE, "images/A_key_94_78.png");
 	addTexture(BUTTON_D_TEXTURE, "images/D_key_92_78.png");
 
-	addFont(font, "arial.ttf");
+	addFont(ARIAL_FONT, "arial.ttf");
 	addImage(WINDOW_ICON, "images/icon.png");
 }
 
