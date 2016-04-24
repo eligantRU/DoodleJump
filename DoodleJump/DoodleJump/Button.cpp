@@ -17,6 +17,12 @@ Button::Button(std::string text, sf::Vector2f position, Assets & assets)
 
 }
 
+Button::~Button()
+{
+	delete m_body;
+	m_body = nullptr;
+}
+
 void Button::setTexture(sf::Texture & texture)
 {
 	m_body->setTexture(texture);
@@ -28,7 +34,7 @@ void Button::setPosition(sf::Vector2f position)
 	setText(m_text.getString());
 }
 
-float Button::getStringLengthPx(const std::string str)
+float Button::getStringLengthPx(const std::string & str)
 {
 	sf::Text text;
 	text.setFont(m_assets->ARIAL_FONT);
@@ -39,7 +45,7 @@ float Button::getStringLengthPx(const std::string str)
 	return (text.findCharacterPos(str.length() - 1).x - text.findCharacterPos(0).x);
 }
 
-void Button::setText(std::string text)
+void Button::setText(const std::string & text)
 {
 	// http://stackoverflow.com/questions/13244928/getting-dimensions-of-text-in-sfml
 	// NOTE: getLocalBounds/getGlobalBounds and sf::FloatRect::contains(sf::Vector2f const& point)
