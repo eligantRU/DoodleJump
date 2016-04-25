@@ -13,7 +13,7 @@ In the future:
 - Table of records
 
 ```sh
-Created by Yegorov Nikita, Lacyem 'InfoTech', 2015
+Created by Yegorov Nikita, Lacyem 'InfoTech', 2015-2016
 Under the direction of Rinat Shaikhutdinov
 Refactoring under the direction of Sergey Shambir
 ```
