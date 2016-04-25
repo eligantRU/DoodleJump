@@ -2,10 +2,10 @@
 #include "sheet.h"
 
 Doodle::Doodle(Assets & assets)
-	:m_assets(&assets)
+	:m_assets(assets)
 {
 	m_body = new sf::Sprite;
-	setTexture(m_assets->DOODLE_LEFT_TEXTURE);
+	setTexture(m_assets.DOODLE_LEFT_TEXTURE);
 	setPosition(sf::Vector2f(WINDOW_WIDTH/2, WINDOW_HEIGHT/2));
 	setDirection(DirectionX::NONE);
 	setPositionBeforeDown(getPosition());
@@ -92,21 +92,21 @@ void Doodle::setDirection(DirectionX newDirection)
 	case DirectionX::LEFT:
 		if (getSpeedY() < 0)
 		{
-			setTexture(m_assets->DOODLE_JUMP_LEFT_TEXTURE);
+			setTexture(m_assets.DOODLE_JUMP_LEFT_TEXTURE);
 		}
 		else
 		{
-			setTexture(m_assets->DOODLE_LEFT_TEXTURE);
+			setTexture(m_assets.DOODLE_LEFT_TEXTURE);
 		}
 		break;
 	case DirectionX::RIGHT:
 		if (getSpeedY() < 0)
 		{
-			setTexture(m_assets->DOODLE_JUMP_RIGHT_TEXTURE);
+			setTexture(m_assets.DOODLE_JUMP_RIGHT_TEXTURE);
 		}
 		else
 		{
-			setTexture(m_assets->DOODLE_RIGHT_TEXTURE);
+			setTexture(m_assets.DOODLE_RIGHT_TEXTURE);
 		}
 		break;
 	case DirectionX::NONE:
@@ -143,22 +143,22 @@ void Doodle::correctSkin(void)
 	{
 		if (lastDirection == DirectionX::LEFT)
 		{
-			setTexture(m_assets->DOODLE_LEFT_TEXTURE);
+			setTexture(m_assets.DOODLE_LEFT_TEXTURE);
 		}
 		else if (lastDirection == DirectionX::RIGHT)
 		{
-			setTexture(m_assets->DOODLE_RIGHT_TEXTURE);
+			setTexture(m_assets.DOODLE_RIGHT_TEXTURE);
 		}
 	}
 	else
 	{
 		if (lastDirection == DirectionX::LEFT)
 		{
-			setTexture(m_assets->DOODLE_JUMP_LEFT_TEXTURE);
+			setTexture(m_assets.DOODLE_JUMP_LEFT_TEXTURE);
 		}
 		else if (lastDirection == DirectionX::RIGHT)
 		{
-			setTexture(m_assets->DOODLE_JUMP_RIGHT_TEXTURE);
+			setTexture(m_assets.DOODLE_JUMP_RIGHT_TEXTURE);
 		}
 	}
 }

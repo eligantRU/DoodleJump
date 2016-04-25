@@ -4,13 +4,13 @@
 #include "sheet.h"
 
 Button::Button(std::string text, sf::Vector2f position, Assets & assets)
-	:m_assets(&assets)
+	:m_assets(assets)
 {
 	m_body = new sf::Sprite();
-	setTexture(assets.BUTTON_INACTIVE_TEXTURE);
+	setTexture(m_assets.BUTTON_INACTIVE_TEXTURE);
 	setPosition(position);
 	setText(text);
-	m_text.setFont(assets.ARIAL_FONT);
+	m_text.setFont(m_assets.ARIAL_FONT);
 	m_text.setCharacterSize(20);
 	m_text.setStyle(sf::Text::Bold);
 	m_text.setColor(sf::Color(0, 0, 0));
@@ -37,7 +37,7 @@ void Button::setPosition(sf::Vector2f position)
 float Button::getStringLengthPx(const std::string & str)
 {
 	sf::Text text;
-	text.setFont(m_assets->ARIAL_FONT);
+	text.setFont(m_assets.ARIAL_FONT);
 	text.setCharacterSize(20);
 	text.setStyle(sf::Text::Bold);
 	text.setColor(sf::Color(0, 0, 0));
@@ -62,11 +62,11 @@ void Button::onMouse(sf::Vector2i mousePosition)
 	if (((mousePosition.y >= buttonPosition.y) && (mousePosition.y <= buttonPosition.y + BUTTON_HEIGHT)
 		&& (mousePosition.x >= buttonPosition.x) && (mousePosition.x <= buttonPosition.x + BUTTON_WIDTH)))
 	{
-		setTexture(m_assets->BUTTON_ACTIVE_TEXTURE);
+		setTexture(m_assets.BUTTON_ACTIVE_TEXTURE);
 	}
 	else
 	{
-		setTexture(m_assets->BUTTON_INACTIVE_TEXTURE);
+		setTexture(m_assets.BUTTON_INACTIVE_TEXTURE);
 	}
 }
 
@@ -79,7 +79,7 @@ bool Button::onClick(sf::Event event)
 		if (((mousePosition.y >= buttonPosition.y) && (mousePosition.y <= buttonPosition.y + BUTTON_HEIGHT)
 			&& (mousePosition.x >= buttonPosition.x) && (mousePosition.x <= buttonPosition.x + BUTTON_WIDTH)))
 		{
-			setTexture(m_assets->BUTTON_INACTIVE_TEXTURE);
+			setTexture(m_assets.BUTTON_INACTIVE_TEXTURE);
 			return true;
 		}
 	}

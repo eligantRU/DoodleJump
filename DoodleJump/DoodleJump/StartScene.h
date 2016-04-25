@@ -18,8 +18,8 @@ private:
 	void clearResult(void);
 	void moveDoodle(void);
 
-	std::unique_ptr<Assets> m_assets;
-	std::unique_ptr<sf::View> m_view;
+	Assets & m_assets;
+	sf::View & m_view;
 
 	std::unique_ptr<Plate> m_plate;
 	std::unique_ptr<Doodle> m_hero;

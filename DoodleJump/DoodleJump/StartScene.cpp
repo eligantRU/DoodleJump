@@ -2,47 +2,47 @@
 #include "sheet.h"
 
 StartScene::StartScene(Assets & assets, sf::View & view)
-	:m_assets(&assets)
-	,m_view(&view)
+	:m_assets(assets)
+	,m_view(view)
 {
-	m_hero = std::make_unique<Doodle>(*m_assets);
-	m_plate = std::make_unique<Plate>(*m_assets);
+	m_hero = std::make_unique<Doodle>(m_assets);
+	m_plate = std::make_unique<Plate>(m_assets);
 	m_hero->setSpeedY(-20.f);
-	m_hero->setTexture(m_assets->DOODLE_RIGHT_TEXTURE);
+	m_hero->setTexture(m_assets.DOODLE_RIGHT_TEXTURE);
 	m_hero->setPosition(sf::Vector2f(110.f, 500.f - DOODLE_HEIGHT));
 
 	m_title = std::make_unique<sf::Sprite>();
-	m_title->setTexture(m_assets->MAIN_TITLE_TEXTURE);
+	m_title->setTexture(m_assets.MAIN_TITLE_TEXTURE);
 	m_title->setPosition(100, 50);
 	
-	m_playButton = std::make_unique<Button>("Play", sf::Vector2f(232.f, 182.f), *m_assets);
-	m_exitButton = std::make_unique<Button>("Exit", sf::Vector2f(250.f, 240.f), *m_assets);
-	m_helpButton = std::make_unique<Button>("Help", sf::Vector2f(350.f, 475.f), *m_assets);
+	m_playButton = std::make_unique<Button>("Play", sf::Vector2f(232.f, 182.f), m_assets);
+	m_exitButton = std::make_unique<Button>("Exit", sf::Vector2f(250.f, 240.f), m_assets);
+	m_helpButton = std::make_unique<Button>("Help", sf::Vector2f(350.f, 475.f), m_assets);
 
 	m_hole = std::make_unique<sf::Sprite>();
-	m_hole->setTexture(m_assets->HOLE_TEXTURE);
+	m_hole->setTexture(m_assets.HOLE_TEXTURE);
 	m_hole->setPosition(300, 350);
 	m_hole->setScale(sf::Vector2f(1.25f, 1.25f));
 
 	m_insects[0] = std::make_unique<sf::Sprite>();
-	m_insects[0]->setTexture(m_assets->GARBAGE_1_TEXTURE);
+	m_insects[0]->setTexture(m_assets.GARBAGE_1_TEXTURE);
 	m_insects[0]->setPosition(450, 250);
 	m_insects[1] = std::make_unique<sf::Sprite>();
-	m_insects[1]->setTexture(m_assets->GARBAGE_2_TEXTURE);
+	m_insects[1]->setTexture(m_assets.GARBAGE_2_TEXTURE);
 	m_insects[1]->setPosition(300, 300);
 	m_insects[2] = std::make_unique<sf::Sprite>();
-	m_insects[2]->setTexture(m_assets->GARBAGE_3_TEXTURE);
+	m_insects[2]->setTexture(m_assets.GARBAGE_3_TEXTURE);
 	m_insects[2]->setPosition(210, 215);
 	m_insects[3] = std::make_unique<sf::Sprite>();
-	m_insects[3]->setTexture(m_assets->GARBAGE_4_TEXTURE);
+	m_insects[3]->setTexture(m_assets.GARBAGE_4_TEXTURE);
 	m_insects[3]->setPosition(50, 50);
 	m_insects[4] = std::make_unique<sf::Sprite>();
-	m_insects[4]->setTexture(m_assets->GARBAGE_5_TEXTURE);
+	m_insects[4]->setTexture(m_assets.GARBAGE_5_TEXTURE);
 	m_insects[4]->setPosition(400, 400);
 
 	m_background = std::make_unique<sf::Sprite>();
 	m_background->setTextureRect(sf::IntRect(0, 0, 550, 700));
-	m_background->setTexture(m_assets->BACKGROUND_TEXTURE);
+	m_background->setTexture(m_assets.BACKGROUND_TEXTURE);
 	m_background->setPosition(0, 0);
 
 	m_plate->setPosition(sf::Vector2f(100.f, 500.f));
@@ -50,15 +50,7 @@ StartScene::StartScene(Assets & assets, sf::View & view)
 
 StartScene::~StartScene()
 {
-	*m_insects = nullptr;
-	m_hero = nullptr;
-	m_plate = nullptr;
-	m_hole = nullptr;
-	m_title = nullptr;
-	m_playButton = nullptr;
-	m_exitButton = nullptr;
-	m_helpButton = nullptr;
-	m_background = nullptr;
+
 }
 
 SGameResult StartScene::onStartMenu(sf::RenderWindow & window)
@@ -141,7 +133,7 @@ void StartScene::moveDoodle(void)
 		m_hero->setSpeedY(m_hero->getSpeedY() + ACCELERATION);
 		position.y = m_hero->getSpeedY();
 
-		m_hero->setTexture(m_assets->DOODLE_JUMP_RIGHT_TEXTURE);
+		m_hero->setTexture(m_assets.DOODLE_JUMP_RIGHT_TEXTURE);
 	}
 	else
 	{
@@ -150,7 +142,7 @@ void StartScene::moveDoodle(void)
 			m_hero->setSpeedY(m_hero->getSpeedY() + ACCELERATION / 8);
 			position.y = m_hero->getSpeedY();
 
-			m_hero->setTexture(m_assets->DOODLE_RIGHT_TEXTURE);
+			m_hero->setTexture(m_assets.DOODLE_RIGHT_TEXTURE);
 		}
 		else
 		{

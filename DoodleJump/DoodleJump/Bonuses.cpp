@@ -8,8 +8,8 @@ Bonus::Bonus()
 
 Bonus::~Bonus()
 {
-	/*delete m_body;
-	m_body = nullptr;*/
+	delete m_body;
+	m_body = nullptr;
 }
 
 void Bonus::draw(sf::RenderWindow & window)

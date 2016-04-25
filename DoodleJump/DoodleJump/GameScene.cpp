@@ -2,13 +2,13 @@
 #include "sheet.h"
 
 GameScene::GameScene(Assets & assets, sf::View & view)
-	:m_assets(&assets)
-	,m_view(&view)
+	:m_assets(assets)
+	,m_view(view)
 {
-	m_hero = std::make_unique<Doodle>(*m_assets);
+	m_hero = std::make_unique<Doodle>(m_assets);
 	for (int i = 0; i < NUMBER_PLATES; ++i)
 	{
-		m_plates[i] = std::make_unique<Plate>(*m_assets);
+		m_plates[i] = std::make_unique<Plate>(m_assets);
 	}
 	for (int i = 0; i < NUMBER_BONUSES; ++i)
 	{
@@ -16,26 +16,26 @@ GameScene::GameScene(Assets & assets, sf::View & view)
 	}
 
 	m_actualBonus = BonusType::NO;
-	m_view->reset(sf::FloatRect(0, 0, 550, 700));
+	m_view.reset(sf::FloatRect(0, 0, 550, 700));
 	m_hero->setSpeedY(-50.f);
 	m_offsetFallBonus.x = 0.f;
 	m_offsetFallBonus.y = 0.f;
 
 	m_hole = std::make_unique<sf::Sprite>();
 	m_hole->setTextureRect(sf::IntRect(0, 0, 60, 54));
-	m_hole->setTexture(m_assets->HOLE_TEXTURE);
+	m_hole->setTexture(m_assets.HOLE_TEXTURE);
 	m_holePosition.x = float(rand() % (550 - HOLE_WIDTH));
 	m_holePosition.y = -1.f * float(rand() % 15000) - 10.f * 750.f;
 	m_hole->setPosition(m_holePosition.x, m_holePosition.y);
 
-	m_scoreNum.setFont(m_assets->ARIAL_FONT);
+	m_scoreNum.setFont(m_assets.ARIAL_FONT);
 	m_scoreNum.setCharacterSize(20);
 	m_scoreNum.setStyle(sf::Text::Bold);
 	m_scoreNum.setColor(sf::Color(0, 0, 0));
 
 	m_background = std::make_unique<sf::Sprite>();
 	m_background->setTextureRect(sf::IntRect(0, 0, 550, 700));
-	m_background->setTexture(m_assets->BACKGROUND_TEXTURE);
+	m_background->setTexture(m_assets.BACKGROUND_TEXTURE);
 
 	initBonuses();
 	resetGame();
@@ -43,11 +43,7 @@ GameScene::GameScene(Assets & assets, sf::View & view)
 
 GameScene::~GameScene()
 {
-	m_hero = nullptr;
-	*m_plates = nullptr;
-	*m_bonuses = nullptr;
-	m_hole = nullptr;
-	m_background = nullptr;
+
 }
 
 SGameResult GameScene::onGameFrame(sf::RenderWindow & window)
@@ -62,19 +58,19 @@ SGameResult GameScene::onGameFrame(sf::RenderWindow & window)
 		if (m_isPause) // TODO: pause handler
 		{
 			m_isPause = false;
-			m_view->setCenter(WINDOW_WIDTH/2, m_background->getPosition().y + WINDOW_HEIGHT/2);
-			window.setView(*m_view);
+			m_view.setCenter(WINDOW_WIDTH/2, m_background->getPosition().y + WINDOW_HEIGHT/2);
+			window.setView(m_view);
 		}
 		checkEvents(window);
 		update(window);
-		window.setView(*m_view);
+		window.setView(m_view);
 		render(window);
 		window.display();
 
 		if (m_isPause) // TODO: pause handler
 		{
-			m_view->setCenter(275, 350);
-			window.setView(*m_view);
+			m_view.setCenter(275, 350);
+			window.setView(m_view);
 			m_result.status = GameStatus::PAUSE_SCENE;
 		}
 		else
@@ -84,8 +80,8 @@ SGameResult GameScene::onGameFrame(sf::RenderWindow & window)
 	}
 	else
 	{
-		m_view->setCenter(275, 350);
-		window.setView(*m_view);
+		m_view.setCenter(275, 350);
+		window.setView(m_view);
 		m_result.status = GameStatus::GAME_OVER_SCENE;		
 	}
 	return m_result;
@@ -169,14 +165,14 @@ void GameScene::animateBonus(void)
 
 void GameScene::animateSpring(void)
 {
-	if ((m_hero->getSpeedY() >= 0) || (m_bonuses[m_actualBonusId]->getPosition().y < m_view->getCenter().y - 350 - SPRING_HEIGHT))
+	if ((m_hero->getSpeedY() >= 0) || (m_bonuses[m_actualBonusId]->getPosition().y < m_view.getCenter().y - 350 - SPRING_HEIGHT))
 	{
 		m_actualBonus = BonusType::NO;
 	}
 	else
 	{
 		m_bonuses[m_actualBonusId]->setPosition(sf::Vector2f(m_bonuses[m_actualBonusId]->getPosition().x, m_bonuses[m_actualBonusId]->getPosition().y - 4.f));
-		m_bonuses[m_actualBonusId]->setTexture(m_assets->SPRING_2_TEXTURE);
+		m_bonuses[m_actualBonusId]->setTexture(m_assets.SPRING_2_TEXTURE);
 	}
 }
 
@@ -198,7 +194,7 @@ void GameScene::animateRocket(void) // TODO: handlers...this code NEED MORE HAND
 	DirectionX doodleLastDirection = m_hero->getLastDirection();
 	sf::Vector2f doodlePosition = m_hero->getPosition();
 	
-	if ((m_hero->getSpeedY() >= 0) || (m_bonuses[m_actualBonusId]->getPosition().y < m_view->getCenter().y - 350 - ROCKET_HEIGHT))
+	if ((m_hero->getSpeedY() >= 0) || (m_bonuses[m_actualBonusId]->getPosition().y < m_view.getCenter().y - 350 - ROCKET_HEIGHT))
 	{
 		m_animationCounter = 0;
 		m_actualBonus = BonusType::NO;
@@ -212,11 +208,11 @@ void GameScene::animateRocket(void) // TODO: handlers...this code NEED MORE HAND
 	{
 		if (doodleLastDirection == DirectionX::RIGHT)
 		{
-			m_bonuses[m_actualBonusId]->setTexture(m_assets->ROCKET_0_LEFT_TEXTURE);
+			m_bonuses[m_actualBonusId]->setTexture(m_assets.ROCKET_0_LEFT_TEXTURE);
 		}
 		else if (doodleLastDirection == DirectionX::LEFT)
 		{
-			m_bonuses[m_actualBonusId]->setTexture(m_assets->ROCKET_0_RIGHT_TEXTURE);
+			m_bonuses[m_actualBonusId]->setTexture(m_assets.ROCKET_0_RIGHT_TEXTURE);
 		}
 		++m_animationCounter;
 	}
@@ -224,11 +220,11 @@ void GameScene::animateRocket(void) // TODO: handlers...this code NEED MORE HAND
 	{
 		if (doodleLastDirection == DirectionX::RIGHT)
 		{
-			m_bonuses[m_actualBonusId]->setTexture(m_assets->ROCKET_1_LEFT_TEXTURE);
+			m_bonuses[m_actualBonusId]->setTexture(m_assets.ROCKET_1_LEFT_TEXTURE);
 		}
 		else if (doodleLastDirection == DirectionX::LEFT)
 		{
-			m_bonuses[m_actualBonusId]->setTexture(m_assets->ROCKET_1_RIGHT_TEXTURE);
+			m_bonuses[m_actualBonusId]->setTexture(m_assets.ROCKET_1_RIGHT_TEXTURE);
 		}
 		++m_animationCounter;
 	}
@@ -236,11 +232,11 @@ void GameScene::animateRocket(void) // TODO: handlers...this code NEED MORE HAND
 	{
 		if (doodleLastDirection == DirectionX::RIGHT)
 		{
-			m_bonuses[m_actualBonusId]->setTexture(m_assets->ROCKET_2_LEFT_TEXTURE);
+			m_bonuses[m_actualBonusId]->setTexture(m_assets.ROCKET_2_LEFT_TEXTURE);
 		}
 		else if (doodleLastDirection == DirectionX::LEFT)
 		{
-			m_bonuses[m_actualBonusId]->setTexture(m_assets->ROCKET_2_RIGHT_TEXTURE);
+			m_bonuses[m_actualBonusId]->setTexture(m_assets.ROCKET_2_RIGHT_TEXTURE);
 		}
 		++m_animationCounter;
 	}
@@ -248,11 +244,11 @@ void GameScene::animateRocket(void) // TODO: handlers...this code NEED MORE HAND
 	{
 		if (doodleLastDirection == DirectionX::RIGHT)
 		{
-			m_bonuses[m_actualBonusId]->setTexture(m_assets->ROCKET_3_LEFT_TEXTURE);
+			m_bonuses[m_actualBonusId]->setTexture(m_assets.ROCKET_3_LEFT_TEXTURE);
 		}
 		else if (doodleLastDirection == DirectionX::LEFT)
 		{
-			m_bonuses[m_actualBonusId]->setTexture(m_assets->ROCKET_3_RIGHT_TEXTURE);
+			m_bonuses[m_actualBonusId]->setTexture(m_assets.ROCKET_3_RIGHT_TEXTURE);
 		}
 		++m_animationCounter;
 	}
@@ -305,7 +301,7 @@ void GameScene::animateRocket(void) // TODO: handlers...this code NEED MORE HAND
 
 	if (m_hero->getSpeedY() >= -0.05f * ROCKET_DELTA_HEIGHT && m_actualBonus != BonusType::NO)
 	{
-		m_bonuses[m_actualBonusId]->setTexture(m_assets->ROCKET_NONE_TEXTURE);
+		m_bonuses[m_actualBonusId]->setTexture(m_assets.ROCKET_NONE_TEXTURE);
 		if (m_actualBonus != BonusType::NO)
 		{
 			m_bonuses[m_actualBonusId]->setPosition(doodlePosition);
@@ -321,7 +317,7 @@ void GameScene::animateHatHelicopter(void) // TODO: handlers...this code NEED MO
 {
 	sf::Vector2f doodlePosition = m_hero->getPosition();
 
-	if ((m_hero->getSpeedY() >= 0) || (m_bonuses[m_actualBonusId]->getPosition().y < m_view->getCenter().y - 350 - HAT_HELICOPTER_HEIGHT))
+	if ((m_hero->getSpeedY() >= 0) || (m_bonuses[m_actualBonusId]->getPosition().y < m_view.getCenter().y - 350 - HAT_HELICOPTER_HEIGHT))
 	{
 		m_animationCounter = 0;
 		m_actualBonus = BonusType::NO;
@@ -335,22 +331,22 @@ void GameScene::animateHatHelicopter(void) // TODO: handlers...this code NEED MO
 	{
 		if ((m_animationCounter >= 0) && (m_animationCounter <= 5))
 		{
-			m_bonuses[m_actualBonusId]->setTexture(m_assets->HAT_HELOCPTER_FLY_LEFT_TEXTURE);
+			m_bonuses[m_actualBonusId]->setTexture(m_assets.HAT_HELOCPTER_FLY_LEFT_TEXTURE);
 			++m_animationCounter;
 		}
 		if ((m_animationCounter >= 6) && (m_animationCounter <= 10))
 		{
-			m_bonuses[m_actualBonusId]->setTexture(m_assets->HAT_HELOCPTER_DIAGONAL_LEFT_TEXTURE);
+			m_bonuses[m_actualBonusId]->setTexture(m_assets.HAT_HELOCPTER_DIAGONAL_LEFT_TEXTURE);
 			++m_animationCounter;
 		}
 		if ((m_animationCounter >= 11) && (m_animationCounter <= 15))
 		{
-			m_bonuses[m_actualBonusId]->setTexture(m_assets->HAT_HELOCPTER_DIAGONAL_RIGHT_TEXTURE);
+			m_bonuses[m_actualBonusId]->setTexture(m_assets.HAT_HELOCPTER_DIAGONAL_RIGHT_TEXTURE);
 			++m_animationCounter;
 		}
 		if ((m_animationCounter >= 16) && (m_animationCounter <= 20))
 		{
-			m_bonuses[m_actualBonusId]->setTexture(m_assets->HAT_HELOCPTER_FLY_RIGHT_TEXTURE);
+			m_bonuses[m_actualBonusId]->setTexture(m_assets.HAT_HELOCPTER_FLY_RIGHT_TEXTURE);
 			++m_animationCounter;
 		}
 		if (m_animationCounter == 20)
@@ -373,7 +369,7 @@ void GameScene::animateHatHelicopter(void) // TODO: handlers...this code NEED MO
 
 	if (m_hero->getSpeedY() >= -0.05f * HAT_HELICOPTER_DELTA_HEIGHT && m_actualBonus != BonusType::NO)
 	{
-		m_bonuses[m_actualBonusId]->setTexture(m_assets->HAT_HELOCPTER_NONE_LEFT_TEXTURE);
+		m_bonuses[m_actualBonusId]->setTexture(m_assets.HAT_HELOCPTER_NONE_LEFT_TEXTURE);
 		if (m_actualBonus != BonusType::NO)
 		{
 			m_bonuses[m_actualBonusId]->setPosition(sf::Vector2f(doodlePosition.x, doodlePosition.y - 14));
@@ -396,7 +392,7 @@ void GameScene::update(sf::RenderWindow & window)
 
 	if ((m_hero->getSpeedY() <= 0) && (doodlePosition.y <= m_hero->getPositionBeforeDown().y)) // TODO: this code need handler
 	{
-		m_view->setCenter(WINDOW_WIDTH/2, doodlePosition.y);
+		m_view.setCenter(WINDOW_WIDTH/2, doodlePosition.y);
 		m_background->setPosition(0, doodlePosition.y - WINDOW_HEIGHT / 2);
 		m_scoreNum.setPosition(0, doodlePosition.y - WINDOW_HEIGHT / 2);
 		++m_points;
@@ -417,7 +413,7 @@ void GameScene::update(sf::RenderWindow & window)
 
 void GameScene::resetGame(void)
 {
-	m_view->reset(sf::FloatRect(0, 0, 550, 700));
+	m_view.reset(sf::FloatRect(0, 0, 550, 700));
 	m_scoreNum.setPosition(0, 0);
 	m_endOfGame = false;
 	m_points = 0;
@@ -428,18 +424,18 @@ void GameScene::resetGame(void)
 	m_isRight = false;
 	m_hero->setDirection(DirectionX::NONE);
 
-	m_hero->setTexture(m_assets->DOODLE_LEFT_TEXTURE);
+	m_hero->setTexture(m_assets.DOODLE_LEFT_TEXTURE);
 	m_hero->setPosition(sf::Vector2f(260.f, 350.f));
 	m_hero->setSpeedY(-50.f);
 	m_animationCounter = 0;
 	m_hero->setPositionBeforeDown(m_hero->getPosition());
-	m_view->setCenter(275, 350);
+	m_view.setCenter(275, 350);
 
 	m_plates[0]->setPosition(sf::Vector2f(275 - PLATE_WIDTH/2, 700 - PLATE_HEIGHT));
 	for (int i = 1; i < NUMBER_PLATES/2; ++(++i))
 	{
 		m_plates[i]->setType(PlateType::STATIC);
-		m_plates[i]->setTexture(m_assets->PLATE_STATIC_TEXTURE);
+		m_plates[i]->setTexture(m_assets.PLATE_STATIC_TEXTURE);
 
 		float y1 = float((rand() % 152) + 90);
 		float x1 = (sqrt(484*484 - y1*y1))/2;
@@ -453,17 +449,17 @@ void GameScene::resetGame(void)
 		m_plates[i]->setPosition(sf::Vector2f(x1, m_plates[i-1]->getPosition().y - y1));
 		m_plates[i]->setPosition(sf::Vector2f(x2, m_plates[i-1]->getPosition().y - y2));
 	}
-	m_view->setCenter(275, 350);
+	m_view.setCenter(275, 350);
 	initBonuses();
 }
 
 void GameScene::generPlates(void)
 {
-	if (m_plates[0]->getPosition().y > m_view->getCenter().x + 350.f)
+	if (m_plates[0]->getPosition().y > m_view.getCenter().x + 350.f)
 	{
 		m_plates[0]->setType(PlateType::STATIC);
-		m_plates[0]->setTexture(m_assets->PLATE_DYNAMIC_TEXTURE);
-		m_plates[0]->setPosition(sf::Vector2f(float(rand() % (550 - PLATE_WIDTH)), m_view->getCenter().y - 350 - PLATE_HEIGHT));
+		m_plates[0]->setTexture(m_assets.PLATE_DYNAMIC_TEXTURE);
+		m_plates[0]->setPosition(sf::Vector2f(float(rand() % (550 - PLATE_WIDTH)), m_view.getCenter().y - 350 - PLATE_HEIGHT));
 	}
 
 	sf::Vector2f platePosition[NUMBER_PLATES];
@@ -483,7 +479,7 @@ void GameScene::generPlates(void)
 		float y1 = float((rand() % 182) + 60);
 		float x1 = float(rand() % (550 - PLATE_WIDTH));	//float x1 = (sqrt(484 * 484 - y1 * y1)) / 2;
 
-		if (platePosition[i].y > m_view->getCenter().y + 350.f + ROCKET_HEIGHT)
+		if (platePosition[i].y > m_view.getCenter().y + 350.f + ROCKET_HEIGHT)
 		{
 			if ((m_plates[i]->getPosition().x + x1 >= 550 - PLATE_WIDTH) && (m_plates[i]->getPosition().x - x1 <= 0))
 			{
@@ -500,12 +496,12 @@ void GameScene::generPlates(void)
 			{
 			case 0:
 				m_plates[i]->setType(PlateType::STATIC);
-				m_plates[i]->setTexture(m_assets->PLATE_STATIC_TEXTURE);
+				m_plates[i]->setTexture(m_assets.PLATE_STATIC_TEXTURE);
 				m_plates[i]->setSpeedX(0);
 				break;
 			case 1:
 				m_plates[i]->setType(PlateType::STATIC_DYNAMIC_X);
-				m_plates[i]->setTexture(m_assets->PLATE_DYNAMIC_TEXTURE);
+				m_plates[i]->setTexture(m_assets.PLATE_DYNAMIC_TEXTURE);
 
 				m_plates[i]->setSpeedX((rand() % 3) + 1);
 				if (rand() % 2)
@@ -515,7 +511,7 @@ void GameScene::generPlates(void)
 				break;
 			case 2:
 				m_plates[i]->setType(PlateType::CLOUD);
-				m_plates[i]->setTexture(m_assets->PLATE_CLOUD_TEXTURE);
+				m_plates[i]->setTexture(m_assets.PLATE_CLOUD_TEXTURE);
 				m_plates[i]->setSpeedX(0);
 				break;
 			}
@@ -526,7 +522,7 @@ void GameScene::generPlates(void)
 				float y2 = float((rand() % 182) + 60);
 				float x2 = float(rand() % (550 - PLATE_WIDTH));
 
-				if (platePosition[j].y > m_view->getCenter().y + 350.f + ROCKET_HEIGHT)
+				if (platePosition[j].y > m_view.getCenter().y + 350.f + ROCKET_HEIGHT)
 				{
 					/*int divider;
 					if (unstablePlatesCounter < 1)
@@ -547,12 +543,12 @@ void GameScene::generPlates(void)
 					{
 					case 0:
 						m_plates[i]->setType(PlateType::STATIC);
-						m_plates[i]->setTexture(m_assets->PLATE_STATIC_TEXTURE);
+						m_plates[i]->setTexture(m_assets.PLATE_STATIC_TEXTURE);
 						m_plates[i]->setSpeedX(0);
 						break;
 					case 1:
 						m_plates[i]->setType(PlateType::STATIC_DYNAMIC_X);
-						m_plates[i]->setTexture(m_assets->PLATE_DYNAMIC_TEXTURE);
+						m_plates[i]->setTexture(m_assets.PLATE_DYNAMIC_TEXTURE);
 
 						m_plates[i]->setSpeedX((rand() % 3) + 1);
 						if (rand() % 2)
@@ -562,18 +558,18 @@ void GameScene::generPlates(void)
 						break;
 					case 2:
 						m_plates[i]->setType(PlateType::CLOUD);
-						m_plates[i]->setTexture(m_assets->PLATE_CLOUD_TEXTURE);
+						m_plates[i]->setTexture(m_assets.PLATE_CLOUD_TEXTURE);
 						m_plates[i]->setSpeedX(0);
 						break;
 					case 3:
 						m_plates[i]->setType(PlateType::UNSTABLE);
-						m_plates[i]->setTexture(m_assets->PLATE_UNSTABLE_TEXTURE);
+						m_plates[i]->setTexture(m_assets.PLATE_UNSTABLE_TEXTURE);
 						m_plates[i]->setSpeedX(0);
 						++m_unstablePlatesCounter;
 						break;
 					case 4:
 						m_plates[i]->setType(PlateType::UNSTABLE_DYNAMIC_X);
-						m_plates[i]->setTexture(m_assets->PLATE_UNSTABLE_TEXTURE);
+						m_plates[i]->setTexture(m_assets.PLATE_UNSTABLE_TEXTURE);
 
 						m_plates[i]->setSpeedX((rand() % 3) + 1);
 						if (rand() % 2)
@@ -594,7 +590,7 @@ void GameScene::generPlates(void)
 
 void GameScene::generHole(void)
 {
-	if (m_hole->getPosition().y >= m_view->getCenter().y + 350.f)
+	if (m_hole->getPosition().y >= m_view.getCenter().y + 350.f)
 	{
 		m_holePosition.x = float(rand() % (550 - HOLE_WIDTH));
 		m_holePosition.y = m_hero->getPosition().y -1.f * float(rand() % 15000) - 10.f * 750.f;
@@ -611,12 +607,12 @@ void GameScene::generBonuses(void)
 	{
 		bonusPosition[bonusIndex] = m_bonuses[bonusIndex]->getPosition();
 
-		if (bonusPosition[bonusIndex].y > m_view->getCenter().y + 350)
+		if (bonusPosition[bonusIndex].y > m_view.getCenter().y + 350)
 		{
 			for (int plateIndex = 0; plateIndex < NUMBER_PLATES; ++plateIndex)
 			{
 				platePosition = m_plates[plateIndex]->getPosition();
-				if ((platePosition.y < m_view->getCenter().y - 350 - ROCKET_HEIGHT) &&
+				if ((platePosition.y < m_view.getCenter().y - 350 - ROCKET_HEIGHT) &&
 					((m_plates[plateIndex]->getType() == PlateType::STATIC) || (m_plates[plateIndex]->getType() == PlateType::STATIC_DYNAMIC_X)))
 				{
 					int randomNum = rand() % 4;
@@ -649,7 +645,7 @@ void GameScene::dropUnstablePlates(void)
 		{
 			m_plates[plateIndex]->rotate(-1.f);
 			m_plates[plateIndex]->move(sf::Vector2f(-1 * STEP, 4 * STEP));
-			if (m_plates[plateIndex]->getPosition().y >= m_view->getCenter().y + 350)
+			if (m_plates[plateIndex]->getPosition().y >= m_view.getCenter().y + 350)
 			{
 				m_plates[plateIndex]->setRotation(0);
 				m_plates[plateIndex]->setFallStatus(false);
@@ -666,7 +662,7 @@ bool GameScene::checkGameEnd(void)
 		PlaySound(L"sounds/crnarupa.wav", nullptr, SND_ASYNC | SND_NODEFAULT);
 		return true;
 	}
-	if (doodlePosition.y < m_view->getCenter().y + 350.f - DOODLE_HEIGHT)
+	if (doodlePosition.y < m_view.getCenter().y + 350.f - DOODLE_HEIGHT)
 	{
 		return false;
 	}
@@ -847,7 +843,7 @@ void GameScene::buildBonus(BonusType bonusType, int bonusIndex, sf::Vector2f pla
 		int x = rand() % (PLATE_WIDTH - SPRING_WIDTH);
 		m_bonuses[bonusIndex]->setBonusType(BonusType::SPRING);
 		m_bonuses[bonusIndex]->setPosition(sf::Vector2f(platePosition.x + x, platePosition.y - SPRING_HEIGHT));
-		m_bonuses[bonusIndex]->setTexture(m_assets->SPRING_TEXTURE);
+		m_bonuses[bonusIndex]->setTexture(m_assets.SPRING_TEXTURE);
 		break;
 	}
 	case BonusType::TRAMPOLINE:
@@ -855,7 +851,7 @@ void GameScene::buildBonus(BonusType bonusType, int bonusIndex, sf::Vector2f pla
 		int x = rand() % (PLATE_WIDTH - TRAMPOLINE_WIDTH);
 		m_bonuses[bonusIndex]->setBonusType(BonusType::TRAMPOLINE);
 		m_bonuses[bonusIndex]->setPosition(sf::Vector2f(platePosition.x + x, platePosition.y - TRAMPOLINE_HEIGHT));
-		m_bonuses[bonusIndex]->setTexture(m_assets->TRAMPOLINE_TEXTURE);
+		m_bonuses[bonusIndex]->setTexture(m_assets.TRAMPOLINE_TEXTURE);
 		break;
 	}
 	case BonusType::HAT_HELICOPTER:
@@ -866,10 +862,10 @@ void GameScene::buildBonus(BonusType bonusType, int bonusIndex, sf::Vector2f pla
 		switch (rand() % 2)
 		{
 		case 0:
-			m_bonuses[bonusIndex]->setTexture(m_assets->HAT_HELOCPTER_NONE_LEFT_TEXTURE);
+			m_bonuses[bonusIndex]->setTexture(m_assets.HAT_HELOCPTER_NONE_LEFT_TEXTURE);
 			break;
 		case 1:
-			m_bonuses[bonusIndex]->setTexture(m_assets->HAT_HELOCPTER_NONE_RIGHT_TEXTURE);
+			m_bonuses[bonusIndex]->setTexture(m_assets.HAT_HELOCPTER_NONE_RIGHT_TEXTURE);
 			break;
 		}
 		break;
@@ -879,7 +875,7 @@ void GameScene::buildBonus(BonusType bonusType, int bonusIndex, sf::Vector2f pla
 		int x = rand() % (PLATE_WIDTH - ROCKET_WIDTH);
 		m_bonuses[bonusIndex]->setBonusType(BonusType::ROCKET);
 		m_bonuses[bonusIndex]->setPosition(sf::Vector2f(platePosition.x + x, platePosition.y - ROCKET_HEIGHT));
-		m_bonuses[bonusIndex]->setTexture(m_assets->ROCKET_NONE_TEXTURE);
+		m_bonuses[bonusIndex]->setTexture(m_assets.ROCKET_NONE_TEXTURE);
 		break;
 	}
 	}

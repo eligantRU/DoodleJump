@@ -29,6 +29,6 @@ private:
 	float m_speedY;
 	DirectionX m_direction;
 	DirectionX m_lastDirection;
-	Assets * m_assets;
+	Assets & m_assets;
 	sf::Vector2f m_positionBeforeDown;
 };

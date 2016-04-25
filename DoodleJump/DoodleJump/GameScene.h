@@ -41,8 +41,8 @@ private:
 	void moveDynamicPlates(void);
 	void resetGame(void);
 
-	std::unique_ptr<Assets> m_assets;
-	std::unique_ptr<sf::View> m_view;
+	Assets & m_assets;
+	sf::View & m_view;
 
 	std::unique_ptr<Doodle> m_hero;
 	std::unique_ptr<Plate> m_plates[NUMBER_PLATES];

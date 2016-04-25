@@ -2,19 +2,19 @@
 #include "sheet.h"
 
 GameOverScene::GameOverScene(Assets & assets, sf::View & view, std::function<uint64_t()> getter)
-	:m_assets(&assets)
-	,m_view(&view)
+	:m_assets(assets)
+	,m_view(view)
 	,m_getter(getter)
 {
 	m_title = std::make_unique<sf::Sprite>(sf::Sprite());
 	m_title->setTextureRect(sf::IntRect(0, 0, 236, 96));
-	m_title->setTexture(m_assets->GAME_OVER_TITLE_TEXTURE);
+	m_title->setTexture(m_assets.GAME_OVER_TITLE_TEXTURE);
 	m_title->setPosition(150, 30);
 
-	m_goMenuButton = std::make_unique<Button>("Menu", sf::Vector2f(232.f, 182.f), *m_assets);
-	m_playAgainButton = std::make_unique<Button>("Play", sf::Vector2f(250.f, 240.f), *m_assets);
+	m_goMenuButton = std::make_unique<Button>("Menu", sf::Vector2f(232.f, 182.f), m_assets);
+	m_playAgainButton = std::make_unique<Button>("Play", sf::Vector2f(250.f, 240.f), m_assets);
 
-	m_lastRecord.setFont(m_assets->ARIAL_FONT);
+	m_lastRecord.setFont(m_assets.ARIAL_FONT);
 	m_lastRecord.setCharacterSize(24);
 	m_lastRecord.setStyle(sf::Text::Bold);
 	m_lastRecord.setPosition(190.f, 140.f);
@@ -22,16 +22,13 @@ GameOverScene::GameOverScene(Assets & assets, sf::View & view, std::function<uin
 
 	m_background = std::make_unique<sf::Sprite>(sf::Sprite());
 	m_background->setTextureRect(sf::IntRect(0, 0, 550, 700));
-	m_background->setTexture(m_assets->BACKGROUND_TEXTURE);
+	m_background->setTexture(m_assets.BACKGROUND_TEXTURE);
 	m_background->setPosition(0.f, 0.f);
 }
 
 GameOverScene::~GameOverScene()
 {
-	m_title = nullptr;
-	m_goMenuButton = nullptr;
-	m_playAgainButton = nullptr;
-	m_background = nullptr;
+
 }
 
 SGameResult GameOverScene::onGameOverMenu(sf::RenderWindow & window)

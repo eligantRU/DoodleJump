@@ -5,32 +5,18 @@ Game::Game()
 	:m_assets(new Assets())
 	,m_view(new sf::View())
 {
-	/*m_sceneStart = std::make_unique<StartScene>(*m_assets, *m_view);
+	m_sceneStart = std::make_unique<StartScene>(*m_assets, *m_view);
 	m_sceneHelp = std::make_unique<HelpScene>(*m_assets, *m_view);
-	m_sceneGame = std::make_shared<GameScene>(*m_assets, *m_view);
 	m_scenePause = std::make_unique<PauseScene>(*m_assets, *m_view);
+	m_sceneGame = std::make_shared<GameScene>(*m_assets, *m_view);
 
 	std::function<uint64_t()> getter = std::bind(&GameScene::getScore, m_sceneGame);
-	m_sceneGameOver = std::make_unique<GameOverScene>(*m_assets, *m_view, getter);*/
-
-	m_sceneStart = new StartScene(*m_assets, *m_view);
-	m_sceneHelp = new HelpScene(*m_assets, *m_view);
-	m_sceneGame = new GameScene(*m_assets, *m_view);
-	m_scenePause = new PauseScene(*m_assets, *m_view);
-
-	std::function<uint64_t()> getter = std::bind(&GameScene::getScore, m_sceneGame);
-	m_sceneGameOver = new GameOverScene(*m_assets, *m_view, getter);
+	m_sceneGameOver = std::make_unique<GameOverScene>(*m_assets, *m_view, getter);
 }
 
 Game::~Game()
 {
-	m_assets = nullptr;
-	m_view = nullptr;
-	m_sceneStart = nullptr;
-	m_sceneHelp = nullptr;
-	m_sceneGame = nullptr;
-	m_sceneGameOver = nullptr;
-	m_scenePause = nullptr;
+
 }
 
 void Game::gameLoop(sf::RenderWindow & window)

@@ -16,8 +16,8 @@ private:
 	void checkMouseClick(sf::Event & event);
 	std::function<uint64_t()> m_getter;
 
-	std::unique_ptr<Assets> m_assets;
-	std::unique_ptr<sf::View> m_view;
+	Assets & m_assets;
+	sf::View & m_view;
 
 	std::unique_ptr<sf::Sprite> m_background;
 	std::unique_ptr<sf::Sprite> m_title;
