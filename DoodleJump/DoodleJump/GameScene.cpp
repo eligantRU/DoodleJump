@@ -58,6 +58,7 @@ SGameResult GameScene::onGameFrame(sf::RenderWindow & window)
 		if (m_isPause) // TODO: pause handler
 		{
 			m_isPause = false;
+			m_assets.removeSoundFromPause();
 			m_view.setCenter(WINDOW_WIDTH/2, m_background->getPosition().y + WINDOW_HEIGHT/2);
 			window.setView(m_view);
 		}
@@ -70,6 +71,7 @@ SGameResult GameScene::onGameFrame(sf::RenderWindow & window)
 		if (m_isPause) // TODO: pause handler
 		{
 			m_view.setCenter(275, 350);
+			m_assets.pauseSound();
 			window.setView(m_view);
 			m_result.status = GameStatus::PAUSE_SCENE;
 		}

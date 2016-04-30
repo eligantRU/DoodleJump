@@ -127,3 +127,13 @@ void Assets::playSound(sf::SoundBuffer & buffer) // TODO: this method need to be
 	m_actualSound.setBuffer(buffer);
 	m_actualSound.play();
 }
+
+void Assets::pauseSound(void)
+{
+	m_actualSound.pause();
+}
+
+void Assets::removeSoundFromPause(void)
+{
+	m_actualSound.play();
+}
