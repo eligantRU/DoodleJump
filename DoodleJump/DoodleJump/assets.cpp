@@ -135,5 +135,8 @@ void Assets::pauseSound(void)
 
 void Assets::removeSoundFromPause(void)
 {
-	m_actualSound.play();
+	if (m_actualSound.getStatus() == sf::SoundSource::Status::Paused)
+	{
+		m_actualSound.play();
+	}
 }

@@ -91,17 +91,16 @@ SGameResult GameScene::onGameFrame(sf::RenderWindow & window)
 
 void GameScene::moveDoodle(void)
 {
-	// TODO: functions must be work like this
-	//                                        posiiton.x = setMovingHorizontal();
 	sf::Vector2f position(0.f, 0.f);
-	moveDoodleHorizontal(position.x);
-	moveDoodleVertical(position.y);
+	position.x = moveDoodleHorizontal();
+	position.y = moveDoodleVertical();
 	m_hero->move(position);
 }
 
-void GameScene::moveDoodleHorizontal(float & positionX)
+float GameScene::moveDoodleHorizontal(void)
 {
 	DirectionX doodleDirection = m_hero->getDirection();
+	float positionX = 0;
 	if (doodleDirection == DirectionX::RIGHT)
 	{
 		positionX += STEP;
@@ -110,37 +109,39 @@ void GameScene::moveDoodleHorizontal(float & positionX)
 	{
 		positionX -= STEP;
 	}
+	return positionX;
 }
 
-void GameScene::moveDoodleVertical(float & positionY)
+float GameScene::moveDoodleVertical(void)
 {
+	float positionY = 0;
 	if (m_hero->getSpeedY() < 0)
 	{
 		m_hero->setSpeedY(m_hero->getSpeedY() + ACCELERATION);
 		positionY = m_hero->getSpeedY();
-		
-		if (m_hero->getPosition().y < m_hero->getPositionBeforeDown().y) // TODO: positionBeforeDOwn handler
-		{
-			m_hero->setPositionBeforeDown(m_hero->getPosition());
-		}
 	}
 	else
-	{ // TODO: falling doodle handler
+	{
 		float testingFall = checkDoodleFall();
 		if (testingFall == 0)
 		{
 			m_actualBonus = BonusType::NO;
 			m_hero->setSpeedY(m_hero->getSpeedY() + ACCELERATION / 8);
 			positionY = m_hero->getSpeedY();
-			if (m_hero->getPosition().y < m_hero->getPositionBeforeDown().y)
-			{
-				m_hero->setPositionBeforeDown(m_hero->getPosition());
-			}
 		}
 		else
 		{
 			m_hero->setSpeedY(-testingFall);
 		}
+	}
+	return positionY;
+}
+
+void GameScene::updatePositionBeforeDown(void)
+{
+	if (m_hero->getPosition().y < m_hero->getPositionBeforeDown().y)
+	{
+		m_hero->setPositionBeforeDown(m_hero->getPosition());
 	}
 }
 
@@ -393,6 +394,7 @@ void GameScene::update(sf::RenderWindow & window)
 	checkCylinderEffect();
 	animateBonus();
 
+	updatePositionBeforeDown();
 	sf::Vector2f doodlePosition = m_hero->getPosition();
 	if ((m_hero->getSpeedY() <= 0) && (doodlePosition.y <= m_hero->getPositionBeforeDown().y)) // TODO: this code need handler
 	{
@@ -409,10 +411,7 @@ void GameScene::update(sf::RenderWindow & window)
 	generBonuses();
 	generHole();
 
-	if (checkGameEnd()) // TODO: m_endOfGame = true; can be encapsulated in checkGameEnd()
-	{
-		m_endOfGame = true;
-	}
+	m_endOfGame = checkGameEnd();
 }
 
 void GameScene::resetGame(void)

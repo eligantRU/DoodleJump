@@ -13,8 +13,8 @@ public:
 private:
 	void render(sf::RenderWindow & window);
 	void moveDoodle(void);
-	void moveDoodleHorizontal(float & positionX);
-	void moveDoodleVertical(float & positionY);
+	float moveDoodleHorizontal(void);
+	float moveDoodleVertical(void);
 	void animateBonus(void);
 	void animateSpring(void);
 	void animateTrampoline(void);
@@ -34,6 +34,7 @@ private:
 	void generHole(void);
 	bool checkGameEnd(void);
 	void checkCylinderEffect(void);
+	void updatePositionBeforeDown(void);
 	Collision checkCollisionPlate(void);
 	Collision checkCollisionBonus(void);
 	Collision checkCollisionHole(void);
