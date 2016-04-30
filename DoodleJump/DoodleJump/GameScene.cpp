@@ -89,6 +89,8 @@ SGameResult GameScene::onGameFrame(sf::RenderWindow & window)
 
 void GameScene::moveDoodle(void)
 {
+	// TODO: functions must be work like this
+	//                                        posiiton.x = setMovingHorizontal();
 	sf::Vector2f position(0.f, 0.f);
 	moveDoodleHorizontal(position.x);
 	moveDoodleVertical(position.y);
@@ -386,10 +388,10 @@ void GameScene::update(sf::RenderWindow & window)
 	(void)window;
 	moveDoodle();
 	m_hero->correctSkin();
-	sf::Vector2f doodlePosition = m_hero->getPosition(); // TODO: remove it
-	checkCylinderEffect(doodlePosition); // TODO: get doodle position inside
+	checkCylinderEffect();
 	animateBonus();
 
+	sf::Vector2f doodlePosition = m_hero->getPosition();
 	if ((m_hero->getSpeedY() <= 0) && (doodlePosition.y <= m_hero->getPositionBeforeDown().y)) // TODO: this code need handler
 	{
 		m_view.setCenter(WINDOW_WIDTH/2, doodlePosition.y);
@@ -659,14 +661,14 @@ bool GameScene::checkGameEnd(void)
 	sf::Vector2f doodlePosition = m_hero->getPosition();
 	if ((checkCollisionHole() == Collision::COLLISION_HOLE) && ((m_actualBonus == BonusType::NO)))
 	{
-		PlaySound(L"sounds/crnarupa.wav", nullptr, SND_ASYNC | SND_NODEFAULT);
+		m_assets.playSound(m_assets.HOLE_SOUND);
 		return true;
 	}
 	if (doodlePosition.y < m_view.getCenter().y + 350.f - DOODLE_HEIGHT)
 	{
 		return false;
 	}
-	PlaySound(L"sounds/pada.wav", nullptr, SND_ASYNC | SND_NODEFAULT);
+	m_assets.playSound(m_assets.GAME_OVER_SOUND);
 	return true;
 }
 
@@ -760,31 +762,27 @@ void GameScene::checkKeyRealesed(sf::Event event, bool & isNeedUpdate)
 	}
 }
 
-void GameScene::moveDynamicPlates(void) // TODO: getSpeedX() ONE TIME! Optimize!
+void GameScene::moveDynamicPlates(void) 
 {
-	sf::Vector2f platePosition[NUMBER_PLATES];
-
 	for (int i = 0; i < NUMBER_PLATES; ++i)
 	{
-		platePosition[i] = m_plates[i]->getPosition();
-		if (m_plates[i]->getSpeedX() != 0)
+		sf::Vector2f platePosition = m_plates[i]->getPosition();
+		int speedX = m_plates[i]->getSpeedX();
+		if (speedX < 0)
 		{
-			if (m_plates[i]->getSpeedX() < 0)
+			if (platePosition.x <= speedX)
 			{
-				if (platePosition[i].x <= m_plates[i]->getSpeedX())
-				{
-					m_plates[i]->setSpeedX(-m_plates[i]->getSpeedX());
-				}
+				m_plates[i]->setSpeedX(-speedX);
 			}
-			if (m_plates[i]->getSpeedX() > 0)
-			{
-				if (platePosition[i].x >= 550 - PLATE_WIDTH - m_plates[i]->getSpeedX())
-				{
-					m_plates[i]->setSpeedX(-m_plates[i]->getSpeedX());
-				}
-			}
-			m_plates[i]->move(sf::Vector2f(float(m_plates[i]->getSpeedX()), 0.f));
 		}
+		if (speedX > 0)
+		{
+			if (platePosition.x >= 550 - PLATE_WIDTH - speedX)
+			{
+				m_plates[i]->setSpeedX(-speedX);
+			}
+		}
+		m_plates[i]->move(sf::Vector2f(float(speedX), 0.f));
 	}
 }
 
@@ -801,9 +799,9 @@ void GameScene::moveBonuses(void)
 	}
 }
 
-void GameScene::checkCylinderEffect(sf::Vector2f & doodlePosition)
+void GameScene::checkCylinderEffect(void)
 {
-	// TODO: get doodle position here
+	auto doodlePosition = m_hero->getPosition();
 
 	if (doodlePosition.x <= -DOODLE_WIDTH)
 	{
@@ -894,28 +892,28 @@ float GameScene::checkDoodleFall(void) // TODO: try to write handler else not to
 	switch (collision)
 	{
 	case Collision::COLLISION_PLATE:
-		m_actualBonus = BonusType::NO;
-		PlaySound(L"sounds/jump.wav", nullptr, SND_ASYNC | SND_NODEFAULT);
+		m_actualBonus = BonusType::NO; 
+		m_assets.playSound(m_assets.JUMP_SOUND);
 		return PLATE_DELTA_HEIGHT;
 	case Collision::COLLISION_GHOST_PLATE:
 		m_actualBonus = BonusType::NO;
-		PlaySound(L"sounds/bijeli.wav", nullptr, SND_ASYNC | SND_NODEFAULT);
+		m_assets.playSound(m_assets.PLATE_GHOST_SOUND);
 		return PLATE_DELTA_HEIGHT;
 	case Collision::COLLISION_SPRING:
 		m_actualBonus = BonusType::SPRING;
-		PlaySound(L"sounds/feder.wav", nullptr, SND_ASYNC | SND_NODEFAULT);
+		m_assets.playSound(m_assets.SPRING_SOUND);
 		return SPRING_DELTA_HEIGHT;
 	case Collision::COLLISION_TRAMPLANE:
 		m_actualBonus = BonusType::TRAMPOLINE;
-		PlaySound(L"sounds/trampoline.wav", nullptr, SND_ASYNC | SND_NODEFAULT);
+		m_assets.playSound(m_assets.TRAMPOLINE_SOUND);
 		return TRAMPLANE_DELTA_HEIGHT;
 	case Collision::COLLISION_HAT_HELICOPTER:
 		m_actualBonus = BonusType::HAT_HELICOPTER;
-		PlaySound(L"sounds/propeller.wav", nullptr, SND_ASYNC | SND_NODEFAULT);
+		m_assets.playSound(m_assets.HAT_HELICOPTER_SOUND);
 		return HAT_HELICOPTER_DELTA_HEIGHT;
 	case Collision::COLLISION_ROCKET:
 		m_actualBonus = BonusType::ROCKET;
-		PlaySound(L"sounds/jetpack.wav", nullptr, SND_ASYNC | SND_NODEFAULT);
+		m_assets.playSound(m_assets.ROCKET_SOUND);
 		return ROCKET_DELTA_HEIGHT;
 	default:
 		return 0.f;

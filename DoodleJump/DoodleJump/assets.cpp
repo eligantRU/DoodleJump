@@ -62,6 +62,15 @@ Assets::Assets()
 
 	addFont(ARIAL_FONT, "arial.ttf");
 	addImage(WINDOW_ICON, "images/icon.png");
+
+	addSound(HAT_HELICOPTER_SOUND, "sounds/propeller.wav");
+	addSound(ROCKET_SOUND, "sounds/jetpack.wav");
+	addSound(TRAMPOLINE_SOUND, "sounds/trampoline.wav");
+	addSound(SPRING_SOUND, "sounds/feder.wav");
+	addSound(GAME_OVER_SOUND, "sounds/pada.wav");
+	addSound(HOLE_SOUND, "sounds/crnarupa.wav");
+	addSound(JUMP_SOUND, "sounds/jump.wav");
+	addSound(PLATE_GHOST_SOUND, "sounds/bijeli.wav");
 }
 
 Assets::~Assets()
@@ -102,4 +111,19 @@ void Assets::addImage(sf::Image & image, std::string string)
 		MessageBoxA(nullptr, "File not founded", "Error", MB_ICONERROR | MB_OK);
 		_exit(-1);
 	}
+}
+
+void Assets::addSound(sf::SoundBuffer & buffer, std::string string)
+{
+	if (!buffer.loadFromFile(string))
+	{
+		MessageBoxA(nullptr, "File not founded", "Error", MB_ICONERROR | MB_OK);
+		_exit(-1);
+	}
+}
+
+void Assets::playSound(sf::SoundBuffer & buffer) // TODO: this method need to be in Game
+{
+	m_actualSound.setBuffer(buffer);
+	m_actualSound.play();
 }

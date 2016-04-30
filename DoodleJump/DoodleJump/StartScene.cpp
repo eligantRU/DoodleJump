@@ -160,7 +160,7 @@ Collision StartScene::checkCollisionPlate(void)
 	if (((doodlePosition.y + DOODLE_HEIGHT >= platePosition.y) && (doodlePosition.y + DOODLE_HEIGHT <= platePosition.y + PLATE_HEIGHT)
 		&& (doodlePosition.x + DOODLE_WIDTH >= platePosition.x) && (doodlePosition.x - PLATE_WIDTH <= platePosition.x)))
 	{
-		PlaySound(L"sounds/jump.wav", nullptr, SND_ASYNC | SND_NODEFAULT);
+		m_assets.playSound(m_assets.JUMP_SOUND);
 		return  Collision::COLLISION_PLATE;
 	}
 	return Collision::NO_COLLISION;

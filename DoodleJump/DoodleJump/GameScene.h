@@ -33,7 +33,7 @@ private:
 	void dropUnstablePlates(void);
 	void generHole(void);
 	bool checkGameEnd(void);
-	void checkCylinderEffect(sf::Vector2f & doodlePosition);
+	void checkCylinderEffect(void);
 	Collision checkCollisionPlate(void);
 	Collision checkCollisionBonus(void);
 	Collision checkCollisionHole(void);
