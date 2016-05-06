@@ -46,22 +46,20 @@ GameScene::~GameScene()
 
 }
 
+
 SGameResult GameScene::onGameFrame(sf::RenderWindow & window)
 {
 	if (m_result.status == GameStatus::GAME_OVER_SCENE)
 	{
-		resetGame();
+		{
+			resetGame();
+		}
 	}
 
 	if (!m_endOfGame)
 	{
-		if (m_isPause) // TODO: pause handler
-		{
-			m_isPause = false;
-			m_assets.removeSoundFromPause();
-			m_view.setCenter(WINDOW_WIDTH/2, m_background->getPosition().y + WINDOW_HEIGHT/2);
-			window.setView(m_view);
-		}
+		tuneSceneAfterPause(window);
+
 		checkEvents(window);
 		update(window);
 		window.setView(m_view);
@@ -84,9 +82,20 @@ SGameResult GameScene::onGameFrame(sf::RenderWindow & window)
 	{
 		m_view.setCenter(275, 350);
 		window.setView(m_view);
-		m_result.status = GameStatus::GAME_OVER_SCENE;		
+		m_result.status = GameStatus::GAME_OVER_SCENE; 
 	}
 	return m_result;
+}
+
+void GameScene::tuneSceneAfterPause(sf::RenderWindow & window)
+{
+	if (m_isPause) // TODO: pause handler
+	{
+		m_isPause = false;
+		m_assets.removeSoundFromPause();
+		m_view.setCenter(WINDOW_WIDTH / 2, m_background->getPosition().y + WINDOW_HEIGHT / 2);
+		window.setView(m_view);
+	}
 }
 
 void GameScene::moveDoodle(void)

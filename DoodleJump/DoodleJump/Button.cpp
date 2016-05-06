@@ -6,7 +6,7 @@
 Button::Button(std::string text, sf::Vector2f position, Assets & assets)
 	:m_assets(assets)
 {
-	m_body = new sf::Sprite();
+	m_body = std::make_unique<sf::Sprite>();
 	setTexture(m_assets.BUTTON_INACTIVE_TEXTURE);
 	setPosition(position);
 	setText(text);
@@ -19,8 +19,7 @@ Button::Button(std::string text, sf::Vector2f position, Assets & assets)
 
 Button::~Button()
 {
-	delete m_body;
-	m_body = nullptr;
+
 }
 
 void Button::setTexture(sf::Texture & texture)

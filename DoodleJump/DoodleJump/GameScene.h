@@ -41,6 +41,7 @@ private:
 	void buildBonus(BonusType bonusType, int bonusIndex, sf::Vector2f platePosition, int plateIndex);
 	void moveDynamicPlates(void);
 	void resetGame(void);
+	void tuneSceneAfterPause(sf::RenderWindow & window);
 
 	Assets & m_assets;
 	sf::View & m_view;

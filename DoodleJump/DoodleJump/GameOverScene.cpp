@@ -9,7 +9,7 @@ GameOverScene::GameOverScene(Assets & assets, sf::View & view, std::function<uin
 	m_title = std::make_unique<sf::Sprite>(sf::Sprite());
 	m_title->setTextureRect(sf::IntRect(0, 0, 236, 96));
 	m_title->setTexture(m_assets.GAME_OVER_TITLE_TEXTURE);
-	m_title->setPosition(150, 30);
+	m_title->setPosition(150.f, 30.f);
 
 	m_goMenuButton = std::make_unique<Button>("Menu", sf::Vector2f(232.f, 182.f), m_assets);
 	m_playAgainButton = std::make_unique<Button>("Play", sf::Vector2f(250.f, 240.f), m_assets);
@@ -21,7 +21,7 @@ GameOverScene::GameOverScene(Assets & assets, sf::View & view, std::function<uin
 	m_lastRecord.setColor(sf::Color(0, 0, 0));
 
 	m_background = std::make_unique<sf::Sprite>(sf::Sprite());
-	m_background->setTextureRect(sf::IntRect(0, 0, 550, 700));
+	m_background->setTextureRect(sf::IntRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT));
 	m_background->setTexture(m_assets.BACKGROUND_TEXTURE);
 	m_background->setPosition(0.f, 0.f);
 }

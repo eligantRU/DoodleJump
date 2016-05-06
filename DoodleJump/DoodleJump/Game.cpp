@@ -2,7 +2,7 @@
 #include "sheet.h"
 
 Game::Game()
-	:m_assets(new Assets())
+	:m_assets(new Assets()) // NOTE: it may be shared_ptr
 	,m_view(new sf::View())
 {
 	m_sceneStart = std::make_unique<StartScene>(*m_assets, *m_view);
@@ -41,6 +41,7 @@ void Game::gameLoop(sf::RenderWindow & window)
 			m_gameState = m_sceneHelp->onHelpMenu(window);
 			break;
 		}
+		// TODO: u check window.close() in all scenes. Do it here.
 	}
 }
 
@@ -48,13 +49,13 @@ void Game::launch(void)
 {
 	sf::ContextSettings settings;
 	settings.antialiasingLevel = 16;
-	sf::RenderWindow window(sf::VideoMode(550, 700), "Doodle Jump", sf::Style::Close, settings);
+	sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Doodle Jump", sf::Style::Close, settings);
 	sf::Image icon = m_assets->WINDOW_ICON;;
 	window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
 	window.setVerticalSyncEnabled(true);
 	window.setFramerateLimit(60);
-	m_view->reset(sf::FloatRect(0, 0, 550, 700));
-	m_view->setCenter(275, 350);
+	m_view->reset(sf::FloatRect(0, 0, float(WINDOW_WIDTH), float(WINDOW_HEIGHT)));
+	m_view->setCenter(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
 	window.setView(*m_view);
 	m_gameState.status = GameStatus::START_SCENE;
 

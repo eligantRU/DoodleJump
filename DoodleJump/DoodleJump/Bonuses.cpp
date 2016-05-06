@@ -3,13 +3,12 @@
 
 Bonus::Bonus()
 {
-	m_body = new sf::Sprite;
+	m_body = std::make_unique<sf::Sprite>();
 }
 
 Bonus::~Bonus()
 {
-	delete m_body;
-	m_body = nullptr;
+
 }
 
 void Bonus::draw(sf::RenderWindow & window)

@@ -2,8 +2,6 @@
 
 #include "stdafx.h"
 
-#pragma comment(lib,"Winmm.lib")
-
 #include "bases.h"
 #include "assets.h"
 #include "Button.h"

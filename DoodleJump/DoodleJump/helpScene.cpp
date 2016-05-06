@@ -10,12 +10,12 @@ HelpScene::HelpScene(Assets & assets, sf::View & view)
 	m_buttonA = std::make_unique<sf::Sprite>();
 	m_buttonA->setTexture(m_assets.BUTTON_A_TEXTURE);
 	m_buttonA->setScale(sf::Vector2f(0.5f, 0.5f));
-	m_buttonA->setPosition(170, 295);
+	m_buttonA->setPosition(170.f, 295.f);
 
 	m_buttonD = std::make_unique<sf::Sprite>();
 	m_buttonD->setTexture(m_assets.BUTTON_D_TEXTURE);
 	m_buttonD->setScale(sf::Vector2f(0.5f, 0.5f));
-	m_buttonD->setPosition(230, 295);
+	m_buttonD->setPosition(230.f, 295.f);
 	
 	m_helpText1.setFont(m_assets.ARIAL_FONT);
 	m_helpText1.setCharacterSize(20);
@@ -34,7 +34,7 @@ HelpScene::HelpScene(Assets & assets, sf::View & view)
 	m_background = std::make_unique<sf::Sprite>();
 	m_background->setTextureRect(sf::IntRect(0, 0, 550, 700));
 	m_background->setTexture(m_assets.BACKGROUND_TEXTURE);
-	m_background->setPosition(0, 0);
+	m_background->setPosition(0.f, 0.f);
 }
 
 HelpScene::~HelpScene()

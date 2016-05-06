@@ -22,7 +22,7 @@ public:
 	bool getFallStatus(void);
 	void setFallStatus(bool fallStatus);
 private:
-	sf::Sprite * m_body;
+	std::unique_ptr<sf::Sprite> m_body;
 	PlateType m_type;
 	bool m_fallStatus = false;
 	int m_speedX = 0;

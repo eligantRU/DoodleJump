@@ -4,10 +4,8 @@
 int main(void)
 {
 	srand(unsigned(time(nullptr)));
-	Game * game = new Game();
+	std::unique_ptr<Game> game = std::make_unique<Game>();
 	game->launch();
-	delete game;
-	game = nullptr;
 
 	return 0;
 }

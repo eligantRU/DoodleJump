@@ -22,7 +22,7 @@ public:
 	void setBonusType(BonusType type);
 	BonusType getBonusType(void);
 private:
-	sf::Sprite * m_body;
+	std::unique_ptr<sf::Sprite> m_body;
 	int m_plateIndex;
 	int m_speedX;
 	BonusType m_type;

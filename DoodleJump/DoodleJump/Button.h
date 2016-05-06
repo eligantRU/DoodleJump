@@ -16,7 +16,7 @@ public:
 	void draw(sf::RenderWindow & window);
 private:
 	float getStringLengthPx(const std::string & str);
-	sf::Sprite * m_body;
+	std::unique_ptr<sf::Sprite> m_body;
 	sf::Text m_text;
 	Assets & m_assets;
 };

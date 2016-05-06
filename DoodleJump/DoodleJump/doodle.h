@@ -25,7 +25,7 @@ public:
 	DirectionX getDirection(void);
 	DirectionX getLastDirection(void);
 private:
-	sf::Sprite * m_body;
+	std::unique_ptr<sf::Sprite> m_body;
 	float m_speedY;
 	DirectionX m_direction;
 	DirectionX m_lastDirection;

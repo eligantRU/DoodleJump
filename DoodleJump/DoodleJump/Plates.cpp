@@ -3,16 +3,15 @@
 
 Plate::Plate(Assets & assets)
 {	
-	m_body = new sf::Sprite;
+	m_body = std::make_unique<sf::Sprite>();
 	m_type = PlateType::STATIC;
 	m_body->setTexture(assets.PLATE_STATIC_TEXTURE);
-	setPosition(sf::Vector2f(float(rand() % (550 - PLATE_WIDTH)), float(rand() % (700 - PLATE_HEIGHT))));
+	setPosition(sf::Vector2f(float(rand() % (WINDOW_WIDTH - PLATE_WIDTH)), float(rand() % (WINDOW_HEIGHT - PLATE_HEIGHT))));
 }
 
 Plate::~Plate()
 {
-	delete m_body;
-	m_body = nullptr;
+
 }
 
 void Plate::draw(sf::RenderWindow & window)

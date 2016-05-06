@@ -13,7 +13,7 @@ StartScene::StartScene(Assets & assets, sf::View & view)
 
 	m_title = std::make_unique<sf::Sprite>();
 	m_title->setTexture(m_assets.MAIN_TITLE_TEXTURE);
-	m_title->setPosition(100, 50);
+	m_title->setPosition(100.f, 50.f);
 	
 	m_playButton = std::make_unique<Button>("Play", sf::Vector2f(232.f, 182.f), m_assets);
 	m_exitButton = std::make_unique<Button>("Exit", sf::Vector2f(250.f, 240.f), m_assets);
@@ -21,29 +21,29 @@ StartScene::StartScene(Assets & assets, sf::View & view)
 
 	m_hole = std::make_unique<sf::Sprite>();
 	m_hole->setTexture(m_assets.HOLE_TEXTURE);
-	m_hole->setPosition(300, 350);
+	m_hole->setPosition(300.f, 350.f);
 	m_hole->setScale(sf::Vector2f(1.25f, 1.25f));
 
 	m_insects[0] = std::make_unique<sf::Sprite>();
 	m_insects[0]->setTexture(m_assets.GARBAGE_1_TEXTURE);
-	m_insects[0]->setPosition(450, 250);
+	m_insects[0]->setPosition(450.f, 250.f);
 	m_insects[1] = std::make_unique<sf::Sprite>();
 	m_insects[1]->setTexture(m_assets.GARBAGE_2_TEXTURE);
-	m_insects[1]->setPosition(300, 300);
+	m_insects[1]->setPosition(300.f, 300.f);
 	m_insects[2] = std::make_unique<sf::Sprite>();
 	m_insects[2]->setTexture(m_assets.GARBAGE_3_TEXTURE);
-	m_insects[2]->setPosition(210, 215);
+	m_insects[2]->setPosition(210.f, 215.f);
 	m_insects[3] = std::make_unique<sf::Sprite>();
 	m_insects[3]->setTexture(m_assets.GARBAGE_4_TEXTURE);
-	m_insects[3]->setPosition(50, 50);
+	m_insects[3]->setPosition(50.f, 50.f);
 	m_insects[4] = std::make_unique<sf::Sprite>();
 	m_insects[4]->setTexture(m_assets.GARBAGE_5_TEXTURE);
-	m_insects[4]->setPosition(400, 400);
+	m_insects[4]->setPosition(400.f, 400.f);
 
 	m_background = std::make_unique<sf::Sprite>();
 	m_background->setTextureRect(sf::IntRect(0, 0, 550, 700));
 	m_background->setTexture(m_assets.BACKGROUND_TEXTURE);
-	m_background->setPosition(0, 0);
+	m_background->setPosition(0.f, 0.f);
 
 	m_plate->setPosition(sf::Vector2f(100.f, 500.f));
 }
@@ -61,7 +61,6 @@ SGameResult StartScene::onStartMenu(sf::RenderWindow & window)
 	checkEvents(window);
 	render(window);
 	window.display();
-
 	return result;
 }
 
