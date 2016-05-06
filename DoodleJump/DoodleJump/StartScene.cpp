@@ -24,19 +24,19 @@ StartScene::StartScene(Assets & assets, sf::View & view)
 	m_hole->setPosition(300.f, 350.f);
 	m_hole->setScale(sf::Vector2f(1.25f, 1.25f));
 
-	m_insects[0] = std::make_unique<sf::Sprite>();
+	for (auto &insect : m_insects)
+	{
+		insect = std::make_unique<sf::Sprite>();
+	}
+
 	m_insects[0]->setTexture(m_assets.GARBAGE_1_TEXTURE);
 	m_insects[0]->setPosition(450.f, 250.f);
-	m_insects[1] = std::make_unique<sf::Sprite>();
 	m_insects[1]->setTexture(m_assets.GARBAGE_2_TEXTURE);
 	m_insects[1]->setPosition(300.f, 300.f);
-	m_insects[2] = std::make_unique<sf::Sprite>();
 	m_insects[2]->setTexture(m_assets.GARBAGE_3_TEXTURE);
 	m_insects[2]->setPosition(210.f, 215.f);
-	m_insects[3] = std::make_unique<sf::Sprite>();
 	m_insects[3]->setTexture(m_assets.GARBAGE_4_TEXTURE);
 	m_insects[3]->setPosition(50.f, 50.f);
-	m_insects[4] = std::make_unique<sf::Sprite>();
 	m_insects[4]->setTexture(m_assets.GARBAGE_5_TEXTURE);
 	m_insects[4]->setPosition(400.f, 400.f);
 

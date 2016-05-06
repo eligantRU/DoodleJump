@@ -3,7 +3,7 @@
 
 PauseScene::PauseScene(Assets & assets, sf::View & view)
 	:m_assets(assets)
-	, m_view(view)
+	,m_view(view)
 {
 	m_backButton = std::make_unique<Button>("Back", sf::Vector2f(232.f, 182.f), m_assets);
 	m_exitButton = std::make_unique<Button>("Exit", sf::Vector2f(250.f, 240.f), m_assets);

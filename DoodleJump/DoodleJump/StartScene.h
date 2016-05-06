@@ -25,7 +25,7 @@ private:
 	std::unique_ptr<Doodle> m_hero;
 
 	std::unique_ptr<sf::Sprite> m_title;
-	std::unique_ptr<sf::Sprite> m_insects[NUMBER_INSECTS];
+	std::array<std::unique_ptr<sf::Sprite>, NUMBER_INSECTS> m_insects;
 	std::unique_ptr<sf::Sprite> m_background;
 	std::unique_ptr<sf::Sprite> m_hole;
 
