@@ -1,9 +1,10 @@
 #include "stdafx.h"
 #include "sheet.h"
 
-HelpScene::HelpScene(Assets & assets, sf::View & view)
+HelpScene::HelpScene(Assets & assets, sf::View & view, SoundHandler & soundHandler)
 	:m_assets(assets)
 	,m_view(view)
+	,m_soundHandler(soundHandler)
 {	
 	m_goMenuButton = std::make_unique<Button>("Back", sf::Vector2f(232.f, 182.f), m_assets);
 

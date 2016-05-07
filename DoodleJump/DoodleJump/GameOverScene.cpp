@@ -1,9 +1,10 @@
 #include "stdafx.h"
 #include "sheet.h"
 
-GameOverScene::GameOverScene(Assets & assets, sf::View & view, std::function<uint64_t()> getter)
+GameOverScene::GameOverScene(Assets & assets, sf::View & view, SoundHandler & soundHandler, std::function<uint64_t()> getter)
 	:m_assets(assets)
 	,m_view(view)
+	,m_soundHandler(soundHandler)
 	,m_getter(getter)
 {
 	m_title = std::make_unique<sf::Sprite>(sf::Sprite());

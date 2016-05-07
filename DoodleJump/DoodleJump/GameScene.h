@@ -6,7 +6,7 @@
 struct GameScene
 {
 public:
-	GameScene(Assets & assets, sf::View & view);
+	GameScene(Assets & assets, sf::View & view, SoundHandler & soundHandler);
 	~GameScene();
 	SGameResult onGameFrame(sf::RenderWindow & window);
 	uint64_t getScore() const;
@@ -45,6 +45,7 @@ private:
 
 	Assets & m_assets;
 	sf::View & m_view;
+	SoundHandler & m_soundHandler;
 
 	std::unique_ptr<Doodle> m_hero;
 	std::unique_ptr<Plate> m_plates[NUMBER_PLATES];

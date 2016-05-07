@@ -6,7 +6,7 @@
 struct StartScene
 {
 public:
-	StartScene(Assets & assets, sf::View & view);
+	StartScene(Assets & assets, sf::View & view, SoundHandler & soundHandler);
 	~StartScene();
 	SGameResult onStartMenu(sf::RenderWindow & window);
 private:
@@ -20,6 +20,7 @@ private:
 
 	Assets & m_assets;
 	sf::View & m_view;
+	SoundHandler & m_soundHandler;
 
 	std::unique_ptr<Plate> m_plate;
 	std::unique_ptr<Doodle> m_hero;

@@ -14,6 +14,7 @@ private:
 
 	std::unique_ptr<Assets> m_assets;
 	std::unique_ptr<sf::View> m_view;
+	std::unique_ptr<SoundHandler> m_soundHandler;
 
 	std::unique_ptr<StartScene> m_sceneStart;
 	std::unique_ptr<HelpScene> m_sceneHelp;

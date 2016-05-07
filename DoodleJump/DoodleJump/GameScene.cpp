@@ -1,9 +1,10 @@
 #include "stdafx.h"
 #include "sheet.h"
 
-GameScene::GameScene(Assets & assets, sf::View & view)
+GameScene::GameScene(Assets & assets, sf::View & view, SoundHandler & soundHandler)
 	:m_assets(assets)
 	,m_view(view)
+	,m_soundHandler(soundHandler)
 {
 	m_hero = std::make_unique<Doodle>(m_assets);
 	for (int i = 0; i < NUMBER_PLATES; ++i)
@@ -69,7 +70,7 @@ SGameResult GameScene::onGameFrame(sf::RenderWindow & window)
 		if (m_isPause) // TODO: pause handler
 		{
 			m_view.setCenter(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
-			m_assets.pauseSound();
+			m_soundHandler.pauseSound();
 			window.setView(m_view);
 			m_result.status = GameStatus::PAUSE_SCENE;
 		}
@@ -92,7 +93,7 @@ void GameScene::tuneSceneAfterPause(sf::RenderWindow & window)
 	if (m_isPause) // TODO: pause handler
 	{
 		m_isPause = false;
-		m_assets.removeSoundFromPause();
+		m_soundHandler.removeSoundFromPause();
 		m_view.setCenter(WINDOW_WIDTH / 2, m_background->getPosition().y + WINDOW_HEIGHT / 2);
 		window.setView(m_view);
 	}
@@ -672,14 +673,14 @@ bool GameScene::checkGameEnd()
 	sf::Vector2f doodlePosition = m_hero->getPosition();
 	if ((checkCollisionHole() == Collision::COLLISION_HOLE) && ((m_actualBonus == BonusType::NO)))
 	{
-		m_assets.playSound(m_assets.HOLE_SOUND);
+		m_soundHandler.playSound(m_assets.HOLE_SOUND);
 		return true;
 	}
 	if (doodlePosition.y < m_view.getCenter().y + WINDOW_HEIGHT / 2 - DOODLE_HEIGHT)
 	{
 		return false;
 	}
-	m_assets.playSound(m_assets.GAME_OVER_SOUND);
+	m_soundHandler.playSound(m_assets.GAME_OVER_SOUND);
 	return true;
 }
 
@@ -903,27 +904,27 @@ float GameScene::checkDoodleFall() // TODO: try to write handler else not too ba
 	{
 	case Collision::COLLISION_PLATE:
 		m_actualBonus = BonusType::NO; 
-		m_assets.playSound(m_assets.JUMP_SOUND);
+		m_soundHandler.playSound(m_assets.JUMP_SOUND);
 		return PLATE_DELTA_HEIGHT;
 	case Collision::COLLISION_GHOST_PLATE:
 		m_actualBonus = BonusType::NO;
-		m_assets.playSound(m_assets.PLATE_GHOST_SOUND);
+		m_soundHandler.playSound(m_assets.PLATE_GHOST_SOUND);
 		return PLATE_DELTA_HEIGHT;
 	case Collision::COLLISION_SPRING:
 		m_actualBonus = BonusType::SPRING;
-		m_assets.playSound(m_assets.SPRING_SOUND);
+		m_soundHandler.playSound(m_assets.SPRING_SOUND);
 		return SPRING_DELTA_HEIGHT;
 	case Collision::COLLISION_TRAMPLANE:
 		m_actualBonus = BonusType::TRAMPOLINE;
-		m_assets.playSound(m_assets.TRAMPOLINE_SOUND);
+		m_soundHandler.playSound(m_assets.TRAMPOLINE_SOUND);
 		return TRAMPLANE_DELTA_HEIGHT;
 	case Collision::COLLISION_HAT_HELICOPTER:
 		m_actualBonus = BonusType::HAT_HELICOPTER;
-		m_assets.playSound(m_assets.HAT_HELICOPTER_SOUND);
+		m_soundHandler.playSound(m_assets.HAT_HELICOPTER_SOUND);
 		return HAT_HELICOPTER_DELTA_HEIGHT;
 	case Collision::COLLISION_ROCKET:
 		m_actualBonus = BonusType::ROCKET;
-		m_assets.playSound(m_assets.ROCKET_SOUND);
+		m_soundHandler.playSound(m_assets.ROCKET_SOUND);
 		return ROCKET_DELTA_HEIGHT;
 	default:
 		return 0.f;

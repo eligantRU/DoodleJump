@@ -6,7 +6,7 @@
 struct HelpScene
 {
 public:
-	HelpScene(Assets & assets, sf::View & view);
+	HelpScene(Assets & assets, sf::View & view, SoundHandler & soundHandler);
 	~HelpScene();
 	SGameResult onHelpMenu(sf::RenderWindow & window);
 private:
@@ -18,6 +18,7 @@ private:
 	
 	Assets & m_assets;
 	sf::View & m_view;
+	SoundHandler & m_soundHandler;
 
 	std::unique_ptr<sf::Sprite> m_background;
 	std::unique_ptr<sf::Sprite> m_buttonA;

@@ -6,7 +6,7 @@
 struct GameOverScene
 {
 public:
-	GameOverScene(Assets & assets, sf::View & view, std::function<uint64_t()> getter);
+	GameOverScene(Assets & assets, sf::View & view, SoundHandler & soundHandler, std::function<uint64_t()> getter);
 	~GameOverScene();
 	SGameResult onGameOverMenu(sf::RenderWindow & window);
 private:
@@ -18,6 +18,7 @@ private:
 
 	Assets & m_assets;
 	sf::View & m_view;
+	SoundHandler & m_soundHandler;
 
 	std::unique_ptr<sf::Sprite> m_background;
 	std::unique_ptr<sf::Sprite> m_title;

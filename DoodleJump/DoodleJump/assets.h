@@ -12,9 +12,6 @@ public:
 	void addFont(sf::Font & font, std::string string); 
 	void addImage(sf::Image & image, std::string string);
 	void addSound(sf::SoundBuffer & buffer, std::string string);
-	void playSound(sf::SoundBuffer & buffer);
-	void pauseSound();
-	void removeSoundFromPause();
 
 	sf::Image WINDOW_ICON;
 	sf::Texture BACKGROUND_TEXTURE;
@@ -82,7 +79,5 @@ public:
 	sf::SoundBuffer HOLE_SOUND;
 	sf::SoundBuffer JUMP_SOUND;
 	sf::SoundBuffer PLATE_GHOST_SOUND;
-
 private:
-	sf::Sound m_actualSound;
 };

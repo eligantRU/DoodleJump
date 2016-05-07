@@ -121,22 +121,3 @@ void Assets::addSound(sf::SoundBuffer & buffer, std::string string)
 		_exit(-1);
 	}
 }
-
-void Assets::playSound(sf::SoundBuffer & buffer) // TODO: this method need to be in Game
-{
-	m_actualSound.setBuffer(buffer);
-	m_actualSound.play();
-}
-
-void Assets::pauseSound()
-{
-	m_actualSound.pause();
-}
-
-void Assets::removeSoundFromPause()
-{
-	if (m_actualSound.getStatus() == sf::SoundSource::Status::Paused)
-	{
-		m_actualSound.play();
-	}
-}

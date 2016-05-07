@@ -4,14 +4,15 @@
 Game::Game()
 	:m_assets(new Assets()) // NOTE: it may be shared_ptr
 	,m_view(new sf::View())
+	,m_soundHandler(new SoundHandler())
 {
-	m_sceneStart = std::make_unique<StartScene>(*m_assets, *m_view);
-	m_sceneHelp = std::make_unique<HelpScene>(*m_assets, *m_view);
-	m_scenePause = std::make_unique<PauseScene>(*m_assets, *m_view);
-	m_sceneGame = std::make_shared<GameScene>(*m_assets, *m_view);
+	m_sceneStart = std::make_unique<StartScene>(*m_assets, *m_view, *m_soundHandler);
+	m_sceneHelp = std::make_unique<HelpScene>(*m_assets, *m_view, *m_soundHandler);
+	m_scenePause = std::make_unique<PauseScene>(*m_assets, *m_view, *m_soundHandler);
+	m_sceneGame = std::make_shared<GameScene>(*m_assets, *m_view, *m_soundHandler);
 
 	std::function<uint64_t()> getter = std::bind(&GameScene::getScore, m_sceneGame);
-	m_sceneGameOver = std::make_unique<GameOverScene>(*m_assets, *m_view, getter);
+	m_sceneGameOver = std::make_unique<GameOverScene>(*m_assets, *m_view, *m_soundHandler, getter);
 }
 
 Game::~Game()

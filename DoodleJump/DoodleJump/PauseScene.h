@@ -6,7 +6,7 @@
 struct PauseScene
 {
 public:
-	PauseScene(Assets & assets, sf::View & view);
+	PauseScene(Assets & assets, sf::View & view, SoundHandler & soundHandler);
 	~PauseScene();
 	SGameResult onPauseMenu(sf::RenderWindow & window);
 private:
@@ -18,6 +18,7 @@ private:
 
 	Assets & m_assets;
 	sf::View & m_view;
+	SoundHandler & m_soundHandler;
 
 	std::unique_ptr<sf::Sprite> m_background;
 

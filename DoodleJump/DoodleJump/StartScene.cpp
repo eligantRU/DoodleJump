@@ -1,9 +1,10 @@
 #include "stdafx.h"
 #include "sheet.h"
 
-StartScene::StartScene(Assets & assets, sf::View & view)
+StartScene::StartScene(Assets & assets, sf::View & view, SoundHandler & soundHandler)
 	:m_assets(assets)
 	,m_view(view)
+	,m_soundHandler(soundHandler)
 {
 	m_hero = std::make_unique<Doodle>(m_assets);
 	m_plate = std::make_unique<Plate>(m_assets);
@@ -159,7 +160,7 @@ Collision StartScene::checkCollisionPlate() const
 	if (((doodlePosition.y + DOODLE_HEIGHT >= platePosition.y) && (doodlePosition.y + DOODLE_HEIGHT <= platePosition.y + PLATE_HEIGHT)
 		&& (doodlePosition.x + DOODLE_WIDTH >= platePosition.x) && (doodlePosition.x - PLATE_WIDTH <= platePosition.x)))
 	{
-		m_assets.playSound(m_assets.JUMP_SOUND);
+		m_soundHandler.playSound(m_assets.JUMP_SOUND);
 		return  Collision::COLLISION_PLATE;
 	}
 	return Collision::NO_COLLISION;
