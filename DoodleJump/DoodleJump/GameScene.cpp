@@ -16,7 +16,7 @@ GameScene::GameScene(Assets & assets, sf::View & view)
 	}
 
 	m_actualBonus = BonusType::NO;
-	m_view.reset(sf::FloatRect(0, 0, 550, 700));
+	m_view.reset(sf::FloatRect(0.f, 0.f, float(WINDOW_WIDTH), float(WINDOW_HEIGHT)));
 	m_hero->setSpeedY(-50.f);
 	m_offsetFallBonus.x = 0.f;
 	m_offsetFallBonus.y = 0.f;
@@ -24,7 +24,7 @@ GameScene::GameScene(Assets & assets, sf::View & view)
 	m_hole = std::make_unique<sf::Sprite>();
 	m_hole->setTextureRect(sf::IntRect(0, 0, 60, 54));
 	m_hole->setTexture(m_assets.HOLE_TEXTURE);
-	m_holePosition.x = float(rand() % (550 - HOLE_WIDTH));
+	m_holePosition.x = float(rand() % (WINDOW_WIDTH - HOLE_WIDTH));
 	m_holePosition.y = -1.f * float(rand() % 15000) - 10.f * 750.f;
 	m_hole->setPosition(m_holePosition.x, m_holePosition.y);
 
@@ -34,7 +34,7 @@ GameScene::GameScene(Assets & assets, sf::View & view)
 	m_scoreNum.setColor(sf::Color(0, 0, 0));
 
 	m_background = std::make_unique<sf::Sprite>();
-	m_background->setTextureRect(sf::IntRect(0, 0, 550, 700));
+	m_background->setTextureRect(sf::IntRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT));
 	m_background->setTexture(m_assets.BACKGROUND_TEXTURE);
 
 	initBonuses();
@@ -68,7 +68,7 @@ SGameResult GameScene::onGameFrame(sf::RenderWindow & window)
 
 		if (m_isPause) // TODO: pause handler
 		{
-			m_view.setCenter(275, 350);
+			m_view.setCenter(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
 			m_assets.pauseSound();
 			window.setView(m_view);
 			m_result.status = GameStatus::PAUSE_SCENE;
@@ -80,7 +80,7 @@ SGameResult GameScene::onGameFrame(sf::RenderWindow & window)
 	}
 	else
 	{
-		m_view.setCenter(275, 350);
+		m_view.setCenter(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
 		window.setView(m_view);
 		m_result.status = GameStatus::GAME_OVER_SCENE; 
 	}
@@ -180,7 +180,7 @@ void GameScene::animateBonus()
 void GameScene::animateSpring()
 {
 	sf::Vector2f actualBonusPosition = m_bonuses[m_actualBonusId]->getPosition();
-	if ((m_hero->getSpeedY() >= 0) || (actualBonusPosition.y < m_view.getCenter().y - 350 - SPRING_HEIGHT))
+	if ((m_hero->getSpeedY() >= 0) || (actualBonusPosition.y < m_view.getCenter().y - WINDOW_HEIGHT / 2 - SPRING_HEIGHT))
 	{
 		m_actualBonus = BonusType::NO;
 	}
@@ -209,7 +209,7 @@ void GameScene::animateRocket() // TODO: handlers...this code NEED MORE HANDLERS
 	DirectionX doodleLastDirection = m_hero->getLastDirection();
 	sf::Vector2f doodlePosition = m_hero->getPosition();
 	
-	if ((m_hero->getSpeedY() >= 0) || (m_bonuses[m_actualBonusId]->getPosition().y < m_view.getCenter().y - 350 - ROCKET_HEIGHT))
+	if ((m_hero->getSpeedY() >= 0) || (m_bonuses[m_actualBonusId]->getPosition().y < m_view.getCenter().y - WINDOW_HEIGHT / 2 - ROCKET_HEIGHT))
 	{
 		m_animationCounter = 0;
 		m_actualBonus = BonusType::NO;
@@ -332,7 +332,7 @@ void GameScene::animateHatHelicopter() // TODO: handlers...this code NEED MORE H
 {
 	sf::Vector2f doodlePosition = m_hero->getPosition();
 
-	if ((m_hero->getSpeedY() >= 0) || (m_bonuses[m_actualBonusId]->getPosition().y < m_view.getCenter().y - 350 - HAT_HELICOPTER_HEIGHT))
+	if ((m_hero->getSpeedY() >= 0) || (m_bonuses[m_actualBonusId]->getPosition().y < m_view.getCenter().y - WINDOW_HEIGHT / 2 - HAT_HELICOPTER_HEIGHT))
 	{
 		m_animationCounter = 0;
 		m_actualBonus = BonusType::NO;
@@ -426,7 +426,7 @@ void GameScene::update(sf::RenderWindow & window)
 
 void GameScene::resetGame()
 {
-	m_view.reset(sf::FloatRect(0, 0, 550, 700));
+	m_view.reset(sf::FloatRect(0.f, 0.f, float(WINDOW_WIDTH), float(WINDOW_HEIGHT)));
 	m_scoreNum.setPosition(0, 0);
 	m_endOfGame = false;
 	m_points = 0;
@@ -442,9 +442,9 @@ void GameScene::resetGame()
 	m_hero->setSpeedY(-50.f);
 	m_animationCounter = 0;
 	m_hero->setPositionBeforeDown(m_hero->getPosition());
-	m_view.setCenter(275, 350);
+	m_view.setCenter(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
 
-	m_plates[0]->setPosition(sf::Vector2f(275 - PLATE_WIDTH/2, 700 - PLATE_HEIGHT));
+	m_plates[0]->setPosition(sf::Vector2f(WINDOW_WIDTH / 2 - PLATE_WIDTH/2, WINDOW_HEIGHT - PLATE_HEIGHT));
 	for (int i = 1; i < NUMBER_PLATES/2; ++(++i))
 	{
 		m_plates[i]->setType(PlateType::STATIC);
@@ -454,25 +454,25 @@ void GameScene::resetGame()
 		float x1 = (sqrt(484*484 - y1*y1))/2;
 		float y2 = float((rand() % 152) + 90);
 		float x2 = (sqrt(484 * 484 - y1*y1)) / 2;
-		if ((m_plates[i - 1]->getPosition().x + x1 >= 550 - PLATE_WIDTH) && (m_plates[i - 1]->getPosition().x - x1 <= 0))
+		if ((m_plates[i - 1]->getPosition().x + x1 >= WINDOW_WIDTH - PLATE_WIDTH) && (m_plates[i - 1]->getPosition().x - x1 <= 0))
 		{
-			x1 = float(rand() % (550-PLATE_WIDTH));
+			x1 = float(rand() % (WINDOW_WIDTH - PLATE_WIDTH));
 		}
 
 		m_plates[i]->setPosition(sf::Vector2f(x1, m_plates[i-1]->getPosition().y - y1));
 		m_plates[i]->setPosition(sf::Vector2f(x2, m_plates[i-1]->getPosition().y - y2));
 	}
-	m_view.setCenter(275, 350);
+	m_view.setCenter(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
 	initBonuses();
 }
 
 void GameScene::generPlates()
 {
-	if (m_plates[0]->getPosition().y > m_view.getCenter().x + 350.f)
+	if (m_plates[0]->getPosition().y > m_view.getCenter().x + WINDOW_HEIGHT / 2)
 	{
 		m_plates[0]->setType(PlateType::STATIC);
 		m_plates[0]->setTexture(m_assets.PLATE_DYNAMIC_TEXTURE);
-		m_plates[0]->setPosition(sf::Vector2f(float(rand() % (550 - PLATE_WIDTH)), m_view.getCenter().y - 350 - PLATE_HEIGHT));
+		m_plates[0]->setPosition(sf::Vector2f(float(rand() % (WINDOW_WIDTH - PLATE_WIDTH)), m_view.getCenter().y - WINDOW_HEIGHT / 2 - PLATE_HEIGHT));
 	}
 
 	sf::Vector2f platePosition[NUMBER_PLATES];
@@ -490,13 +490,13 @@ void GameScene::generPlates()
 	for (int i = 1; i < NUMBER_PLATES / 2; ++(++i))
 	{
 		float y1 = float((rand() % 182) + 60);
-		float x1 = float(rand() % (550 - PLATE_WIDTH));	//float x1 = (sqrt(484 * 484 - y1 * y1)) / 2;
+		float x1 = float(rand() % (WINDOW_WIDTH - PLATE_WIDTH));	//float x1 = (sqrt(484 * 484 - y1 * y1)) / 2;
 
-		if (platePosition[i].y > m_view.getCenter().y + 350.f + ROCKET_HEIGHT)
+		if (platePosition[i].y > m_view.getCenter().y + WINDOW_HEIGHT / 2 + ROCKET_HEIGHT)
 		{
-			if ((m_plates[i]->getPosition().x + x1 >= 550 - PLATE_WIDTH) && (m_plates[i]->getPosition().x - x1 <= 0))
+			if ((m_plates[i]->getPosition().x + x1 >= WINDOW_WIDTH - PLATE_WIDTH) && (m_plates[i]->getPosition().x - x1 <= 0))
 			{
-				x1 = float(rand() % (550 - PLATE_WIDTH));
+				x1 = float(rand() % (WINDOW_WIDTH - PLATE_WIDTH));
 			}
 
 			if ((m_plates[i]->getType() == PlateType::UNSTABLE) || (m_plates[i]->getType() == PlateType::UNSTABLE_DYNAMIC_X))
@@ -533,9 +533,9 @@ void GameScene::generPlates()
 			for (int j = 1; j < NUMBER_PLATES/ 2; ++(++j)) // NOTE: Oh my God...What the f*ck r u doing?
 			{
 				float y2 = float((rand() % 182) + 60);
-				float x2 = float(rand() % (550 - PLATE_WIDTH));
+				float x2 = float(rand() % (WINDOW_WIDTH - PLATE_WIDTH));
 
-				if (platePosition[j].y > m_view.getCenter().y + 350.f + ROCKET_HEIGHT)
+				if (platePosition[j].y > m_view.getCenter().y + WINDOW_HEIGHT / 2 + ROCKET_HEIGHT)
 				{
 					/*int divider;
 					if (unstablePlatesCounter < 1)
@@ -603,9 +603,9 @@ void GameScene::generPlates()
 
 void GameScene::generHole()
 {
-	if (m_hole->getPosition().y >= m_view.getCenter().y + 350.f)
+	if (m_hole->getPosition().y >= m_view.getCenter().y + WINDOW_HEIGHT / 2)
 	{
-		m_holePosition.x = float(rand() % (550 - HOLE_WIDTH));
+		m_holePosition.x = float(rand() % (WINDOW_WIDTH - HOLE_WIDTH));
 		m_holePosition.y = m_hero->getPosition().y -1.f * float(rand() % 15000) - 10.f * 750.f;
 		m_hole->setPosition(sf::Vector2f(m_holePosition.x, m_holePosition.y));
 	}
@@ -620,12 +620,12 @@ void GameScene::generBonuses()
 	{
 		bonusPosition[bonusIndex] = m_bonuses[bonusIndex]->getPosition();
 
-		if (bonusPosition[bonusIndex].y > m_view.getCenter().y + 350)
+		if (bonusPosition[bonusIndex].y > m_view.getCenter().y + WINDOW_HEIGHT / 2)
 		{
 			for (int plateIndex = 0; plateIndex < NUMBER_PLATES; ++plateIndex)
 			{
 				platePosition = m_plates[plateIndex]->getPosition();
-				if ((platePosition.y < m_view.getCenter().y - 350 - ROCKET_HEIGHT) &&
+				if ((platePosition.y < m_view.getCenter().y - WINDOW_HEIGHT / 2 - ROCKET_HEIGHT) &&
 					((m_plates[plateIndex]->getType() == PlateType::STATIC) || (m_plates[plateIndex]->getType() == PlateType::STATIC_DYNAMIC_X)))
 				{
 					int randomNum = rand() % 4;
@@ -658,7 +658,7 @@ void GameScene::dropUnstablePlates()
 		{
 			m_plates[plateIndex]->rotate(-1.f);
 			m_plates[plateIndex]->move(sf::Vector2f(-1 * STEP, 4 * STEP));
-			if (m_plates[plateIndex]->getPosition().y >= m_view.getCenter().y + 350)
+			if (m_plates[plateIndex]->getPosition().y >= m_view.getCenter().y + WINDOW_HEIGHT / 2)
 			{
 				m_plates[plateIndex]->setRotation(0);
 				m_plates[plateIndex]->setFallStatus(false);
@@ -675,7 +675,7 @@ bool GameScene::checkGameEnd()
 		m_assets.playSound(m_assets.HOLE_SOUND);
 		return true;
 	}
-	if (doodlePosition.y < m_view.getCenter().y + 350.f - DOODLE_HEIGHT)
+	if (doodlePosition.y < m_view.getCenter().y + WINDOW_HEIGHT / 2 - DOODLE_HEIGHT)
 	{
 		return false;
 	}

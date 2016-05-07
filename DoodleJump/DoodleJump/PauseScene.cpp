@@ -9,7 +9,7 @@ PauseScene::PauseScene(Assets & assets, sf::View & view)
 	m_exitButton = std::make_unique<Button>("Exit", sf::Vector2f(250.f, 240.f), m_assets);
 
 	m_background = std::make_unique<sf::Sprite>(sf::Sprite());
-	m_background->setTextureRect(sf::IntRect(0, 0, 550, 700));
+	m_background->setTextureRect(sf::IntRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT));
 	m_background->setPosition(0.f, 0.f);
 	m_background->setTexture(m_assets.BACKGROUND_TEXTURE);
 }

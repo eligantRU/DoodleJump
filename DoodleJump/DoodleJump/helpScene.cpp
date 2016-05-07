@@ -32,7 +32,7 @@ HelpScene::HelpScene(Assets & assets, sf::View & view)
 	m_helpText2.setColor(sf::Color(0, 0, 0));
 
 	m_background = std::make_unique<sf::Sprite>();
-	m_background->setTextureRect(sf::IntRect(0, 0, 550, 700));
+	m_background->setTextureRect(sf::IntRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT));
 	m_background->setTexture(m_assets.BACKGROUND_TEXTURE);
 	m_background->setPosition(0.f, 0.f);
 }
