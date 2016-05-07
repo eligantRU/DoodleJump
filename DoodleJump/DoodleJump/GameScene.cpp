@@ -179,13 +179,14 @@ void GameScene::animateBonus()
 
 void GameScene::animateSpring()
 {
-	if ((m_hero->getSpeedY() >= 0) || (m_bonuses[m_actualBonusId]->getPosition().y < m_view.getCenter().y - 350 - SPRING_HEIGHT))
+	sf::Vector2f actualBonusPosition = m_bonuses[m_actualBonusId]->getPosition();
+	if ((m_hero->getSpeedY() >= 0) || (actualBonusPosition.y < m_view.getCenter().y - 350 - SPRING_HEIGHT))
 	{
 		m_actualBonus = BonusType::NO;
 	}
 	else
 	{
-		m_bonuses[m_actualBonusId]->setPosition(sf::Vector2f(m_bonuses[m_actualBonusId]->getPosition().x, m_bonuses[m_actualBonusId]->getPosition().y - 4.f));
+		m_bonuses[m_actualBonusId]->setPosition(sf::Vector2f(actualBonusPosition.x, actualBonusPosition.y - 4.f));
 		m_bonuses[m_actualBonusId]->setTexture(m_assets.SPRING_2_TEXTURE);
 	}
 }
@@ -684,7 +685,6 @@ bool GameScene::checkGameEnd()
 
 void GameScene::render(sf::RenderWindow & window)
 {
-	//for (std::vector<sf::Sprite*>::const_iterator it = needRender.begin(); it != needRender.end(); ++it) // NOTE: try to use std::vector
 	window.clear(sf::Color(255, 255, 255));
 	
 	window.draw(*m_background);
@@ -787,7 +787,7 @@ void GameScene::moveDynamicPlates()
 		}
 		if (speedX > 0)
 		{
-			if (platePosition.x >= 550 - PLATE_WIDTH - speedX)
+			if (platePosition.x >= WINDOW_WIDTH - PLATE_WIDTH - speedX)
 			{
 				m_plates[i]->setSpeedX(-speedX);
 			}
@@ -815,9 +815,9 @@ void GameScene::checkCylinderEffect()
 
 	if (doodlePosition.x <= -DOODLE_WIDTH)
 	{
-		m_hero->setPosition(sf::Vector2f(float(550 - DOODLE_WIDTH), doodlePosition.y));
+		m_hero->setPosition(sf::Vector2f(float(WINDOW_WIDTH - DOODLE_WIDTH), doodlePosition.y));
 	}
-	if (doodlePosition.x >= 550)
+	if (doodlePosition.x >= WINDOW_WIDTH)
 	{
 		m_hero->setPosition(sf::Vector2f(0.f, doodlePosition.y));
 	}
