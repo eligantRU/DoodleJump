@@ -98,7 +98,7 @@ void GameScene::tuneSceneAfterPause(sf::RenderWindow & window)
 	}
 }
 
-void GameScene::moveDoodle(void)
+void GameScene::moveDoodle()
 {
 	sf::Vector2f position(0.f, 0.f);
 	position.x = moveDoodleHorizontal();
@@ -106,7 +106,7 @@ void GameScene::moveDoodle(void)
 	m_hero->move(position);
 }
 
-float GameScene::moveDoodleHorizontal(void)
+float GameScene::moveDoodleHorizontal()
 {
 	DirectionX doodleDirection = m_hero->getDirection();
 	float positionX = 0;
@@ -121,7 +121,7 @@ float GameScene::moveDoodleHorizontal(void)
 	return positionX;
 }
 
-float GameScene::moveDoodleVertical(void)
+float GameScene::moveDoodleVertical()
 {
 	float positionY = 0;
 	if (m_hero->getSpeedY() < 0)
@@ -146,7 +146,7 @@ float GameScene::moveDoodleVertical(void)
 	return positionY;
 }
 
-void GameScene::updatePositionBeforeDown(void)
+void GameScene::updatePositionBeforeDown()
 {
 	if (m_hero->getPosition().y < m_hero->getPositionBeforeDown().y)
 	{
@@ -154,7 +154,7 @@ void GameScene::updatePositionBeforeDown(void)
 	}
 }
 
-void GameScene::animateBonus(void)
+void GameScene::animateBonus()
 {
 	switch (m_actualBonus)
 	{
@@ -177,7 +177,7 @@ void GameScene::animateBonus(void)
 	}
 }
 
-void GameScene::animateSpring(void)
+void GameScene::animateSpring()
 {
 	if ((m_hero->getSpeedY() >= 0) || (m_bonuses[m_actualBonusId]->getPosition().y < m_view.getCenter().y - 350 - SPRING_HEIGHT))
 	{
@@ -190,7 +190,7 @@ void GameScene::animateSpring(void)
 	}
 }
 
-void GameScene::animateTrampoline(void)
+void GameScene::animateTrampoline()
 {
 	if (m_hero->getSpeedY() >= 0)
 	{
@@ -203,7 +203,7 @@ void GameScene::animateTrampoline(void)
 	}
 }
 
-void GameScene::animateRocket(void) // TODO: handlers...this code NEED MORE HANDLERS!
+void GameScene::animateRocket() // TODO: handlers...this code NEED MORE HANDLERS!
 {
 	DirectionX doodleLastDirection = m_hero->getLastDirection();
 	sf::Vector2f doodlePosition = m_hero->getPosition();
@@ -327,7 +327,7 @@ void GameScene::animateRocket(void) // TODO: handlers...this code NEED MORE HAND
 	}
 }
 
-void GameScene::animateHatHelicopter(void) // TODO: handlers...this code NEED MORE HANDLERS!
+void GameScene::animateHatHelicopter() // TODO: handlers...this code NEED MORE HANDLERS!
 {
 	sf::Vector2f doodlePosition = m_hero->getPosition();
 
@@ -423,7 +423,7 @@ void GameScene::update(sf::RenderWindow & window)
 	m_endOfGame = checkGameEnd();
 }
 
-void GameScene::resetGame(void)
+void GameScene::resetGame()
 {
 	m_view.reset(sf::FloatRect(0, 0, 550, 700));
 	m_scoreNum.setPosition(0, 0);
@@ -465,7 +465,7 @@ void GameScene::resetGame(void)
 	initBonuses();
 }
 
-void GameScene::generPlates(void)
+void GameScene::generPlates()
 {
 	if (m_plates[0]->getPosition().y > m_view.getCenter().x + 350.f)
 	{
@@ -600,7 +600,7 @@ void GameScene::generPlates(void)
 	}
 }
 
-void GameScene::generHole(void)
+void GameScene::generHole()
 {
 	if (m_hole->getPosition().y >= m_view.getCenter().y + 350.f)
 	{
@@ -610,7 +610,7 @@ void GameScene::generHole(void)
 	}
 }
 
-void GameScene::generBonuses(void)
+void GameScene::generBonuses()
 {
 	sf::Vector2f bonusPosition[NUMBER_BONUSES];
 	sf::Vector2f platePosition;
@@ -649,7 +649,7 @@ void GameScene::generBonuses(void)
 	}
 }
 
-void GameScene::dropUnstablePlates(void)
+void GameScene::dropUnstablePlates()
 {
 	for (int plateIndex = 0; plateIndex < NUMBER_PLATES; ++plateIndex)
 	{
@@ -666,7 +666,7 @@ void GameScene::dropUnstablePlates(void)
 	}
 }
 
-bool GameScene::checkGameEnd(void)
+bool GameScene::checkGameEnd()
 {
 	sf::Vector2f doodlePosition = m_hero->getPosition();
 	if ((checkCollisionHole() == Collision::COLLISION_HOLE) && ((m_actualBonus == BonusType::NO)))
@@ -772,7 +772,7 @@ void GameScene::checkKeyRealesed(sf::Event event, bool & isNeedUpdate)
 	}
 }
 
-void GameScene::moveDynamicPlates(void) 
+void GameScene::moveDynamicPlates() 
 {
 	for (int i = 0; i < NUMBER_PLATES; ++i)
 	{
@@ -796,7 +796,7 @@ void GameScene::moveDynamicPlates(void)
 	}
 }
 
-void GameScene::moveBonuses(void)
+void GameScene::moveBonuses()
 {
 	for (int bonusIndex = 0; bonusIndex < NUMBER_BONUSES; ++bonusIndex)
 	{
@@ -809,7 +809,7 @@ void GameScene::moveBonuses(void)
 	}
 }
 
-void GameScene::checkCylinderEffect(void)
+void GameScene::checkCylinderEffect()
 {
 	auto doodlePosition = m_hero->getPosition();
 
@@ -823,7 +823,7 @@ void GameScene::checkCylinderEffect(void)
 	}
 }
 
-void GameScene::initBonuses(void)
+void GameScene::initBonuses()
 {
 	std::vector<sf::Vector2f> platePosition;
 	for (int plateIndex = 0; plateIndex < NUMBER_PLATES; ++plateIndex)
@@ -889,7 +889,7 @@ void GameScene::buildBonus(BonusType bonusType, int bonusIndex, sf::Vector2f pla
 	}
 }
 
-float GameScene::checkDoodleFall(void) // TODO: try to write handler else not too bad
+float GameScene::checkDoodleFall() // TODO: try to write handler else not too bad
 {
 	Collision collision = Collision::NO_COLLISION;
 
@@ -930,7 +930,7 @@ float GameScene::checkDoodleFall(void) // TODO: try to write handler else not to
 	}
 }
 
-Collision GameScene::checkCollisionPlate(void)
+Collision GameScene::checkCollisionPlate()
 {
 	auto doodlePosition = m_hero->getPosition();
 	std::array<sf::Vector2f, NUMBER_PLATES> platePosition;
@@ -961,7 +961,7 @@ Collision GameScene::checkCollisionPlate(void)
 	return Collision::NO_COLLISION;
 }
 
-Collision GameScene::checkCollisionHole(void)
+Collision GameScene::checkCollisionHole()
 {
 	auto doodlePosition = m_hero->getPosition();
 	if (((doodlePosition.y + DOODLE_HEIGHT >= m_holePosition.y) && (doodlePosition.y + DOODLE_HEIGHT <= m_holePosition.y + HOLE_HEIGHT)
@@ -972,7 +972,7 @@ Collision GameScene::checkCollisionHole(void)
 	return Collision::NO_COLLISION;
 }
 
-Collision GameScene::checkCollisionBonus(void) // TODO: this code want to be refactored to
+Collision GameScene::checkCollisionBonus() // TODO: this code want to be refactored to
 {
 	auto doodlePosition = m_hero->getPosition();
 	std::array<sf::Vector2f, NUMBER_BONUSES> bonusPosition;
@@ -1022,7 +1022,7 @@ Collision GameScene::checkCollisionBonus(void) // TODO: this code want to be ref
 	return Collision::NO_COLLISION;
 }
 
-uint64_t GameScene::getScore(void)
+uint64_t GameScene::getScore() const
 {
 	return m_points;
 }

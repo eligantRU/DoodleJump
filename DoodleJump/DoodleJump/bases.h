@@ -87,12 +87,6 @@ enum class GameStatus
 	GAME_OVER_SCENE
 };
 
-struct SDirection
-{
-	DirectionX x;
-	DirectionY y;
-};
-
 struct SGameResult // NOTE: in future u can use this to exchange data from scene to scene
 {
 	GameStatus status;

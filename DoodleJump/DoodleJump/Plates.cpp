@@ -30,7 +30,7 @@ void Plate::setTexture(sf::Texture & texture)
 	m_body->setTexture(texture);
 }
 
-sf::Vector2f Plate::getPosition(void)
+sf::Vector2f Plate::getPosition()
 {
 	return m_body->getPosition();
 }
@@ -55,12 +55,12 @@ void Plate::setType(PlateType type)
 	m_type = type;
 }
 
-PlateType Plate::getType(void)
+PlateType Plate::getType()
 {
 	return m_type;
 }
 
-int Plate::getSpeedX(void)
+int Plate::getSpeedX()
 {
 	return m_speedX;
 }
@@ -70,7 +70,7 @@ void Plate::setSpeedX(int speedX)
 	m_speedX = speedX;
 }
 
-bool Plate::getFallStatus(void)
+bool Plate::getFallStatus()
 {
 	return m_fallStatus;
 }

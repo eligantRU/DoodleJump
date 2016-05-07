@@ -45,7 +45,7 @@ void Game::gameLoop(sf::RenderWindow & window)
 	}
 }
 
-void Game::launch(void)
+void Game::launch()
 {
 	sf::ContextSettings settings;
 	settings.antialiasingLevel = 16;

@@ -52,12 +52,12 @@ SGameResult HelpScene::onHelpMenu(sf::RenderWindow & window)
 	return m_result;
 }
 
-void HelpScene::clearResult(void)
+void HelpScene::clearResult()
 {
 	m_result.status = GameStatus::HELP_SCENE;
 }
 
-void HelpScene::render(sf::RenderWindow & window)
+void HelpScene::render(sf::RenderWindow & window) const
 {
 	window.clear(sf::Color(255, 255, 255));
 	window.draw(*m_background);

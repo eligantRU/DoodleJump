@@ -128,12 +128,12 @@ void Assets::playSound(sf::SoundBuffer & buffer) // TODO: this method need to be
 	m_actualSound.play();
 }
 
-void Assets::pauseSound(void)
+void Assets::pauseSound()
 {
 	m_actualSound.pause();
 }
 
-void Assets::removeSoundFromPause(void)
+void Assets::removeSoundFromPause()
 {
 	if (m_actualSound.getStatus() == sf::SoundSource::Status::Paused)
 	{

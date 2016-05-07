@@ -10,7 +10,7 @@ public:
 	~GameOverScene();
 	SGameResult onGameOverMenu(sf::RenderWindow & window);
 private:
-	void render(sf::RenderWindow & window);
+	void render(sf::RenderWindow & window) const;
 	void checkEvents(sf::RenderWindow & window);
 	void checkMouseOnButtons(sf::Vector2i mousePosition);
 	void checkMouseClick(sf::Event & event);

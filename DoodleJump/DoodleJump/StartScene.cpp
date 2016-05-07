@@ -64,12 +64,12 @@ SGameResult StartScene::onStartMenu(sf::RenderWindow & window)
 	return result;
 }
 
-void StartScene::clearResult(void)
+void StartScene::clearResult()
 {
 	result.status = GameStatus::START_SCENE;
 }
 
-void StartScene::render(sf::RenderWindow & window)
+void StartScene::render(sf::RenderWindow & window) const
 {
 	window.clear(sf::Color(255, 255, 255));
 	window.draw(*m_background);
@@ -124,7 +124,7 @@ void StartScene::checkEvents(sf::RenderWindow & window)
 	}
 }
 
-void StartScene::moveDoodle(void)
+void StartScene::moveDoodle()
 {
 	sf::Vector2f position(0.f, 0.f);
 	if (m_hero->getSpeedY() < 0)
@@ -151,7 +151,7 @@ void StartScene::moveDoodle(void)
 	m_hero->move(position);
 }
 
-Collision StartScene::checkCollisionPlate(void)
+Collision StartScene::checkCollisionPlate() const
 {
 	sf::Vector2f doodlePosition = m_hero->getPosition();
 	sf::Vector2f platePosition = m_plate->getPosition();

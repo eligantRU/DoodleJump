@@ -11,7 +11,7 @@ Bonus::~Bonus()
 
 }
 
-void Bonus::draw(sf::RenderWindow & window)
+void Bonus::draw(sf::RenderWindow & window) const
 {
 	window.draw(*m_body);
 }
@@ -27,7 +27,7 @@ void Bonus::setTexture(sf::Texture & texture)
 	m_body->setTexture(texture);
 }
 
-sf::Vector2f Bonus::getPosition(void)
+sf::Vector2f Bonus::getPosition() const
 {
 	return m_body->getPosition();
 }
@@ -42,7 +42,7 @@ void Bonus::setPlateIndex(int index)
 	m_plateIndex = index;
 }
 
-int Bonus::getPlateIndex(void)
+int Bonus::getPlateIndex() const
 {
 	return m_plateIndex;
 }
@@ -52,7 +52,7 @@ void Bonus::setSpeedX(int speed)
 	m_speedX = speed;
 }
 
-int Bonus::getSpeedX(void)
+int Bonus::getSpeedX() const
 {
 	return m_speedX;
 }
@@ -62,7 +62,7 @@ void Bonus::setBonusType(BonusType type)
 	m_type = type;
 }
 
-BonusType Bonus::getBonusType(void)
+BonusType Bonus::getBonusType() const
 {
 	return m_type;
 }

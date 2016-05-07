@@ -10,13 +10,13 @@ public:
 	~StartScene();
 	SGameResult onStartMenu(sf::RenderWindow & window);
 private:
-	Collision checkCollisionPlate(void);
-	void render(sf::RenderWindow & window);
+	Collision checkCollisionPlate() const;
+	void render(sf::RenderWindow & window) const;
 	void checkEvents(sf::RenderWindow & window);
 	void checkMouseOnButtons(sf::Vector2i mousePosition);
 	void checkMouseClick(sf::RenderWindow & window, sf::Event & event);
-	void clearResult(void);
-	void moveDoodle(void);
+	void clearResult();
+	void moveDoodle();
 
 	Assets & m_assets;
 	sf::View & m_view;

@@ -44,7 +44,7 @@ SGameResult GameOverScene::onGameOverMenu(sf::RenderWindow & window)
 	return m_result;
 }
 
-void GameOverScene::render(sf::RenderWindow & window)
+void GameOverScene::render(sf::RenderWindow & window) const
 {
 	window.clear(sf::Color(255, 255, 255));
 	window.draw(*m_background);

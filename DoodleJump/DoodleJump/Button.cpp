@@ -33,7 +33,7 @@ void Button::setPosition(sf::Vector2f position)
 	setText(m_text.getString());
 }
 
-float Button::getStringLengthPx(const std::string & str)
+float Button::getStringLengthPx(const std::string & str) const
 {
 	sf::Text text;
 	text.setFont(m_assets.ARIAL_FONT);
@@ -85,7 +85,7 @@ bool Button::onClick(sf::Event event)
 	return false;
 }
 
-void Button::draw(sf::RenderWindow & window)
+void Button::draw(sf::RenderWindow & window) const
 {
 	window.draw(*m_body);
 	window.draw(m_text);

@@ -28,12 +28,12 @@ SGameResult PauseScene::onPauseMenu(sf::RenderWindow & window)
 	return m_result;
 }
 
-void PauseScene::clearResult(void)
+void PauseScene::clearResult()
 {
 	m_result.status = GameStatus::PAUSE_SCENE;
 }
 
-void PauseScene::render(sf::RenderWindow & window)
+void PauseScene::render(sf::RenderWindow & window) const
 {
 	window.clear(sf::Color(255, 255, 255));
 	window.draw(*m_background);

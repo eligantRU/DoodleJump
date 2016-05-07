@@ -13,8 +13,8 @@ public:
 	void addImage(sf::Image & image, std::string string);
 	void addSound(sf::SoundBuffer & buffer, std::string string);
 	void playSound(sf::SoundBuffer & buffer);
-	void pauseSound(void);
-	void removeSoundFromPause(void);
+	void pauseSound();
+	void removeSoundFromPause();
 
 	sf::Image WINDOW_ICON;
 	sf::Texture BACKGROUND_TEXTURE;

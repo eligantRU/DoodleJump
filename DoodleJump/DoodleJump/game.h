@@ -8,7 +8,7 @@ struct Game
 public:
 	Game();
 	~Game();
-	void launch(void);
+	void launch();
 private:
 	void gameLoop(sf::RenderWindow & window);
 

@@ -18,7 +18,7 @@ Doodle::~Doodle()
 
 }
 
-void Doodle::draw(sf::RenderWindow & window)
+void Doodle::draw(sf::RenderWindow & window) const
 {
 	window.draw(*m_body);
 }
@@ -34,7 +34,7 @@ void Doodle::setTexture(sf::Texture & texture)
 	m_body->setTexture(texture);
 }
 
-sf::Vector2f Doodle::getPosition(void)
+sf::Vector2f Doodle::getPosition() const
 {
 	return m_body->getPosition();
 }
@@ -54,12 +54,12 @@ void Doodle::rotate(float degree)
 	m_body->rotate(degree);
 }
 
-DirectionX Doodle::getDirection(void)
+DirectionX Doodle::getDirection() const
 {
 	return m_direction;
 }
 
-DirectionX Doodle::getLastDirection(void)
+DirectionX Doodle::getLastDirection() const
 {
 	return m_lastDirection;
 }
@@ -120,12 +120,12 @@ void Doodle::setSpeedY(float speed)
 	m_speedY = speed;
 }
 
-float Doodle::getSpeedY(void)
+float Doodle::getSpeedY() const
 {
 	return m_speedY;
 }
 
-sf::Vector2f Doodle::getPositionBeforeDown(void)
+sf::Vector2f Doodle::getPositionBeforeDown() const
 {
 	return m_positionBeforeDown;
 }
@@ -135,7 +135,7 @@ void Doodle::setPositionBeforeDown(sf::Vector2f position)
 	m_positionBeforeDown = position;
 }
 
-void Doodle::correctSkin(void)
+void Doodle::correctSkin()
 {
 	auto lastDirection = getLastDirection();
 	if (getSpeedY() > 0)
