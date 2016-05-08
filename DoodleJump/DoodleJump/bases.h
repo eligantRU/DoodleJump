@@ -74,7 +74,6 @@ enum class BonusType
 	HAT_HELICOPTER,
 	SPRING,
 	TRAMPOLINE,
-	MISSILE,
 	ROCKET,
 	NO
 };

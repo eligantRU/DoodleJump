@@ -146,14 +146,14 @@ void GameScene::moveDynamicPlates()
 		int speedX = m_plates[i]->getSpeedX();
 		if (speedX < 0)
 		{
-			if (platePosition.x <= speedX)
+			if (platePosition.x <= 0)
 			{
 				m_plates[i]->setSpeedX(-speedX);
 			}
 		}
 		if (speedX > 0)
 		{
-			if (platePosition.x >= WINDOW_WIDTH - PLATE_WIDTH - speedX)
+			if (platePosition.x >= WINDOW_WIDTH - PLATE_WIDTH)
 			{
 				m_plates[i]->setSpeedX(-speedX);
 			}

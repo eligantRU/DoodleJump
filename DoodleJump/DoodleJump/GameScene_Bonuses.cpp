@@ -256,18 +256,14 @@ void GameScene::initBonuses()
 
 	for (int bonusIndex = 0; bonusIndex < NUMBER_BONUSES; ++bonusIndex)
 	{
-		int plateIndex = rand() % platePosition.size();
 		BonusType type = (rand() % 2) ? BonusType::SPRING : BonusType::TRAMPOLINE;
-		buildBonus(type, bonusIndex, platePosition[plateIndex], plateIndex);
+		buildBonus(type, bonusIndex, platePosition[0], 0);
 	}
 }
 
 void GameScene::buildBonus(BonusType bonusType, int bonusIndex, sf::Vector2f platePosition, int plateIndex) // TODO: this code really want to be refactored
 {
-	m_bonuses[bonusIndex]->setPlateIndex(plateIndex);
-	m_bonuses[bonusIndex]->setRotation(0.f);
-	int x;
-
+	int x = 0;
 	switch (bonusType)
 	{
 	case BonusType::SPRING:
@@ -305,18 +301,34 @@ void GameScene::buildBonus(BonusType bonusType, int bonusIndex, sf::Vector2f pla
 	default:
 		break;
 	}
+	m_bonuses[bonusIndex]->setPlateIndex(plateIndex);
+	m_bonuses[bonusIndex]->setSpeedX(m_plates[plateIndex]->getSpeedX());
+	m_bonuses[bonusIndex]->setRotation(0);
+	m_bonuses[bonusIndex]->setPlateOffset(x);
 }
 
 void GameScene::moveBonuses()
 {
 	for (int bonusIndex = 0; bonusIndex < NUMBER_BONUSES; ++bonusIndex)
 	{
-		m_bonuses[bonusIndex]->setSpeedX(m_plates[m_bonuses[bonusIndex]->getPlateIndex()]->getSpeedX());
-
-		if (m_bonuses[bonusIndex]->getSpeedX() != 0)
+		sf::Vector2f bonusPosition = m_bonuses[bonusIndex]->getPosition();
+		int speedX = m_bonuses[bonusIndex]->getSpeedX();
+		int plateOffset = m_bonuses[bonusIndex]->getPlateOffset();
+		if (speedX < 0)
 		{
-			m_bonuses[bonusIndex]->move(sf::Vector2f(float(m_bonuses[bonusIndex]->getSpeedX()), 0.f));
+			if (bonusPosition.x <= plateOffset)
+			{
+				m_bonuses[bonusIndex]->setSpeedX(-speedX);
+			}
 		}
+		if (speedX > 0)
+		{
+			if (bonusPosition.x >= WINDOW_WIDTH - PLATE_WIDTH + plateOffset)
+			{
+				m_bonuses[bonusIndex]->setSpeedX(-speedX);
+			}
+		}
+		m_bonuses[bonusIndex]->move(sf::Vector2f(float(speedX), 0));
 	}
 }
 
