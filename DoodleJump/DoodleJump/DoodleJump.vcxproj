@@ -19,18 +19,18 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="assets.h" />
+    <ClInclude Include="Assets.h" />
     <ClInclude Include="bases.h" />
-    <ClInclude Include="bonuses.h" />
+    <ClInclude Include="Bonus.h" />
     <ClInclude Include="Button.h" />
-    <ClInclude Include="doodle.h" />
-    <ClInclude Include="game.h" />
+    <ClInclude Include="Doodle.h" />
+    <ClInclude Include="Game.h" />
     <ClInclude Include="GameOverScene.h" />
     <ClInclude Include="GameScene.h" />
-    <ClInclude Include="helpScene.h" />
+    <ClInclude Include="HelpScene.h" />
     <ClInclude Include="PauseScene.h" />
-    <ClInclude Include="plates.h" />
     <ClInclude Include="DoodleJumpRes.h" />
+    <ClInclude Include="Plate.h" />
     <ClInclude Include="sheet.h" />
     <ClInclude Include="SoundHandler.h" />
     <ClInclude Include="StartScene.h" />
@@ -38,17 +38,17 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="assets.cpp" />
-    <ClCompile Include="Bonuses.cpp" />
+    <ClCompile Include="Assets.cpp" />
+    <ClCompile Include="Bonus.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Doodle.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameOverScene.cpp" />
     <ClCompile Include="GameScene.cpp" />
-    <ClCompile Include="helpScene.cpp" />
+    <ClCompile Include="HelpScene.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PauseScene.cpp" />
-    <ClCompile Include="Plates.cpp" />
+    <ClCompile Include="Plate.cpp" />
     <ClCompile Include="SoundHandler.cpp" />
     <ClCompile Include="StartScene.cpp" />
     <ClCompile Include="stdafx.cpp" />
