@@ -3,28 +3,31 @@
 #include "stdafx.h"
 #include "sheet.h"
 
-struct helpScene
+struct HelpScene
 {
 public:
-	helpScene(Assets * assets, sf::View * view);
-	~helpScene();
+	HelpScene(Assets & assets, sf::View & view, SoundHandler & soundHandler);
+	~HelpScene();
 	SGameResult onHelpMenu(sf::RenderWindow & window);
 private:
-	Assets * assets;
-	sf::View * view;
-	void render(sf::RenderWindow & window);
+	void render(sf::RenderWindow & window) const;
 	void checkEvents(sf::RenderWindow & window);
-	void checkMouseOnButtons(sf::Vector2i & mousePosition);
-	void checkMouseClick(sf::RenderWindow & window, sf::Event & event, sf::Vector2i & mousePosition);
+	void checkMouseOnButtons(sf::Vector2i mousePosition);
+	void checkMouseClick(sf::RenderWindow & window, sf::Event & event);
+	void clearResult();
+	
+	Assets & m_assets;
+	sf::View & m_view;
+	SoundHandler & m_soundHandler;
 
-	sf::Sprite * background;
-	sf::Sprite * goMenuButton;
-	sf::Sprite * buttonA;
-	sf::Sprite * buttonD;
+	std::unique_ptr<sf::Sprite> m_background;
+	std::unique_ptr<sf::Sprite> m_buttonA;
+	std::unique_ptr<sf::Sprite> m_buttonD;
 
-	sf::Text goMenuText;
-	sf::Text helpText1;
-	sf::Text helpText2;
+	std::unique_ptr<Button> m_goMenuButton;
 
-	SGameResult result;
+	sf::Text m_helpText1;
+	sf::Text m_helpText2;
+
+	SGameResult m_result;
 };

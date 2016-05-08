@@ -2,9 +2,10 @@
 
 #include "stdafx.h"
 
-static const int NUMBER_PLATES = 40; 
+static const int NUMBER_PLATES = 50; 
 static const int NUMBER_BONUSES = 1;
 static const int NUMBER_INSECTS = 5;
+static const int NUMBER_UNSTABLE_PLATES = 3;
 static const float STEP = 6.f;
 static const float ACCELERATION = 1.f;
 static const int DOODLE_WIDTH = 45;
@@ -26,6 +27,10 @@ static const float SPRING_DELTA_HEIGHT = 60.f;
 static const float TRAMPLANE_DELTA_HEIGHT = 65.f;
 static const float HAT_HELICOPTER_DELTA_HEIGHT = 200.f;
 static const float ROCKET_DELTA_HEIGHT = 180.f;
+static const int BUTTON_WIDTH = 100;
+static const int BUTTON_HEIGHT = 29;
+static const int WINDOW_WIDTH = 550;
+static const int WINDOW_HEIGHT = 700;
 
 enum class PlateType
 {
@@ -43,6 +48,7 @@ enum class Collision
 	COLLISION_TRAMPLANE,
 	COLLISION_MISSLE,
 	COLLISION_PLATE,
+	COLLISION_GHOST_PLATE,
 	COLLISION_ROCKET,
 	COLLISION_UNSTABLE,
 	COLLISION_HOLE,
@@ -72,13 +78,7 @@ enum class BonusType
 	NO
 };
 
-struct Direction
-{
-	DirectionX x;
-	DirectionY y;
-};
-
-enum class gameStatus
+enum class GameStatus
 {
 	START_SCENE,
 	HELP_SCENE,
@@ -87,9 +87,7 @@ enum class gameStatus
 	GAME_OVER_SCENE
 };
 
-struct SGameResult
+struct SGameResult // NOTE: in future u can use this to exchange data from scene to scene
 {
-	uint64_t points;
-	gameStatus status;
-	Collision collision;
+	GameStatus status;
 };

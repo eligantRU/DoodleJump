@@ -1,96 +1,81 @@
 #include "stdafx.h"
 #include "sheet.h"
 
-helpScene::helpScene(Assets * assets, sf::View * view)
+HelpScene::HelpScene(Assets & assets, sf::View & view, SoundHandler & soundHandler)
+	:m_assets(assets)
+	,m_view(view)
+	,m_soundHandler(soundHandler)
 {	
-	this->assets = assets;
-	this->view = view;
-	goMenuButton = new sf::Sprite;
-	goMenuButton->setTexture(assets->BUTTON_INACTIVE_TEXTURE);
-	goMenuButton->setPosition(200, 210);
-	goMenuText.setFont(assets->font);
-	goMenuText.setCharacterSize(20);
-	goMenuText.setString("back");
-	goMenuText.setStyle(sf::Text::Bold);
-	goMenuText.setPosition(232.f, 212.f);
-	goMenuText.setColor(sf::Color(0, 0, 0));
+	m_goMenuButton = std::make_unique<Button>("Back", sf::Vector2f(232.f, 182.f), m_assets);
 
-	buttonA = new sf::Sprite;
-	buttonA->setTexture(assets->BUTTON_A_TEXTURE);
-	buttonA->setScale(sf::Vector2f(0.5f, 0.5f));
-	buttonA->setPosition(170, 295);
+	m_buttonA = std::make_unique<sf::Sprite>();
+	m_buttonA->setTexture(m_assets.BUTTON_A_TEXTURE);
+	m_buttonA->setScale(sf::Vector2f(0.5f, 0.5f));
+	m_buttonA->setPosition(170.f, 295.f);
 
-	buttonD = new sf::Sprite;
-	buttonD->setTexture(assets->BUTTON_D_TEXTURE);
-	buttonD->setScale(sf::Vector2f(0.5f, 0.5f));
-	buttonD->setPosition(230, 295);
+	m_buttonD = std::make_unique<sf::Sprite>();
+	m_buttonD->setTexture(m_assets.BUTTON_D_TEXTURE);
+	m_buttonD->setScale(sf::Vector2f(0.5f, 0.5f));
+	m_buttonD->setPosition(230.f, 295.f);
 	
-	helpText1.setFont(assets->font);
-	helpText1.setCharacterSize(20);
-	helpText1.setString("Press");
-	helpText1.setStyle(sf::Text::Bold);
-	helpText1.setPosition(100.f, 300.f);
-	helpText1.setColor(sf::Color(0, 0, 0));
+	m_helpText1.setFont(m_assets.ARIAL_FONT);
+	m_helpText1.setCharacterSize(20);
+	m_helpText1.setString("Press");
+	m_helpText1.setStyle(sf::Text::Bold);
+	m_helpText1.setPosition(100.f, 300.f);
+	m_helpText1.setColor(sf::Color(0, 0, 0));
 
-	helpText2.setFont(assets->font);
-	helpText2.setCharacterSize(20);
-	helpText2.setString("to move Doodle");
-	helpText2.setStyle(sf::Text::Bold);
-	helpText2.setPosition(290.f, 300.f);
-	helpText2.setColor(sf::Color(0, 0, 0));
+	m_helpText2.setFont(m_assets.ARIAL_FONT);
+	m_helpText2.setCharacterSize(20);
+	m_helpText2.setString("to move Doodle");
+	m_helpText2.setStyle(sf::Text::Bold);
+	m_helpText2.setPosition(290.f, 300.f);
+	m_helpText2.setColor(sf::Color(0, 0, 0));
 
-	background = new sf::Sprite;
-	background->setTextureRect(sf::IntRect(0, 0, 550, 700));
-	background->setTexture(assets->BACKGROUND_TEXTURE);
-	background->setPosition(0, 0);
+	m_background = std::make_unique<sf::Sprite>();
+	m_background->setTextureRect(sf::IntRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT));
+	m_background->setTexture(m_assets.BACKGROUND_TEXTURE);
+	m_background->setPosition(0.f, 0.f);
 }
 
-helpScene::~helpScene()
+HelpScene::~HelpScene()
 {
-	delete background;
-	delete goMenuButton;
-	delete buttonA;
-	delete buttonD;
-	background = NULL;
-	goMenuButton = NULL;
-	buttonA = NULL;
-	buttonD = NULL;
+
 }
 
-SGameResult helpScene::onHelpMenu(sf::RenderWindow & window)
+SGameResult HelpScene::onHelpMenu(sf::RenderWindow & window)
 {
-	result.status = gameStatus::HELP_SCENE;
-	result.collision = Collision::NO_COLLISION;
-	result.points = 0;
-
-	render(window);
-	window.display();
+	clearResult();
 
 	checkEvents(window);
-	return result;
+	render(window);
+	window.display();
+	return m_result;
 }
 
+void HelpScene::clearResult()
+{
+	m_result.status = GameStatus::HELP_SCENE;
+}
 
-void helpScene::render(sf::RenderWindow & window)
+void HelpScene::render(sf::RenderWindow & window) const
 {
 	window.clear(sf::Color(255, 255, 255));
-	window.draw(*background);
-	window.draw(*goMenuButton);
-	window.draw(goMenuText);
-	window.draw(helpText1);
-	window.draw(*buttonA);
-	window.draw(*buttonD);
-	window.draw(helpText2);
+	window.draw(*m_background);
+	m_goMenuButton->draw(window);
+	window.draw(m_helpText1);
+	window.draw(m_helpText2);
+	window.draw(*m_buttonA);
+	window.draw(*m_buttonD);
 }
 
-void helpScene::checkEvents(sf::RenderWindow & window)
+void HelpScene::checkEvents(sf::RenderWindow & window)
 {
 	sf::Event event;
 	while (window.pollEvent(event))
 	{
-		sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
-		checkMouseOnButtons(mousePosition);
-		checkMouseClick(window, event, mousePosition);
+		checkMouseOnButtons(sf::Mouse::getPosition(window));
+		checkMouseClick(window, event);
 		if (event.type == sf::Event::Closed)
 		{
 			window.close();
@@ -98,28 +83,16 @@ void helpScene::checkEvents(sf::RenderWindow & window)
 	}
 }
 
-void helpScene::checkMouseOnButtons(sf::Vector2i & mousePosition)
+void HelpScene::checkMouseOnButtons(sf::Vector2i mousePosition)
 {
-	if (((mousePosition.y >= 210) && (mousePosition.y <= 239)
-		&& (mousePosition.x >= 200) && (mousePosition.x <= 300)))
-	{
-		goMenuButton->setTexture(assets->BUTTON_ACTIVE_TEXTURE);
-	}
-	else
-	{
-		goMenuButton->setTexture(assets->BUTTON_INACTIVE_TEXTURE);
-	}
+	m_goMenuButton->onMouse(mousePosition);
 }
 
-
-void helpScene::checkMouseClick(sf::RenderWindow & window, sf::Event & event, sf::Vector2i & mousePosition)
+void HelpScene::checkMouseClick(sf::RenderWindow & window, sf::Event & event)
 {
-	if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left)
+	(void)window;
+	if (m_goMenuButton->onClick(event))
 	{
-		if (((mousePosition.y >= 210) && (mousePosition.y <= 239)
-			&& (mousePosition.x >= 200) && (mousePosition.x <= 300)))
-		{
-			result.status = gameStatus::START_SCENE;
-		}
+		m_result.status = GameStatus::START_SCENE;
 	}
 }

@@ -3,25 +3,27 @@
 #include "stdafx.h"
 #include "sheet.h"
 
-struct pauseScene
+struct PauseScene
 {
 public:
-	pauseScene(Assets * assets, sf::View * view);
-	~pauseScene();
+	PauseScene(Assets & assets, sf::View & view, SoundHandler & soundHandler);
+	~PauseScene();
 	SGameResult onPauseMenu(sf::RenderWindow & window);
 private:
-	Assets * assets;
-	sf::View * view;
-	void render(sf::RenderWindow & window);
+	void render(sf::RenderWindow & window) const;
 	void checkEvents(sf::RenderWindow & window);
-	void checkMouseOnButtons(sf::Vector2i & mousePosition);
-	void checkMouseClick(sf::RenderWindow & window, sf::Event & event, sf::Vector2i & mousePosition);
-	sf::Sprite * background;
-	sf::Sprite * backButton;
-	sf::Sprite * exitButton;
+	void checkMouseOnButtons(sf::Vector2i mousePosition);
+	void checkMouseClick(sf::RenderWindow & window, sf::Event & event);
+	void clearResult();
 
-	sf::Text backText;
-	sf::Text exitText;
+	Assets & m_assets;
+	sf::View & m_view;
+	SoundHandler & m_soundHandler;
 
-	SGameResult result;
+	std::unique_ptr<sf::Sprite> m_background;
+
+	std::unique_ptr<Button> m_backButton;
+	std::unique_ptr<Button> m_exitButton;
+
+	SGameResult m_result;
 };

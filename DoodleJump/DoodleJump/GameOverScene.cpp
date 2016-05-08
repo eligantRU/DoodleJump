@@ -1,93 +1,67 @@
 #include "stdafx.h"
 #include "sheet.h"
 
-gameOverScene::gameOverScene(Assets * assets, sf::View * view)
+GameOverScene::GameOverScene(Assets & assets, sf::View & view, SoundHandler & soundHandler, std::function<uint64_t()> getter)
+	:m_assets(assets)
+	,m_view(view)
+	,m_soundHandler(soundHandler)
+	,m_getter(getter)
 {
-	this->assets = assets;
-	this->view = view;
-	title = new sf::Sprite;
-	title->setTextureRect(sf::IntRect(0, 0, 236, 96));
-	title->setTexture(assets->GAME_OVER_TITLE_TEXTURE);
-	title->setPosition(150, 30);
+	m_title = std::make_unique<sf::Sprite>(sf::Sprite());
+	m_title->setTextureRect(sf::IntRect(0, 0, 236, 96));
+	m_title->setTexture(m_assets.GAME_OVER_TITLE_TEXTURE);
+	m_title->setPosition(150.f, 30.f);
 
-	goMenuButton = new sf::Sprite;
-	goMenuButton->setTextureRect(sf::IntRect(0, 0, 104, 29));
-	goMenuButton->setTexture(assets->BUTTON_INACTIVE_TEXTURE);
-	goMenuButton->setPosition(200, 210);
-	goMenuText.setFont(assets->font);
-	goMenuText.setCharacterSize(20);
-	goMenuText.setString("Menu");
-	goMenuText.setStyle(sf::Text::Bold);
-	goMenuText.setPosition(232.f, 212.f);
-	goMenuText.setColor(sf::Color(0, 0, 0));
+	m_goMenuButton = std::make_unique<Button>("Menu", sf::Vector2f(232.f, 182.f), m_assets);
+	m_playAgainButton = std::make_unique<Button>("Play", sf::Vector2f(250.f, 240.f), m_assets);
 
-	playAgainButton = new sf::Sprite;
-	playAgainButton->setTextureRect(sf::IntRect(0, 0, 104, 29));
-	playAgainButton->setTexture(assets->BUTTON_INACTIVE_TEXTURE);
-	playAgainButton->setPosition(250, 270);
-	playAgainText.setFont(assets->font);
-	playAgainText.setCharacterSize(20);
-	playAgainText.setString("Play");
-	playAgainText.setStyle(sf::Text::Bold);
-	playAgainText.setPosition(282.f, 272.f);
-	playAgainText.setColor(sf::Color(0, 0, 0));
+	m_lastRecord.setFont(m_assets.ARIAL_FONT);
+	m_lastRecord.setCharacterSize(24);
+	m_lastRecord.setStyle(sf::Text::Bold);
+	m_lastRecord.setPosition(190.f, 140.f);
+	m_lastRecord.setColor(sf::Color(0, 0, 0));
 
-	lastRecord.setFont(assets->font);
-	lastRecord.setCharacterSize(24);
-	lastRecord.setStyle(sf::Text::Bold);
-	lastRecord.setPosition(190.f, 150.f);
-	lastRecord.setColor(sf::Color(0, 0, 0));
-
-	background = new sf::Sprite;
-	background->setTextureRect(sf::IntRect(0, 0, 550, 700));
-	background->setTexture(assets->BACKGROUND_TEXTURE);
-	background->setPosition(0, 0);
+	m_background = std::make_unique<sf::Sprite>(sf::Sprite());
+	m_background->setTextureRect(sf::IntRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT));
+	m_background->setTexture(m_assets.BACKGROUND_TEXTURE);
+	m_background->setPosition(0.f, 0.f);
 }
 
-gameOverScene::~gameOverScene()
+GameOverScene::~GameOverScene()
 {
-	delete background;
-	delete goMenuButton;
-	delete playAgainButton;
-	background = NULL;
-	goMenuButton = NULL;
-	playAgainButton = NULL;
+
 }
 
-SGameResult gameOverScene::onGameOverMenu(sf::RenderWindow & window, uint64_t & score)
+SGameResult GameOverScene::onGameOverMenu(sf::RenderWindow & window)
 {
-	result.status = gameStatus::GAME_OVER_SCENE;
-	result.collision = Collision::NO_COLLISION;
-	result.points = 0;
-	lastRecord.setString("Your record: " + std::to_string(score));
-
+	m_score = m_getter();
+	m_result.status = GameStatus::GAME_OVER_SCENE;
+	m_lastRecord.setString("Your record: " + std::to_string(m_score));
+	
 	render(window);
 	window.display();
 
 	checkEvents(window);
-	return result;
+	return m_result;
 }
 
-void gameOverScene::render(sf::RenderWindow & window)
+void GameOverScene::render(sf::RenderWindow & window) const
 {
 	window.clear(sf::Color(255, 255, 255));
-	window.draw(*background);
-	window.draw(*title);
-	window.draw(*goMenuButton);
-	window.draw(goMenuText);
-	window.draw(*playAgainButton);
-	window.draw(playAgainText);
-	window.draw(lastRecord);
+	window.draw(*m_background);
+	window.draw(*m_title);
+	m_goMenuButton->draw(window);
+	m_playAgainButton->draw(window);
+	window.draw(m_lastRecord);
 }
 
-void gameOverScene::checkEvents(sf::RenderWindow & window)
+void GameOverScene::checkEvents(sf::RenderWindow & window)
 {
 	sf::Event event;
 	while (window.pollEvent(event))
 	{
-		sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
-		checkMouseOnButtons(mousePosition);
-		checkMouseClick(window, event, mousePosition);
+		checkMouseOnButtons(sf::Mouse::getPosition(window));
+		checkMouseClick(event);
 		if (event.type == sf::Event::Closed)
 		{
 			window.close();
@@ -95,44 +69,21 @@ void gameOverScene::checkEvents(sf::RenderWindow & window)
 	}
 }
 
-void gameOverScene::checkMouseOnButtons(sf::Vector2i & mousePosition)
+void GameOverScene::checkMouseOnButtons(sf::Vector2i mousePosition)
 {
-	if (((mousePosition.y >= 210) && (mousePosition.y <= 239)
-		&& (mousePosition.x >= 200) && (mousePosition.x <= 300)))
-	{
-		goMenuButton->setTexture(assets->BUTTON_ACTIVE_TEXTURE);
-	}
-	else
-	{
-		goMenuButton->setTexture(assets->BUTTON_INACTIVE_TEXTURE);
-	}
-
-	if (((mousePosition.y >= 270) && (mousePosition.y <= 299)
-		&& (mousePosition.x >= 250) && (mousePosition.x <= 350)))
-	{
-		playAgainButton->setTexture(assets->BUTTON_ACTIVE_TEXTURE);
-	}
-	else
-	{
-		playAgainButton->setTexture(assets->BUTTON_INACTIVE_TEXTURE);
-	}
+	m_goMenuButton->onMouse(mousePosition);
+	m_playAgainButton->onMouse(mousePosition);
 }
 
-
-void gameOverScene::checkMouseClick(sf::RenderWindow & window, sf::Event & event, sf::Vector2i & mousePosition)
+void GameOverScene::checkMouseClick(sf::Event & event)
 {
-	if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left)
+	if (m_goMenuButton->onClick(event))
 	{
-		if (((mousePosition.y >= 210) && (mousePosition.y <= 239)
-			&& (mousePosition.x >= 200) && (mousePosition.x <= 300)))
-		{
-			result.status = gameStatus::START_SCENE;
-		}
-		if (((mousePosition.y >= 270) && (mousePosition.y <= 299)
-			&& (mousePosition.x >= 250) && (mousePosition.x <= 350)))
-		{
-			result.status = gameStatus::GAME_SCENE;
-		}
+		m_result.status = GameStatus::START_SCENE;
+	}
+
+	if (m_playAgainButton->onClick(event))
+	{
+		m_result.status = GameStatus::GAME_SCENE;
 	}
 }
-

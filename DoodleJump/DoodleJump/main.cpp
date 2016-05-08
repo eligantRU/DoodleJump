@@ -1,15 +1,11 @@
 #include "stdafx.h"
-#include <SFML/Graphics.hpp>
 #include "sheet.h"
 
-int main(void)
+int main()
 {
-	srand(unsigned(time(NULL)));
-
-	Game * game = new Game();
+	srand(unsigned(time(nullptr)));
+	std::unique_ptr<Game> game = std::make_unique<Game>();
 	game->launch();
-	delete game;
-	game = NULL;
 
 	return 0;
 }

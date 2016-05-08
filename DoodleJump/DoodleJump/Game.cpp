@@ -2,163 +2,63 @@
 #include "sheet.h"
 
 Game::Game()
+	:m_assets(new Assets()) // NOTE: it may be shared_ptr
+	,m_view(new sf::View())
+	,m_soundHandler(new SoundHandler())
 {
-	assets = new Assets();
-	view = new sf::View();
-	sceneStart = new startScene(assets, view);
-	sceneHelp = new helpScene(assets, view);
-	sceneGame = new gameScene(assets, view);
-	sceneGameOver = new gameOverScene(assets, view);
-	scenePause = new pauseScene(assets, view);
+	m_sceneStart = std::make_unique<StartScene>(*m_assets, *m_view, *m_soundHandler);
+	m_sceneHelp = std::make_unique<HelpScene>(*m_assets, *m_view, *m_soundHandler);
+	m_scenePause = std::make_unique<PauseScene>(*m_assets, *m_view, *m_soundHandler);
+	m_sceneGame = std::make_shared<GameScene>(*m_assets, *m_view, *m_soundHandler);
+
+	std::function<uint64_t()> getter = std::bind(&GameScene::getScore, m_sceneGame);
+	m_sceneGameOver = std::make_unique<GameOverScene>(*m_assets, *m_view, *m_soundHandler, getter);
 }
 
 Game::~Game()
 {
-	
-}
 
-/*void Game::gameLoop(sf::RenderWindow & window)
-{
-	while (window.isOpen())
-	{
-		frameFunc(window);
-	}
-}*/
-
-void Game::playPlateSound(void)
-{
-	PlaySound(L"sounds/jump.wav", NULL, NULL);
-}
-
-void Game::playSpringSound(void)
-{
-	PlaySound(L"sounds/feder.wav", NULL, NULL);
-}
-
-void Game::playTrampolineSound(void)
-{
-	PlaySound(L"sounds/trampoline.wav", NULL, NULL);
-}
-
-void Game::playRocketSound(void)
-{
-	PlaySound(L"sounds/jetpack.wav", NULL, NULL);
-}
-
-void Game::playHatHelicopterSound(void)
-{
-	PlaySound(L"sounds/propeller.wav", NULL, NULL);
-}
-
-void Game::playStartGameSound(void)
-{
-	PlaySound(L"sounds/start.wav", NULL, NULL);
-}
-
-void Game::playGameOverSound(void)
-{
-	PlaySound(L"sounds/pada.wav", NULL, NULL);
 }
 
 void Game::gameLoop(sf::RenderWindow & window)
 {
-	SGameResult result;
-
-	sf::Thread soundPlateThread(&Game::playPlateSound, this);
-	sf::Thread soundSpringThread(&Game::playSpringSound, this);
-	sf::Thread soundTrampolineThread(&Game::playTrampolineSound, this);
-	sf::Thread soundRocketThread(&Game::playRocketSound, this);
-	sf::Thread soundHatHelicopterThread(&Game::playHatHelicopterSound, this);
-	sf::Thread soundStartGameThread(&Game::playStartGameSound, this);
-	sf::Thread soundGameOverThread(&Game::playGameOverSound, this);
-
 	while (window.isOpen())
 	{
-		switch (gameState.status)
+		switch (m_gameState.status)
 		{
-		case gameStatus::START_SCENE:
-			result = sceneStart->onStartMenu(window);
-			gameState.status = result.status; 
-			if (result.status == gameStatus::GAME_SCENE)
-			{
-				soundStartGameThread.launch(); // TODO: ќбработчик снизу, вытащи вниз
-			}
-			else
-			{
-				if (result.status == gameStatus::HELP_SCENE)
-				{
-					gameState.status = gameStatus::HELP_SCENE;
-				}
-			}
+		case GameStatus::START_SCENE:
+			m_gameState = m_sceneStart->onStartMenu(window);
 			break;
-		case gameStatus::GAME_SCENE:
-			result = sceneGame->onGameFrame(window);
-			if (result.status == gameStatus::GAME_SCENE)
-			{
-				gameState.status = gameStatus::GAME_SCENE;
-			}
-			else
-			{
-				if (result.status == gameStatus::GAME_OVER_SCENE)
-				{
-					gameState.status = gameStatus::GAME_OVER_SCENE;
-					soundGameOverThread.launch(); // TODO: ќбработчик снизу, вытащи вниз
-				}
-				else
-				{
-					if (result.status == gameStatus::PAUSE_SCENE)
-					{
-						gameState.status = gameStatus::PAUSE_SCENE;
-					}
-				}
-			}
+		case GameStatus::GAME_SCENE:
+			m_gameState = m_sceneGame->onGameFrame(window);
 			break;
-		case gameStatus::GAME_OVER_SCENE:
-			gameState = sceneGameOver->onGameOverMenu(window, result.points); // NOTE: не требует росписи на if'ы т.к. сразу в gameState присваиваетс€
+		case GameStatus::GAME_OVER_SCENE:
+			m_gameState = m_sceneGameOver->onGameOverMenu(window);
 			break;
-		case gameStatus::PAUSE_SCENE:
-			gameState = scenePause->onPauseMenu(window); // NOTE: не требует росписи на if'ы т.к. сразу в gameState присваиваетс€
+		case GameStatus::PAUSE_SCENE:
+			m_gameState = m_scenePause->onPauseMenu(window);
 			break;
-		case gameStatus::HELP_SCENE:
-			gameState = sceneHelp->onHelpMenu(window); // NOTE: не требует росписи на if'ы т.к. сразу в gameState присваиваетс€
+		case GameStatus::HELP_SCENE:
+			m_gameState = m_sceneHelp->onHelpMenu(window);
 			break;
 		}
-
-		switch (result.collision)
-		{
-		case Collision::COLLISION_PLATE:
-			soundPlateThread.launch();
-			break;
-		case Collision::COLLISION_SPRING:
-			soundSpringThread.launch();
-			break;
-		case Collision::COLLISION_TRAMPLANE:
-			soundTrampolineThread.launch();
-			break;
-		case Collision::COLLISION_ROCKET:
-			soundRocketThread.launch();
-			break;
-		case Collision::COLLISION_HAT_HELICOPTER:
-			soundHatHelicopterThread.launch();
-			break;
-		default:
-			break;
-		}
+		// TODO: u check window.close() in all scenes. Do it here.
 	}
 }
 
-void Game::launch(void)
+void Game::launch()
 {
 	sf::ContextSettings settings;
 	settings.antialiasingLevel = 16;
-
-	sf::RenderWindow window(sf::VideoMode(550, 700), "Doodle Jump", sf::Style::Close, settings);
+	sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Doodle Jump", sf::Style::Close, settings);
+	sf::Image icon = m_assets->WINDOW_ICON;;
+	window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
 	window.setVerticalSyncEnabled(true);
 	window.setFramerateLimit(60);
-	view->reset(sf::FloatRect(0, 0, 550, 700));
-	view->setCenter(275, 350);
-	window.setView(*view);
-	gameState.status = gameStatus::START_SCENE;
+	m_view->reset(sf::FloatRect(0, 0, float(WINDOW_WIDTH), float(WINDOW_HEIGHT)));
+	m_view->setCenter(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
+	window.setView(*m_view);
+	m_gameState.status = GameStatus::START_SCENE;
 
 	gameLoop(window);
 }

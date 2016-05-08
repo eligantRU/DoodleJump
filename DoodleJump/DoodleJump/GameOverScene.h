@@ -3,28 +3,31 @@
 #include "stdafx.h"
 #include "sheet.h"
 
-struct gameOverScene
+struct GameOverScene
 {
 public:
-	gameOverScene(Assets * assets, sf::View * view);
-	~gameOverScene();
-	SGameResult onGameOverMenu(sf::RenderWindow & window, uint64_t & score);
+	GameOverScene(Assets & assets, sf::View & view, SoundHandler & soundHandler, std::function<uint64_t()> getter);
+	~GameOverScene();
+	SGameResult onGameOverMenu(sf::RenderWindow & window);
 private:
-	Assets * assets;
-	sf::View * view;
-	void render(sf::RenderWindow & window);
+	void render(sf::RenderWindow & window) const;
 	void checkEvents(sf::RenderWindow & window);
-	void checkMouseOnButtons(sf::Vector2i & mousePosition);
-	void checkMouseClick(sf::RenderWindow & window, sf::Event & event, sf::Vector2i & mousePosition);
+	void checkMouseOnButtons(sf::Vector2i mousePosition);
+	void checkMouseClick(sf::Event & event);
+	std::function<uint64_t()> m_getter;
 
-	sf::Sprite * background;
-	sf::Sprite * playAgainButton;
-	sf::Sprite * goMenuButton;
-	sf::Sprite * title;
+	Assets & m_assets;
+	sf::View & m_view;
+	SoundHandler & m_soundHandler;
 
-	sf::Text playAgainText;
-	sf::Text goMenuText;
-	sf::Text lastRecord;
+	std::unique_ptr<sf::Sprite> m_background;
+	std::unique_ptr<sf::Sprite> m_title;
 
-	SGameResult result;
+	std::unique_ptr<Button> m_playAgainButton;
+	std::unique_ptr<Button> m_goMenuButton;
+
+	uint64_t m_score;
+	sf::Text m_lastRecord;
+
+	SGameResult m_result;
 };

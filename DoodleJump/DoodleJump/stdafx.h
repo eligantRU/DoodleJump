@@ -10,7 +10,18 @@
 #include <stdio.h>
 #include <tchar.h>
 
+#include <algorithm>
+#include <memory>
 #include <vector>
+#include <array>
 #include <string>
 #include <stdint.h>
 #include <functional>
+
+#pragma warning (push, 3)
+
+#include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
+#include <SFML/OpenGL.hpp>
+
+#pragma warning (pop)
