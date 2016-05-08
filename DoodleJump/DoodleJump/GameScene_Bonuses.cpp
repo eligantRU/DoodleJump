@@ -161,7 +161,7 @@ void GameScene::animateRocket() // TODO: handlers...this code NEED MORE HANDLERS
 		}
 	}
 
-	if (m_hero->getSpeedY() >= -0.05f * ROCKET_DELTA_HEIGHT && m_actualBonus != BonusType::NO)
+	if (m_hero->getSpeedY() >= -0.05 * ROCKET_DELTA_HEIGHT && m_actualBonus != BonusType::NO)
 	{
 		m_bonuses[m_actualBonusId]->setTexture(m_assets.ROCKET_NONE_TEXTURE);
 		if (m_actualBonus != BonusType::NO)
@@ -169,8 +169,8 @@ void GameScene::animateRocket() // TODO: handlers...this code NEED MORE HANDLERS
 			m_bonuses[m_actualBonusId]->setPosition(doodlePosition);
 		}
 		m_bonuses[m_actualBonusId]->rotate(-10.f);
-		m_offsetFallBonus.x += -2.f * STEP;
-		m_offsetFallBonus.y += 6.f * STEP;
+		m_offsetFallBonus.x += -2 * STEP;
+		m_offsetFallBonus.y += 6 * STEP;
 		m_bonuses[m_actualBonusId]->move(sf::Vector2f(m_offsetFallBonus));
 	}
 }
@@ -189,7 +189,7 @@ void GameScene::animateHatHelicopter() // TODO: handlers...this code NEED MORE H
 		m_bonuses[m_actualBonusId]->move(sf::Vector2f(0.f, float(WINDOW_HEIGHT)));
 	}
 
-	if (m_hero->getSpeedY() < -0.05f * HAT_HELICOPTER_DELTA_HEIGHT)
+	if (m_hero->getSpeedY() < -0.05 * HAT_HELICOPTER_DELTA_HEIGHT)
 	{
 		if ((m_animationCounter >= 0) && (m_animationCounter <= 5))
 		{
@@ -229,7 +229,7 @@ void GameScene::animateHatHelicopter() // TODO: handlers...this code NEED MORE H
 		}
 	}
 
-	if (m_hero->getSpeedY() >= -0.05f * HAT_HELICOPTER_DELTA_HEIGHT && m_actualBonus != BonusType::NO)
+	if (m_hero->getSpeedY() >= -0.05 * HAT_HELICOPTER_DELTA_HEIGHT && m_actualBonus != BonusType::NO)
 	{
 		m_bonuses[m_actualBonusId]->setTexture(m_assets.HAT_HELOCPTER_NONE_LEFT_TEXTURE);
 		if (m_actualBonus != BonusType::NO)

@@ -26,7 +26,7 @@ GameScene::GameScene(Assets & assets, sf::View & view, SoundHandler & soundHandl
 	m_hole->setTextureRect(sf::IntRect(0, 0, 60, 54));
 	m_hole->setTexture(m_assets.HOLE_TEXTURE);
 	m_holePosition.x = float(rand() % (WINDOW_WIDTH - HOLE_WIDTH));
-	m_holePosition.y = -1.f * float(rand() % 15000) - 10.f * 750.f;
+	m_holePosition.y = -float(rand() % 15000) - 10 * WINDOW_HEIGHT;
 	m_hole->setPosition(m_holePosition.x, m_holePosition.y);
 
 	m_scoreNum.setFont(m_assets.ARIAL_FONT);
