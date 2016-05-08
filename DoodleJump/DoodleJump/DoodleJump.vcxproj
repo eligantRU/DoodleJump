@@ -45,6 +45,11 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameOverScene.cpp" />
     <ClCompile Include="GameScene.cpp" />
+    <ClCompile Include="GameScene_Bonuses.cpp" />
+    <ClCompile Include="GameScene_Doodle.cpp" />
+    <ClCompile Include="GameScene_Events.cpp" />
+    <ClCompile Include="GameScene_Hole.cpp" />
+    <ClCompile Include="GameScene_Plates.cpp" />
     <ClCompile Include="HelpScene.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PauseScene.cpp" />
