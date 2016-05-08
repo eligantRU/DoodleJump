@@ -39,10 +39,10 @@ void GameScene::buildPlate(int startingPointPlateID, int plateIndex)
 {
 	sf::Vector2f startingPoint = getCenterPlatePosition(startingPointPlateID);
 
-	float y = float((rand() % 100) + PLATE_WIDTH); //float((rand() % 182) + 60);
-	float x = float(rand() % (WINDOW_WIDTH - PLATE_WIDTH));	//float x = (sqrt(484 * 484 - y * y)) / 2;
+	float y = float((rand() % 191) + PLATE_HEIGHT + ROCKET_HEIGHT);
+	float x = (sqrt(242 * 242 - y * y));
 
-	if ((startingPoint.x + x > WINDOW_WIDTH - PLATE_WIDTH) && (startingPoint.x - x < 0))
+	if (startingPoint.x + x > WINDOW_WIDTH - PLATE_WIDTH)
 	{
 		x = float(rand() % (WINDOW_WIDTH - PLATE_WIDTH));
 	}
