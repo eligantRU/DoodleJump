@@ -46,11 +46,7 @@ void GameScene::buildPlate(int startingPointPlateID, int plateIndex)
 	{
 		x = float(rand() % (WINDOW_WIDTH - PLATE_WIDTH));
 	}
-
-	if ((m_plates[startingPointPlateID]->getType() == PlateType::UNSTABLE) || (m_plates[startingPointPlateID]->getType() == PlateType::UNSTABLE_DYNAMIC_X))
-	{
-		--m_unstablePlatesCounter;
-	}
+	
 	int divider = 3 + rand() % (1 + plateIndex % 2); // NOTE: interesting engineering solution
 	switch (rand() % divider)
 	{

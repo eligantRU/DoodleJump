@@ -71,7 +71,6 @@ private:
 	BonusType m_actualBonus;
 	sf::Vector2f m_holePosition;
 	sf::Vector2f m_offsetFallBonus;
-	int m_unstablePlatesCounter = 0;
 	int m_animationCounter = 0;
 	int m_actualBonusId;
 	bool m_endOfGame = false;
