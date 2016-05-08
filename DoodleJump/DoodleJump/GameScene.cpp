@@ -52,9 +52,7 @@ SGameResult GameScene::onGameFrame(sf::RenderWindow & window)
 {
 	if (m_result.status == GameStatus::GAME_OVER_SCENE)
 	{
-		{
-			resetGame();
-		}
+		resetGame();
 	}
 
 	if (!m_endOfGame)
@@ -120,7 +118,7 @@ void GameScene::update(sf::RenderWindow & window)
 	moveBonuses();
 	dropUnstablePlates();
 	moveDynamicPlates();
-	generPlates();
+	//generPlates();
 	generBonuses();
 	generHole();
 
@@ -141,31 +139,18 @@ void GameScene::resetGame()
 	m_hero->setDirection(DirectionX::NONE);
 
 	m_hero->setTexture(m_assets.DOODLE_LEFT_TEXTURE);
-	m_hero->setPosition(sf::Vector2f(260.f, 350.f));
+	m_hero->setPosition(DOODLE_START_POSITION);
 	m_hero->setSpeedY(-50.f);
 	m_animationCounter = 0;
 	m_hero->setPositionBeforeDown(m_hero->getPosition());
 	m_view.setCenter(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
 
-	m_plates[0]->setPosition(sf::Vector2f(WINDOW_WIDTH / 2 - PLATE_WIDTH/2, WINDOW_HEIGHT - PLATE_HEIGHT));
-	for (int i = 1; i < NUMBER_PLATES/2; ++(++i))
+	m_plates[0]->setPosition(sf::Vector2f((WINDOW_WIDTH - PLATE_WIDTH) / 2, DOODLE_START_POSITION.y - WINDOW_HEIGHT));
+	for (int i = 1; i < NUMBER_PLATES; ++i)
 	{
-		m_plates[i]->setType(PlateType::STATIC);
-		m_plates[i]->setTexture(m_assets.PLATE_STATIC_TEXTURE);
-
-		float y1 = float((rand() % 152) + 90);
-		float x1 = (sqrt(484*484 - y1*y1))/2;
-		float y2 = float((rand() % 152) + 90);
-		float x2 = (sqrt(484 * 484 - y1*y1)) / 2;
-		if ((m_plates[i - 1]->getPosition().x + x1 >= WINDOW_WIDTH - PLATE_WIDTH) && (m_plates[i - 1]->getPosition().x - x1 <= 0))
-		{
-			x1 = float(rand() % (WINDOW_WIDTH - PLATE_WIDTH));
-		}
-
-		m_plates[i]->setPosition(sf::Vector2f(x1, m_plates[i-1]->getPosition().y - y1));
-		m_plates[i]->setPosition(sf::Vector2f(x2, m_plates[i-1]->getPosition().y - y2));
+		m_plates[i]->setPosition(sf::Vector2f(0, DOODLE_START_POSITION.y));
 	}
-	m_view.setCenter(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
+	generPlates();
 	initBonuses();
 }
 

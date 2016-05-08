@@ -23,8 +23,12 @@ private:
 	void updatePositionBeforeDown();
 
 	void generPlates();
+	sf::Vector2f getCenterPlatePosition(int plateID) const;
+	void buildPlate(int startingPointPlateID, int plateIndex);
 	void dropUnstablePlates();
-	void moveDynamicPlates();
+	void moveDynamicPlates(); 
+	int getLowermostPlateID() const;
+	int getUppermostPlateID() const;
 
 	void animateBonus();
 	void animateSpring();

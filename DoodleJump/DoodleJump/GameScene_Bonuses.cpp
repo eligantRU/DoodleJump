@@ -263,28 +263,24 @@ void GameScene::buildBonus(BonusType bonusType, int bonusIndex, sf::Vector2f pla
 {
 	m_bonuses[bonusIndex]->setPlateIndex(plateIndex);
 	m_bonuses[bonusIndex]->setRotation(0.f);
+	int x;
 
 	switch (bonusType)
 	{
 	case BonusType::SPRING:
-	{
-		int x = rand() % (PLATE_WIDTH - SPRING_WIDTH);
+		x = rand() % (PLATE_WIDTH - SPRING_WIDTH);
 		m_bonuses[bonusIndex]->setBonusType(BonusType::SPRING);
 		m_bonuses[bonusIndex]->setPosition(sf::Vector2f(platePosition.x + x, platePosition.y - SPRING_HEIGHT));
 		m_bonuses[bonusIndex]->setTexture(m_assets.SPRING_TEXTURE);
 		break;
-	}
 	case BonusType::TRAMPOLINE:
-	{
-		int x = rand() % (PLATE_WIDTH - TRAMPOLINE_WIDTH);
+		x = rand() % (PLATE_WIDTH - TRAMPOLINE_WIDTH);
 		m_bonuses[bonusIndex]->setBonusType(BonusType::TRAMPOLINE);
 		m_bonuses[bonusIndex]->setPosition(sf::Vector2f(platePosition.x + x, platePosition.y - TRAMPOLINE_HEIGHT));
 		m_bonuses[bonusIndex]->setTexture(m_assets.TRAMPOLINE_TEXTURE);
 		break;
-	}
 	case BonusType::HAT_HELICOPTER:
-	{
-		int x = rand() % (PLATE_WIDTH - SPRING_WIDTH);
+		x = rand() % (PLATE_WIDTH - SPRING_WIDTH);
 		m_bonuses[bonusIndex]->setBonusType(BonusType::HAT_HELICOPTER);
 		m_bonuses[bonusIndex]->setPosition(sf::Vector2f(platePosition.x + x, platePosition.y - HAT_HELICOPTER_HEIGHT));
 		switch (rand() % 2)
@@ -297,15 +293,14 @@ void GameScene::buildBonus(BonusType bonusType, int bonusIndex, sf::Vector2f pla
 			break;
 		}
 		break;
-	}
 	case BonusType::ROCKET:
-	{
-		int x = rand() % (PLATE_WIDTH - ROCKET_WIDTH);
+		x = rand() % (PLATE_WIDTH - ROCKET_WIDTH);
 		m_bonuses[bonusIndex]->setBonusType(BonusType::ROCKET);
 		m_bonuses[bonusIndex]->setPosition(sf::Vector2f(platePosition.x + x, platePosition.y - ROCKET_HEIGHT));
 		m_bonuses[bonusIndex]->setTexture(m_assets.ROCKET_NONE_TEXTURE);
 		break;
-	}
+	default:
+		break;
 	}
 }
 
