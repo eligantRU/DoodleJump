@@ -118,7 +118,15 @@ void GameScene::update(sf::RenderWindow & window)
 	moveBonuses();
 	dropUnstablePlates();
 	moveDynamicPlates();
-	//generPlates();
+
+	auto upID = getUppermostPlateID();
+	float uppermostPlatePositionY = m_plates[upID]->getPosition().y;
+	bool needGenerPlate = uppermostPlatePositionY > (m_view.getCenter().y - 350);
+	if (needGenerPlate)
+	{
+		generPlates();
+	}
+
 	generBonuses();
 	generHole();
 
@@ -150,7 +158,7 @@ void GameScene::resetGame()
 	{
 		m_plates[i]->setPosition(sf::Vector2f(0, DOODLE_START_POSITION.y));
 	}
-	generPlates();
+	initPlates();
 	initBonuses();
 }
 

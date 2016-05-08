@@ -79,13 +79,28 @@ void GameScene::buildPlate(int startingPointPlateID, int plateIndex)
 	m_plates[plateIndex]->setPosition(sf::Vector2f(x, startingPoint.y - y));
 }
 
-void GameScene::generPlates()
+void GameScene::initPlates()
 {
 	int uppermostPlateID;
-	sf::Vector2f viewPosition = m_view.getCenter();
+	float viewPositionY = m_view.getCenter().y;
 	for (int i = 1; i < NUMBER_PLATES; ++(++i))
 	{
-		if ((m_plates[i]->getPosition().x < viewPosition.y + 350) && (m_plates[i + 1]->getPosition().x < viewPosition.y + 350))
+		if ((m_plates[i]->getPosition().y < viewPositionY + 350) && (m_plates[i + 1]->getPosition().y < viewPositionY + 350))
+		{
+			uppermostPlateID = getUppermostPlateID();
+			buildPlate(uppermostPlateID, i);
+			buildPlate(uppermostPlateID, i + 1);
+		}
+	}
+}
+
+void GameScene::generPlates() // TODO: see on initPlates(): they r equal! NOTE: 0 not 1! > not <
+{
+	int uppermostPlateID;
+	float viewPositionY = m_view.getCenter().y;
+	for (int i = 0; i < NUMBER_PLATES; ++(++i))
+	{
+		if ((m_plates[i]->getPosition().y > viewPositionY + 350) && (m_plates[i + 1]->getPosition().y > viewPositionY + 350))
 		{
 			uppermostPlateID = getUppermostPlateID();
 			buildPlate(uppermostPlateID, i);
@@ -101,7 +116,7 @@ void GameScene::dropUnstablePlates()
 		if (m_plates[plateIndex]->getFallStatus() == true)
 		{
 			m_plates[plateIndex]->rotate(-1.f);
-			m_plates[plateIndex]->move(sf::Vector2f(-1 * STEP, 4 * STEP));
+			m_plates[plateIndex]->move(sf::Vector2f(-STEP, 4 * STEP));
 			if (m_plates[plateIndex]->getPosition().y >= m_view.getCenter().y + WINDOW_HEIGHT / 2)
 			{
 				m_plates[plateIndex]->setRotation(0);

@@ -22,6 +22,7 @@ private:
 	float checkDoodleFall();
 	void updatePositionBeforeDown();
 
+	void initPlates();
 	void generPlates();
 	sf::Vector2f getCenterPlatePosition(int plateID) const;
 	void buildPlate(int startingPointPlateID, int plateIndex);
