@@ -11,10 +11,21 @@ public:
 	SGameResult onGameFrame(sf::RenderWindow & window);
 	uint64_t getScore() const;
 private:
+	void resetGame();
+	void tuneSceneAfterPause(sf::RenderWindow & window);
 	void render(sf::RenderWindow & window);
+	void update(sf::RenderWindow & window);
+
 	void moveDoodle();
 	float moveDoodleHorizontal();
 	float moveDoodleVertical();
+	float checkDoodleFall();
+	void updatePositionBeforeDown();
+
+	void generPlates();
+	void dropUnstablePlates();
+	void moveDynamicPlates();
+
 	void animateBonus();
 	void animateSpring();
 	void animateTrampoline();
@@ -22,26 +33,20 @@ private:
 	void animateHatHelicopter();
 	void initBonuses();
 	void moveBonuses();
-	void generPlates();
 	void generBonuses();
-	void update(sf::RenderWindow & window);
-	void checkEvents(sf::RenderWindow & window);
-	void checkKeyboard(sf::Event event); 
-	void checkKeyPressed(sf::Event event, bool & isNeedUpdate);
-	void checkKeyRealesed(sf::Event event, bool & isNeedUpdate);
-	float checkDoodleFall();
-	void dropUnstablePlates();
+	void buildBonus(BonusType bonusType, int bonusIndex, sf::Vector2f platePosition, int plateIndex);
+
 	void generHole();
+
+	void checkEvents(sf::RenderWindow & window);
+	void checkKeyboard(sf::Event event);
+	void checkKeyPressed(sf::Event event, bool & isNeedUpdate);
+	void checkKeyReleased(sf::Event event, bool & isNeedUpdate);
 	bool checkGameEnd();
 	void checkCylinderEffect();
-	void updatePositionBeforeDown();
 	Collision checkCollisionPlate();
 	Collision checkCollisionBonus();
 	Collision checkCollisionHole();
-	void buildBonus(BonusType bonusType, int bonusIndex, sf::Vector2f platePosition, int plateIndex);
-	void moveDynamicPlates();
-	void resetGame();
-	void tuneSceneAfterPause(sf::RenderWindow & window);
 
 	Assets & m_assets;
 	sf::View & m_view;

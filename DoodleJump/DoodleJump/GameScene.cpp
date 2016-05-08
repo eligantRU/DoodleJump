@@ -725,7 +725,7 @@ void GameScene::checkKeyboard(sf::Event event)
 {
 	bool isNeedUpdate = false;
 	checkKeyPressed(event, isNeedUpdate);
-	checkKeyRealesed(event, isNeedUpdate);
+	checkKeyReleased(event, isNeedUpdate);
 
 	if (isNeedUpdate)
 	{
@@ -753,7 +753,7 @@ void GameScene::checkKeyPressed(sf::Event event, bool & isNeedUpdate)
 	}
 }
 
-void GameScene::checkKeyRealesed(sf::Event event, bool & isNeedUpdate)
+void GameScene::checkKeyReleased(sf::Event event, bool & isNeedUpdate)
 {
 	if (event.type == sf::Event::KeyReleased)
 	{
