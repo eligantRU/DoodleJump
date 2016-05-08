@@ -119,8 +119,7 @@ void GameScene::update(sf::RenderWindow & window)
 	dropUnstablePlates();
 	moveDynamicPlates();
 
-	auto upID = getUppermostPlateID();
-	float uppermostPlatePositionY = m_plates[upID]->getPosition().y;
+	float uppermostPlatePositionY = m_plates[getUppermostPlateID()]->getPosition().y;
 	bool needGenerPlate = uppermostPlatePositionY > (m_view.getCenter().y - 350);
 	if (needGenerPlate)
 	{
