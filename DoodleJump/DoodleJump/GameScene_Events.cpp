@@ -118,6 +118,7 @@ Collision GameScene::checkCollisionPlate()
 			if ((m_plates[i]->getType() == PlateType::UNSTABLE) || (m_plates[i]->getType() == PlateType::UNSTABLE_DYNAMIC_X))
 			{
 				m_plates[i]->setFallStatus(true);
+				m_soundHandler.playSound(m_assets.PLATE_BROKEN_SOUND);
 				continue;
 			}
 

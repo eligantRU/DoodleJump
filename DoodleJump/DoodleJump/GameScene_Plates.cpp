@@ -51,9 +51,8 @@ void GameScene::buildPlate(int startingPointPlateID, int plateIndex)
 	{
 		--m_unstablePlatesCounter;
 	}
-
-	m_plates[plateIndex]->setRotation(0);
-	switch (rand() % 3)
+	int divider = 3 + rand() % (1 + plateIndex % 2); // NOTE: interesting engineering solution
+	switch (rand() % divider)
 	{
 	case 0:
 		m_plates[plateIndex]->setType(PlateType::STATIC);
@@ -75,7 +74,20 @@ void GameScene::buildPlate(int startingPointPlateID, int plateIndex)
 		m_plates[plateIndex]->setTexture(m_assets.PLATE_CLOUD_TEXTURE);
 		m_plates[plateIndex]->setSpeedX(0);
 		break;
+	case 3:
+		m_plates[plateIndex]->setType(PlateType::UNSTABLE_DYNAMIC_X);
+		m_plates[plateIndex]->setTexture(m_assets.PLATE_UNSTABLE_TEXTURE);
+
+		m_plates[plateIndex]->setSpeedX((rand() % 3) + 1);
+		if (rand() % 2)
+		{
+			m_plates[plateIndex]->setSpeedX(-m_plates[plateIndex]->getSpeedX());
+		}
+		break;
+	default:
+		break;
 	}
+	m_plates[plateIndex]->setRotation(0);
 	m_plates[plateIndex]->setPosition(sf::Vector2f(x, startingPoint.y - y));
 }
 

@@ -248,7 +248,10 @@ void GameScene::initBonuses()
 	std::vector<sf::Vector2f> platePosition;
 	for (int plateIndex = 0; plateIndex < NUMBER_PLATES; ++plateIndex)
 	{
-		platePosition.push_back(m_plates[plateIndex]->getPosition());
+		if (m_plates[plateIndex]->getType() == PlateType::STATIC)
+		{
+			platePosition.push_back(m_plates[plateIndex]->getPosition());
+		}
 	}
 
 	for (int bonusIndex = 0; bonusIndex < NUMBER_BONUSES; ++bonusIndex)
