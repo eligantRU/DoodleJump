@@ -4,12 +4,14 @@
 int GameScene::getUppermostPlateID() const
 {
 	int uppermostPlateID = 0;
-	for (int i = 0; i < NUMBER_PLATES; ++i)
+	int plateIndex = 0;
+	for (auto &plate : m_plates)
 	{
-		if (m_plates[i]->getPosition().y < m_plates[uppermostPlateID]->getPosition().y)
+		if (plate->getPosition().y < m_plates[uppermostPlateID]->getPosition().y)
 		{
-			uppermostPlateID = i;
+			uppermostPlateID = plateIndex;
 		}
+		++plateIndex;
 	}
 	return uppermostPlateID;
 }

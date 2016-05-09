@@ -300,27 +300,26 @@ void GameScene::buildBonus(BonusType bonusType, int bonusIndex, sf::Vector2f pla
 
 void GameScene::moveBonuses()
 {
-	for (int bonusIndex = 0; bonusIndex < NUMBER_BONUSES; ++bonusIndex)
-	{
-		sf::Vector2f bonusPosition = m_bonuses[bonusIndex]->getPosition();
-		int speedX = m_bonuses[bonusIndex]->getSpeedX();
-		int plateOffset = m_bonuses[bonusIndex]->getPlateOffset();
+	std::for_each(m_bonuses.begin(), m_bonuses.end(), [](std::unique_ptr<Bonus> & bonus) {
+		sf::Vector2f bonusPosition = bonus->getPosition();
+		int speedX = bonus->getSpeedX();
+		int plateOffset = bonus->getPlateOffset();
 		if (speedX < 0)
 		{
 			if (bonusPosition.x <= plateOffset)
 			{
-				m_bonuses[bonusIndex]->setSpeedX(-speedX);
+				bonus->setSpeedX(-speedX);
 			}
 		}
 		if (speedX > 0)
 		{
 			if (bonusPosition.x >= WINDOW_WIDTH - PLATE_WIDTH + plateOffset)
 			{
-				m_bonuses[bonusIndex]->setSpeedX(-speedX);
+				bonus->setSpeedX(-speedX);
 			}
 		}
-		m_bonuses[bonusIndex]->move(sf::Vector2f(float(speedX), 0));
-	}
+		bonus->move(sf::Vector2f(float(speedX), 0));
+	});
 }
 
 void GameScene::generBonuses()
