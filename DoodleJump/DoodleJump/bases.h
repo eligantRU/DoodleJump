@@ -2,7 +2,7 @@
 
 #include "stdafx.h"
 
-static const int NUMBER_PLATES = 30; 
+static const int NUMBER_PLATES = 26; 
 static const int NUMBER_BONUSES = 1;
 static const int NUMBER_INSECTS = 5;
 static const int NUMBER_UNSTABLE_PLATES = 3;

@@ -1,19 +1,6 @@
 #include "stdafx.h"
 #include "sheet.h"
 
-int GameScene::getLowermostPlateID() const
-{
-	int lowermostPlateID = 0;
-	for (int i = 0; i < NUMBER_PLATES; ++i)
-	{
-		if (m_plates[i]->getPosition().y > m_plates[lowermostPlateID]->getPosition().y)
-		{
-			lowermostPlateID = i;
-		}
-	}
-	return lowermostPlateID;
-}
-
 int GameScene::getUppermostPlateID() const
 {
 	int uppermostPlateID = 0;
@@ -39,7 +26,7 @@ void GameScene::buildPlate(int startingPointPlateID, int plateIndex)
 {
 	sf::Vector2f startingPoint = getCenterPlatePosition(startingPointPlateID);
 	float x, y;
-	float offsetY = float((rand() % 191) + PLATE_HEIGHT + ROCKET_HEIGHT);
+	float offsetY = float((rand() % 100) + PLATE_HEIGHT + DOODLE_HEIGHT);
 	float offsetX = (sqrt(242 * 242 - offsetY * offsetY));
 	if (rand() % 2)
 	{
@@ -92,28 +79,14 @@ void GameScene::buildPlate(int startingPointPlateID, int plateIndex)
 	m_plates[plateIndex]->setPosition(sf::Vector2f(x, y));
 }
 
-void GameScene::initPlates()
+void GameScene::generPlates()
 {
 	int uppermostPlateID;
 	float viewPositionY = m_view.getCenter().y;
-	for (int i = 1; i < NUMBER_PLATES; ++(++i))
-	{
-		if ((m_plates[i]->getPosition().y < viewPositionY + 350) && (m_plates[i + 1]->getPosition().y < viewPositionY + 350))
-		{
-			uppermostPlateID = getUppermostPlateID();
-			buildPlate(uppermostPlateID, i);
-			buildPlate(uppermostPlateID, i + 1);
-		}
-	}
-}
-
-void GameScene::generPlates() // TODO: see on initPlates(): they r equal! NOTE: 0 not 1! > not <
-{
-	int uppermostPlateID;
-	float viewPositionY = m_view.getCenter().y;
+	
 	for (int i = 0; i < NUMBER_PLATES; ++(++i))
 	{
-		if ((m_plates[i]->getPosition().y > viewPositionY + 350) && (m_plates[i + 1]->getPosition().y > viewPositionY + 350))
+		if ((m_plates[i]->getPosition().y > viewPositionY + WINDOW_HEIGHT / 2) && (m_plates[i + 1]->getPosition().y > viewPositionY + WINDOW_HEIGHT / 2))
 		{
 			uppermostPlateID = getUppermostPlateID();
 			buildPlate(uppermostPlateID, i);
@@ -124,41 +97,39 @@ void GameScene::generPlates() // TODO: see on initPlates(): they r equal! NOTE: 
 
 void GameScene::dropUnstablePlates()
 {
-	for (int plateIndex = 0; plateIndex < NUMBER_PLATES; ++plateIndex)
-	{
-		if (m_plates[plateIndex]->getFallStatus() == true)
+	std::for_each(m_plates.begin(), m_plates.end(), [&](std::unique_ptr<Plate> & plate) {
+		if (plate->getFallStatus() == true)
 		{
-			m_plates[plateIndex]->rotate(-1.f);
-			m_plates[plateIndex]->move(sf::Vector2f(-STEP, 4 * STEP));
-			if (m_plates[plateIndex]->getPosition().y >= m_view.getCenter().y + WINDOW_HEIGHT / 2)
+			plate->rotate(-1.f);
+			plate->move(sf::Vector2f(-STEP, 4 * STEP));
+			if (plate->getPosition().y >= m_view.getCenter().y + WINDOW_HEIGHT / 2)
 			{
-				m_plates[plateIndex]->setRotation(0);
-				m_plates[plateIndex]->setFallStatus(false);
+				plate->setRotation(0);
+				plate->setFallStatus(false);
 			}
 		}
-	}
+	});
 }
 
 void GameScene::moveDynamicPlates()
 {
-	for (int i = 0; i < NUMBER_PLATES; ++i)
-	{
-		sf::Vector2f platePosition = m_plates[i]->getPosition();
-		int speedX = m_plates[i]->getSpeedX();
+	std::for_each(m_plates.begin(), m_plates.end(), [](std::unique_ptr<Plate> & plate) {
+		sf::Vector2f platePosition = plate->getPosition();
+		int speedX = plate->getSpeedX();
 		if (speedX < 0)
 		{
 			if (platePosition.x <= 0)
 			{
-				m_plates[i]->setSpeedX(-speedX);
+				plate->setSpeedX(-speedX);
 			}
 		}
 		if (speedX > 0)
 		{
 			if (platePosition.x >= WINDOW_WIDTH - PLATE_WIDTH)
 			{
-				m_plates[i]->setSpeedX(-speedX);
+				plate->setSpeedX(-speedX);
 			}
 		}
-		m_plates[i]->move(sf::Vector2f(float(speedX), 0.f));
-	}
+		plate->move(sf::Vector2f(float(speedX), 0));
+	});
 }

@@ -7,7 +7,7 @@ StartScene::StartScene(Assets & assets, sf::View & view, SoundHandler & soundHan
 	,m_soundHandler(soundHandler)
 {
 	m_hero = std::make_unique<Doodle>(m_assets);
-	m_plate = std::make_unique<Plate>(m_assets);
+	m_plate = std::make_unique<Plate>();
 	m_hero->setSpeedY(-20.f);
 	m_hero->setTexture(m_assets.DOODLE_RIGHT_TEXTURE);
 	m_hero->setPosition(sf::Vector2f(110.f, 500.f - DOODLE_HEIGHT));
@@ -46,6 +46,8 @@ StartScene::StartScene(Assets & assets, sf::View & view, SoundHandler & soundHan
 	m_background->setTexture(m_assets.BACKGROUND_TEXTURE);
 	m_background->setPosition(0.f, 0.f);
 
+	m_plate->setType(PlateType::STATIC);
+	m_plate->setTexture(m_assets.PLATE_STATIC_TEXTURE);
 	m_plate->setPosition(sf::Vector2f(100.f, 500.f));
 }
 
@@ -81,7 +83,6 @@ void StartScene::render(sf::RenderWindow & window) const
 	m_exitButton->draw(window);
 	m_helpButton->draw(window);
 	window.draw(*m_hole);
-
 	for (auto &insect : m_insects)
 	{
 		window.draw(*insect);

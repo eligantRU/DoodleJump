@@ -22,13 +22,11 @@ private:
 	float checkDoodleFall();
 	void updatePositionBeforeDown();
 
-	void initPlates();
 	void generPlates();
 	sf::Vector2f getCenterPlatePosition(int plateID) const;
 	void buildPlate(int startingPointPlateID, int plateIndex);
 	void dropUnstablePlates();
 	void moveDynamicPlates(); 
-	int getLowermostPlateID() const;
 	int getUppermostPlateID() const;
 
 	void animateBonus();
@@ -58,9 +56,8 @@ private:
 	SoundHandler & m_soundHandler;
 
 	std::unique_ptr<Doodle> m_hero;
-	std::unique_ptr<Plate> m_plates[NUMBER_PLATES];
-	std::unique_ptr<Bonus> m_bonuses[NUMBER_BONUSES];
-	// std::unique_ptr<Enemy> m_enemies[NUMBER_ENEMIES];
+	std::array<std::unique_ptr<Plate>, NUMBER_PLATES> m_plates;
+	std::array<std::unique_ptr<Bonus>, NUMBER_BONUSES> m_bonuses;
 
 	std::unique_ptr<sf::Sprite> m_hole;
 	std::unique_ptr<sf::Sprite> m_background;
