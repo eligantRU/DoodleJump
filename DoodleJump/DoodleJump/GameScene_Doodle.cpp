@@ -57,7 +57,7 @@ void GameScene::updatePositionBeforeDown()
 	}
 }
 
-float GameScene::checkDoodleFall() // TODO: try to write handler else not too bad
+float GameScene::checkDoodleFall()
 {
 	Collision collision = Collision::NO_COLLISION;
 

@@ -27,15 +27,14 @@ sf::Vector2f GameScene::getCenterPlatePosition(int plateID) const
 void GameScene::buildPlate(int startingPointPlateID, int plateIndex)
 {
 	sf::Vector2f startingPoint = getCenterPlatePosition(startingPointPlateID);
-	float x, y;
 	float offsetY = float((rand() % 100) + PLATE_HEIGHT + DOODLE_HEIGHT);
 	float offsetX = (sqrt(242 * 242 - offsetY * offsetY));
 	if (rand() % 2)
 	{
 		offsetX *= -1;
 	}
-	x = startingPoint.x + offsetX;
-	y = startingPoint.y - offsetY;
+	float x = startingPoint.x + offsetX;
+	float y = startingPoint.y - offsetY;
 	if ((startingPoint.x + offsetX > WINDOW_WIDTH - PLATE_WIDTH) || (startingPoint.x + offsetX < 0))
 	{
 		x = float(rand() % (WINDOW_WIDTH - PLATE_WIDTH));

@@ -131,7 +131,7 @@ Collision GameScene::checkCollisionPlate()
 
 Collision GameScene::checkCollisionHole()
 {
-	auto doodlePosition = m_hero->getPosition();
+	sf::Vector2f doodlePosition = m_hero->getPosition();
 	if (((doodlePosition.y + DOODLE_HEIGHT >= m_holePosition.y) && (doodlePosition.y + DOODLE_HEIGHT <= m_holePosition.y + HOLE_HEIGHT)
 		&& (doodlePosition.x + DOODLE_WIDTH >= m_holePosition.x) && (doodlePosition.x - HOLE_WIDTH <= m_holePosition.x)))
 	{
