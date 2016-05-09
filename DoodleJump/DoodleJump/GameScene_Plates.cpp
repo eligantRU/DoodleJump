@@ -38,11 +38,16 @@ sf::Vector2f GameScene::getCenterPlatePosition(int plateID) const
 void GameScene::buildPlate(int startingPointPlateID, int plateIndex)
 {
 	sf::Vector2f startingPoint = getCenterPlatePosition(startingPointPlateID);
-
-	float y = float((rand() % 191) + PLATE_HEIGHT + ROCKET_HEIGHT);
-	float x = (sqrt(242 * 242 - y * y));
-
-	if (startingPoint.x + x > WINDOW_WIDTH - PLATE_WIDTH)
+	float x, y;
+	float offsetY = float((rand() % 191) + PLATE_HEIGHT + ROCKET_HEIGHT);
+	float offsetX = (sqrt(242 * 242 - offsetY * offsetY));
+	if (rand() % 2)
+	{
+		offsetX *= -1;
+	}
+	x = startingPoint.x + offsetX;
+	y = startingPoint.y - offsetY;
+	if ((startingPoint.x + offsetX > WINDOW_WIDTH - PLATE_WIDTH) || (startingPoint.x + offsetX < 0))
 	{
 		x = float(rand() % (WINDOW_WIDTH - PLATE_WIDTH));
 	}
@@ -71,10 +76,10 @@ void GameScene::buildPlate(int startingPointPlateID, int plateIndex)
 		m_plates[plateIndex]->setSpeedX(0);
 		break;
 	case 3:
-		m_plates[plateIndex]->setType(PlateType::UNSTABLE_DYNAMIC_X);
+		m_plates[plateIndex]->setType(PlateType::UNSTABLE);
 		m_plates[plateIndex]->setTexture(m_assets.PLATE_UNSTABLE_TEXTURE);
 
-		m_plates[plateIndex]->setSpeedX((rand() % 3) + 1);
+		m_plates[plateIndex]->setSpeedX(rand() % 3);
 		if (rand() % 2)
 		{
 			m_plates[plateIndex]->setSpeedX(-m_plates[plateIndex]->getSpeedX());
@@ -84,7 +89,7 @@ void GameScene::buildPlate(int startingPointPlateID, int plateIndex)
 		break;
 	}
 	m_plates[plateIndex]->setRotation(0);
-	m_plates[plateIndex]->setPosition(sf::Vector2f(x, startingPoint.y - y));
+	m_plates[plateIndex]->setPosition(sf::Vector2f(x, y));
 }
 
 void GameScene::initPlates()

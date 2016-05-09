@@ -115,7 +115,7 @@ Collision GameScene::checkCollisionPlate()
 		if (((doodlePosition.y + DOODLE_HEIGHT >= platePosition[i].y) && (doodlePosition.y + DOODLE_HEIGHT <= platePosition[i].y + PLATE_HEIGHT)
 			&& (doodlePosition.x + DOODLE_WIDTH >= platePosition[i].x) && (doodlePosition.x - PLATE_WIDTH <= platePosition[i].x)))
 		{
-			if ((m_plates[i]->getType() == PlateType::UNSTABLE) || (m_plates[i]->getType() == PlateType::UNSTABLE_DYNAMIC_X))
+			if (m_plates[i]->getType() == PlateType::UNSTABLE)
 			{
 				m_plates[i]->setFallStatus(true);
 				m_soundHandler.playSound(m_assets.PLATE_BROKEN_SOUND);

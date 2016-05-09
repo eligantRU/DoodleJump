@@ -258,6 +258,7 @@ void GameScene::initBonuses()
 	{
 		BonusType type = (rand() % 2) ? BonusType::SPRING : BonusType::TRAMPOLINE;
 		buildBonus(type, bonusIndex, platePosition[0], 0);
+		m_bonuses[bonusIndex]->setSpeedX(0);
 	}
 }
 
