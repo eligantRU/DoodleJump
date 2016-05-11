@@ -28,12 +28,8 @@ void GameScene::buildPlate(int startingPointPlateID, int plateIndex)
 	{
 		offsetX *= -1;
 	}
-	float x = startingPoint.x + offsetX;
+	float x = float(int(startingPoint.x + offsetX + WINDOW_WIDTH - PLATE_WIDTH) % (WINDOW_WIDTH - PLATE_WIDTH));
 	float y = startingPoint.y - offsetY;
-	if ((startingPoint.x + offsetX > WINDOW_WIDTH - PLATE_WIDTH) || (startingPoint.x + offsetX < 0))
-	{
-		x = float(rand() % (WINDOW_WIDTH - PLATE_WIDTH));
-	}
 	
 	int divider = 3 + rand() % (1 + plateIndex % 2); // NOTE: interesting engineering solution
 	switch (rand() % divider)
