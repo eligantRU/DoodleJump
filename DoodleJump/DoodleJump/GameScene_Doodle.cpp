@@ -94,6 +94,6 @@ float GameScene::checkDoodleFall()
 		m_soundHandler.playSound(m_assets.ROCKET_SOUND);
 		return ROCKET_DELTA_HEIGHT;
 	default:
-		return 0.f;
+		return 0;
 	}
 }

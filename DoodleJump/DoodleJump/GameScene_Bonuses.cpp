@@ -20,6 +20,7 @@ void GameScene::animateBonus()
 	case BonusType::NO:
 		break;
 	default:
+		assert(0);
 		break;
 	}
 }
@@ -281,6 +282,9 @@ void GameScene::buildBonus(BonusType bonusType, int bonusIndex, sf::Vector2f pla
 		case 1:
 			m_bonuses[bonusIndex]->setTexture(m_assets.HAT_HELOCPTER_NONE_RIGHT_TEXTURE);
 			break;
+		default:
+			assert(0);
+			break;
 		}
 		break;
 	case BonusType::ROCKET:
@@ -290,6 +294,7 @@ void GameScene::buildBonus(BonusType bonusType, int bonusIndex, sf::Vector2f pla
 		m_bonuses[bonusIndex]->setTexture(m_assets.ROCKET_NONE_TEXTURE);
 		break;
 	default:
+		assert(0);
 		break;
 	}
 	m_bonuses[bonusIndex]->setPlateIndex(plateIndex);
@@ -300,7 +305,8 @@ void GameScene::buildBonus(BonusType bonusType, int bonusIndex, sf::Vector2f pla
 
 void GameScene::moveBonuses()
 {
-	std::for_each(m_bonuses.begin(), m_bonuses.end(), [](std::unique_ptr<Bonus> & bonus) {
+	for (auto &bonus : m_bonuses)
+	{
 		sf::Vector2f bonusPosition = bonus->getPosition();
 		int speedX = bonus->getSpeedX();
 		int plateOffset = bonus->getPlateOffset();
@@ -319,21 +325,20 @@ void GameScene::moveBonuses()
 			}
 		}
 		bonus->move(sf::Vector2f(float(speedX), 0));
-	});
+	}
 }
 
 void GameScene::generBonuses()
 {
-	int bonusIndex = 0;
-	int plateIndex = 0;
-
-	std::for_each(m_bonuses.begin(), m_bonuses.end(), [&, bonusIndex](std::unique_ptr<Bonus> & bonus) mutable {
-		float bonusPositionY = bonus->getPosition().y;
+	for (int bonusIndex = 0; bonusIndex < NUMBER_BONUSES; ++bonusIndex)
+	{
+		float bonusPositionY = m_bonuses[bonusIndex]->getPosition().y;
 		if (bonusPositionY > m_view.getCenter().y + WINDOW_HEIGHT / 2)
 		{
-			std::for_each(m_plates.begin(), m_plates.end(), [&, plateIndex](std::unique_ptr<Plate> & plate) mutable {
-				sf::Vector2f platePosition = plate->getPosition();
-				PlateType plateType = plate->getType();
+			for (int plateIndex = 0; plateIndex < NUMBER_PLATES; ++plateIndex)
+			{
+				sf::Vector2f platePosition = m_plates[plateIndex]->getPosition();
+				PlateType plateType = m_plates[plateIndex]->getType();
 
 				if ((platePosition.y < m_view.getCenter().y - WINDOW_HEIGHT / 2 - ROCKET_HEIGHT) &&
 					((plateType == PlateType::STATIC) || (plateType == PlateType::STATIC_DYNAMIC_X)))
@@ -353,12 +358,12 @@ void GameScene::generBonuses()
 					case 3:
 						buildBonus(BonusType::ROCKET, bonusIndex, platePosition, plateIndex);
 						break;
+					default:
+						assert(0);
+						break;
 					}
 				}
-				++plateIndex;
-			});
-			plateIndex = 0;
-			++bonusIndex;
+			}
 		}
-	});
+	}
 }

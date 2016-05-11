@@ -182,6 +182,9 @@ Collision GameScene::checkCollisionBonus()
 				return Collision::COLLISION_ROCKET;
 			}
 			break;
+		default:
+			assert(0);
+			break;
 		}
 		++bonusIndex;
 	}

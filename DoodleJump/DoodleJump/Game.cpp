@@ -41,6 +41,9 @@ void Game::gameLoop(sf::RenderWindow & window)
 		case GameStatus::HELP_SCENE:
 			m_gameState = m_sceneHelp->onHelpMenu(window);
 			break;
+		default:
+			assert(0);
+			break;
 		}
 		// TODO: u check window.close() in all scenes. Do it here.
 	}

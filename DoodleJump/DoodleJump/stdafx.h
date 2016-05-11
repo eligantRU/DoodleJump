@@ -7,10 +7,8 @@
 
 #include "targetver.h"
 
-#include <stdio.h>
-#include <tchar.h>
-
 #include <algorithm>
+#include <cassert>
 #include <memory>
 #include <vector>
 #include <array>

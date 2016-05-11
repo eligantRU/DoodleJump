@@ -7,15 +7,16 @@ GameScene::GameScene(Assets & assets, sf::View & view, SoundHandler & soundHandl
 	,m_soundHandler(soundHandler)
 {
 	m_hero = std::make_unique<Doodle>(m_assets);
-	std::for_each(m_bonuses.begin(), m_bonuses.end(), [](std::unique_ptr<Bonus> & bonus) {
+	for (auto &bonus : m_bonuses)
+	{
 		bonus = std::make_unique<Bonus>();
-	});
-	
-	std::for_each(m_plates.begin(), m_plates.end(), [&](std::unique_ptr<Plate> & plate) {
+	}	
+	for (auto &plate : m_plates)
+	{
 		plate = std::make_unique<Plate>();
 		plate->setType(PlateType::STATIC);
 		plate->setTexture(m_assets.PLATE_STATIC_TEXTURE);
-	});
+	}
 
 	m_actualBonus = BonusType::NO;
 	m_view.reset(sf::FloatRect(0.f, 0.f, float(WINDOW_WIDTH), float(WINDOW_HEIGHT)));
@@ -152,9 +153,10 @@ void GameScene::resetGame()
 	m_hero->setPositionBeforeDown(m_hero->getPosition());
 	m_view.setCenter(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
 
-	std::for_each(m_plates.begin(), m_plates.end(), [&](std::unique_ptr<Plate> & plate) {
+	for (auto &plate : m_plates)
+	{
 		plate->setPosition(sf::Vector2f(0, DOODLE_START_POSITION.y));
-	}); 
+	}
 	m_plates[0]->setPosition(sf::Vector2f((WINDOW_WIDTH - PLATE_WIDTH) / 2, DOODLE_START_POSITION.y - WINDOW_HEIGHT));
 	initBonuses();
 }
@@ -164,13 +166,15 @@ void GameScene::render(sf::RenderWindow & window)
 	window.clear(sf::Color(255, 255, 255));
 	
 	window.draw(*m_background);
-	for_each(m_plates.begin(), m_plates.end(), [&](std::unique_ptr<Plate> & plate) {
+	for (auto &plate : m_plates)
+	{
 		plate->draw(window);
-	});
+	}
 	m_hero->draw(window);
-	for_each(m_bonuses.begin(), m_bonuses.end(), [&](std::unique_ptr<Bonus> & bonus) {
+	for (auto &bonus : m_bonuses)
+	{
 		bonus->draw(window);
-	});
+	}
 	window.draw(*m_hole);
 	m_scoreNum.setString("Score: " + std::to_string(m_points));
 	window.draw(m_scoreNum);

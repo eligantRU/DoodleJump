@@ -74,6 +74,7 @@ void GameScene::buildPlate(int startingPointPlateID, int plateIndex)
 		}
 		break;
 	default:
+		assert(0);
 		break;
 	}
 	m_plates[plateIndex]->setRotation(0);
@@ -98,7 +99,8 @@ void GameScene::generPlates()
 
 void GameScene::dropUnstablePlates()
 {
-	std::for_each(m_plates.begin(), m_plates.end(), [&](std::unique_ptr<Plate> & plate) {
+	for (auto &plate : m_plates)
+	{
 		if (plate->getFallStatus() == true)
 		{
 			plate->rotate(-1.f);
@@ -109,12 +111,13 @@ void GameScene::dropUnstablePlates()
 				plate->setFallStatus(false);
 			}
 		}
-	});
+	}
 }
 
 void GameScene::moveDynamicPlates()
 {
-	std::for_each(m_plates.begin(), m_plates.end(), [](std::unique_ptr<Plate> & plate) {
+	for (auto &plate : m_plates)
+	{
 		sf::Vector2f platePosition = plate->getPosition();
 		int speedX = plate->getSpeedX();
 		if (speedX < 0)
@@ -132,5 +135,5 @@ void GameScene::moveDynamicPlates()
 			}
 		}
 		plate->move(sf::Vector2f(float(speedX), 0));
-	});
+	}
 }
