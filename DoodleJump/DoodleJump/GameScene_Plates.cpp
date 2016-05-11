@@ -3,17 +3,12 @@
 
 int GameScene::getUppermostPlateID() const
 {
-	int uppermostPlateID = 0;
-	int plateIndex = 0;
+	std::vector<float> platePosition;
 	for (auto &plate : m_plates)
 	{
-		if (plate->getPosition().y < m_plates[uppermostPlateID]->getPosition().y)
-		{
-			uppermostPlateID = plateIndex;
-		}
-		++plateIndex;
+		platePosition.push_back(plate->getPosition().y);
 	}
-	return uppermostPlateID;
+	return std::distance(platePosition.begin(), std::min_element(platePosition.begin(), platePosition.end()));
 }
 
 sf::Vector2f GameScene::getCenterPlatePosition(int plateID) const
