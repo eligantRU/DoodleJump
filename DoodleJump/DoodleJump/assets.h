@@ -79,5 +79,6 @@ public:
 	sf::SoundBuffer HOLE_SOUND;
 	sf::SoundBuffer JUMP_SOUND;
 	sf::SoundBuffer PLATE_GHOST_SOUND;
+	sf::SoundBuffer PLATE_BROKEN_SOUND;
 private:
 };

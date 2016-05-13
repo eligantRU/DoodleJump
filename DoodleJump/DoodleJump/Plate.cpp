@@ -1,11 +1,9 @@
 #include "stdafx.h"
 #include "sheet.h"
 
-Plate::Plate(Assets & assets)
+Plate::Plate()
 {	
 	m_body = std::make_unique<sf::Sprite>();
-	m_type = PlateType::STATIC;
-	m_body->setTexture(assets.PLATE_STATIC_TEXTURE);
 	setPosition(sf::Vector2f(float(rand() % (WINDOW_WIDTH - PLATE_WIDTH)), float(rand() % (WINDOW_HEIGHT - PLATE_HEIGHT))));
 }
 

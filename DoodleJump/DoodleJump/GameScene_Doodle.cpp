@@ -57,7 +57,7 @@ void GameScene::updatePositionBeforeDown()
 	}
 }
 
-float GameScene::checkDoodleFall() // TODO: try to write handler else not too bad
+float GameScene::checkDoodleFall()
 {
 	Collision collision = Collision::NO_COLLISION;
 
@@ -94,6 +94,6 @@ float GameScene::checkDoodleFall() // TODO: try to write handler else not too ba
 		m_soundHandler.playSound(m_assets.ROCKET_SOUND);
 		return ROCKET_DELTA_HEIGHT;
 	default:
-		return 0.f;
+		return 0;
 	}
 }

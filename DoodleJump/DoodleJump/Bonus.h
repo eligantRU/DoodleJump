@@ -21,9 +21,12 @@ public:
 	void rotate(float degree);
 	void setBonusType(BonusType type);
 	BonusType getBonusType() const;
+	int getPlateOffset() const;
+	void setPlateOffset(int offset);
 private:
 	std::unique_ptr<sf::Sprite> m_body;
 	int m_plateIndex;
 	int m_speedX;
 	BonusType m_type;
+	int m_plateOffset;
 };

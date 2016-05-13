@@ -6,7 +6,7 @@
 struct Plate
 {
 public:
-	Plate(Assets & assets);
+	Plate();
 	~Plate();
 	void draw(sf::RenderWindow & window);
 	void move(sf::Vector2f deltaPosition);

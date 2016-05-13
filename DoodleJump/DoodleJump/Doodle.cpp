@@ -111,6 +111,7 @@ void Doodle::setDirection(DirectionX newDirection)
 	case DirectionX::NONE:
 		break;
 	default:
+		assert(0);
 		break;
 	}
 }

@@ -103,30 +103,27 @@ void GameScene::checkCylinderEffect()
 
 Collision GameScene::checkCollisionPlate()
 {
-	auto doodlePosition = m_hero->getPosition();
-	std::array<sf::Vector2f, NUMBER_PLATES> platePosition;
-	for (int i = 0; i < NUMBER_PLATES; ++i)
-	{
-		platePosition[i] = m_plates[i]->getPosition();
-	}
+	sf::Vector2f doodlePosition = m_hero->getPosition();
 
-	for (int i = 0; i < NUMBER_PLATES; ++i)
+	for (auto &plate : m_plates)
 	{
-		if (((doodlePosition.y + DOODLE_HEIGHT >= platePosition[i].y) && (doodlePosition.y + DOODLE_HEIGHT <= platePosition[i].y + PLATE_HEIGHT)
-			&& (doodlePosition.x + DOODLE_WIDTH >= platePosition[i].x) && (doodlePosition.x - PLATE_WIDTH <= platePosition[i].x)))
+		sf::Vector2f platePosition = plate->getPosition();
+		PlateType plateType = plate->getType();
+		if (((doodlePosition.y + DOODLE_HEIGHT >= platePosition.y) && (doodlePosition.y + DOODLE_HEIGHT <= platePosition.y + PLATE_HEIGHT)
+			&& (doodlePosition.x + DOODLE_WIDTH >= platePosition.x) && (doodlePosition.x - PLATE_WIDTH <= platePosition.x)))
 		{
-			if ((m_plates[i]->getType() == PlateType::UNSTABLE) || (m_plates[i]->getType() == PlateType::UNSTABLE_DYNAMIC_X))
+			switch (plateType)
 			{
-				m_plates[i]->setFallStatus(true);
-				continue;
-			}
-
-			if (m_plates[i]->getType() == PlateType::CLOUD)
-			{
-				m_plates[i]->setPosition(sf::Vector2f(100.f, 1000.f));
+			case PlateType::UNSTABLE:
+				plate->setFallStatus(true);
+				m_soundHandler.playSound(m_assets.PLATE_BROKEN_SOUND);
+				break;
+			case PlateType::CLOUD:
+				plate->setPosition(sf::Vector2f(100.f, 1000.f));
 				return Collision::COLLISION_GHOST_PLATE;
+			default:
+				return  Collision::COLLISION_PLATE;
 			}
-			return  Collision::COLLISION_PLATE;
 		}
 	}
 	return Collision::NO_COLLISION;
@@ -134,7 +131,7 @@ Collision GameScene::checkCollisionPlate()
 
 Collision GameScene::checkCollisionHole()
 {
-	auto doodlePosition = m_hero->getPosition();
+	sf::Vector2f doodlePosition = m_hero->getPosition();
 	if (((doodlePosition.y + DOODLE_HEIGHT >= m_holePosition.y) && (doodlePosition.y + DOODLE_HEIGHT <= m_holePosition.y + HOLE_HEIGHT)
 		&& (doodlePosition.x + DOODLE_WIDTH >= m_holePosition.x) && (doodlePosition.x - HOLE_WIDTH <= m_holePosition.x)))
 	{
@@ -143,52 +140,53 @@ Collision GameScene::checkCollisionHole()
 	return Collision::NO_COLLISION;
 }
 
-Collision GameScene::checkCollisionBonus() // TODO: this code want to be refactored to
+Collision GameScene::checkCollisionBonus()
 {
-	auto doodlePosition = m_hero->getPosition();
-	std::array<sf::Vector2f, NUMBER_BONUSES> bonusPosition;
-	for (int i = 0; i < NUMBER_BONUSES; ++i)
-	{
-		bonusPosition[i] = m_bonuses[i]->getPosition();
-	}
+	sf::Vector2f doodlePosition = m_hero->getPosition();
 
-	for (int bonusIndex = 0; bonusIndex < NUMBER_BONUSES; ++bonusIndex)
+	int bonusIndex = 0;
+	for (auto &bonus : m_bonuses)
 	{
-		switch (m_bonuses[bonusIndex]->getBonusType())
+		sf::Vector2f bonusPosition = bonus->getPosition();
+		switch (bonus->getBonusType())
 		{
 		case BonusType::SPRING:
-			if (((doodlePosition.y + DOODLE_HEIGHT >= bonusPosition[bonusIndex].y) && (doodlePosition.y + DOODLE_HEIGHT <= bonusPosition[bonusIndex].y + SPRING_HEIGHT)
-				&& (doodlePosition.x + DOODLE_WIDTH >= bonusPosition[bonusIndex].x) && (doodlePosition.x - SPRING_WIDTH <= bonusPosition[bonusIndex].x)))
+			if (((doodlePosition.y + DOODLE_HEIGHT >= bonusPosition.y) && (doodlePosition.y + DOODLE_HEIGHT <= bonusPosition.y + SPRING_HEIGHT)
+				&& (doodlePosition.x + DOODLE_WIDTH >= bonusPosition.x) && (doodlePosition.x - SPRING_WIDTH <= bonusPosition.x)))
 			{
 				m_actualBonusId = bonusIndex;
 				return Collision::COLLISION_SPRING;
 			}
 			break;
 		case BonusType::TRAMPOLINE:
-			if (((doodlePosition.y + DOODLE_HEIGHT >= bonusPosition[bonusIndex].y) && (doodlePosition.y + DOODLE_HEIGHT <= bonusPosition[bonusIndex].y + TRAMPOLINE_HEIGHT)
-				&& (doodlePosition.x + DOODLE_WIDTH >= bonusPosition[bonusIndex].x) && (doodlePosition.x - TRAMPOLINE_WIDTH <= bonusPosition[bonusIndex].x)))
+			if (((doodlePosition.y + DOODLE_HEIGHT >= bonusPosition.y) && (doodlePosition.y + DOODLE_HEIGHT <= bonusPosition.y + TRAMPOLINE_HEIGHT)
+				&& (doodlePosition.x + DOODLE_WIDTH >= bonusPosition.x) && (doodlePosition.x - TRAMPOLINE_WIDTH <= bonusPosition.x)))
 			{
 				m_actualBonusId = bonusIndex;
 				return Collision::COLLISION_TRAMPLANE;
 			}
 			break;
 		case BonusType::HAT_HELICOPTER:
-			if (((doodlePosition.y + DOODLE_HEIGHT >= bonusPosition[bonusIndex].y) && (doodlePosition.y + DOODLE_HEIGHT <= bonusPosition[bonusIndex].y + HAT_HELICOPTER_HEIGHT)
-				&& (doodlePosition.x + DOODLE_WIDTH >= bonusPosition[bonusIndex].x) && (doodlePosition.x - HAT_HELICOPTER_WIDTH <= bonusPosition[bonusIndex].x)))
+			if (((doodlePosition.y + DOODLE_HEIGHT >= bonusPosition.y) && (doodlePosition.y + DOODLE_HEIGHT <= bonusPosition.y + HAT_HELICOPTER_HEIGHT)
+				&& (doodlePosition.x + DOODLE_WIDTH >= bonusPosition.x) && (doodlePosition.x - HAT_HELICOPTER_WIDTH <= bonusPosition.x)))
 			{
 				m_actualBonusId = bonusIndex;
 				return Collision::COLLISION_HAT_HELICOPTER;
 			}
 			break;
 		case BonusType::ROCKET:
-			if (((doodlePosition.y + DOODLE_HEIGHT >= bonusPosition[bonusIndex].y) && (doodlePosition.y + DOODLE_HEIGHT <= bonusPosition[bonusIndex].y + ROCKET_HEIGHT)
-				&& (doodlePosition.x + DOODLE_WIDTH >= bonusPosition[bonusIndex].x) && (doodlePosition.x - ROCKET_WIDTH <= bonusPosition[bonusIndex].x)))
+			if (((doodlePosition.y + DOODLE_HEIGHT >= bonusPosition.y) && (doodlePosition.y + DOODLE_HEIGHT <= bonusPosition.y + ROCKET_HEIGHT)
+				&& (doodlePosition.x + DOODLE_WIDTH >= bonusPosition.x) && (doodlePosition.x - ROCKET_WIDTH <= bonusPosition.x)))
 			{
 				m_actualBonusId = bonusIndex;
 				return Collision::COLLISION_ROCKET;
 			}
 			break;
+		default:
+			assert(0);
+			break;
 		}
+		++bonusIndex;
 	}
 	return Collision::NO_COLLISION;
 }

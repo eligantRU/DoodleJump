@@ -76,3 +76,13 @@ void Bonus::rotate(float degree)
 {
 	m_body->rotate(degree);
 }
+
+int Bonus::getPlateOffset() const
+{
+	return m_plateOffset;
+}
+
+void Bonus::setPlateOffset(int offset)
+{
+	m_plateOffset = offset;
+}

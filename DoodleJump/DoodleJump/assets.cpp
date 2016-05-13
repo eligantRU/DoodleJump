@@ -71,6 +71,7 @@ Assets::Assets()
 	addSound(HOLE_SOUND, "sounds/crnarupa.wav");
 	addSound(JUMP_SOUND, "sounds/jump.wav");
 	addSound(PLATE_GHOST_SOUND, "sounds/bijeli.wav");
+	addSound(PLATE_BROKEN_SOUND, "sounds/lomise.wav");
 }
 
 Assets::~Assets()

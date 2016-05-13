@@ -7,13 +7,15 @@ GameScene::GameScene(Assets & assets, sf::View & view, SoundHandler & soundHandl
 	,m_soundHandler(soundHandler)
 {
 	m_hero = std::make_unique<Doodle>(m_assets);
-	for (int i = 0; i < NUMBER_PLATES; ++i)
+	for (auto &bonus : m_bonuses)
 	{
-		m_plates[i] = std::make_unique<Plate>(m_assets);
-	}
-	for (int i = 0; i < NUMBER_BONUSES; ++i)
+		bonus = std::make_unique<Bonus>();
+	}	
+	for (auto &plate : m_plates)
 	{
-		m_bonuses[i] = std::make_unique<Bonus>();
+		plate = std::make_unique<Plate>();
+		plate->setType(PlateType::STATIC);
+		plate->setTexture(m_assets.PLATE_STATIC_TEXTURE);
 	}
 
 	m_actualBonus = BonusType::NO;
@@ -48,13 +50,11 @@ GameScene::~GameScene()
 }
 
 
-SGameResult GameScene::onGameFrame(sf::RenderWindow & window)
+SGameResult GameScene::onGameFrame(sf::RenderWindow & window) // TODO: refactoring
 {
 	if (m_result.status == GameStatus::GAME_OVER_SCENE)
 	{
-		{
-			resetGame();
-		}
+		resetGame();
 	}
 
 	if (!m_endOfGame)
@@ -67,7 +67,7 @@ SGameResult GameScene::onGameFrame(sf::RenderWindow & window)
 		render(window);
 		window.display();
 
-		if (m_isPause) // TODO: pause handler
+		if (m_isPause)
 		{
 			m_view.setCenter(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
 			m_soundHandler.pauseSound();
@@ -90,7 +90,7 @@ SGameResult GameScene::onGameFrame(sf::RenderWindow & window)
 
 void GameScene::tuneSceneAfterPause(sf::RenderWindow & window)
 {
-	if (m_isPause) // TODO: pause handler
+	if (m_isPause)
 	{
 		m_isPause = false;
 		m_soundHandler.removeSoundFromPause();
@@ -120,7 +120,14 @@ void GameScene::update(sf::RenderWindow & window)
 	moveBonuses();
 	dropUnstablePlates();
 	moveDynamicPlates();
-	generPlates();
+
+	float uppermostPlatePositionY = m_plates[getUppermostPlateID()]->getPosition().y;
+	bool needGenerPlate = uppermostPlatePositionY > (m_view.getCenter().y - 350);
+	if (needGenerPlate)
+	{
+		generPlates();
+	}
+
 	generBonuses();
 	generHole();
 
@@ -134,38 +141,23 @@ void GameScene::resetGame()
 	m_endOfGame = false;
 	m_points = 0;
 	m_actualBonus = BonusType::NO;
+	m_animationCounter = 0;
 	m_offsetFallBonus.x = 0.f;
 	m_offsetFallBonus.y = 0.f;
 	m_isLeft = false;
 	m_isRight = false;
 	m_hero->setDirection(DirectionX::NONE);
-
 	m_hero->setTexture(m_assets.DOODLE_LEFT_TEXTURE);
-	m_hero->setPosition(sf::Vector2f(260.f, 350.f));
+	m_hero->setPosition(DOODLE_START_POSITION);
 	m_hero->setSpeedY(-50.f);
-	m_animationCounter = 0;
 	m_hero->setPositionBeforeDown(m_hero->getPosition());
 	m_view.setCenter(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
 
-	m_plates[0]->setPosition(sf::Vector2f(WINDOW_WIDTH / 2 - PLATE_WIDTH/2, WINDOW_HEIGHT - PLATE_HEIGHT));
-	for (int i = 1; i < NUMBER_PLATES/2; ++(++i))
+	for (auto &plate : m_plates)
 	{
-		m_plates[i]->setType(PlateType::STATIC);
-		m_plates[i]->setTexture(m_assets.PLATE_STATIC_TEXTURE);
-
-		float y1 = float((rand() % 152) + 90);
-		float x1 = (sqrt(484*484 - y1*y1))/2;
-		float y2 = float((rand() % 152) + 90);
-		float x2 = (sqrt(484 * 484 - y1*y1)) / 2;
-		if ((m_plates[i - 1]->getPosition().x + x1 >= WINDOW_WIDTH - PLATE_WIDTH) && (m_plates[i - 1]->getPosition().x - x1 <= 0))
-		{
-			x1 = float(rand() % (WINDOW_WIDTH - PLATE_WIDTH));
-		}
-
-		m_plates[i]->setPosition(sf::Vector2f(x1, m_plates[i-1]->getPosition().y - y1));
-		m_plates[i]->setPosition(sf::Vector2f(x2, m_plates[i-1]->getPosition().y - y2));
+		plate->setPosition(sf::Vector2f(0, DOODLE_START_POSITION.y));
 	}
-	m_view.setCenter(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
+	m_plates[0]->setPosition(sf::Vector2f((WINDOW_WIDTH - PLATE_WIDTH) / 2, DOODLE_START_POSITION.y - WINDOW_HEIGHT));
 	initBonuses();
 }
 

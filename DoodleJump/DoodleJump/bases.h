@@ -2,7 +2,7 @@
 
 #include "stdafx.h"
 
-static const int NUMBER_PLATES = 50; 
+static const int NUMBER_PLATES = 26; 
 static const int NUMBER_BONUSES = 1;
 static const int NUMBER_INSECTS = 5;
 static const int NUMBER_UNSTABLE_PLATES = 3;
@@ -31,13 +31,13 @@ static const int BUTTON_WIDTH = 100;
 static const int BUTTON_HEIGHT = 29;
 static const int WINDOW_WIDTH = 550;
 static const int WINDOW_HEIGHT = 700;
+static const sf::Vector2f DOODLE_START_POSITION((WINDOW_WIDTH - DOODLE_WIDTH) / 2, WINDOW_HEIGHT / 2);
 
 enum class PlateType
 {
 	STATIC,
 	STATIC_DYNAMIC_X,
 	UNSTABLE,
-	UNSTABLE_DYNAMIC_X,
 	CLOUD
 };
 
@@ -73,7 +73,6 @@ enum class BonusType
 	HAT_HELICOPTER,
 	SPRING,
 	TRAMPOLINE,
-	MISSILE,
 	ROCKET,
 	NO
 };
