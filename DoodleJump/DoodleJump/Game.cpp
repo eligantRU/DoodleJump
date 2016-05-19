@@ -43,7 +43,6 @@ void Game::gameLoop(sf::RenderWindow & window)
 			break;
 		default:
 			assert(0);
-			break;
 		}
 		// TODO: u check window.close() in all scenes. Do it here.
 	}

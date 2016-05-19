@@ -21,7 +21,6 @@ void GameScene::animateBonus()
 		break;
 	default:
 		assert(0);
-		break;
 	}
 }
 
@@ -284,7 +283,6 @@ void GameScene::buildBonus(BonusType bonusType, int bonusIndex, sf::Vector2f pla
 			break;
 		default:
 			assert(0);
-			break;
 		}
 		break;
 	case BonusType::ROCKET:
@@ -295,7 +293,6 @@ void GameScene::buildBonus(BonusType bonusType, int bonusIndex, sf::Vector2f pla
 		break;
 	default:
 		assert(0);
-		break;
 	}
 	m_bonuses[bonusIndex]->setPlateIndex(plateIndex);
 	m_bonuses[bonusIndex]->setSpeedX(m_plates[plateIndex]->getSpeedX());
@@ -360,10 +357,76 @@ void GameScene::generBonuses()
 						break;
 					default:
 						assert(0);
-						break;
 					}
 				}
 			}
+		}
+	}
+}
+
+int GameScene::getBonusCollisionID()
+{
+	sf::Vector2f doodlePosition = m_hero->getPosition();
+	for (int bonusIndex = 0; bonusIndex < NUMBER_BONUSES; ++bonusIndex)
+	{
+		sf::Vector2f bonusPosition = m_bonuses[bonusIndex]->getPosition();
+		switch (m_bonuses[bonusIndex]->getBonusType())
+		{
+		case BonusType::SPRING:
+			if (((doodlePosition.y + DOODLE_HEIGHT >= bonusPosition.y) && (doodlePosition.y + DOODLE_HEIGHT <= bonusPosition.y + SPRING_HEIGHT)
+				&& (doodlePosition.x + DOODLE_WIDTH >= bonusPosition.x) && (doodlePosition.x - SPRING_WIDTH <= bonusPosition.x)))
+			{
+				return bonusIndex;
+			}
+			break;
+		case BonusType::TRAMPOLINE:
+			if (((doodlePosition.y + DOODLE_HEIGHT >= bonusPosition.y) && (doodlePosition.y + DOODLE_HEIGHT <= bonusPosition.y + TRAMPOLINE_HEIGHT)
+				&& (doodlePosition.x + DOODLE_WIDTH >= bonusPosition.x) && (doodlePosition.x - TRAMPOLINE_WIDTH <= bonusPosition.x)))
+			{
+				return bonusIndex;
+			}
+			break;
+		case BonusType::HAT_HELICOPTER:
+			if (((doodlePosition.y + DOODLE_HEIGHT >= bonusPosition.y) && (doodlePosition.y + DOODLE_HEIGHT <= bonusPosition.y + HAT_HELICOPTER_HEIGHT)
+				&& (doodlePosition.x + DOODLE_WIDTH >= bonusPosition.x) && (doodlePosition.x - HAT_HELICOPTER_WIDTH <= bonusPosition.x)))
+			{
+				return bonusIndex;
+			}
+			break;
+		case BonusType::ROCKET:
+			if (((doodlePosition.y + DOODLE_HEIGHT >= bonusPosition.y) && (doodlePosition.y + DOODLE_HEIGHT <= bonusPosition.y + ROCKET_HEIGHT)
+				&& (doodlePosition.x + DOODLE_WIDTH >= bonusPosition.x) && (doodlePosition.x - ROCKET_WIDTH <= bonusPosition.x)))
+			{
+				return bonusIndex;
+			}
+			break;
+		default:
+			assert(0);
+		}
+	}
+	return -1;
+}
+
+void GameScene::getBonusJumping()
+{
+	int collisionBonudID = getBonusCollisionID();
+	if (collisionBonudID != -1)
+	{
+		m_actualBonusId = collisionBonudID;
+		switch (m_bonuses[collisionBonudID]->getBonusType())
+		{
+		case BonusType::ROCKET:
+			m_actualBonus = BonusType::ROCKET;
+			m_soundHandler.playSound(m_assets.ROCKET_SOUND);
+			m_hero->setSpeedY(-ROCKET_DELTA_HEIGHT);
+			break;
+		case BonusType::HAT_HELICOPTER:
+			m_actualBonus = BonusType::HAT_HELICOPTER;
+			m_soundHandler.playSound(m_assets.HAT_HELICOPTER_SOUND);
+			m_hero->setSpeedY(-HAT_HELICOPTER_DELTA_HEIGHT);
+			break;
+		default:
+			break;
 		}
 	}
 }

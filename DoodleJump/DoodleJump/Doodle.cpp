@@ -112,7 +112,6 @@ void Doodle::setDirection(DirectionX newDirection)
 		break;
 	default:
 		assert(0);
-		break;
 	}
 }
 

@@ -10,7 +10,7 @@ public:
 	~StartScene();
 	SGameResult onStartMenu(sf::RenderWindow & window);
 private:
-	Collision checkCollisionPlate() const;
+	Collision checkCollisionPlates() const;
 	void render(sf::RenderWindow & window) const;
 	void checkEvents(sf::RenderWindow & window);
 	void checkMouseOnButtons(sf::Vector2i mousePosition);

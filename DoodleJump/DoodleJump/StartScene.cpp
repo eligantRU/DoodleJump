@@ -138,7 +138,7 @@ void StartScene::moveDoodle()
 	}
 	else
 	{
-		if (checkCollisionPlate() == Collision::NO_COLLISION)
+		if (checkCollisionPlates() == Collision::NO_COLLISION)
 		{
 			m_hero->setSpeedY(m_hero->getSpeedY() + ACCELERATION / 8);
 			position.y = m_hero->getSpeedY();
@@ -153,7 +153,7 @@ void StartScene::moveDoodle()
 	m_hero->move(position);
 }
 
-Collision StartScene::checkCollisionPlate() const
+Collision StartScene::checkCollisionPlates() const
 {
 	sf::Vector2f doodlePosition = m_hero->getPosition();
 	sf::Vector2f platePosition = m_plate->getPosition();

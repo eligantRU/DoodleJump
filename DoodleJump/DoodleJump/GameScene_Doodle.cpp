@@ -4,12 +4,12 @@
 void GameScene::moveDoodle()
 {
 	sf::Vector2f position(0.f, 0.f);
-	position.x = moveDoodleHorizontal();
-	position.y = moveDoodleVertical();
+	position.x = getDoodleHorizontalOffset();
+	position.y = getDoodleVerticalOffset();
 	m_hero->move(position);
 }
 
-float GameScene::moveDoodleHorizontal()
+float GameScene::getDoodleHorizontalOffset()
 {
 	DirectionX doodleDirection = m_hero->getDirection();
 	float positionX = 0;
@@ -24,50 +24,6 @@ float GameScene::moveDoodleHorizontal()
 	return positionX;
 }
 
-float GameScene::moveDoodleVertical()
-{
-	float positionY = 0;
-	int actualbonusId = m_actualBonusId;
-	Collision coll = checkCollisionBonus();
-	switch (coll)
-	{
-	case Collision::COLLISION_ROCKET:
-		m_actualBonus = BonusType::ROCKET;
-		m_soundHandler.playSound(m_assets.ROCKET_SOUND);
-		m_hero->setSpeedY(-ROCKET_DELTA_HEIGHT);
-		break;
-	case Collision::COLLISION_HAT_HELICOPTER:
-		m_actualBonus = BonusType::HAT_HELICOPTER;
-		m_soundHandler.playSound(m_assets.HAT_HELICOPTER_SOUND);
-		m_hero->setSpeedY(-HAT_HELICOPTER_DELTA_HEIGHT);
-		break;
-	default:
-		m_actualBonusId = actualbonusId;
-		break;
-	}
-	
-	if (m_hero->getSpeedY() < 0)
-	{
-		m_hero->setSpeedY(m_hero->getSpeedY() + ACCELERATION);
-		positionY = m_hero->getSpeedY();
-	}
-	else
-	{
-		float testingFall = checkDoodleFall();
-		if (testingFall == 0)
-		{
-			m_actualBonus = BonusType::NO;
-			m_hero->setSpeedY(m_hero->getSpeedY() + ACCELERATION / 8);
-			positionY = m_hero->getSpeedY();
-		}
-		else
-		{
-			m_hero->setSpeedY(-testingFall);
-		}
-	}
-	return positionY;
-}
-
 void GameScene::updatePositionBeforeDown()
 {
 	if (m_hero->getPosition().y < m_hero->getPositionBeforeDown().y)
@@ -76,14 +32,51 @@ void GameScene::updatePositionBeforeDown()
 	}
 }
 
-float GameScene::checkDoodleFall()
+void GameScene::handleDoodleFalling(float & offsetY)
+{
+	float testingFall = checkCollisions();
+	if (testingFall == 0)
+	{
+		m_hero->setSpeedY(m_hero->getSpeedY() + ACCELERATION / 8);
+		offsetY = m_hero->getSpeedY();
+	}
+	else
+	{
+		m_hero->setSpeedY(-testingFall);
+	}
+}
+
+void GameScene::handleDoodleJumping(float & offsetY)
+{
+	m_hero->setSpeedY(m_hero->getSpeedY() + ACCELERATION);
+	offsetY = m_hero->getSpeedY();
+}
+
+float GameScene::getDoodleVerticalOffset()
+{
+	float offsetY = 0;
+
+	getBonusJumping();
+
+	if (m_hero->getSpeedY() < 0)
+	{
+		handleDoodleJumping(offsetY);
+	}
+	else
+	{
+		handleDoodleFalling(offsetY);
+	}
+	return offsetY;
+}
+
+float GameScene::checkCollisions()
 {
 	Collision collision = Collision::NO_COLLISION;
 
-	collision = checkCollisionBonus();
+	collision = checkCollisionBonuses();
 	if (collision == Collision::NO_COLLISION)
 	{
-		collision = checkCollisionPlate();
+		collision = checkCollisionPlates();
 	}
 
 	switch (collision)

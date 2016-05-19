@@ -101,7 +101,7 @@ void GameScene::checkCylinderEffect()
 	}
 }
 
-Collision GameScene::checkCollisionPlate()
+Collision GameScene::checkCollisionPlates()
 {
 	sf::Vector2f doodlePosition = m_hero->getPosition();
 
@@ -140,53 +140,25 @@ Collision GameScene::checkCollisionHole()
 	return Collision::NO_COLLISION;
 }
 
-Collision GameScene::checkCollisionBonus()
+Collision GameScene::checkCollisionBonuses()
 {
-	sf::Vector2f doodlePosition = m_hero->getPosition();
-
-	int bonusIndex = 0;
-	for (auto &bonus : m_bonuses)
+	int bonusCollisionID = getBonusCollisionID();
+	if (bonusCollisionID != -1)
 	{
-		sf::Vector2f bonusPosition = bonus->getPosition();
-		switch (bonus->getBonusType())
+		m_actualBonusId = bonusCollisionID;
+		switch (m_bonuses[bonusCollisionID]->getBonusType())
 		{
 		case BonusType::SPRING:
-			if (((doodlePosition.y + DOODLE_HEIGHT >= bonusPosition.y) && (doodlePosition.y + DOODLE_HEIGHT <= bonusPosition.y + SPRING_HEIGHT)
-				&& (doodlePosition.x + DOODLE_WIDTH >= bonusPosition.x) && (doodlePosition.x - SPRING_WIDTH <= bonusPosition.x)))
-			{
-				m_actualBonusId = bonusIndex;
-				return Collision::COLLISION_SPRING;
-			}
-			break;
+			return Collision::COLLISION_SPRING;
 		case BonusType::TRAMPOLINE:
-			if (((doodlePosition.y + DOODLE_HEIGHT >= bonusPosition.y) && (doodlePosition.y + DOODLE_HEIGHT <= bonusPosition.y + TRAMPOLINE_HEIGHT)
-				&& (doodlePosition.x + DOODLE_WIDTH >= bonusPosition.x) && (doodlePosition.x - TRAMPOLINE_WIDTH <= bonusPosition.x)))
-			{
-				m_actualBonusId = bonusIndex;
-				return Collision::COLLISION_TRAMPLANE;
-			}
-			break;
+			return Collision::COLLISION_TRAMPLANE;
 		case BonusType::HAT_HELICOPTER:
-			if (((doodlePosition.y + DOODLE_HEIGHT >= bonusPosition.y) && (doodlePosition.y + DOODLE_HEIGHT <= bonusPosition.y + HAT_HELICOPTER_HEIGHT)
-				&& (doodlePosition.x + DOODLE_WIDTH >= bonusPosition.x) && (doodlePosition.x - HAT_HELICOPTER_WIDTH <= bonusPosition.x)))
-			{
-				m_actualBonusId = bonusIndex;
-				return Collision::COLLISION_HAT_HELICOPTER;
-			}
-			break;
+			return Collision::COLLISION_HAT_HELICOPTER;
 		case BonusType::ROCKET:
-			if (((doodlePosition.y + DOODLE_HEIGHT >= bonusPosition.y) && (doodlePosition.y + DOODLE_HEIGHT <= bonusPosition.y + ROCKET_HEIGHT)
-				&& (doodlePosition.x + DOODLE_WIDTH >= bonusPosition.x) && (doodlePosition.x - ROCKET_WIDTH <= bonusPosition.x)))
-			{
-				m_actualBonusId = bonusIndex;
-				return Collision::COLLISION_ROCKET;
-			}
-			break;
+			return Collision::COLLISION_ROCKET;
 		default:
 			assert(0);
-			break;
 		}
-		++bonusIndex;
 	}
 	return Collision::NO_COLLISION;
 }

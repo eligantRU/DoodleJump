@@ -17,9 +17,11 @@ private:
 	void update(sf::RenderWindow & window);
 
 	void moveDoodle();
-	float moveDoodleHorizontal();
-	float moveDoodleVertical();
-	float checkDoodleFall();
+	float getDoodleHorizontalOffset();
+	float getDoodleVerticalOffset();
+	void handleDoodleJumping(float & offsetY);
+	void handleDoodleFalling(float & offsetY);
+	float checkCollisions();
 	void updatePositionBeforeDown();
 
 	void generPlates();
@@ -36,7 +38,8 @@ private:
 	void animateHatHelicopter();
 	void initBonuses();
 	void moveBonuses();
-	void generBonuses();
+	void generBonuses(); 
+	void getBonusJumping();
 	void buildBonus(BonusType bonusType, int bonusIndex, sf::Vector2f platePosition, int plateIndex);
 
 	void generHole();
@@ -47,9 +50,10 @@ private:
 	void checkKeyReleased(sf::Event event, bool & isNeedUpdate);
 	bool checkGameEnd();
 	void checkCylinderEffect();
-	Collision checkCollisionPlate();
-	Collision checkCollisionBonus();
+	Collision checkCollisionPlates();
+	Collision checkCollisionBonuses();
 	Collision checkCollisionHole();
+	int getBonusCollisionID();
 
 	Assets & m_assets;
 	sf::View & m_view;
