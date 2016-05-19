@@ -27,6 +27,25 @@ float GameScene::moveDoodleHorizontal()
 float GameScene::moveDoodleVertical()
 {
 	float positionY = 0;
+	int actualbonusId = m_actualBonusId;
+	Collision coll = checkCollisionBonus();
+	switch (coll)
+	{
+	case Collision::COLLISION_ROCKET:
+		m_actualBonus = BonusType::ROCKET;
+		m_soundHandler.playSound(m_assets.ROCKET_SOUND);
+		m_hero->setSpeedY(-ROCKET_DELTA_HEIGHT);
+		break;
+	case Collision::COLLISION_HAT_HELICOPTER:
+		m_actualBonus = BonusType::HAT_HELICOPTER;
+		m_soundHandler.playSound(m_assets.HAT_HELICOPTER_SOUND);
+		m_hero->setSpeedY(-HAT_HELICOPTER_DELTA_HEIGHT);
+		break;
+	default:
+		m_actualBonusId = actualbonusId;
+		break;
+	}
+	
 	if (m_hero->getSpeedY() < 0)
 	{
 		m_hero->setSpeedY(m_hero->getSpeedY() + ACCELERATION);

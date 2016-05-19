@@ -2,7 +2,7 @@
 #include "sheet.h"
 
 Game::Game()
-	:m_assets(new Assets()) // NOTE: it may be shared_ptr
+	:m_assets(new Assets()) 
 	,m_view(new sf::View())
 	,m_soundHandler(new SoundHandler())
 {

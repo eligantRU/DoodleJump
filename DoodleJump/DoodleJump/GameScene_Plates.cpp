@@ -4,6 +4,7 @@
 int GameScene::getUppermostPlateID() const
 {
 	std::vector<float> platePosition;
+	platePosition.reserve(NUMBER_PLATES);
 	for (auto &plate : m_plates)
 	{
 		platePosition.push_back(plate->getPosition().y);
@@ -74,14 +75,12 @@ void GameScene::buildPlate(int startingPointPlateID, int plateIndex)
 
 void GameScene::generPlates()
 {
-	int uppermostPlateID;
-	float viewPositionY = m_view.getCenter().y;
-	
+	float viewPositionY = m_view.getCenter().y;	
 	for (int i = 0; i < NUMBER_PLATES; ++(++i))
 	{
 		if ((m_plates[i]->getPosition().y > viewPositionY + WINDOW_HEIGHT / 2) && (m_plates[i + 1]->getPosition().y > viewPositionY + WINDOW_HEIGHT / 2))
 		{
-			uppermostPlateID = getUppermostPlateID();
+			int uppermostPlateID = getUppermostPlateID();
 			buildPlate(uppermostPlateID, i);
 			buildPlate(uppermostPlateID, i + 1);
 		}

@@ -63,7 +63,7 @@ void GameScene::animateRocket() // TODO: handlers...this code NEED MORE HANDLERS
 		m_actualBonus = BonusType::NO;
 		m_offsetFallBonus.x = 0.f;
 		m_offsetFallBonus.y = 0.f;
-		m_bonuses[m_actualBonusId]->setRotation(0.f);
+		m_bonuses[m_actualBonusId]->setRotation(0);
 		m_bonuses[m_actualBonusId]->move(sf::Vector2f(0.f, float(WINDOW_HEIGHT)));
 	}
 
@@ -169,8 +169,8 @@ void GameScene::animateRocket() // TODO: handlers...this code NEED MORE HANDLERS
 		{
 			m_bonuses[m_actualBonusId]->setPosition(doodlePosition);
 		}
-		m_bonuses[m_actualBonusId]->rotate(-10.f);
-		m_offsetFallBonus.x += -2 * STEP;
+		m_bonuses[m_actualBonusId]->rotate(-10);
+		m_offsetFallBonus.x += -5 * STEP;
 		m_offsetFallBonus.y += 6 * STEP;
 		m_bonuses[m_actualBonusId]->move(sf::Vector2f(m_offsetFallBonus));
 	}
@@ -186,7 +186,7 @@ void GameScene::animateHatHelicopter() // TODO: handlers...this code NEED MORE H
 		m_actualBonus = BonusType::NO;
 		m_offsetFallBonus.x = 0.f;
 		m_offsetFallBonus.y = 0.f;
-		m_bonuses[m_actualBonusId]->setRotation(0.f);
+		m_bonuses[m_actualBonusId]->setRotation(0);
 		m_bonuses[m_actualBonusId]->move(sf::Vector2f(0.f, float(WINDOW_HEIGHT)));
 	}
 
@@ -237,9 +237,9 @@ void GameScene::animateHatHelicopter() // TODO: handlers...this code NEED MORE H
 		{
 			m_bonuses[m_actualBonusId]->setPosition(sf::Vector2f(doodlePosition.x, doodlePosition.y - 14));
 		}
-		m_bonuses[m_actualBonusId]->rotate(-10.f);
-		m_offsetFallBonus.x += -2.f * STEP;
-		m_offsetFallBonus.y += 6.f * STEP;
+		m_bonuses[m_actualBonusId]->rotate(-10);
+		m_offsetFallBonus.x += -5 * STEP;
+		m_offsetFallBonus.y += 6 * STEP;
 		m_bonuses[m_actualBonusId]->move(sf::Vector2f(m_offsetFallBonus));
 	}
 }
