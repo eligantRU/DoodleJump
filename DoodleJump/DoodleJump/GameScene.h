@@ -53,7 +53,7 @@ private:
 	Collision checkCollisionPlates();
 	Collision checkCollisionBonuses();
 	Collision checkCollisionHole();
-	int getBonusCollisionID();
+	int getBonusCollisionID() const;
 
 	Assets & m_assets;
 	sf::View & m_view;

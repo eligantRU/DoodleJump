@@ -364,7 +364,7 @@ void GameScene::generBonuses()
 	}
 }
 
-int GameScene::getBonusCollisionID()
+int GameScene::getBonusCollisionID() const
 {
 	sf::Vector2f doodlePosition = m_hero->getPosition();
 	for (int bonusIndex = 0; bonusIndex < NUMBER_BONUSES; ++bonusIndex)
