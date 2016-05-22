@@ -40,7 +40,7 @@ private:
 	void moveBonuses();
 	void generBonuses(); 
 	void getBonusJumping();
-	void buildBonus(BonusType bonusType, int bonusIndex, sf::Vector2f platePosition, int plateIndex);
+	void buildBonus(BonusType bonusType, int bonusIndex, int plateIndex);
 
 	void generHole();
 

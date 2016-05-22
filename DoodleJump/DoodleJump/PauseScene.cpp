@@ -36,7 +36,7 @@ void PauseScene::clearResult()
 
 void PauseScene::render(sf::RenderWindow & window) const
 {
-	window.clear(sf::Color(255, 255, 255));
+	window.clear();
 	window.draw(*m_background);
 	m_backButton->draw(window);
 	m_exitButton->draw(window);

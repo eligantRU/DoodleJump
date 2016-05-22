@@ -60,7 +60,7 @@ void HelpScene::clearResult()
 
 void HelpScene::render(sf::RenderWindow & window) const
 {
-	window.clear(sf::Color(255, 255, 255));
+	window.clear();
 	window.draw(*m_background);
 	m_goMenuButton->draw(window);
 	window.draw(m_helpText1);

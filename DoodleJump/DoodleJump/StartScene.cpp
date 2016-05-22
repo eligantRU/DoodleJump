@@ -74,7 +74,7 @@ void StartScene::clearResult()
 
 void StartScene::render(sf::RenderWindow & window) const
 {
-	window.clear(sf::Color(255, 255, 255));
+	window.clear();
 	window.draw(*m_background);
 	window.draw(*m_title);
 	m_plate->draw(window);
@@ -128,7 +128,7 @@ void StartScene::checkEvents(sf::RenderWindow & window)
 
 void StartScene::moveDoodle()
 {
-	sf::Vector2f position(0.f, 0.f);
+	sf::Vector2f position(0, 0);
 	if (m_hero->getSpeedY() < 0)
 	{
 		m_hero->setSpeedY(m_hero->getSpeedY() + ACCELERATION);

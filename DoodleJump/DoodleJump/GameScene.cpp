@@ -158,7 +158,7 @@ void GameScene::resetGame()
 
 void GameScene::render(sf::RenderWindow & window)
 {
-	window.clear(sf::Color(255, 255, 255));
+	window.clear();
 	
 	window.draw(*m_background);
 	for (auto &plate : m_plates)

@@ -47,7 +47,7 @@ SGameResult GameOverScene::onGameOverMenu(sf::RenderWindow & window)
 
 void GameOverScene::render(sf::RenderWindow & window) const
 {
-	window.clear(sf::Color(255, 255, 255));
+	window.clear();
 	window.draw(*m_background);
 	window.draw(*m_title);
 	m_goMenuButton->draw(window);

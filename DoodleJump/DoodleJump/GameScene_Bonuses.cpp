@@ -248,12 +248,13 @@ void GameScene::initBonuses()
 	for (int bonusIndex = 0; bonusIndex < NUMBER_BONUSES; ++bonusIndex)
 	{
 		BonusType type = (rand() % 2) ? BonusType::SPRING : BonusType::TRAMPOLINE;
-		buildBonus(type, bonusIndex, m_plates[0]->getPosition(), 0);
+		buildBonus(type, bonusIndex, 0);
 	}
 }
 
-void GameScene::buildBonus(BonusType bonusType, int bonusIndex, sf::Vector2f platePosition, int plateIndex) // TODO: delete platePosition
+void GameScene::buildBonus(BonusType bonusType, int bonusIndex, int plateIndex)
 {
+	sf::Vector2f platePosition = m_plates[plateIndex]->getPosition();
 	int x = 0;
 	switch (bonusType)
 	{
@@ -344,16 +345,16 @@ void GameScene::generBonuses()
 					switch (randomNum)
 					{
 					case 0:
-						buildBonus(BonusType::SPRING, bonusIndex, platePosition, plateIndex);
+						buildBonus(BonusType::SPRING, bonusIndex, plateIndex);
 						break;
 					case 1:
-						buildBonus(BonusType::TRAMPOLINE, bonusIndex, platePosition, plateIndex);
+						buildBonus(BonusType::TRAMPOLINE, bonusIndex, plateIndex);
 						break;
 					case 2:
-						buildBonus(BonusType::HAT_HELICOPTER, bonusIndex, platePosition, plateIndex);
+						buildBonus(BonusType::HAT_HELICOPTER, bonusIndex, plateIndex);
 						break;
 					case 3:
-						buildBonus(BonusType::ROCKET, bonusIndex, platePosition, plateIndex);
+						buildBonus(BonusType::ROCKET, bonusIndex, plateIndex);
 						break;
 					default:
 						assert(0);
