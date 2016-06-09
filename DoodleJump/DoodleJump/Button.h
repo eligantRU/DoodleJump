@@ -3,7 +3,7 @@
 #include "stdafx.h"
 #include "sheet.h"
 
-struct Button
+class Button
 {
 public:
 	Button(std::string text, sf::Vector2f position, Assets & assets);

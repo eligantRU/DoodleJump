@@ -3,7 +3,7 @@
 #include "stdafx.h"
 #include "sheet.h"
 
-struct PauseScene
+class PauseScene
 {
 public:
 	PauseScene(Assets & assets, sf::View & view, SoundHandler & soundHandler);

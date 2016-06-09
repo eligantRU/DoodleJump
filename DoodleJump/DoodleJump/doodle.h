@@ -3,7 +3,7 @@
 #include "stdafx.h"
 #include "sheet.h"
 
-struct Doodle
+class Doodle
 {
 public:
 	Doodle(Assets & assets);

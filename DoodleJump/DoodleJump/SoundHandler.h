@@ -3,7 +3,7 @@
 #include "stdafx.h"
 #include "sheet.h"
 
-struct SoundHandler
+class SoundHandler
 {
 public:
 	SoundHandler();

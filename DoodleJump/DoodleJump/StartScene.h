@@ -3,7 +3,7 @@
 #include "stdafx.h"
 #include "sheet.h"
 
-struct StartScene
+class StartScene
 {
 public:
 	StartScene(Assets & assets, sf::View & view, SoundHandler & soundHandler);

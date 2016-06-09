@@ -40,7 +40,7 @@ struct SAnimationStep // Ask Shambir: why this here? Do I need encapsulate metho
 	}
 };
 
-struct GameScene
+class GameScene
 {
 public:
 	GameScene(Assets & assets, sf::View & view, SoundHandler & soundHandler);

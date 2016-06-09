@@ -3,7 +3,7 @@
 #include "stdafx.h"
 #include "sheet.h"
 
-struct Game
+class Game
 {
 public:
 	Game();
@@ -21,8 +21,6 @@ private:
 	std::unique_ptr<PauseScene> m_scenePause;
 	std::shared_ptr<GameScene> m_sceneGame;
 	std::unique_ptr<GameOverScene> m_sceneGameOver;
-
-	//RenderFrameFunc frameFunc;
 
 	SGameResult m_gameState;
 };

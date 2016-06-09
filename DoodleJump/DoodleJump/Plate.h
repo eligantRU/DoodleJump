@@ -3,7 +3,7 @@
 #include "stdafx.h"
 #include "sheet.h"
 
-struct Plate
+class Plate
 {
 public:
 	Plate();

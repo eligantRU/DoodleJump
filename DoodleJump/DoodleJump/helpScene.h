@@ -3,7 +3,7 @@
 #include "stdafx.h"
 #include "sheet.h"
 
-struct HelpScene
+class HelpScene
 {
 public:
 	HelpScene(Assets & assets, sf::View & view, SoundHandler & soundHandler);
