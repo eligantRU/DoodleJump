@@ -14,7 +14,6 @@ Button::Button(std::string text, sf::Vector2f position, Assets & assets)
 	m_text.setCharacterSize(20);
 	m_text.setStyle(sf::Text::Bold);
 	m_text.setColor(sf::Color(0, 0, 0));
-
 }
 
 Button::~Button()

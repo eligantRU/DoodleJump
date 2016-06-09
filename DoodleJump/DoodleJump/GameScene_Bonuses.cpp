@@ -42,204 +42,120 @@ void GameScene::animateTrampoline()
 {
 	if (m_hero->getSpeedY() >= 0)
 	{
-		m_hero->setRotation(0.f);
+		m_hero->setRotation(0);
 		m_actualBonus = BonusType::NO;
 	}
 	else
 	{
-		m_hero->rotate(360.f / TRAMPLANE_DELTA_HEIGHT);
+		m_hero->rotate(360 / TRAMPLANE_DELTA_HEIGHT);
 	}
 }
 
-void GameScene::animateRocket() // TODO: handlers...this code NEED MORE HANDLERS!
+void GameScene::applyAnimationStep(SAnimationStep animationStep)
 {
 	DirectionX doodleLastDirection = m_hero->getLastDirection();
 	sf::Vector2f doodlePosition = m_hero->getPosition();
+	
+	if (doodleLastDirection == DirectionX::RIGHT)
+	{
+		m_bonuses[m_actualBonusId]->setTexture(animationStep.m_leftTexture); 
+		m_bonuses[m_actualBonusId]->setPosition(sf::Vector2f(doodlePosition.x + animationStep.m_leftOffset.x, doodlePosition.y + animationStep.m_leftOffset.y));
+	}
+	else if (doodleLastDirection == DirectionX::LEFT)
+	{
+		m_bonuses[m_actualBonusId]->setTexture(animationStep.m_rightTexture);
+		m_bonuses[m_actualBonusId]->setPosition(sf::Vector2f(doodlePosition.x + DOODLE_WIDTH + animationStep.m_rightOffset.x, doodlePosition.y + animationStep.m_rightOffset.y));
+	}
+}
+
+void GameScene::fallBonus(int bonusID)
+{
+	BonusType bonusType = m_bonuses[bonusID]->getBonusType();
+	
+	switch (bonusType)
+	{
+	case BonusType::HAT_HELICOPTER:
+		m_bonuses[bonusID]->setTexture(m_assets.HAT_HELOCPTER_NONE_LEFT_TEXTURE);
+		break;
+	case BonusType::ROCKET:
+		m_bonuses[bonusID]->setTexture(m_assets.ROCKET_NONE_TEXTURE);
+		break;
+	default:
+		assert(0);
+	}
+	m_bonuses[bonusID]->setPosition(m_hero->getPosition());
+	m_bonuses[bonusID]->rotate(-10.f);
+	m_offsetFallBonus += sf::Vector2f(-6 * STEP, 8 * STEP);
+    m_bonuses[bonusID]->move(m_offsetFallBonus);
+}
+
+void GameScene::animateRocket()
+{
+	const std::vector<SAnimationStep> ROCKET_ANIMATION_STEPS = {
+		SAnimationStep(0, 1, m_assets.ROCKET_0_LEFT_TEXTURE, m_assets.ROCKET_0_RIGHT_TEXTURE, sf::Vector2f(-13.f, 0), sf::Vector2f(1.f, 0)),
+		SAnimationStep(2, 4, m_assets.ROCKET_1_LEFT_TEXTURE, m_assets.ROCKET_1_RIGHT_TEXTURE, sf::Vector2f(-13.f, 0), sf::Vector2f(1.f, 0)),
+		SAnimationStep(5, 7, m_assets.ROCKET_2_LEFT_TEXTURE, m_assets.ROCKET_2_RIGHT_TEXTURE, sf::Vector2f(-15.f, 0), sf::Vector2f(0, 0)),
+		SAnimationStep(8, 10, m_assets.ROCKET_3_LEFT_TEXTURE, m_assets.ROCKET_3_RIGHT_TEXTURE, sf::Vector2f(-17.f, 0), sf::Vector2f(-5.f, 0))
+	};
 
 	if ((m_hero->getSpeedY() >= 0) || (m_bonuses[m_actualBonusId]->getPosition().y < m_view.getCenter().y - WINDOW_HEIGHT / 2 - ROCKET_HEIGHT))
 	{
 		m_animationCounter = 0;
 		m_actualBonus = BonusType::NO;
-		m_offsetFallBonus.x = 0.f;
-		m_offsetFallBonus.y = 0.f;
+		m_offsetFallBonus = sf::Vector2f(0, 0);
 		m_bonuses[m_actualBonusId]->setRotation(0);
-		m_bonuses[m_actualBonusId]->move(sf::Vector2f(0.f, float(WINDOW_HEIGHT)));
+		m_bonuses[m_actualBonusId]->setPosition(sf::Vector2f(0, 0));
 	}
 
-	if ((m_animationCounter >= 0) && (m_animationCounter <= 2))
-	{
-		if (doodleLastDirection == DirectionX::RIGHT)
-		{
-			m_bonuses[m_actualBonusId]->setTexture(m_assets.ROCKET_0_LEFT_TEXTURE);
-		}
-		else if (doodleLastDirection == DirectionX::LEFT)
-		{
-			m_bonuses[m_actualBonusId]->setTexture(m_assets.ROCKET_0_RIGHT_TEXTURE);
-		}
-		++m_animationCounter;
-	}
-	if ((m_animationCounter >= 3) && (m_animationCounter <= 5))
-	{
-		if (doodleLastDirection == DirectionX::RIGHT)
-		{
-			m_bonuses[m_actualBonusId]->setTexture(m_assets.ROCKET_1_LEFT_TEXTURE);
-		}
-		else if (doodleLastDirection == DirectionX::LEFT)
-		{
-			m_bonuses[m_actualBonusId]->setTexture(m_assets.ROCKET_1_RIGHT_TEXTURE);
-		}
-		++m_animationCounter;
-	}
-	if ((m_animationCounter >= 6) && (m_animationCounter <= 8))
-	{
-		if (doodleLastDirection == DirectionX::RIGHT)
-		{
-			m_bonuses[m_actualBonusId]->setTexture(m_assets.ROCKET_2_LEFT_TEXTURE);
-		}
-		else if (doodleLastDirection == DirectionX::LEFT)
-		{
-			m_bonuses[m_actualBonusId]->setTexture(m_assets.ROCKET_2_RIGHT_TEXTURE);
-		}
-		++m_animationCounter;
-	}
-	if ((m_animationCounter >= 9) && (m_animationCounter <= 11))
-	{
-		if (doodleLastDirection == DirectionX::RIGHT)
-		{
-			m_bonuses[m_actualBonusId]->setTexture(m_assets.ROCKET_3_LEFT_TEXTURE);
-		}
-		else if (doodleLastDirection == DirectionX::LEFT)
-		{
-			m_bonuses[m_actualBonusId]->setTexture(m_assets.ROCKET_3_RIGHT_TEXTURE);
-		}
-		++m_animationCounter;
-	}
-	if (m_animationCounter == 11)
+	auto stepIt = std::find_if(ROCKET_ANIMATION_STEPS.begin(), ROCKET_ANIMATION_STEPS.end(), std::bind(&SAnimationStep::IsActive, std::placeholders::_1, m_animationCounter));
+	if (stepIt == ROCKET_ANIMATION_STEPS.end())
 	{
 		m_animationCounter = 0;
 	}
-
-	if ((m_animationCounter >= 0) && (m_animationCounter <= 11) && (m_actualBonus != BonusType::NO) && (m_hero->getSpeedY() < -0.05f * ROCKET_DELTA_HEIGHT))
+	else if (m_actualBonus != BonusType::NO)
 	{
-		if (doodleLastDirection == DirectionX::RIGHT)
-		{
-			if ((m_animationCounter >= 0) && (m_animationCounter <= 2))
-			{
-				m_bonuses[m_actualBonusId]->setPosition(sf::Vector2f(doodlePosition.x - 13, doodlePosition.y));
-			}
-			if ((m_animationCounter >= 3) && (m_animationCounter <= 5))
-			{
-				m_bonuses[m_actualBonusId]->setPosition(sf::Vector2f(doodlePosition.x - 13, doodlePosition.y));
-			}
-			if ((m_animationCounter >= 6) && (m_animationCounter <= 8))
-			{
-				m_bonuses[m_actualBonusId]->setPosition(sf::Vector2f(doodlePosition.x - 15, doodlePosition.y));
-			}
-			if ((m_animationCounter >= 9) && (m_animationCounter <= 11))
-			{
-				m_bonuses[m_actualBonusId]->setPosition(sf::Vector2f(doodlePosition.x - 17, doodlePosition.y));
-			}
-		}
-		else if (doodleLastDirection == DirectionX::LEFT)
-		{
-			if ((m_animationCounter >= 0) && (m_animationCounter <= 2))
-			{
-				m_bonuses[m_actualBonusId]->setPosition(sf::Vector2f(doodlePosition.x + DOODLE_WIDTH + 1, doodlePosition.y));
-			}
-			if ((m_animationCounter >= 3) && (m_animationCounter <= 5))
-			{
-				m_bonuses[m_actualBonusId]->setPosition(sf::Vector2f(doodlePosition.x + DOODLE_WIDTH + 1, doodlePosition.y));
-			}
-			if ((m_animationCounter >= 6) && (m_animationCounter <= 8))
-			{
-				m_bonuses[m_actualBonusId]->setPosition(sf::Vector2f(doodlePosition.x + DOODLE_WIDTH, doodlePosition.y));
-			}
-			if ((m_animationCounter >= 9) && (m_animationCounter <= 11))
-			{
-				m_bonuses[m_actualBonusId]->setPosition(sf::Vector2f(doodlePosition.x + DOODLE_WIDTH - 5, doodlePosition.y));
-			}
-		}
+		applyAnimationStep(ROCKET_ANIMATION_STEPS[std::distance(ROCKET_ANIMATION_STEPS.begin(), stepIt)]);
+		++m_animationCounter;
 	}
 
-	if (m_hero->getSpeedY() >= -0.05 * ROCKET_DELTA_HEIGHT && m_actualBonus != BonusType::NO)
+	if ((m_hero->getSpeedY() >= -0.25 * ROCKET_DELTA_HEIGHT) && (m_actualBonus != BonusType::NO))
 	{
-		m_bonuses[m_actualBonusId]->setTexture(m_assets.ROCKET_NONE_TEXTURE);
-		if (m_actualBonus != BonusType::NO)
-		{
-			m_bonuses[m_actualBonusId]->setPosition(doodlePosition);
-		}
-		m_bonuses[m_actualBonusId]->rotate(-10);
-		m_offsetFallBonus.x += -5 * STEP;
-		m_offsetFallBonus.y += 6 * STEP;
-		m_bonuses[m_actualBonusId]->move(sf::Vector2f(m_offsetFallBonus));
+		fallBonus(m_actualBonusId);
 	}
 }
 
-void GameScene::animateHatHelicopter() // TODO: handlers...this code NEED MORE HANDLERS!
+void GameScene::animateHatHelicopter()
 {
-	sf::Vector2f doodlePosition = m_hero->getPosition();
+	const std::vector<SAnimationStep> HAT_HELICOPTER_ANIMATION_STEPS = {
+		SAnimationStep(0, 1, m_assets.HAT_HELOCPTER_FLY_LEFT_TEXTURE, m_assets.HAT_HELOCPTER_FLY_LEFT_TEXTURE, sf::Vector2f(0, -14.f), sf::Vector2f(-28.f, -14.f)),
+		SAnimationStep(2, 4, m_assets.HAT_HELOCPTER_DIAGONAL_LEFT_TEXTURE, m_assets.HAT_HELOCPTER_DIAGONAL_LEFT_TEXTURE, sf::Vector2f(0, -14.f), sf::Vector2f(-28.f, -14.f)),
+		SAnimationStep(5, 7, m_assets.HAT_HELOCPTER_DIAGONAL_RIGHT_TEXTURE, m_assets.HAT_HELOCPTER_DIAGONAL_RIGHT_TEXTURE, sf::Vector2f(0, -14.f), sf::Vector2f(-28.f, -14.f)),
+		SAnimationStep(8, 10, m_assets.HAT_HELOCPTER_FLY_RIGHT_TEXTURE, m_assets.HAT_HELOCPTER_FLY_RIGHT_TEXTURE, sf::Vector2f(0, -14.f), sf::Vector2f(-28.f, -20.f))
+	};
 
 	if ((m_hero->getSpeedY() >= 0) || (m_bonuses[m_actualBonusId]->getPosition().y < m_view.getCenter().y - WINDOW_HEIGHT / 2 - HAT_HELICOPTER_HEIGHT))
 	{
 		m_animationCounter = 0;
 		m_actualBonus = BonusType::NO;
-		m_offsetFallBonus.x = 0.f;
-		m_offsetFallBonus.y = 0.f;
+		m_offsetFallBonus = sf::Vector2f(0, 0);
 		m_bonuses[m_actualBonusId]->setRotation(0);
-		m_bonuses[m_actualBonusId]->move(sf::Vector2f(0.f, float(WINDOW_HEIGHT)));
+		m_bonuses[m_actualBonusId]->setPosition(sf::Vector2f(0, 0));
 	}
 
-	if (m_hero->getSpeedY() < -0.05 * HAT_HELICOPTER_DELTA_HEIGHT)
+	auto stepIt = std::find_if(HAT_HELICOPTER_ANIMATION_STEPS.begin(), HAT_HELICOPTER_ANIMATION_STEPS.end(), std::bind(&SAnimationStep::IsActive, std::placeholders::_1, m_animationCounter));
+	if (stepIt == HAT_HELICOPTER_ANIMATION_STEPS.end())
 	{
-		if ((m_animationCounter >= 0) && (m_animationCounter <= 5))
-		{
-			m_bonuses[m_actualBonusId]->setTexture(m_assets.HAT_HELOCPTER_FLY_LEFT_TEXTURE);
-			++m_animationCounter;
-		}
-		if ((m_animationCounter >= 6) && (m_animationCounter <= 10))
-		{
-			m_bonuses[m_actualBonusId]->setTexture(m_assets.HAT_HELOCPTER_DIAGONAL_LEFT_TEXTURE);
-			++m_animationCounter;
-		}
-		if ((m_animationCounter >= 11) && (m_animationCounter <= 15))
-		{
-			m_bonuses[m_actualBonusId]->setTexture(m_assets.HAT_HELOCPTER_DIAGONAL_RIGHT_TEXTURE);
-			++m_animationCounter;
-		}
-		if ((m_animationCounter >= 16) && (m_animationCounter <= 20))
-		{
-			m_bonuses[m_actualBonusId]->setTexture(m_assets.HAT_HELOCPTER_FLY_RIGHT_TEXTURE);
-			++m_animationCounter;
-		}
-		if (m_animationCounter == 20)
-		{
-			m_animationCounter = 0;
-		}
+		m_animationCounter = 0;
 	}
-	if ((m_animationCounter >= 0) && (m_animationCounter <= 20) && (m_actualBonus != BonusType::NO) && (m_hero->getSpeedY() < -0.05f * HAT_HELICOPTER_DELTA_HEIGHT))
+	else if (m_actualBonus != BonusType::NO)
 	{
-		DirectionX doodleLastDirection = m_hero->getLastDirection();
-		if (doodleLastDirection == DirectionX::RIGHT)
-		{
-			m_bonuses[m_actualBonusId]->setPosition(sf::Vector2f(doodlePosition.x, doodlePosition.y - 14));
-		}
-		else if (doodleLastDirection == DirectionX::LEFT)
-		{
-			m_bonuses[m_actualBonusId]->setPosition(sf::Vector2f(doodlePosition.x + 15, doodlePosition.y - 14));
-		}
+		applyAnimationStep(HAT_HELICOPTER_ANIMATION_STEPS[std::distance(HAT_HELICOPTER_ANIMATION_STEPS.begin(), stepIt)]);
+		++m_animationCounter;
 	}
 
-	if (m_hero->getSpeedY() >= -0.05 * HAT_HELICOPTER_DELTA_HEIGHT && m_actualBonus != BonusType::NO)
+	if ((m_hero->getSpeedY() >= -0.3 * HAT_HELICOPTER_DELTA_HEIGHT) && (m_actualBonus != BonusType::NO))
 	{
-		m_bonuses[m_actualBonusId]->setTexture(m_assets.HAT_HELOCPTER_NONE_LEFT_TEXTURE);
-		if (m_actualBonus != BonusType::NO)
-		{
-			m_bonuses[m_actualBonusId]->setPosition(sf::Vector2f(doodlePosition.x, doodlePosition.y - 14));
-		}
-		m_bonuses[m_actualBonusId]->rotate(-10);
-		m_offsetFallBonus.x += -5 * STEP;
-		m_offsetFallBonus.y += 6 * STEP;
-		m_bonuses[m_actualBonusId]->move(sf::Vector2f(m_offsetFallBonus));
+		fallBonus(m_actualBonusId);
 	}
 }
 

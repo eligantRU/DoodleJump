@@ -3,6 +3,43 @@
 #include "stdafx.h"
 #include "sheet.h"
 
+struct SAnimationStep // Ask Shambir: why this here? Do I need encapsulate methods?
+{
+	unsigned m_firstFrameNo = 0;
+	unsigned m_lastFrameNo = 0;
+	sf::Texture & m_leftTexture;
+	sf::Texture & m_rightTexture;
+	sf::Vector2f m_leftOffset;
+	sf::Vector2f m_rightOffset;
+
+	SAnimationStep operator=(const SAnimationStep animStep)
+	{
+		m_firstFrameNo = animStep.m_firstFrameNo;
+		m_lastFrameNo = animStep.m_lastFrameNo;
+		m_leftTexture = animStep.m_leftTexture;
+		m_rightTexture = animStep.m_rightTexture;
+		m_leftOffset = animStep.m_leftOffset;
+		m_rightOffset = animStep.m_rightOffset;
+		return *this;
+	}
+
+	SAnimationStep(unsigned firstFrameNo, unsigned lastFrameNo, sf::Texture & leftTexture, sf::Texture & rightTexture, sf::Vector2f leftOffset, sf::Vector2f rightOffset)
+		:m_firstFrameNo(firstFrameNo)
+		, m_lastFrameNo(lastFrameNo)
+		, m_leftTexture(leftTexture)
+		, m_rightTexture(rightTexture)
+		, m_leftOffset(leftOffset)
+		, m_rightOffset(rightOffset)
+	{
+
+	}
+
+	bool IsActive(unsigned frameNo) const
+	{
+		return (frameNo >= m_firstFrameNo) && (frameNo <= m_lastFrameNo);
+	}
+};
+
 struct GameScene
 {
 public:
@@ -31,6 +68,8 @@ private:
 	void moveDynamicPlates(); 
 	int getUppermostPlateID() const;
 
+	void applyAnimationStep(SAnimationStep animationStep);
+	void fallBonus(int bonusID);
 	void animateBonus();
 	void animateSpring();
 	void animateTrampoline();

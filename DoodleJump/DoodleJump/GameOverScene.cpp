@@ -24,7 +24,7 @@ GameOverScene::GameOverScene(Assets & assets, sf::View & view, SoundHandler & so
 	m_background = std::make_unique<sf::Sprite>(sf::Sprite());
 	m_background->setTextureRect(sf::IntRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT));
 	m_background->setTexture(m_assets.BACKGROUND_TEXTURE);
-	m_background->setPosition(0.f, 0.f);
+	m_background->setPosition(0, 0);
 }
 
 GameOverScene::~GameOverScene()
