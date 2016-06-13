@@ -67,6 +67,11 @@ void GameOverScene::checkEvents(sf::RenderWindow & window)
 			window.close();
 		}
 	}
+
+	if (m_result.status != GameStatus::GAME_OVER_SCENE)
+	{
+		saveRecord();
+	}
 }
 
 void GameOverScene::checkMouseOnButtons(sf::Vector2i mousePosition)
@@ -85,5 +90,24 @@ void GameOverScene::checkMouseClick(sf::Event & event)
 	if (m_playAgainButton->onClick(event))
 	{
 		m_result.status = GameStatus::GAME_SCENE;
+	}
+}
+
+void GameOverScene::saveRecord()
+{
+	system("cls");
+	std::cout << "Write your nickname: ";
+	std::string nickname;
+	std::cin >> nickname;
+	system("cls");
+
+	MasterAPI api(API_HOST);
+	sf::Http::Response::Status status = api.sendRequest("index.php/record/" + nickname + "/" + std::to_string(m_score), "POST");
+
+	if (status != sf::Http::Response::Ok)
+	{
+		std::cout << "Error: " << status << std::endl;
+		MessageBoxA(nullptr, "Error server connection\n Code: " + status, "Error", MB_ICONERROR | MB_OK);
+		assert(0);
 	}
 }

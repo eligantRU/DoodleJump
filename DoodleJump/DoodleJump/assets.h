@@ -68,6 +68,7 @@ public:
 	sf::Texture MONSTER_BLUE_RIGHT_TEXTURE;
 	sf::Texture BUTTON_A_TEXTURE;
 	sf::Texture BUTTON_D_TEXTURE;
+	sf::Texture RECORD_LINE_TEXTURE;
 
 	sf::Font ARIAL_FONT;
 

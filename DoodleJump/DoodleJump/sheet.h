@@ -3,7 +3,10 @@
 #include "stdafx.h"
 
 #include "bases.h"
+#include "MasterAPI.h"
+#include "FuckingJSONParser.h"
 #include "Assets.h"
+#include "Record.h"
 #include "SoundHandler.h"
 #include "Button.h"
 #include "Bonus.h"

@@ -59,6 +59,7 @@ Assets::Assets()
 	addTexture(MONSTER_BLUE_RIGHT_TEXTURE, "images/Monster_blue_right_37_49.png");
 	addTexture(BUTTON_A_TEXTURE, "images/A_key_94_78.png");
 	addTexture(BUTTON_D_TEXTURE, "images/D_key_92_78.png");
+	addTexture(RECORD_LINE_TEXTURE, "images/record_line_49_4.png");
 
 	addFont(ARIAL_FONT, "arial.ttf");
 	addImage(WINDOW_ICON, "images/icon.png");

@@ -39,6 +39,9 @@ GameScene::GameScene(Assets & assets, sf::View & view, SoundHandler & soundHandl
 	m_background = std::make_unique<sf::Sprite>();
 	m_background->setTextureRect(sf::IntRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT));
 	m_background->setTexture(m_assets.BACKGROUND_TEXTURE);
+
+	m_records.reserve(DEFAULT_NUMBER_RECORDS);
+	getRecords(DEFAULT_NUMBER_RECORDS);
 	
 	initBonuses();
 	resetGame();
@@ -168,6 +171,10 @@ void GameScene::render(sf::RenderWindow & window)
 	{
 		bonus->draw(window);
 	}
+	for (auto &record : m_records)
+	{
+		record.draw(window);
+	}
 	window.draw(*m_hole);
 	m_scoreNum.setString("Score: " + std::to_string(m_points));
 	window.draw(m_scoreNum);
@@ -176,4 +183,31 @@ void GameScene::render(sf::RenderWindow & window)
 uint64_t GameScene::getScore() const
 {
 	return m_points;
+}
+
+void GameScene::getRecords(unsigned numRecords)
+{
+	MasterAPI api(API_HOST);
+	sf::Http::Response::Status status = api.sendRequest("api/index.php/records/" + std::to_string(numRecords), "GET");
+	
+	if (status == sf::Http::Response::Ok)
+	{
+		FuckingJSONParser parser;
+		std::string str = parser.getArray(api.getResponseBody());
+		for (unsigned i = 0; i < numRecords; ++i)
+		{
+			std::string strJSON = parser.getJSON(str);
+			std::string result1 = parser.getCoupleKeyValue(strJSON);
+			std::string result2 = parser.getCoupleKeyValue(strJSON);
+			std::map<std::string, std::string> result1mod = parser.getMap(result1);
+			std::map<std::string, std::string> result2mod = parser.getMap(result2);
+			m_records.push_back(Record(result1mod["nickname"], uint64_t(std::stoull(result2mod["score"].c_str())), m_assets));
+		}
+	}
+	else
+	{
+		std::cout << "Error: " << status << std::endl; 
+		MessageBoxA(nullptr, "Error server connection; Code: " + status, "Error", MB_ICONERROR | MB_OK);
+		assert(0);
+	}
 }

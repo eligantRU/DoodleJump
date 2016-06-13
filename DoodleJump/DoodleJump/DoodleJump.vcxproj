@@ -24,13 +24,16 @@
     <ClInclude Include="Bonus.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="Doodle.h" />
+    <ClInclude Include="FuckingJSONParser.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameOverScene.h" />
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="HelpScene.h" />
+    <ClInclude Include="MasterAPI.h" />
     <ClInclude Include="PauseScene.h" />
     <ClInclude Include="DoodleJumpRes.h" />
     <ClInclude Include="Plate.h" />
+    <ClInclude Include="Record.h" />
     <ClInclude Include="sheet.h" />
     <ClInclude Include="SoundHandler.h" />
     <ClInclude Include="StartScene.h" />
@@ -52,8 +55,10 @@
     <ClCompile Include="GameScene_Plates.cpp" />
     <ClCompile Include="HelpScene.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MasterAPI.cpp" />
     <ClCompile Include="PauseScene.cpp" />
     <ClCompile Include="Plate.cpp" />
+    <ClCompile Include="Record.cpp" />
     <ClCompile Include="SoundHandler.cpp" />
     <ClCompile Include="StartScene.cpp" />
     <ClCompile Include="stdafx.cpp" />
@@ -117,8 +122,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\sdk\SFML\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\sdk\SFML\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\sdk\SFML\include;E:\Qt\5.6\msvc2015_64\include;C:\sdk\JSON\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\sdk\SFML\lib;E:\Qt\5.6\msvc2015_64\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -127,8 +132,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>C:\sdk\SFML\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\sdk\SFML\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\sdk\SFML\include;E:\Qt\5.6\msvc2015_64\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\sdk\SFML\lib;E:\Qt\5.6\msvc2015_64\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -141,16 +146,16 @@
       </PrecompiledHeader>
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32; _DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>false</MultiProcessorCompilation>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>sfml-main-d.lib;sfml-graphics-d.lib;sfml-window-d.lib;sfml-system-d.lib;sfml-audio-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>sfml-main-d.lib;sfml-graphics-d.lib;sfml-window-d.lib;sfml-system-d.lib;sfml-audio-d.lib;sfml-network-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -179,7 +184,7 @@
       <Optimization>Disabled</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32; NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>false</MultiProcessorCompilation>
@@ -190,7 +195,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>sfml-main.lib;sfml-graphics.lib;sfml-window.lib;sfml-system.lib;sfml-audio.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>sfml-main.lib;sfml-graphics.lib;sfml-window.lib;sfml-system.lib;sfml-audio.lib;sfml-network.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

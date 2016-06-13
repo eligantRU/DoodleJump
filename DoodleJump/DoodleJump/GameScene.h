@@ -94,6 +94,8 @@ private:
 	Collision checkCollisionHole();
 	int getBonusCollisionID() const;
 
+	void getRecords(unsigned numRecords);
+
 	Assets & m_assets;
 	sf::View & m_view;
 	SoundHandler & m_soundHandler;
@@ -117,6 +119,8 @@ private:
 	bool m_isPause = false;
 	bool m_isLeft = false;
 	bool m_isRight = false;
+
+	std::vector<Record> m_records;
 
 	SGameResult m_result;
 };

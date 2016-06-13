@@ -14,6 +14,7 @@ private:
 	void checkEvents(sf::RenderWindow & window);
 	void checkMouseOnButtons(sf::Vector2i mousePosition);
 	void checkMouseClick(sf::Event & event);
+	void saveRecord();
 	std::function<uint64_t()> m_getter;
 
 	Assets & m_assets;
@@ -30,4 +31,6 @@ private:
 	sf::Text m_lastRecord;
 
 	SGameResult m_result;
+
+	MasterAPI m_api;
 };
