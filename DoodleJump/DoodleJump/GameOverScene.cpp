@@ -102,7 +102,7 @@ void GameOverScene::saveRecord()
 	system("cls");
 
 	MasterAPI api(API_HOST);
-	sf::Http::Response::Status status = api.sendRequest("index.php/record/" + nickname + "/" + std::to_string(m_score), "POST");
+	sf::Http::Response::Status status = api.sendRequest("api/index.php/records/" + nickname + "/" + std::to_string(m_score), "POST");
 
 	if (status != sf::Http::Response::Ok)
 	{
