@@ -122,7 +122,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\sdk\SFML\include;E:\Qt\5.6\msvc2015_64\include;C:\sdk\JSON\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\sdk\SFML\include;C:\sdk\Qt\5.6\msvc2015_64\include;C:\sdk\JSON\include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\sdk\SFML\lib;E:\Qt\5.6\msvc2015_64\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -132,7 +132,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>C:\sdk\SFML\include;E:\Qt\5.6\msvc2015_64\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\sdk\SFML\include;C:\sdk\JSON\include;C:\sdk\Qt\5.6\msvc2015_64\include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\sdk\SFML\lib;E:\Qt\5.6\msvc2015_64\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -190,7 +190,7 @@
       <MultiProcessorCompilation>false</MultiProcessorCompilation>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
