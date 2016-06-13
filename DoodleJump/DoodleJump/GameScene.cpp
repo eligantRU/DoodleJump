@@ -39,7 +39,7 @@ GameScene::GameScene(Assets & assets, sf::View & view, SoundHandler & soundHandl
 	m_background = std::make_unique<sf::Sprite>();
 	m_background->setTextureRect(sf::IntRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT));
 	m_background->setTexture(m_assets.BACKGROUND_TEXTURE);
-
+	
 	initBonuses();
 	resetGame();
 }
@@ -48,7 +48,6 @@ GameScene::~GameScene()
 {
 
 }
-
 
 SGameResult GameScene::onGameFrame(sf::RenderWindow & window) // TODO: refactoring
 {
@@ -66,7 +65,6 @@ SGameResult GameScene::onGameFrame(sf::RenderWindow & window) // TODO: refactori
 		window.setView(m_view);
 		render(window);
 		window.display();
-
 		if (m_isPause)
 		{
 			m_view.setCenter(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
@@ -114,7 +112,7 @@ void GameScene::update(sf::RenderWindow & window)
 		m_view.setCenter(WINDOW_WIDTH/2, doodlePosition.y);
 		m_background->setPosition(0, doodlePosition.y - WINDOW_HEIGHT / 2);
 		m_scoreNum.setPosition(0, doodlePosition.y - WINDOW_HEIGHT / 2);
-		++m_points;
+		m_points = uint64_t(-m_hero->getPositionBeforeDown().y / 10);
 	}
 
 	moveBonuses();
@@ -131,20 +129,20 @@ void GameScene::update(sf::RenderWindow & window)
 
 void GameScene::resetGame()
 {
-	m_view.reset(sf::FloatRect(0.f, 0.f, float(WINDOW_WIDTH), float(WINDOW_HEIGHT)));
+	m_view.reset(sf::FloatRect(0, 0, float(WINDOW_WIDTH), float(WINDOW_HEIGHT)));
 	m_scoreNum.setPosition(0, 0);
 	m_endOfGame = false;
 	m_points = 0;
 	m_actualBonus = BonusType::NO;
 	m_animationCounter = 0;
-	m_offsetFallBonus.x = 0.f;
-	m_offsetFallBonus.y = 0.f;
+	m_offsetFallBonus.x = 0;
+	m_offsetFallBonus.y = 0;
 	m_isLeft = false;
 	m_isRight = false;
 	m_hero->setDirection(DirectionX::NONE);
 	m_hero->setTexture(m_assets.DOODLE_LEFT_TEXTURE);
 	m_hero->setPosition(DOODLE_START_POSITION);
-	m_hero->setSpeedY(-50.f);
+	m_hero->setSpeedY(-50);
 	m_hero->setPositionBeforeDown(m_hero->getPosition());
 	m_view.setCenter(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
 
