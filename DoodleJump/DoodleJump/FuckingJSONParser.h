@@ -140,7 +140,7 @@ public:
 		return result;
 	}
 
-	unsigned getSize(std::string str)
+	unsigned getArraySize(std::string str)
 	{
 		// How much time u can get new JSON = size
 		// fuck, getJSON use substr, u must save your data :/

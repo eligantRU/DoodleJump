@@ -207,7 +207,7 @@ void GameScene::getRecords(unsigned numRecords)
 	else
 	{
 		std::cout << "Error: " << status << std::endl; 
-		MessageBoxA(nullptr, "Connection failed\n Code: " + status, "Error", MB_ICONERROR | MB_OK);
+		MessageBoxA(nullptr, "Connection failed", "Error", MB_ICONERROR | MB_OK);
 		assert(0);
 	}
 }
