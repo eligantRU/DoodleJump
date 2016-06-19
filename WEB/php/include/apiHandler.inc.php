@@ -61,7 +61,7 @@
             {
                 $record["score"] = intval($record["score"]);
             }
-            
+
             return json_encode($records, JSON_NUMERIC_CHECK);
         }
 
