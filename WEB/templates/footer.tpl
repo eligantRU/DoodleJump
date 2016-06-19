@@ -6,7 +6,7 @@
         <a href="#">FAQ</a>
         <a href="#">Contact</a>
       </p>
-      <p class="copywrite">Yegorov Nikita (Infotech Lacyem) © 2016</p>
+      <p class="copywrite">Yegorov Nikita © 2016</p>
     </div>
   </div>
 </footer>

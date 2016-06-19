@@ -49,9 +49,28 @@
 
             <div class="row">
               <div class="large-12 columns panel">
-                <p>DoodleJump is a popular game in over the world with very simple rule: u must get max points.</p>
-                <p>Bonuses like a hat-helicopter, rocket, trampoline & spring can help u in it.</p>
+                <p>DoodleJump is a popular game in over the world with very simple rule: u must get max points. <br />
+                   Bonuses like a hat-helicopter, rocket, trampoline & spring can help u in it.</p>
                 <p>But be careful: if u touch the window-bottom u lose.</p>
+                <div class="flex-video widescreen">
+                  <iframe width="420" height="315" src="https://www.youtube.com/embed/tDyM_bNjtKs" frameborder="0" allowfullscreen></iframe>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="large-10 columns">
+                <h4>Minimum system requirements</h4>
+                <ul>
+                  <li>Windows (XP, Vista, 7, 8, 8.1, 10) x86 or x64</li>
+                  <li>32 Mb RAM</li>
+                  <li>20 Mb HDD</li>
+                  <li>Keyboard</li>
+                  <li>Mouse</li>
+                </ul>
+                <h4>Recommendations:</h4>
+                <ul>
+                  <li>Network connection</li>
+                </ul>
               </div>
             </div>
           </div>
