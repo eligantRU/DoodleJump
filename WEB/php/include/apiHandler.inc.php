@@ -50,12 +50,19 @@
 
         private function getRecords($num)
         {
-            return json_encode($this->dbHandler->queryGetAsoc("SELECT nickname, score FROM
-                                                                   records
-                                                               ORDER BY
-                                                                   score DESC
-                                                               LIMIT
-                                                                   0, {$num}"));
+            $records = $this->dbHandler->queryGetAsoc("SELECT nickname, score FROM
+                                                           records
+                                                       ORDER BY
+                                                            score DESC
+                                                       LIMIT
+                                                           0, {$num}");
+
+            foreach ($records as $record)
+            {
+                $record["score"] = intval($record["score"]);
+            }
+            
+            return json_encode($records, JSON_NUMERIC_CHECK);
         }
 
         private function addRecord($nickname, $score)

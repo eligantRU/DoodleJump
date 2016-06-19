@@ -192,16 +192,12 @@ void GameScene::getRecords(unsigned numRecords)
 	
 	if (status == sf::Http::Response::Ok)
 	{
-		FuckingJSONParser parser;
-		std::string str = parser.getArray(api.getResponseBody());
+		json data = nlohmann::json::parse(api.getResponseBody());
 		for (unsigned i = 0; i < numRecords; ++i)
 		{
-			std::string strJSON = parser.getJSON(str);
-			std::string result1 = parser.getCoupleKeyValue(strJSON);
-			std::string result2 = parser.getCoupleKeyValue(strJSON);
-			std::map<std::string, std::string> result1mod = parser.getMap(result1);
-			std::map<std::string, std::string> result2mod = parser.getMap(result2);
-			m_records.push_back(Record(result1mod["nickname"], uint64_t(std::stoull(result2mod["score"].c_str())), m_assets));
+			json nickname = data.at(i).at("nickname");
+			json score = data.at(i).at("score");
+			m_records.push_back(Record(nickname.get<std::string>(), score.get<uint64_t>(), m_assets));
 		}
 	}
 	else

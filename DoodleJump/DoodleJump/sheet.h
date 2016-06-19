@@ -4,7 +4,6 @@
 
 #include "bases.h"
 #include "MasterAPI.h"
-#include "FuckingJSONParser.h"
 #include "Assets.h"
 #include "Record.h"
 #include "SoundHandler.h"
@@ -18,3 +17,5 @@
 #include "HelpScene.h"
 #include "StartScene.h"
 #include "Game.h"
+
+using json = nlohmann::json;

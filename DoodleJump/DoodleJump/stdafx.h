@@ -19,11 +19,7 @@
 
 #pragma warning (push, 3)
 
-// github.com/miloyip/rapidjson // Ask Shambir: use it or my couch-bicycle class?
-#include <rapidjson/document.h>
-#include <rapidjson/writer.h>
-#include <rapidjson/stringbuffer.h>
-
+#include <json.hpp>
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include <SFML/OpenGL.hpp>
