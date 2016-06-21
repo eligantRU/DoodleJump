@@ -17,19 +17,19 @@
                   <button class="orbit-next"><span class="show-for-sr">Next Slide</span>&#9654;&#xFE0E;</button>
                   <li class="is-active orbit-slide">
                     <img class="orbit-image" src="img/01.png" alt="Space">
-                    <figcaption class="orbit-caption">Text 1</figcaption>
+                    <figcaption class="orbit-caption">The main menu</figcaption>
                   </li>
                   <li class="orbit-slide">
                     <img class="orbit-image" src="img/02.png" alt="Space">
-                    <figcaption class="orbit-caption">Text 2</figcaption>
+                    <figcaption class="orbit-caption">Get scores</figcaption>
                   </li>
                   <li class="orbit-slide">
                     <img class="orbit-image" src="img/03.png" alt="Space">
-                    <figcaption class="orbit-caption">Text 3</figcaption>
+                    <figcaption class="orbit-caption">Use bonuses</figcaption>
                   </li>
                   <li class="orbit-slide">
                     <img class="orbit-image" src="img/04.png" alt="Space">
-                    <figcaption class="orbit-caption">Text 4</figcaption>
+                    <figcaption class="orbit-caption">C records</figcaption>
                   </li>
                 </ul>
                 <nav class="orbit-bullets">
