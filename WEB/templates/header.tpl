@@ -2,7 +2,7 @@
 <div class="title-bar" data-responsive-toggle="widemenu" data-hide-for="medium">
   <div class="title-bar-left">
     <button class="menu-icon" type="button" data-open="offCanvasLeft"></button>
-    <span class="title-bar-title">DoodleJump</span>
+    <span class="title-bar-title"><a href="index.php" style="display: inline; color: #FFFFFF">DoodleJump</a></span>
   </div>
   <div class="title-bar-right">
     <span class="title-bar-title">Log In</span>
