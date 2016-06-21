@@ -11,24 +11,24 @@
         <div class="off-canvas-content" data-off-canvas-content>
           <div class="row column">
             <div class="row">
-              <div class="orbit large-12 medium-12 small-12" role="region" aria-label="Favorite Space Pictures" data-orbit>
+              <div class="orbit large-12  medium-12 small-12 hide-for-large hide-for-medium" role="region" aria-label="Favorite Space Pictures" data-orbit>
                 <ul class="orbit-container">
                   <button class="orbit-previous"><span class="show-for-sr">Previous Slide</span>&#9664;&#xFE0E;</button>
                   <button class="orbit-next"><span class="show-for-sr">Next Slide</span>&#9654;&#xFE0E;</button>
                   <li class="is-active orbit-slide">
-                    <img class="orbit-image" src="img/01.jpg" alt="Space">
+                    <img class="orbit-image" src="img/01.png" alt="Space">
                     <figcaption class="orbit-caption">Text 1</figcaption>
                   </li>
                   <li class="orbit-slide">
-                    <img class="orbit-image" src="img/02.jpg" alt="Space">
+                    <img class="orbit-image" src="img/02.png" alt="Space">
                     <figcaption class="orbit-caption">Text 2</figcaption>
                   </li>
                   <li class="orbit-slide">
-                    <img class="orbit-image" src="img/03.jpg" alt="Space">
+                    <img class="orbit-image" src="img/03.png" alt="Space">
                     <figcaption class="orbit-caption">Text 3</figcaption>
                   </li>
                   <li class="orbit-slide">
-                    <img class="orbit-image" src="img/04.jpg" alt="Space">
+                    <img class="orbit-image" src="img/04.png" alt="Space">
                     <figcaption class="orbit-caption">Text 4</figcaption>
                   </li>
                 </ul>
@@ -61,7 +61,7 @@
               <div class="large-10 columns">
                 <h4>Minimum system requirements</h4>
                 <ul>
-                  <li>Windows (XP, Vista, 7, 8, 8.1, 10) x86 or x64</li>
+                  <li>Windows (XP, Vista, 7, 8, 8.1, 10)</li>
                   <li>32 Mb RAM</li>
                   <li>20 Mb HDD</li>
                   <li>Keyboard</li>

@@ -14,7 +14,7 @@
 <div class="off-canvas position-left" id="offCanvasLeft" data-off-canvas>
   <ul class="vertical dropdown menu" data-dropdown-menu>
     <li><a href="records.php">Records</a></li>
-    <li><a href="https://github.com/eligantRU/DoodleJump/archive/dev-api.zip">Download</a></li>
+    <li><a href="download.php">Download</a></li>
   </ul>
 </div>
 
@@ -22,12 +22,13 @@
 <div id="widemenu" class="top-bar">
   <div class="top-bar-left">
     <ul class="dropdown menu" data-dropdown-menu>
-      <li class="menu-text has-submenu">DoodleJump</li>
+      <li class="menu-text has-submenu"><a href="index.php" style="display: inline">DoodleJump</a></li>
+      <!--li class="menu-text has-submenu"><a href="index.php"><span class="couch">DoodleJump</span></a></li-->
       <li class="has-submenu">
         <a href="records.php">Records</a>
       </li>
       <li class="has-submenu">
-        <a href="https://github.com/eligantRU/DoodleJump/archive/dev-api.zip">Download</a>
+        <a href="download.php">Download</a>
       </li>
     </ul>
   </div>

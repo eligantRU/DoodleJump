@@ -2,7 +2,7 @@
   <div class="row">
     <div class="small-12 columns">
       <p class="links">
-        <a href="#">About</a>
+        <a href="about.php">About</a>
         <a href="#">FAQ</a>
         <a href="#">Contact</a>
       </p>
