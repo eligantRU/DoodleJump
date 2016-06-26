@@ -4,9 +4,10 @@
     class dbHandler
     {
         private $m_mysqli = null;
-        function __construct()
+
+        function __construct($dbHost, $dbUser, $dbPass, $dbName, $dbPort)
         {
-            $this->m_mysqli = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME, DB_PORT);
+            $this->m_mysqli = new mysqli($dbHost, $dbUser, $dbPass, $dbName, $dbPort);
             $this->m_mysqli->set_charset("utf8");
             if (mysqli_connect_errno())
             {
@@ -20,7 +21,7 @@
             return ($result !== false);
         }
 
-        public function queryGetAsoc($query)
+        public function queryGetAssoc($query)
         {
             $data = array();
             $result = $this->m_mysqli->query($query);
@@ -39,8 +40,14 @@
             return $this->m_mysqli->insert_id;
         }
 
-        public function quote($value)
+        public function quote($query)
         {
-            return $this->m_mysqli->real_escape_string($value);
+            return $this->m_mysqli->real_escape_string($query);
+        }
+
+        public function getRows($query)
+        {
+            $bla = $this->m_mysqli->query($query);
+            return $bla->fetch_row();
         }
     }
