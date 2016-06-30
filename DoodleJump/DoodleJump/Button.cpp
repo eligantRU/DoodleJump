@@ -40,7 +40,7 @@ float Button::getStringLengthPx(const std::string & str) const
 	text.setStyle(sf::Text::Bold);
 	text.setColor(sf::Color(0, 0, 0));
 	text.setString(str);
-	return (text.findCharacterPos(str.length() - 1).x - text.findCharacterPos(0).x);
+	return (text.findCharacterPos(str.length()).x - text.findCharacterPos(0).x);
 }
 
 void Button::setText(const std::string & text)

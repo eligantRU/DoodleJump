@@ -197,7 +197,14 @@ void GameScene::getRecords(unsigned numRecords)
 		{
 			json nickname = data.at(i).at("nickname");
 			json score = data.at(i).at("score");
-			m_records.push_back(Record(nickname.get<std::string>(), score.get<uint64_t>(), m_assets));
+			try
+			{
+				m_records.push_back(Record(nickname.get<std::string>(), score.get<uint64_t>(), m_assets));
+			}
+			catch (...)
+			{
+				std::cerr << "Exception in records getter: records #" << i << std::endl;
+			}
 		}
 	}
 	else
