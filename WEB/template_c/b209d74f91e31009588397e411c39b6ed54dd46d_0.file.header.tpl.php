@@ -1,3 +1,26 @@
+<?php
+/* Smarty version 3.1.29, created on 2016-06-30 23:32:55
+  from "E:\!git\!web_backend\server2go\server2go\htdocs\web_backend\DoodleJump\template\header.tpl" */
+
+if ($_smarty_tpl->smarty->ext->_validateCompiled->decodeProperties($_smarty_tpl, array (
+  'has_nocache_code' => false,
+  'version' => '3.1.29',
+  'unifunc' => 'content_57759007d88af5_86422881',
+  'file_dependency' => 
+  array (
+    'b209d74f91e31009588397e411c39b6ed54dd46d' => 
+    array (
+      0 => 'E:\\!git\\!web_backend\\server2go\\server2go\\htdocs\\web_backend\\DoodleJump\\template\\header.tpl',
+      1 => 1467320710,
+      2 => 'file',
+    ),
+  ),
+  'includes' => 
+  array (
+  ),
+),false)) {
+function content_57759007d88af5_86422881 ($_smarty_tpl) {
+?>
 <!-- off-canvas title bar for 'small' screen -->
 <div class="title-bar" data-responsive-toggle="widemenu" data-hide-for="medium">
   <div class="title-bar-left">
@@ -39,8 +62,8 @@
         <a href="#" data-reveal-id="myModal" class="button">Log In</a>
         <!--div id="myModal" class="reveal-modal remove-whitespace" data-reveal>
           <div class="row">
-            <div class="large-6 columns auth-plain">
-              <div class="signup-panel left-solid">
+            <div class="large-6 columns auth_plain">
+              <div class="signup_panel left_solid">
                 <p class="welcome">Registered Users</p>
                 <form>
                   <div class="row collapse">
@@ -64,8 +87,8 @@
               </div>
             </div>
 
-            <div class="large-6 columns auth-plain">
-              <div class="signup-panel newusers">
+            <div class="large-6 columns auth_plain">
+              <div class="signup_panel new_users">
                 <p class="welcome">New User?</p>
                 <p>By creating an account with us, you will be able to move through the checkout process faster, view and track your orders, and more.</p><br>
                 <a href="#" class="button ">Sign Up</a></br>
@@ -79,3 +102,5 @@
     </ul>
   </div>
 </div>
+<?php }
+}
