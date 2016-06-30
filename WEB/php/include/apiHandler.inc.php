@@ -1,49 +1,29 @@
 <?php
-    class apiHandler
+    class ApiHandler
     {
-        private $method = null;
-        private $request = null;
-        private $dbHandler = null;
+        private $m_method = null;
+        private $m_request = null;
+        private $m_dbHandler = null;
 
         function __construct($method, $request)
         {
-            $this->dbHandler = new dbHandler(DB_HOST, DB_USER, DB_PASS, DB_NAME, DB_PORT);
+            $this->m_dbHandler = new DbHandler(DB_HOST, DB_USER, DB_PASS, DB_NAME, DB_PORT);
 
-            $this->method = $method;
-            $this->request = $this->clearRequest($request);
+            $this->m_method = $method;
+            $this->m_request = $this->clearRequest($request);
         }
 
         public function handle()
         {
             $response = null;
-            switch ($this->method)
+
+            switch ($this->m_method)
             {
                 case "GET":;
-                    if (count($this->request) == 2 && $this->request[0] == "records")
-                    {
-                        $response = $this->getRecords($this->request[1]);
-                    }
-                    elseif (count($this->request) == 1 && $this->request[0] == "records")
-                    {
-                        $response = $this->getAllRecords();
-                    }
+                    $response = $this->getResponseByGet($this->m_request);
                     break;
                 case "POST":
-                    if (count($this->request) == 3 && $this->request[0] == "record")
-                    {
-                        $userInfo = $this->dbHandler->queryGetAssoc("SELECT nickname, score FROM records WHERE nickname = '{$this->request[1]}'");
-                        if (!empty($userInfo))
-                        {
-                            if ($userInfo[0]["score"] < $this->request[2])
-                            {
-                                $this->updateRecord($this->request[1], $this->request[2]);
-                            }
-                        }
-                        else
-                        {
-                            $this->addRecord($this->request[1], $this->request[2]);
-                        }
-                    }
+                    $response = $this->getResponseByPost($this->m_request);
                     break;
                 case "PUT":
                     break;
@@ -52,10 +32,61 @@
                 case "DELETE":
                     break;
                 default:
-                    echo("Invalid method");
                     break;
             }
             return $response;
+        }
+
+        private function getRecords($num)
+        {
+            $records = $this->m_dbHandler->queryGetAssoc("SELECT
+                                                            nickname, score
+                                                          FROM
+                                                            records
+                                                          ORDER BY
+                                                            score DESC
+                                                          LIMIT
+                                                            0, {$num}");
+            foreach ($records as $record)
+            {
+                strval($record["nickname"]);
+                intval($record["score"]);
+            }
+            return json_encode($records, JSON_NUMERIC_CHECK);
+        }
+
+        private function getAllRecords()
+        {
+            $records = $this->m_dbHandler->queryGetAssoc("SELECT
+                                                            nickname, score
+                                                          FROM
+                                                            records
+                                                          ORDER BY
+                                                            score DESC");
+            foreach ($records as $record)
+            {
+                strval($record["nickname"]);
+                intval($record["score"]);
+            }
+            return json_encode($records, JSON_NUMERIC_CHECK);
+        }
+
+        private function addRecord($nickname, $score)
+        {
+            $this->m_dbHandler->query("INSERT INTO records
+                                         (nickname, score)
+                                       VALUES
+                                         ('{$nickname}', '{$score}')");
+        }
+
+        private function updateRecord($nickname, $score)
+        {
+            $this->m_dbHandler->query("UPDATE
+                                         records
+                                       SET
+                                         score = {$score}
+                                       WHERE
+                                         nickname = '{$nickname}'");
         }
 
         private function clearRequest($request)
@@ -63,54 +94,86 @@
             $request = explode("/", trim($request, "/"));
             foreach ($request as $data)
             {
-                $data = $this->dbHandler->quote($data);
+                $this->m_dbHandler->quote($data);
             }
             return $request;
         }
 
-        private function getRecords($num)
+        private function getResponseByGet($request)
         {
-            $records = $this->dbHandler->queryGetAssoc("SELECT nickname, score FROM
-                                                           records
-                                                       ORDER BY
-                                                            score DESC
-                                                       LIMIT
-                                                           0, {$num}");
-            foreach ($records as $record)
+            $response = null;
+
+            switch ($this->getTaskByGet($request))
             {
-                $record["nickname"] = strval($record["nickname"]);
-                $record["score"] = intval($record["score"]);
+                case GET_N_RECORDS:
+                    $response = $this->getRecords($request[1]);
+                    break;
+                case GET_ALL_RECORDS:
+                    $response = $this->getAllRecords();
+                    break;
+                default:
+                    break;
             }
-            return json_encode($records, JSON_NUMERIC_CHECK);
+            return $response;
         }
 
-        private function getAllRecords()
+        private function getResponseByPost($request)
         {
-            $records = $this->dbHandler->queryGetAssoc("SELECT nickname, score FROM
-                                                           records
-                                                       ORDER BY
-                                                            score DESC");
-            foreach ($records as $record)
+            $response = null;
+
+            switch ($this->getTaskByPost($request))
             {
-                $record["nickname"] = strval($record["nickname"]);
-                $record["score"] = intval($record["score"]);
+                case ADD_RECORD:
+                    $this->addRecord($request[1], $request[2]);
+                    break;
+                case UPDATE_RECORD:
+                    $this->updateRecord($request[1], $request[2]);
+                    break;
+                default:
+                    break;
             }
-            return json_encode($records, JSON_NUMERIC_CHECK);
+            return $response;
         }
 
-        private function addRecord($nickname, $score)
+        private function getTaskByGet($request)
         {
-            $this->dbHandler->query("INSERT INTO records
-                                         (nickname, score)
-                                     VALUES
-                                         ('{$nickname}', '{$score}')");
+            $task = UNEXPECTED_TASK;
+
+            if (count($request) == 2 && $request[0] == "records")
+            {
+                $task = GET_N_RECORDS;
+            }
+            elseif (count($this->m_request) == 1 && $request[0] == "records")
+            {
+                $task = GET_ALL_RECORDS;
+            }
+            return $task;
         }
 
-        private function updateRecord($nickname, $score)
+        private function getTaskByPost($request)
         {
-            $this->dbHandler->query("UPDATE records
-                                         SET score = {$score}
-                                     WHERE
-                                         nickname = '{$nickname}'");
+            $task = UNEXPECTED_TASK;
+
+            if (count($request) == 3 && $request[0] == "record")
+            {
+                $userInfo = $this->m_dbHandler->queryGetAssoc("SELECT
+                                                                 nickname, score
+                                                               FROM
+                                                                 records
+                                                               WHERE
+                                                                 nickname = '{$request[1]}'");
+                if (!empty($userInfo))
+                {
+                    if ($userInfo[0]["score"] < $request[2])
+                    {
+                        $task = UPDATE_RECORD;
+                    }
+                }
+                else
+                {
+                    $task = ADD_RECORD;
+                }
+            }
+            return $task;
         }
     }

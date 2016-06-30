@@ -1,7 +1,7 @@
 <?php
     require_once("common.inc.php");
 
-    class dbHandler
+    class DbHandler
     {
         private $m_mysqli = null;
 
@@ -11,7 +11,7 @@
             $this->m_mysqli->set_charset("utf8");
             if (mysqli_connect_errno())
             {
-                die("Unable to connect to DB die to error: " .  mysqli_connect_error());
+                die("Unable to connect to DB die to error: " . mysqli_connect_error());
             }
         }
 

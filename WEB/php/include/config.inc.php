@@ -9,3 +9,9 @@
 
     define("SITE_ROOT", "/home/u483376883/public_html");
     define("INCLUDE_DIR", SITE_ROOT . "/php/include");
+
+    define("UNEXPECTED_TASK", "UNEXPECTED_TASK");
+    define("UPDATE_RECORD", "UPDATE_RECORD");
+    define("ADD_RECORD", "ADD_RECORD");
+    define("GET_N_RECORDS", "GET_N_RECORDS");
+    define("GET_ALL_RECORDS", "GET_ALL_RECORDS");

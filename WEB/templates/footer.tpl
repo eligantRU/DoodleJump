@@ -3,8 +3,8 @@
     <div class="small-12 columns">
       <p class="links">
         <a href="about.php">About</a>
-        <a href="#">FAQ</a>
-        <a href="#">Contact</a>
+        <a href="faq.php">FAQ</a>
+        <a href="contact.php">Contact</a>
       </p>
       <p class="copywrite">Yegorov Nikita © 2016</p>
     </div>

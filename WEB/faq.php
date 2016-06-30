@@ -3,4 +3,4 @@
     $smarty = new Smarty();
     // $smarty->setCaching(Smarty::CACHING_LIFETIME_CURRENT); // Only for release
 
-    $smarty->display("about.tpl");
+    $smarty->display("faq.tpl");
