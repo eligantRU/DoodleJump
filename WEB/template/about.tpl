@@ -25,7 +25,7 @@
                 <li><a href="https://docs.google.com/document/d/1kjto9LA2BcVBjXd9e6DH0zrALFZ8bdjKzAkJJ4RckCQ/edit">Specification I</a></li>
                 <li><a href="https://docs.google.com/spreadsheets/d/1fvFr4tqhUAbG9Rj28kTvcEmp7yTPssYyyDevOqoEVwE/edit#gid=0">RoadMap I</a></li>
                 <li><a href="https://docs.google.com/document/d/1RMM_ous2-aTqk7FYdlNmu_2mANp_jVlbcpziu0aR158/edit">Specification II</a></li>
-                <li><a href="https://docs.google.com/spreadsheets/d/1KDjUXYfd_gr6iIjH8IsOAPN4TTmO8ufnkgn2Pgd_7qY/edit#gid=0">RoadMap I</a></li>
+                <li><a href="https://docs.google.com/spreadsheets/d/1KDjUXYfd_gr6iIjH8IsOAPN4TTmO8ufnkgn2Pgd_7qY/edit#gid=0">RoadMap II</a></li>
                 <li><a href="https://github.com/eligantRU/DoodleJump">GitHub repository</a></li>
               </ul>
             </div>
