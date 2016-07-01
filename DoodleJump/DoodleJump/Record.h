@@ -10,6 +10,7 @@ public:
 	~Record();
 
 	void draw(sf::RenderWindow & window) const;
+	static bool validateNickname(std::string nickname);
 private:
 	uint64_t m_score = 0;
 	sf::Sprite m_lineBody;

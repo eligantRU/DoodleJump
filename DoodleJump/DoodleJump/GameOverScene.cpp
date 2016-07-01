@@ -96,9 +96,14 @@ void GameOverScene::checkMouseClick(sf::Event & event)
 void GameOverScene::saveRecord()
 {
 	system("cls");
-	std::cout << "Write your nickname: ";
-	std::string nickname;
-	std::cin >> nickname;
+	std::string nickname = "";
+	while (!Record::validateNickname(nickname))
+	{
+		std::cout << "Write your nickname.";
+		std::cout << "Remember that you nickname must have 4..16 symbols, no more than 2 digits & has no spaces" << std::endl;
+		std::cout << ">> ";
+		std::cin >> nickname;
+	}
 	system("cls");
 
 	MasterAPI api(API_HOST);

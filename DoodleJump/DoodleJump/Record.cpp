@@ -26,3 +26,28 @@ void Record::draw(sf::RenderWindow & window) const
 	window.draw(m_lineBody);
 	window.draw(m_nickname);
 }
+
+bool Record::validateNickname(std::string nickname) // TODO: refactoring
+{
+	if (nickname.length() > 16 || nickname.length() < 4)
+	{
+		return false;
+	}
+
+	unsigned digitCounter = 0;
+	auto isDigit = [](const char ch) {
+		return (ch >= '0' && ch <= '9') ? true : false;
+	};
+	for (unsigned i = 0; i < nickname.length(); ++i)
+	{
+		if (isDigit(nickname[i]))
+		{
+			++digitCounter;
+		}
+		if (digitCounter > 2)
+		{
+			return false;
+		}
+	}
+	return true;
+}
