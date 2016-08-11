@@ -195,15 +195,17 @@ void GameScene::getRecords(unsigned numRecords)
 		json data = nlohmann::json::parse(api.getResponseBody());
 		for (unsigned i = 0; i < numRecords; ++i)
 		{
-			json nickname = data.at(i).at("nickname");
-			json score = data.at(i).at("score");
 			try
 			{
+				json nickname = data.at(i).at("nickname");
+				json score = data.at(i).at("score");
 				m_records.push_back(Record(nickname.get<std::string>(), score.get<uint64_t>(), m_assets));
 			}
 			catch (...)
 			{
+#ifdef _DEBUG
 				std::cerr << "Exception in records getter: records #" << i << std::endl;
+#endif
 			}
 		}
 	}

@@ -34,8 +34,8 @@ static const int BUTTON_HEIGHT = 29;
 static const int WINDOW_WIDTH = 550;
 static const int WINDOW_HEIGHT = 700;
 static const sf::Vector2f DOODLE_START_POSITION((WINDOW_WIDTH - DOODLE_WIDTH) / 2, 0);
-static const std::string API_HOST = "http://lorem-ipsum-dolor-sit-amet.xyz";
-static const unsigned DEFAULT_NUMBER_RECORDS = 49;
+static const std::string API_HOST = "http://bydlocoda.net";
+static const unsigned DEFAULT_NUMBER_RECORDS = 200;
 
 enum class PlateType
 {
