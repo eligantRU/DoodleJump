@@ -11,7 +11,7 @@
 
         <!-- original content goes in this container -->
         <div class="off-canvas-content" data-off-canvas-content>
-          <div class="row column">
+          <div class="column">
             <div class="row">
               <div class="large-12 columns">
                 <h1>Download</h1>

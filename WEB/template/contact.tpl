@@ -21,7 +21,7 @@
         </div>
 
         <div class="row">
-          <div class="row">
+          <div class="column">
             <div id="contactForm" class="small-12 medium-9 large-8 columns">
               <form id="myForm" method="post" data-abide>
                 <h5>Contact Us</h5>
