@@ -34,7 +34,7 @@ GameScene::GameScene(Assets & assets, sf::View & view, SoundHandler & soundHandl
 	m_scoreNum.setFont(m_assets.ARIAL_FONT);
 	m_scoreNum.setCharacterSize(20);
 	m_scoreNum.setStyle(sf::Text::Bold);
-	m_scoreNum.setColor(sf::Color(0, 0, 0));
+	m_scoreNum.setFillColor(sf::Color(0, 0, 0));
 
 	m_background = std::make_unique<sf::Sprite>();
 	m_background->setTextureRect(sf::IntRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT));

@@ -13,7 +13,7 @@ Button::Button(std::string text, sf::Vector2f position, Assets & assets)
 	m_text.setFont(m_assets.ARIAL_FONT);
 	m_text.setCharacterSize(20);
 	m_text.setStyle(sf::Text::Bold);
-	m_text.setColor(sf::Color(0, 0, 0));
+	m_text.setFillColor(sf::Color(0, 0, 0));
 }
 
 Button::~Button()
@@ -38,7 +38,7 @@ float Button::getStringLengthPx(const std::string & str) const
 	text.setFont(m_assets.ARIAL_FONT);
 	text.setCharacterSize(20);
 	text.setStyle(sf::Text::Bold);
-	text.setColor(sf::Color(0, 0, 0));
+	text.setFillColor(sf::Color(0, 0, 0));
 	text.setString(str);
 	return (text.findCharacterPos(str.length()).x - text.findCharacterPos(0).x);
 }

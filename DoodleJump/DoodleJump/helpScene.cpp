@@ -23,14 +23,14 @@ HelpScene::HelpScene(Assets & assets, sf::View & view, SoundHandler & soundHandl
 	m_helpText1.setString("Press");
 	m_helpText1.setStyle(sf::Text::Bold);
 	m_helpText1.setPosition(100.f, 300.f);
-	m_helpText1.setColor(sf::Color(0, 0, 0));
+	m_helpText1.setFillColor(sf::Color(0, 0, 0));
 
 	m_helpText2.setFont(m_assets.ARIAL_FONT);
 	m_helpText2.setCharacterSize(20);
 	m_helpText2.setString("to move Doodle");
 	m_helpText2.setStyle(sf::Text::Bold);
 	m_helpText2.setPosition(290.f, 300.f);
-	m_helpText2.setColor(sf::Color(0, 0, 0));
+	m_helpText2.setFillColor(sf::Color(0, 0, 0));
 
 	m_background = std::make_unique<sf::Sprite>();
 	m_background->setTextureRect(sf::IntRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT));

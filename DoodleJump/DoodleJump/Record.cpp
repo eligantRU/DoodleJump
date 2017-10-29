@@ -11,7 +11,7 @@ Record::Record(std::string nickname, uint64_t score, Assets & assets)
 	m_nickname.setFont(assets.ARIAL_FONT);
 	m_nickname.setCharacterSize(20);
 	m_nickname.setStyle(sf::Text::Bold);
-	m_nickname.setColor(sf::Color(0, 0, 0));
+	m_nickname.setFillColor(sf::Color(0, 0, 0));
 	Button bla("", sf::Vector2f(0, 0), assets); // TODO: Why a button calculate a length of string?!
 	m_nickname.setPosition(WINDOW_WIDTH - bla.getStringLengthPx(nickname), -10 * float(m_score) + 5);
 }

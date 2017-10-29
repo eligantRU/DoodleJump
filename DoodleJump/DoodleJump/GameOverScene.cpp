@@ -19,7 +19,7 @@ GameOverScene::GameOverScene(Assets & assets, sf::View & view, SoundHandler & so
 	m_lastRecord.setCharacterSize(24);
 	m_lastRecord.setStyle(sf::Text::Bold);
 	m_lastRecord.setPosition(190.f, 140.f);
-	m_lastRecord.setColor(sf::Color(0, 0, 0));
+	m_lastRecord.setFillColor(sf::Color(0, 0, 0));
 
 	m_background = std::make_unique<sf::Sprite>(sf::Sprite());
 	m_background->setTextureRect(sf::IntRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT));
